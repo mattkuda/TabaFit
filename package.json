@@ -11,12 +11,17 @@
   "dependencies": {
     "expo": "~48.0.18",
     "expo-status-bar": "~1.4.4",
-    "react": "18.2.0",
-    "react-native": "0.71.8"
+    "native-base": "3.4.28",
+    "react": "*",
+    "react-dom": "*",
+    "react-native": "*",
+    "react-native-safe-area-context": "*",
+    "react-native-svg": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@types/react": "~18.0.14",
+    "@types/react": "*",
+    "@types/react-native": "*",
     "typescript": "^4.9.4"
   },
   "private": true
