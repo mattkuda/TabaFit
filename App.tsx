@@ -1,15 +1,15 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native';
-import Timer from './src/components/Timer';
 import { NativeBaseProvider } from 'native-base';
+import { Timer } from './src/components/Timer';
 
-export default function App() {
-  return (
+export const App = (): JSX.Element => (
     <NativeBaseProvider>
-      <SafeAreaView>
-        <Timer />
-      </SafeAreaView>
+        <SafeAreaView>
+            <Timer />
+        </SafeAreaView>
     </NativeBaseProvider>
-  );
-}
+);
 
+// eslint-disable-next-line import/no-default-export
+export default App;
