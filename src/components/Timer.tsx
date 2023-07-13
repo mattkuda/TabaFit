@@ -1,20 +1,25 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-    VStack, Text, Button, Input,
+    VStack, Text, Button, IconButton, Icon,
 } from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation, RouteProp } from '@react-navigation/native';
+import { TabNavigatorParamList, TimerScreenNavigationProp } from '../types/navigationTypes';
 
-export const Timer = (): JSX.Element => {
-    const [tabatas, setTabatas] = useState(1);
-    const exercisesPerTabata = 8;
-    const [exercises, setExercises] = useState(exercisesPerTabata * tabatas);
-    const workInterval = 20;
-    const restInterval = 10;
-    const cooldownInterval = 60;
+type TimerProps = {
+    route: RouteProp<TabNavigatorParamList, 'Timer'>;
+};
 
-    const [currentInterval, setCurrentInterval] = useState('work');
+export const Timer: React.FC<TimerProps> = ({ route }) => {
+    const {
+        warmup, work, rest, exercises: exercisesParam, circuits, intermission, cooldown,
+    } = route.params;
+
+    const navigation = useNavigation<TimerScreenNavigationProp>();
+    const [currentInterval, setCurrentInterval] = useState('warmup');
     const [exercisesDone, setExercisesDone] = useState(0);
-    const [tabatasDone, setTabatasDone] = useState(0);
-    const [seconds, setSeconds] = useState(workInterval);
+    const [circuitsDone, setCircuitsDone] = useState(0);
+    const [seconds, setSeconds] = useState(warmup);
     const [isActive, setIsActive] = useState(false);
     const [isReset, setIsReset] = useState(false);
     const [totalWorkoutTime, setTotalWorkoutTime] = useState(0);
@@ -27,12 +32,11 @@ export const Timer = (): JSX.Element => {
     const reset = (): void => {
         setIsReset(true);
         setIsActive(false);
-        setCurrentInterval('work');
+        setCurrentInterval('warmup');
         setExercisesDone(0);
-        setTabatasDone(0);
-        setSeconds(workInterval);
+        setCircuitsDone(0);
+        setSeconds(warmup);
         setRemainingTime(totalWorkoutTime);
-        setExercises(exercisesPerTabata * tabatas);
     };
 
     const formatTime = (time: number): string => {
@@ -48,11 +52,10 @@ export const Timer = (): JSX.Element => {
     };
 
     useEffect(() => {
-        setTotalWorkoutTime(tabatas * (exercisesPerTabata * (workInterval + restInterval) + cooldownInterval)
-         - cooldownInterval);
-        setRemainingTime(tabatas * (exercisesPerTabata * (workInterval + restInterval) + cooldownInterval)
-         - cooldownInterval);
-    }, [tabatas, workInterval, restInterval]);
+        setTotalWorkoutTime(warmup + circuits * (exercisesParam * (work + rest)
+        + intermission) + cooldown - intermission);
+        setRemainingTime(warmup + circuits * (exercisesParam * (work + rest) + intermission) + cooldown - intermission);
+    }, [warmup, work, rest, exercisesParam, circuits, intermission, cooldown]);
 
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null;
@@ -62,19 +65,33 @@ export const Timer = (): JSX.Element => {
                 if (seconds > 0) {
                     setSeconds(seconds - 1);
                     setRemainingTime(remainingTime - 1);
-                } else if (exercisesDone >= exercises) {
-                    setIsActive(false);
-                } else if (exercisesDone % exercisesPerTabata === 0 && exercisesDone > 0) {
-                    setCurrentInterval('cooldown');
-                    setSeconds(cooldownInterval);
-                    setTabatasDone(tabatasDone + 1);
-                } else if (currentInterval === 'work') {
-                    setCurrentInterval('rest');
-                    setSeconds(restInterval);
-                    setExercisesDone(exercisesDone + 1);
-                } else if (currentInterval === 'rest' || currentInterval === 'cooldown') {
+                } else if (currentInterval === 'warmup') {
                     setCurrentInterval('work');
-                    setSeconds(workInterval);
+                    setSeconds(work);
+                } else if (currentInterval === 'work' && exercisesDone < exercisesParam - 1) {
+                    setCurrentInterval('rest');
+                    setSeconds(rest);
+                    setExercisesDone(exercisesDone + 1);
+                } else if (currentInterval === 'work' && exercisesDone === exercisesParam - 1) {
+                    setCurrentInterval('rest');
+                    setSeconds(rest);
+                    setExercisesDone(0);
+                    setCircuitsDone(circuitsDone + 1);
+                } else if (currentInterval === 'rest' && exercisesDone < exercisesParam - 1) {
+                    setCurrentInterval('work');
+                    setSeconds(work);
+                    setExercisesDone(exercisesDone + 1);
+                } else if (currentInterval === 'rest' && exercisesDone === exercisesParam - 1 && circuitsDone < circuits - 1) {
+                    setCurrentInterval('intermission');
+                    setSeconds(intermission);
+                } else if (currentInterval === 'intermission' && circuitsDone < circuits - 1) {
+                    setCurrentInterval('work');
+                    setSeconds(work);
+                } else if (circuitsDone === circuits - 1 && currentInterval !== 'cooldown') {
+                    setCurrentInterval('cooldown');
+                    setSeconds(cooldown);
+                } else if (currentInterval === 'cooldown') {
+                    setIsActive(false);
                 }
             }, 1000);
         } else if (!isActive && seconds !== 0 && !isReset) {
@@ -90,25 +107,28 @@ export const Timer = (): JSX.Element => {
                 clearInterval(interval);
             }
         };
-    }, [isActive, seconds, isReset, exercises, exercisesDone, workInterval,
-        restInterval, currentInterval, remainingTime, tabatasDone]);
+    }, [isActive, seconds, isReset, exercisesParam, work, circuits,
+        currentInterval, remainingTime, cooldown, intermission,
+        exercisesDone, circuitsDone, rest]);
 
     return (
         <VStack alignItems="center" space={4}>
+            <IconButton
+                icon={<Icon as={Ionicons} name="arrow-back" />}
+                left={0}
+                position="absolute"
+                top={0}
+                onPress={(): void => navigation.navigate('Home')}
+            />
             <Text>{`Total remaining time: ${formatTime(remainingTime)}`}</Text>
             {/* eslint-disable-next-line no-nested-ternary */}
             <Text color={currentInterval === 'work' ? 'green.500' : currentInterval === 'cooldown' ? 'orange.500' : 'yellow.500'} fontSize="6xl">
                 {formatTime(seconds)}
             </Text>
 
-            <Text>{`${exercisesDone}/${exercises} exercises done`}</Text>
-            <Text>{`${tabatasDone}/${tabatas} tabatas done`}</Text>
+            <Text>{`${exercisesDone}/${exercisesParam} exercises done`}</Text>
+            <Text>{`${circuitsDone}/${circuits} circuits done`}</Text>
             <Text>{`Current: ${currentInterval.toUpperCase()}`}</Text>
-            <Input
-                defaultValue={tabatas.toString()}
-                width="40%" // you can change this to be whatever you like
-                onChangeText={(valueString): void => setTabatas(parseInt(valueString, 10))}
-            />
             <Button onPress={toggle}>{isActive ? 'Pause' : 'Start'}</Button>
             <Button onPress={reset}>Reset</Button>
         </VStack>
