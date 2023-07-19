@@ -20,7 +20,8 @@
     "react-dom": "*",
     "react-native": "*",
     "react-native-safe-area-context": "*",
-    "react-native-svg": "*"
+    "react-native-svg": "*",
+    "recoil": "^0.7.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

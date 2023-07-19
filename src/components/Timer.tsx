@@ -4,7 +4,9 @@ import {
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, RouteProp } from '@react-navigation/native';
+import { useSetRecoilState } from 'recoil';
 import { TabNavigatorParamList, TimerScreenNavigationProp } from '../types/navigationTypes';
+import { showFooterState } from '../atoms/showFooterAtom';
 
 type TimerProps = {
     route: RouteProp<TabNavigatorParamList, 'Timer'>;
@@ -24,6 +26,16 @@ export const Timer: React.FC<TimerProps> = ({ route }) => {
     const [isReset, setIsReset] = useState(false);
     const [totalWorkoutTime, setTotalWorkoutTime] = useState(0);
     const [remainingTime, setRemainingTime] = useState(0);
+    const setShowFooter = useSetRecoilState(showFooterState);
+
+    useEffect(() => {
+        setShowFooter(false); // Hide the tab bar when the Timer component is mounted
+
+        return () => {
+            setShowFooter(true); // Show the tab bar when the Timer component is unmounted
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const toggle = (): void => {
         setIsActive(!isActive);
