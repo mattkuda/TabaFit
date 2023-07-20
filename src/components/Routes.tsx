@@ -7,10 +7,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useRecoilValue } from 'recoil';
 import { TabNavigatorParamList } from '../types/navigationTypes';
-import { TabataSetup } from './TabataSetup';
-import { Timer } from './Timer';
-import { Home } from './Home';
-import { About } from './About';
+import { TabataSetup } from './TabataSetupPage/TabataSetup';
+import { Timer } from './TabataTimerPage';
+import { Home } from './HomePage';
+import { ProfilePage } from './ProfilePage';
 import { showFooterState } from '../atoms/showFooterAtom';
 
 // Create a new stack navigator
@@ -30,7 +30,7 @@ const TimerStackNavigator = (): JSX.Element => (
 // Creating separate components for each Icon
 const HomeIcon = ({ color, size }): JSX.Element => <Ionicons color={color} name="home-outline" size={size} />;
 const TimerIcon = ({ color, size }): JSX.Element => <Ionicons color={color} name="timer-outline" size={size} />;
-const AboutIcon = ({ color, size }): JSX.Element => <Ionicons color={color} name="information-circle-outline" size={size} />;
+const ProfilePageIcon = ({ color, size }): JSX.Element => <Ionicons color={color} name="information-circle-outline" size={size} />;
 
 export const Routes = (): JSX.Element => {
     const showFooter = useRecoilValue(showFooterState);
@@ -60,10 +60,10 @@ export const Routes = (): JSX.Element => {
                             }}
                         />
                         <Tab.Screen
-                            component={About}
-                            name="About"
+                            component={ProfilePage}
+                            name="ProfilePage"
                             options={{
-                                tabBarIcon: AboutIcon,
+                                tabBarIcon: ProfilePageIcon,
                             }}
                         />
                     </Tab.Navigator>

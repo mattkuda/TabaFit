@@ -5,8 +5,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, RouteProp } from '@react-navigation/native';
 import { useSetRecoilState } from 'recoil';
-import { TabNavigatorParamList, TimerScreenNavigationProp } from '../types/navigationTypes';
-import { showFooterState } from '../atoms/showFooterAtom';
+import { TabNavigatorParamList, TimerScreenNavigationProp } from '../../types/navigationTypes';
+import { showFooterState } from '../../atoms/showFooterAtom';
 
 type TimerProps = {
     route: RouteProp<TabNavigatorParamList, 'Timer'>;

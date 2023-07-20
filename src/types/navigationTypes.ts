@@ -22,7 +22,7 @@ export interface TabNavigatorParamList extends ParamListBase {
         intermission: number;
         cooldown: number;
     },
-    About: undefined
+    ProfilePage: undefined
 }
 
 export type HomeScreenRouteProp = RouteProp<TabNavigatorParamList, 'Home'>;
@@ -33,5 +33,5 @@ export type TimerScreenRouteProp = RouteProp<TabNavigatorParamList, 'Timer'> & {
 };
 export type TimerScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'Timer'>;
 
-export type AboutScreenRouteProp = RouteProp<TabNavigatorParamList, 'About'>;
-export type AboutScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'About'>;
+export type ProfilePageScreenRouteProp = RouteProp<TabNavigatorParamList, 'ProfilePage'>;
+export type ProfilePageScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'ProfilePage'>;

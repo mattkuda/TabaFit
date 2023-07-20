@@ -7,7 +7,7 @@ export const Home = ({ navigation }): JSX.Element => (
         <VStack alignItems="center" space={4}>
             <Text fontSize="5xl">Abcountable</Text>
             <Button onPress={(): void => navigation.navigate('TabataSetup')}>Start Workout</Button>
-            <Button onPress={(): void => navigation.navigate('About')}>About</Button>
+            <Button onPress={(): void => navigation.navigate('ProfilePage')}>About</Button>
         </VStack>
     </Box>
 );
