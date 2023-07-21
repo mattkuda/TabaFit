@@ -53,6 +53,21 @@ export const TabataSetup = ({ navigation }): JSX.Element => {
         setTotalTime(time);
     }, [warmup, work, rest, exercises, circuits, intermission, cooldown]);
 
+    const handleStartButtonPress = (): void => {
+        navigation.navigate('Workout', {
+            screen: 'WorkoutTimerPage',
+            params: {
+                warmup,
+                work,
+                rest,
+                exercises,
+                circuits,
+                intermission,
+                cooldown,
+            },
+        });
+    };
+
     return (
         <VStack alignItems="center" space={4}>
             <Text>
@@ -71,15 +86,7 @@ export const TabataSetup = ({ navigation }): JSX.Element => {
             <IntervalInput label="Cooldown" setValue={setCooldown} value={cooldown} />
             <Button
                 colorScheme="danger"
-                onPress={(): void => navigation.navigate('Timer', {
-                    warmup,
-                    work,
-                    rest,
-                    exercises,
-                    circuits,
-                    intermission,
-                    cooldown,
-                })}
+                onPress={handleStartButtonPress}
             >
                 Start
             </Button>

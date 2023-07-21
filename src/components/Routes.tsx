@@ -8,10 +8,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useRecoilValue } from 'recoil';
 import { TabNavigatorParamList } from '../types/navigationTypes';
 import { TabataSetup } from './TabataSetupPage/TabataSetup';
-import { Timer } from './TabataTimerPage';
+import { WorkoutTimerPage } from './WorkoutTimerPage';
 import { Home } from './HomePage';
 import { ProfilePage } from './ProfilePage';
 import { showFooterState } from '../atoms/showFooterAtom';
+import { WorkoutsPage } from './WorkoutsPage';
 
 // Create a new stack navigator
 const TimerStack = createStackNavigator<TabNavigatorParamList>();
@@ -19,11 +20,18 @@ const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
 const TimerStackNavigator = (): JSX.Element => (
     <TimerStack.Navigator
-        initialRouteName="TabataSetup"
+        initialRouteName="WorkoutsPage"
         screenOptions={{ headerShown: false }}
     >
-        <TimerStack.Screen component={TabataSetup} name="TabataSetup" />
-        <TimerStack.Screen component={Timer} name="Timer" />
+        <TimerStack.Screen component={WorkoutsPage} name="WorkoutsPage" />
+        <TimerStack.Screen
+            component={TabataSetup}
+            name="TabataSetup"
+        />
+        <TimerStack.Screen
+            component={WorkoutTimerPage}
+            name="WorkoutTimerPage"
+        />
     </TimerStack.Navigator>
 );
 
@@ -52,13 +60,13 @@ export const Routes = (): JSX.Element => {
                         />
                         <Tab.Screen
                             component={TimerStackNavigator}
-                            name="Timer"
+                            name="Workout"
                             options={{
                                 tabBarIcon: TimerIcon,
-                                unmountOnBlur: true, // Add this line
                                 tabBarStyle: !showFooter ? { display: 'none' } : undefined,
                             }}
                         />
+
                         <Tab.Screen
                             component={ProfilePage}
                             name="ProfilePage"
