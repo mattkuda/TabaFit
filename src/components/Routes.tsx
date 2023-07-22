@@ -69,7 +69,7 @@ export const Routes = (): JSX.Element => {
 
                         <Tab.Screen
                             component={ProfilePage}
-                            name="ProfilePage"
+                            name="Profile"
                             options={{
                                 tabBarIcon: ProfilePageIcon,
                             }}
