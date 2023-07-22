@@ -32,7 +32,7 @@ const WorkoutCard: FC<WorkoutCardProps> = ({ workout, navigation }) => {
         <Card>
             <VStack alignItems="center" space={3}>
                 <Box>
-                    <Heading>{`Workout ${workout._id}`}</Heading>
+                    <Heading>{workout.name}</Heading>
                     <Text>{`Created at: ${workout.createdAt}`}</Text>
                     <Text>{`Number of exercises: ${workout.exercises.length}`}</Text>
                     <Text>{`Number of circuits: ${workout.circuits}`}</Text>

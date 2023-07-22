@@ -2,6 +2,7 @@ import { Exercise } from './exercises';
 
 export interface Workout {
     _id: string;
+    name: string;
     createdAt: string;
     updatedAt: string;
     userId: string;
@@ -17,6 +18,27 @@ export interface Workout {
 export const workouts: Workout[] = [
     {
         _id: '1',
+        name: 'Lightning Workout (for testing)',
+        createdAt: '2023-07-08T00:00:00Z',
+        updatedAt: '2023-07-08T00:00:00Z',
+        userId: '123',
+        warmupDuration: 1,
+        exercises: [{
+            _id: '1',
+            name: 'Burpees',
+            description: 'A full body exercise that combines a squat, push-up, and jump.',
+            difficulty: 'Hard',
+            videoLink: 'https://www.youtube.com/watch?v=1fO8DGHK4Eo',
+        },
+        ],
+        restDuration: 1,
+        exerciseDuration: 1,
+        circuits: 1,
+        intermisionDuration: 1,
+        cooldownDuration: 1,
+    }, {
+        _id: '1',
+        name: 'Workout 1',
         createdAt: '2023-07-08T00:00:00Z',
         updatedAt: '2023-07-08T00:00:00Z',
         userId: '123',
@@ -57,6 +79,7 @@ export const workouts: Workout[] = [
     },
     {
         _id: '2',
+        name: 'Workout 2',
         createdAt: '2023-07-08T00:00:00Z',
         updatedAt: '2023-07-08T00:00:00Z',
         userId: '123',

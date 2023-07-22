@@ -7,6 +7,7 @@ import { useNavigation, RouteProp } from '@react-navigation/native';
 import { useSetRecoilState } from 'recoil';
 import { TabNavigatorParamList, TimerScreenNavigationProp } from '../../types/navigationTypes';
 import { showFooterState } from '../../atoms/showFooterAtom';
+import { Intervals } from '../../util/constants';
 
 type WorkoutTimerPageProps = {
     route: RouteProp<TabNavigatorParamList, 'WorkoutTimerPage'>;
@@ -15,12 +16,12 @@ type WorkoutTimerPageProps = {
 export const WorkoutTimerPage: React.FC<WorkoutTimerPageProps> = ({ route }) => {
     const {
         warmupDuration, exerciseDuration, restDuration,
-        exercises: exercisesParam, circuits,
+        exercises, circuits,
         intermisionDuration, cooldownDuration,
     } = route.params;
 
     const navigation = useNavigation<TimerScreenNavigationProp>();
-    const [currentInterval, setCurrentInterval] = useState('warmup');
+    const [currentInterval, setCurrentInterval] = useState<Intervals>(Intervals.Warmup);
     const [exercisesDone, setExercisesDone] = useState(0);
     const [circuitsDone, setCircuitsDone] = useState(0);
     const [seconds, setSeconds] = useState(warmupDuration);
@@ -46,7 +47,7 @@ export const WorkoutTimerPage: React.FC<WorkoutTimerPageProps> = ({ route }) => 
     const reset = (): void => {
         setIsReset(true);
         setIsActive(false);
-        setCurrentInterval('warmupDuration');
+        setCurrentInterval(Intervals.Warmup);
         setExercisesDone(0);
         setCircuitsDone(0);
         setSeconds(warmupDuration);
@@ -66,12 +67,12 @@ export const WorkoutTimerPage: React.FC<WorkoutTimerPageProps> = ({ route }) => 
     };
 
     useEffect(() => {
-        setTotalWorkoutTime(warmupDuration + circuits * (exercisesParam.length * (exerciseDuration + restDuration)
+        setTotalWorkoutTime(warmupDuration + circuits * (exercises.length * (exerciseDuration + restDuration)
         + intermisionDuration) + cooldownDuration - intermisionDuration);
         setRemainingTime(warmupDuration + circuits * (
-            exercisesParam.length * (exerciseDuration + restDuration) + intermisionDuration)
+            exercises.length * (exerciseDuration + restDuration) + intermisionDuration)
         + cooldownDuration - intermisionDuration);
-    }, [warmupDuration, exerciseDuration, restDuration, exercisesParam,
+    }, [warmupDuration, exerciseDuration, restDuration, exercises,
         circuits, intermisionDuration, cooldownDuration]);
 
     useEffect(() => {
@@ -82,33 +83,42 @@ export const WorkoutTimerPage: React.FC<WorkoutTimerPageProps> = ({ route }) => 
                 if (seconds > 0) {
                     setSeconds(seconds - 1);
                     setRemainingTime(remainingTime - 1);
-                } else if (currentInterval === 'warmupDuration') {
-                    setCurrentInterval('work');
-                    setSeconds(exerciseDuration);
-                } else if (currentInterval === 'exerciseDuration' && exercisesDone < exercisesParam.length - 1) {
-                    setCurrentInterval('restDuration');
-                    setSeconds(restDuration);
-                    setExercisesDone(exercisesDone + 1);
-                } else if (currentInterval === 'exerciseDuration' && exercisesDone === exercisesParam.length - 1) {
-                    setCurrentInterval('restDuration');
-                    setSeconds(restDuration);
-                    setExercisesDone(0);
-                    setCircuitsDone(circuitsDone + 1);
-                } else if (currentInterval === 'restDuration' && exercisesDone < exercisesParam.length - 1) {
-                    setCurrentInterval('exerciseDuration');
-                    setSeconds(exerciseDuration);
-                    setExercisesDone(exercisesDone + 1);
-                } else if (currentInterval === 'restDuration' && exercisesDone === exercisesParam.length - 1 && circuitsDone < circuits - 1) {
-                    setCurrentInterval('intermisionDuration');
-                    setSeconds(intermisionDuration);
-                } else if (currentInterval === 'intermisionDuration' && circuitsDone < circuits - 1) {
-                    setCurrentInterval('exerciseDuration');
-                    setSeconds(exerciseDuration);
-                } else if (circuitsDone === circuits - 1 && currentInterval !== 'cooldownDuration') {
-                    setCurrentInterval('cooldownDuration');
-                    setSeconds(cooldownDuration);
-                } else if (currentInterval === 'cooldownDuration') {
-                    setIsActive(false);
+                } else {
+                    switch (currentInterval) {
+                        case Intervals.Warmup:
+                            setCurrentInterval(Intervals.Exercise);
+                            setSeconds(exerciseDuration);
+                            break;
+                        case Intervals.Exercise:
+                            setCurrentInterval(Intervals.Rest);
+                            setSeconds(restDuration);
+                            break;
+                        case Intervals.Rest:
+                            if (exercisesDone < exercises.length - 1) {
+                                setCurrentInterval(Intervals.Exercise);
+                                setSeconds(exerciseDuration);
+                                setExercisesDone(exercisesDone + 1);
+                            } else {
+                                setCurrentInterval(Intervals.Intermission);
+                                setSeconds(intermisionDuration);
+                                setCircuitsDone(circuitsDone + 1);
+                            }
+                            break;
+                        case Intervals.Intermission:
+                            if (circuitsDone < circuits - 1) {
+                                setCurrentInterval(Intervals.Exercise);
+                                setSeconds(exerciseDuration);
+                                setExercisesDone(0);
+                            } else {
+                                setCurrentInterval(Intervals.Cooldown);
+                                setSeconds(cooldownDuration);
+                            }
+                            break;
+                        case Intervals.Cooldown:
+                            setIsActive(false);
+                            break;
+                        default: break;
+                    }
                 }
             }, 1000);
         } else if (!isActive && seconds !== 0 && !isReset) {
@@ -125,7 +135,7 @@ export const WorkoutTimerPage: React.FC<WorkoutTimerPageProps> = ({ route }) => 
             }
         };
     }, [isActive, seconds, isReset,
-        exercisesParam, exerciseDuration, circuits,
+        exercises, exerciseDuration, circuits,
         currentInterval, remainingTime, cooldownDuration, intermisionDuration,
         exercisesDone, circuitsDone, restDuration]);
 
@@ -141,17 +151,30 @@ export const WorkoutTimerPage: React.FC<WorkoutTimerPageProps> = ({ route }) => 
                         index: 0,
                         routes: [{ name: 'WorkoutsPage' }],
                     });
-                    navigation.navigate('Home');
+                    navigation.navigate('WorkoutsPage');
                 }}
             />
             <Text>{`Total remaining time: ${formatTime(remainingTime)}`}</Text>
             {/* eslint-disable-next-line no-nested-ternary */}
-            <Text color={currentInterval === 'exerciseDuration' ? 'green.500' : currentInterval === 'cooldownDuration' ? 'orange.500' : 'yellow.500'} fontSize="6xl">
+            <Text color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'} fontSize="6xl">
                 {formatTime(seconds)}
             </Text>
+            {/* TODO: Write formatters for exercise ands circuit displays */}
+            <Text>
+                Exercises:
+                {' '}
+                {currentInterval === Intervals.Intermission || currentInterval === Intervals.Warmup ? `0/${exercises.length}` : `${exercisesDone + 1}/${exercises.length}`}
+            </Text>
+            <Text>
+                Circuits:
+                {' '}
+                {currentInterval === Intervals.Intermission && `0/${circuits}`}
+                {currentInterval !== Intervals.Intermission
+                && (circuitsDone === 0 && currentInterval === Intervals.Warmup)
+                    ? `0/${circuits}`
+                    : `${circuitsDone + 1}/${circuits}`}
 
-            <Text>{`${exercisesDone}/${exercisesParam.length} exercises done`}</Text>
-            <Text>{`${circuitsDone}/${circuits} circuits done`}</Text>
+            </Text>
             <Text>{`Current: ${currentInterval.toUpperCase()}`}</Text>
             <Button onPress={toggle}>{isActive ? 'Pause' : 'Start'}</Button>
             <Button onPress={reset}>Reset</Button>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Button, Input, Text, VStack, HStack,
+    Button, Input, Text, VStack, HStack, Icon, IconButton,
 } from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
 
 const calculateWorkoutTime = (
     warmup: number,
@@ -70,6 +71,19 @@ export const TabataSetup = ({ navigation }): JSX.Element => {
 
     return (
         <VStack alignItems="center" space={4}>
+            <IconButton
+                icon={<Icon as={Ionicons} name="arrow-back" />}
+                left={0}
+                position="absolute"
+                top={0}
+                onPress={(): void => {
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'WorkoutsPage' }],
+                    });
+                    navigation.navigate('WorkoutsPage');
+                }}
+            />
             <Text>
                 Total Workout Time:
                 {' '}
