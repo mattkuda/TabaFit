@@ -19,6 +19,8 @@ Ensure that you have the following installed on your local machine:
 
 ### Installation & Setup
 
+#### Frontend
+
 1. Clone this repository and navigate into it
 
    ```bash
@@ -44,6 +46,30 @@ Ensure that you have the following installed on your local machine:
    ```
 
 This will open Expo Dev Tools in the browser. You can then use an emulator or a physical device connected to your machine to run the application.
+
+#### Backend
+
+1. Navigate back to the root directory and then into the `server` directory
+
+   ```bash
+   cd ..
+   cd server
+
+   ```
+
+2. Install dependencies
+
+   ```bash
+   npm install
+   ```
+
+3. Start the server
+
+   ```bash
+   npm start
+   ```
+
+The server will start running at http://localhost:3000.
 
 ## Features
 
