@@ -53,8 +53,7 @@ This will open Expo Dev Tools in the browser. You can then use an emulator or a 
 
    ```bash
    cd ..
-   cd server
-
+   cd server && cd src
    ```
 
 2. Install dependencies
