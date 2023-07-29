@@ -1,12 +1,12 @@
 /* eslint-disable no-underscore-dangle */
 import React, { FC } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
 import {
     VStack, Heading, Text, Button, Card, Box, HStack,
 } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { workouts, Workout } from '../../types/workouts';
+import { hardcodedWorkouts } from '../../util/constants';
+import { Workout } from '../../types/workouts';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 
 type WorkoutsPageNavigationProp = StackNavigationProp<TabNavigatorParamList, 'WorkoutsPage'>;
@@ -53,7 +53,7 @@ export const WorkoutsPage: FC = () => {
     return (
         <VStack>
             <Heading>Workouts:</Heading>
-            {workouts.map((workout) => (
+            {hardcodedWorkouts.map((workout) => (
                 <WorkoutCard key={workout._id} navigation={navigation} workout={workout} />
             ))}
         </VStack>
