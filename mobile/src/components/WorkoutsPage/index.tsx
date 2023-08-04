@@ -5,7 +5,7 @@ import {
     VStack, Heading, Text, Button, Card, Box, HStack,
 } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { hardcodedWorkouts } from '../../util/constants';
+import { useQueryWorkouts } from '../../hooks/useQueryWorkouts';
 import { Workout } from '../../types/workouts';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 
@@ -49,11 +49,12 @@ const WorkoutCard: FC<WorkoutCardProps> = ({ workout, navigation }) => {
 
 export const WorkoutsPage: FC = () => {
     const navigation = useNavigation<WorkoutsPageNavigationProp>();
+    const { data } = useQueryWorkouts();
 
     return (
         <VStack>
             <Heading>Workouts:</Heading>
-            {hardcodedWorkouts.map((workout) => (
+            {data?.map((workout) => (
                 <WorkoutCard key={workout._id} navigation={navigation} workout={workout} />
             ))}
         </VStack>
