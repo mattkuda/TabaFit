@@ -54,6 +54,7 @@ export const WorkoutsPage: FC = () => {
     return (
         <VStack>
             <Heading>Workouts:</Heading>
+            <Text>{JSON.stringify(data)}</Text>
             {data?.map((workout) => (
                 <WorkoutCard key={workout._id} navigation={navigation} workout={workout} />
             ))}

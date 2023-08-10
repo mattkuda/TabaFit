@@ -1,16 +1,56 @@
+/* eslint-disable import/no-unresolved */
 import express, { Request, Response } from 'express';
+import { MongoClient, Collection } from 'mongodb';
 // eslint-disable-next-line import/no-relative-packages
-import { hardcodedWorkouts } from '../../../mobile/src/util/constants';
+import { Workout } from '../../../mobile/src/types/workouts';
 
 const router = express.Router();
+const connectionString = process.env.MONGODB_URI;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-router.get('/', (req: Request, res: Response) => {
-  res.send(hardcodedWorkouts);
+if (!connectionString) {
+  throw new Error('MONGODB_URI environment variable is not set.');
+}
+
+// Connect to MongoDB
+const client = new MongoClient(connectionString);
+
+let workoutsCollection: Collection<Workout>;
+
+(async () => {
+  try {
+    await client.connect();
+    console.log('Connected to MongoDB');
+    workoutsCollection = client.db('AbcountableDB').collection<Workout>('workouts');
+  } catch (err) {
+    console.error('Failed to connect to MongoDB', err);
+    process.exit(1);
+  }
+})();
+
+router.get('/', async (req: Request, res: Response) => {
+  try {
+    const workouts = await workoutsCollection.aggregate([
+      {
+        $lookup: {
+          from: 'exercises',
+          localField: 'exercises',
+          foreignField: '_id',
+          as: 'exercises',
+        },
+      },
+    ]).toArray();
+    console.log('workouts');
+    console.log(workouts);
+    res.send(workouts);
+  } catch (err) {
+    console.error('Failed to fetch workouts', err);
+    res.status(500).send({ message: 'Failed to fetch workouts' });
+  }
 });
 
-// router.post('/', (req: Request, res: Response) => {
+// router.post('/', async (req: Request, res: Response) => {
 //   // Handle POST requests for workouts
+//   // You can use workoutsCollection.insertOne() to insert a workout into MongoDB
 // });
 
 // Add more routes as needed
