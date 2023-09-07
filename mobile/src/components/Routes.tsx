@@ -1,4 +1,7 @@
-import { SafeAreaView } from 'react-native';
+import {
+    SafeAreaView,
+    Text,
+} from 'react-native';
 import { NativeBaseProvider } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -6,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useRecoilValue } from 'recoil';
+import { useAuth } from '../context/AuthContext';
 import { TabNavigatorParamList } from '../types/navigationTypes';
 import { TabataSetup } from './TabataSetupPage/TabataSetup';
 import { WorkoutTimerPage } from './WorkoutTimerPage';
@@ -13,7 +17,7 @@ import { Home } from './HomePage';
 import { ProfilePage } from './ProfilePage';
 import { showFooterState } from '../atoms/showFooterAtom';
 import { WorkoutsPage } from './WorkoutsPage';
-
+import { AuthPage } from './AuthPage';
 // Create a new stack navigator
 const TimerStack = createStackNavigator<TabNavigatorParamList>();
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
@@ -42,6 +46,18 @@ const ProfilePageIcon = ({ color, size }): JSX.Element => <Ionicons color={color
 
 export const Routes = (): JSX.Element => {
     const showFooter = useRecoilValue(showFooterState);
+    const { authState } = useAuth();
+
+    if (!authState.authenticated) {
+        return (
+            <SafeAreaView style={{ flex: 1 }}>
+                <AuthPage />
+                <Text>
+                    {authState.authenticated ? 'y' : 'n'}
+                </Text>
+            </SafeAreaView>
+        );
+    }
 
     return (
         <NativeBaseProvider>

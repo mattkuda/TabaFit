@@ -39,20 +39,11 @@ router.get('/', async (req: Request, res: Response) => {
         },
       },
     ]).toArray();
-    console.log('workouts');
-    console.log(workouts);
     res.send(workouts);
   } catch (err) {
     console.error('Failed to fetch workouts', err);
     res.status(500).send({ message: 'Failed to fetch workouts' });
   }
 });
-
-// router.post('/', async (req: Request, res: Response) => {
-//   // Handle POST requests for workouts
-//   // You can use workoutsCollection.insertOne() to insert a workout into MongoDB
-// });
-
-// Add more routes as needed
 
 export default router;
