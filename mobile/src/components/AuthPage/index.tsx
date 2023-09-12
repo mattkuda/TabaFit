@@ -26,6 +26,8 @@ export const AuthPage = (): JSX.Element => {
             setErrorMessage(error.message);
         }
     };
+    const tokenKey = process.env.EXPO_PUBLIC_TOKEN_KEY;
+    const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
     const handleSignIn = async (): Promise<void> => {
         try {
@@ -51,6 +53,8 @@ export const AuthPage = (): JSX.Element => {
             <Button title="Sign Up" onPress={handleSignUp} />
             <Button title="Sign In" onPress={handleSignIn} />
             {errorMessage && <Text>{errorMessage}</Text>}
+            <Text>{tokenKey}</Text>
+            <Text>{apiUrl}</Text>
         </View>
     );
 };
