@@ -7,6 +7,7 @@ dotenv.config();
 import express, { Request, Response } from 'express';
 import { MongoClient } from 'mongodb';
 import workoutRoutes from './routes/workouts';
+import postRoutes from './routes/posts';
 import userAuthRoutes from './routes/userAuth';
 
 const app = express();
@@ -37,6 +38,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use('/', userAuthRoutes);
 app.use('/workouts', workoutRoutes);
+app.use('/posts', postRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
