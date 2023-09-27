@@ -42,7 +42,7 @@ Ensure that you have the following installed on your local machine:
 
 4. Start the application via Expo
    ```bash
-   expo start
+   npx expo start
    ```
 
 This will open Expo Dev Tools in the browser. You can then use an emulator or a physical device connected to your machine to run the application.
