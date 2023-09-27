@@ -6,6 +6,9 @@ import { useSetRecoilState } from 'recoil';
 import { useAuth } from '../../context/AuthContext';
 import { isAuthenticatedState } from '../../atoms/isAuthenticatedAtom';
 
+const tokenKey = process.env.EXPO_PUBLIC_TOKEN_KEY;
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
 export const AuthPage = (): JSX.Element => {
     const [email, setEmail] = useState<string>('test@gmail.com');
     const [password, setPassword] = useState<string>('test');
@@ -26,11 +29,14 @@ export const AuthPage = (): JSX.Element => {
             setErrorMessage(error.message);
         }
     };
-    const tokenKey = process.env.EXPO_PUBLIC_TOKEN_KEY;
-    const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
     const handleSignIn = async (): Promise<void> => {
         try {
+            console.log('In handle sign in');
+            console.log('apiUrl');
+            console.log(apiUrl);
+            console.log('tokenKey');
+            console.log(tokenKey);
             const data = await onLogin(email, password);
 
             setErrorMessage(JSON.stringify(data));
