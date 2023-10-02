@@ -9,6 +9,7 @@ import { MongoClient } from 'mongodb';
 import workoutRoutes from './routes/workouts';
 import postRoutes from './routes/posts';
 import userAuthRoutes from './routes/userAuth';
+import usersRoutes from './routes/users';
 
 const app = express();
 const port = 3000;
@@ -39,6 +40,7 @@ app.use(express.json());
 app.use('/', userAuthRoutes);
 app.use('/workouts', workoutRoutes);
 app.use('/posts', postRoutes);
+app.use('/users', usersRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
