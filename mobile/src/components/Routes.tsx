@@ -9,12 +9,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useRecoilValue } from 'recoil';
+import { ProfileStackNavigator } from '../navigation/ProfileStackNavigator';
 import { useAuth } from '../context/AuthContext';
 import { TabNavigatorParamList } from '../types/navigationTypes';
 import { TabataSetup } from './TabataSetupPage/TabataSetup';
 import { WorkoutTimerPage } from './WorkoutTimerPage';
 import { Home } from './HomePage';
-import { ProfilePage } from './ProfilePage';
+// import { ProfilePage } from './ProfilePage';
 import { showFooterState } from '../atoms/showFooterAtom';
 import { WorkoutsPage } from './WorkoutsPage';
 import { AuthPage } from './AuthPage';
@@ -84,7 +85,7 @@ export const Routes = (): JSX.Element => {
                         />
 
                         <Tab.Screen
-                            component={ProfilePage}
+                            component={ProfileStackNavigator}
                             name="Profile"
                             options={{
                                 tabBarIcon: ProfilePageIcon,
