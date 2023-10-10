@@ -1,8 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import express, { Request, Response } from 'express';
+import mongoose from 'mongoose';
 import { MongoClient, Collection, ObjectId } from 'mongodb';
 // eslint-disable-next-line import/no-relative-packages
 import { User } from '../../../mobile/src/types/users';
+import authenticate from '../middleware/authenticate';
 
 const router = express.Router();
 const connectionString = process.env.MONGODB_URI;
@@ -49,8 +51,6 @@ router.get('/:userId', async (req: Request, res: Response) => {
 router.get('/username/:username', async (req: Request, res: Response) => {
   try {
     const { username } = req.params; // Extract username from params
-    console.log('USERNAME');
-    console.log(username);
 
     // Find the user by username
     const user = await usersCollection.findOne({ username });
@@ -69,9 +69,9 @@ router.get('/username/:username', async (req: Request, res: Response) => {
   }
 });
 
-router.put('/:userId', async (req: Request, res: Response) => {
+router.put('/:userId', authenticate, async (req: Request, res: Response) => {
   try {
-    const userId = new ObjectId(req.params.userId); // Convert string ID to ObjectId
+    const userId = new mongoose.Types.ObjectId(req.params.userId);
     const updateData: Partial<User> = req.body; // Get the data to update from the request body
 
     // Prevent updating sensitive fields
@@ -79,7 +79,7 @@ router.put('/:userId', async (req: Request, res: Response) => {
     delete updateData.passwordHash;
 
     const result = await usersCollection.updateOne(
-      { _id: userId.toHexString() },
+      { _id: userId },
       { $set: updateData },
     );
 

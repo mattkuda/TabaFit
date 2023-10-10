@@ -4,6 +4,7 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 // eslint-disable-next-line import/no-unresolved
 import { ProfileStackParamList } from 'src/navigation/navigationTypes';
+import axios from 'axios';
 
 type EditProfileRouteProp = RouteProp<ProfileStackParamList, 'EditProfile'>;
 type EditProfileNavigationProp = StackNavigationProp<ProfileStackParamList, 'EditProfile'>;
@@ -16,19 +17,29 @@ interface EditProfileProps {
 export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation }) => {
     const { user } = route.params;
 
-    console.log('HERE ARE THE PROPS');
-    console.log(user);
     const [username, setUsername] = useState(user.username);
     const [email, setEmail] = useState(user.email);
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
 
-    // Function to handle the update of user info
-    const handleUpdate = (): void => {
-    // Here you would typically make an API call to update the user info
-        console.log('User Info Updated:', {
-            username, email, firstName, lastName,
-        });
+    const handleUpdate = async (): Promise<void> => {
+        try {
+            // eslint-disable-next-line no-underscore-dangle
+            const response = await axios.put(`http://localhost:3000/users/${user._id}`, {
+                username,
+                email,
+                firstName,
+                lastName,
+            });
+
+            if (response.status === 200) {
+                navigation.goBack();
+            } else {
+                console.error(response.data.message);
+            }
+        } catch (error) {
+            console.error('Error updating user:', error);
+        }
     };
 
     return (

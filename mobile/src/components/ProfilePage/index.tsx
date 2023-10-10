@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { VStack, Text, Button } from 'native-base';
 import Config from 'react-native-config';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useUserInfo } from '../../hooks/useUserInfo';
 import { EditProfileScreenNavigationProp } from '../../types/navigationTypes';
 import { useAuth } from '../../context/AuthContext';
@@ -14,10 +14,16 @@ export const ProfilePage = (): JSX.Element => {
     // TODO: replace with the user's username based on cookie
     const userInfo = useUserInfo('test');
 
-    console.log('userInfo');
-    console.log('userInfo');
-    console.log(userInfo);
-    console.log(userInfo.data);
+    useFocusEffect(
+        useCallback(() => {
+            // Refetch the user data when the screen comes into focus
+            userInfo.refetch();
+
+            return () => {
+                // Do any cleanup if needed when the screen goes out of focus
+            };
+        }, [userInfo]),
+    );
 
     const navigateToEditProfile = (): void => {
         if (userInfo.isSuccess && userInfo) {
