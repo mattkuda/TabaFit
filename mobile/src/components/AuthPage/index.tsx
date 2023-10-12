@@ -32,11 +32,6 @@ export const AuthPage = (): JSX.Element => {
 
     const handleSignIn = async (): Promise<void> => {
         try {
-            console.log('In handle sign in');
-            console.log('apiUrl');
-            console.log(apiUrl);
-            console.log('tokenKey');
-            console.log(tokenKey);
             const data = await onLogin(email, password);
 
             setErrorMessage(JSON.stringify(data));

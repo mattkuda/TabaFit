@@ -16,7 +16,6 @@ const authenticate = (req: Request, res: Response, next: NextFunction): Response
 
   const token = authHeader.split(' ')[1];
 
-  console.log(`THE PARSED TOKEN IS!: ${token}`);
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const decodedToken: any = jwt.verify(token, process.env.TOKEN_KEY as string);

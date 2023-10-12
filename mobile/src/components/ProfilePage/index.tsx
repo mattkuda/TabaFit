@@ -28,8 +28,6 @@ export const ProfilePage = (): JSX.Element => {
     const navigateToEditProfile = (): void => {
         if (userInfo.isSuccess && userInfo) {
             // Navigate to EditProfilePage with user data
-            console.log('passing this as user to edit page');
-            console.log(userInfo.data);
             navigation.navigate('EditProfile', { user: userInfo.data });
         }
     };

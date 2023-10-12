@@ -27,7 +27,6 @@ let postsCollection: Collection<Post>;
 })();
 
 router.get('/', async (req: Request, res: Response) => {
-  console.log('POSTSS');
   try {
     const posts = await postsCollection.aggregate([
       {

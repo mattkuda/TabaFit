@@ -49,7 +49,7 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
 
     const onRegister = async (email: string, password: string): Promise<void> => {
         try {
-            const response = await axios.post(`${apiUrl}/register`, { email, password });
+            const response = await axios.post(`${apiUrl}/signup`, { email, password });
             const { token } = response.data;
 
             setAuthState({ token, authenticated: true });
@@ -57,8 +57,6 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
             axios.defaults.headers.common.Authorization = `Bearer ${response.data.token}`;
 
             await SecureStore.setItemAsync(tokenKey, response.data.token);
-
-            // return response.data;
         } catch (error) {
             console.error('Registration error:', error);
             throw error;
@@ -67,10 +65,7 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
 
     const onLogin = async (email: string, password: string): Promise<void> => {
         try {
-            console.log(apiUrl);
             const response = await axios.post(`${apiUrl}/login`, { email, password });
-
-            console.log('Login errorq234ewqfd3241325:');
             const { token } = response.data;
 
             setAuthState({ token, authenticated: true });
