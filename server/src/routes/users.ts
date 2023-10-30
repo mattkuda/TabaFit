@@ -40,7 +40,7 @@ router.get('/:userId', async (req: Request, res: Response) => {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { passwordHash, ...safeUser } = user;
+    const { password, ...safeUser } = user;
     res.status(200).send(safeUser);
   } catch (err) {
     console.error('Failed to fetch user', err);
@@ -61,11 +61,45 @@ router.get('/username/:username', async (req: Request, res: Response) => {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { passwordHash, ...safeUser } = user;
+    const { password, ...safeUser } = user;
     res.status(200).send(safeUser);
   } catch (err) {
     console.error('Failed to get user by username', err);
     res.status(500).send({ message: 'Failed to get user by username' });
+  }
+});
+
+router.get('/search/:query', async (req: Request, res: Response) => {
+  try {
+    const { query } = req.params;
+
+    // Create a case-insensitive regex pattern for the search query
+    const regex = new RegExp(query, 'i');
+
+    // Search for users by username, first name, or last name
+    const users = await usersCollection.find({
+      $or: [
+        { username: regex },
+        { firstName: regex },
+        { lastName: regex },
+      ],
+    }).toArray();
+
+    // Exclude sensitive fields from the results
+    const safeUsers = users.map((user) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...safeUser } = user;
+
+      console.log('safeUser');
+      console.log(safeUser);
+
+      return safeUser;
+    });
+
+    res.status(200).send(safeUsers);
+  } catch (err) {
+    console.error('Failed to search for users', err);
+    res.status(500).send({ message: 'Failed to search for users' });
   }
 });
 
@@ -76,7 +110,7 @@ router.put('/:userId', authenticate, async (req: Request, res: Response) => {
 
     // Prevent updating sensitive fields
     delete updateData._id;
-    delete updateData.passwordHash;
+    delete updateData.password;
 
     const result = await usersCollection.updateOne(
       { _id: userId },
