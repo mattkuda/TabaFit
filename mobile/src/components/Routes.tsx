@@ -9,17 +9,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useRecoilValue } from 'recoil';
+import { HomeStackNavigator } from '../navigation/HomeStackNavigator';
 import { ProfileStackNavigator } from '../navigation/ProfileStackNavigator';
 import { useAuth } from '../context/AuthContext';
 import { TabNavigatorParamList } from '../types/navigationTypes';
 import { TabataSetup } from './TabataSetupPage/TabataSetup';
 import { WorkoutTimerPage } from './WorkoutTimerPage';
-import { Home } from './HomePage';
-// import { ProfilePage } from './ProfilePage';
 import { showFooterState } from '../atoms/showFooterAtom';
 import { WorkoutsPage } from './WorkoutsPage';
 import { AuthPage } from './AuthPage';
-// Create a new stack navigator
+
 const TimerStack = createStackNavigator<TabNavigatorParamList>();
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
@@ -40,7 +39,6 @@ const TimerStackNavigator = (): JSX.Element => (
     </TimerStack.Navigator>
 );
 
-// Creating separate components for each Icon
 const HomeIcon = ({ color, size }): JSX.Element => <Ionicons color={color} name="home-outline" size={size} />;
 const TimerIcon = ({ color, size }): JSX.Element => <Ionicons color={color} name="timer-outline" size={size} />;
 const ProfilePageIcon = ({ color, size }): JSX.Element => <Ionicons color={color} name="information-circle-outline" size={size} />;
@@ -65,12 +63,12 @@ export const Routes = (): JSX.Element => {
             <SafeAreaView style={{ flex: 1 }}>
                 <NavigationContainer>
                     <Tab.Navigator
-                        initialRouteName="Home"
+                        initialRouteName="HomePage"
                         screenOptions={{ headerShown: false }}
                     >
                         <Tab.Screen
-                            component={Home}
-                            name="Home"
+                            component={HomeStackNavigator}
+                            name="HomePage"
                             options={{
                                 tabBarIcon: HomeIcon,
                             }}

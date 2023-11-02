@@ -9,6 +9,7 @@ export interface TabNavigatorParamList extends ParamListBase {
     WorkoutsPage: undefined,
     ProfilePage: undefined,
     EditProfile: { user: User };
+    Search: undefined;
 }
 
 export type HomeScreenRouteProp = RouteProp<TabNavigatorParamList, 'Home'>;

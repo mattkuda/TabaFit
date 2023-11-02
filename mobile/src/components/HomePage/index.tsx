@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-    VStack, Box, Text, Input, FlatList,
+    VStack, Box, Text, Icon, IconButton,
 } from 'native-base';
-import { User } from '../../types/users';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+import { SearchScreenNavigationProp } from '../../navigation/navigationTypes';
 import { useQueryPosts } from '../../hooks/useQueryPosts';
-import { useSearchUsers } from '../../hooks/useSearchUsers'; // Import the new hook
 import { useAuth } from '../../context/AuthContext';
 
-export const Home = (): JSX.Element => {
+export const HomePage = (): JSX.Element => {
     const [token, setToken] = useState<string>('');
-    const [searchQuery, setSearchQuery] = useState<string>(''); // State to hold the search query
     const { data: postData } = useQueryPosts();
-    const { data: userData } = useSearchUsers(searchQuery); // Use the new hook with the search query
     const { authState: authenticated } = useAuth();
+    const navigation = useNavigation<SearchScreenNavigationProp>();
 
     useEffect(() => {
         const fetchToken = async (): Promise<void> => {
@@ -33,19 +33,18 @@ export const Home = (): JSX.Element => {
 
     return (
         <Box flex={1} justifyContent="center">
+            {/* <CustomHeader /> */}
             <VStack alignItems="center" space={4}>
+                <IconButton
+                    _icon={{
+                        color: 'primary.500',
+                        size: 'md',
+                    }}
+                    borderRadius="full"
+                    icon={<Icon as={Ionicons} name="search-outline" size="sm" />}
+                    onPress={(): void => navigation.navigate('Search')}
+                />
                 <Text fontSize="5xl">Abcountable</Text>
-                <Input
-                    placeholder="Search for users..."
-                    value={searchQuery}
-                    onChangeText={setSearchQuery}
-                />
-                <FlatList
-                    data={userData}
-                    // eslint-disable-next-line no-underscore-dangle
-                    keyExtractor={(item: User): string => item._id.toString()}
-                    renderItem={({ item }): JSX.Element => <Text>{item.username}</Text>}
-                />
                 <Text>TODO: Home Feed</Text>
                 <Text>
                     {JSON.stringify(postData)}
