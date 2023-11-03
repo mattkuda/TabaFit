@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { VStack, Text, Button } from 'native-base';
-import Config from 'react-native-config';
 import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
 import { ProfileScreenRouteProp } from '../../navigation/navigationTypes';
 import { useUserInfo } from '../../hooks/useUserInfo';
@@ -10,13 +9,10 @@ import { useAuth } from '../../context/AuthContext';
 export const ProfilePage = (): JSX.Element => {
     const { onLogout } = useAuth();
     // eslint-disable-next-line prefer-destructuring
-    const TOKEN_KEY = Config.TOKEN_KEY; // <-- Use Config to access environment variables
     const navigation = useNavigation<EditProfileScreenNavigationProp>();
     const route = useRoute<ProfileScreenRouteProp>();
-    const userId = route.params?.userId || null; // Access userId from the route params
-    const userInfo = useUserInfo(userId || 'test'); // Pass userId to your hook
-    // TODO: replace with the user's username based on cookie
-    // const userInfo = useUserInfo('test');
+    const username = route.params?.username || null; // Access userId from the route params
+    const userInfo = useUserInfo(username || 'test'); // Pass userId to your hook
 
     useFocusEffect(
         useCallback(() => {
@@ -54,7 +50,7 @@ export const ProfilePage = (): JSX.Element => {
             )}
             <Button onPress={navigateToEditProfile}>Edit Profile</Button>
             <Text>
-                {TOKEN_KEY}
+                {JSON.stringify(route.params)}
             </Text>
             <Button onPress={handleLogout}>Logout</Button>
         </VStack>

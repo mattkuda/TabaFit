@@ -16,7 +16,7 @@ export const HomeStackNavigator = (): JSX.Element => (
         <Stack.Screen component={SearchPage} name="Search" />
         <Stack.Screen
             component={ProfilePage}
-            initialParams={{ userId: null }} // Set up initial params for the user ID
+            initialParams={{ username: null }} // Set up initial params for the user ID
             name="Profile"
         />
     </Stack.Navigator>
