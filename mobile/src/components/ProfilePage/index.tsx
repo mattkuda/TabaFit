@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
 import { VStack, Text, Button } from 'native-base';
 import Config from 'react-native-config';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
+import { ProfileScreenRouteProp } from '../../navigation/navigationTypes';
 import { useUserInfo } from '../../hooks/useUserInfo';
 import { EditProfileScreenNavigationProp } from '../../types/navigationTypes';
 import { useAuth } from '../../context/AuthContext';
@@ -11,8 +12,11 @@ export const ProfilePage = (): JSX.Element => {
     // eslint-disable-next-line prefer-destructuring
     const TOKEN_KEY = Config.TOKEN_KEY; // <-- Use Config to access environment variables
     const navigation = useNavigation<EditProfileScreenNavigationProp>();
+    const route = useRoute<ProfileScreenRouteProp>();
+    const userId = route.params?.userId || null; // Access userId from the route params
+    const userInfo = useUserInfo(userId || 'test'); // Pass userId to your hook
     // TODO: replace with the user's username based on cookie
-    const userInfo = useUserInfo('test');
+    // const userInfo = useUserInfo('test');
 
     useFocusEffect(
         useCallback(() => {
@@ -27,7 +31,6 @@ export const ProfilePage = (): JSX.Element => {
 
     const navigateToEditProfile = (): void => {
         if (userInfo.isSuccess && userInfo) {
-            // Navigate to EditProfilePage with user data
             navigation.navigate('EditProfile', { user: userInfo.data });
         }
     };
@@ -35,7 +38,6 @@ export const ProfilePage = (): JSX.Element => {
     const handleLogout = async (): Promise<void> => {
         try {
             await onLogout();
-            // You can also navigate to the login page or show a message after logging out if needed
         } catch (error) {
             console.error('Error logging out:', error);
         }
