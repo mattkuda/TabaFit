@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { useSetRecoilState } from 'recoil';
 import { useAuth } from '../../context/AuthContext';
-import { isAuthenticatedState } from '../../atoms/isAuthenticatedAtom';
+import { userState } from '../../atoms/userStateAtom';
 
 const tokenKey = process.env.EXPO_PUBLIC_TOKEN_KEY;
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -13,7 +13,7 @@ export const AuthPage = (): JSX.Element => {
     const [email, setEmail] = useState<string>('test@gmail.com');
     const [password, setPassword] = useState<string>('test');
     const [errorMessage, setErrorMessage] = useState<string>('');
-    const setIsAuthenticated = useSetRecoilState(isAuthenticatedState);
+    const setUser = useSetRecoilState(userState);
     const { onLogin, onRegister } = useAuth();
 
     const handleSignUp = async (): Promise<void> => {
@@ -36,9 +36,15 @@ export const AuthPage = (): JSX.Element => {
 
             setErrorMessage(JSON.stringify(data));
 
+            console.log('dataa');
+            console.log(data);
+
             if (data.success) {
-                setIsAuthenticated(true); // This will update the global state in Recoil
-                // Navigate to the main app
+                setUser((prevState) => ({
+                    ...prevState,
+                    isAuthenticated: true,
+                    user: data.user, // Assuming 'data.user' contains the user data returned from the server
+                }));
             } else {
                 // setErrorMessage(data.message);
             }

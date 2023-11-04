@@ -39,7 +39,14 @@ export const SearchPage = (): JSX.Element => {
                     renderItem={({ item }): JSX.Element => (
                         // eslint-disable-next-line no-underscore-dangle
                         <Pressable onPress={(): void => handlePressUser(item.username)}>
-                            <Text>{item.username}</Text>
+                            <Text>
+                                {item?.firstName}
+                                {' '}
+                                {item?.lastName}
+                                {' '}
+                                @
+                                {item.username}
+                            </Text>
                         </Pressable>
                     )}
                 />

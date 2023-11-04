@@ -3,15 +3,18 @@ import React, {
 } from 'react';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import { User } from '../types/users';
 
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 const tokenKey = process.env.EXPO_PUBLIC_TOKEN_KEY;
 
+// Add a user field to the AuthProps interface
 interface AuthProps {
     children?: React.ReactNode;
     authState?: {
         token: string | null;
         authenticated: boolean | null;
+        user?: User; // You can replace 'any' with a more specific type for your user data
     };
     onRegister?: (email: string, password: string) => Promise<any>;
     onLogin?: (email: string, password: string) => Promise<any>;
@@ -23,12 +26,15 @@ const AuthContext = createContext<AuthProps>({});
 export const useAuth = (): AuthProps => useContext(AuthContext);
 
 export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
+    // Update the initial state to include a user field
     const [authState, setAuthState] = useState<{
         token: string | null;
         authenticated: boolean | null;
+        user?: any; // Again, replace 'any' with your user type
     }>({
         token: null,
         authenticated: null,
+        user: null,
     });
 
     useEffect(() => {
@@ -63,18 +69,17 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
         }
     };
 
-    const onLogin = async (email: string, password: string): Promise<void> => {
+    // Update the onLogin function to handle user data
+    const onLogin = async (email: string, password: string): Promise<any> => {
         try {
             const response = await axios.post(`${apiUrl}/login`, { email, password });
-            const { token } = response.data;
+            const { token, user } = response.data;
 
-            setAuthState({ token, authenticated: true });
+            setAuthState({ token, authenticated: true, user });
+            axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+            await SecureStore.setItemAsync(tokenKey, token);
 
-            axios.defaults.headers.common.Authorization = `Bearer ${response.data.token}`;
-
-            await SecureStore.setItemAsync(tokenKey, response.data.token);
-
-            // return response.data;
+            return { success: true, user };
         } catch (error) {
             console.error('Login error:', error);
             throw error;

@@ -60,25 +60,36 @@ router.post('/signup', async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 });
-
 router.post('/login', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.error('LOGIN');
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.json({ message: 'All fields are required' });
+      return res.status(400).json({ message: 'All fields are required' });
     }
     const user = await usersCollection.findOne({ email });
     if (!user) {
-      return res.json({ message: 'Incorrect password or email' });
+      return res.status(401).json({ message: 'Incorrect password or email' });
     }
     const auth = await bcrypt.compare(password, user.password);
     if (!auth) {
-      return res.json({ message: 'Incorrect password or email' });
+      return res.status(401).json({ message: 'Incorrect password or email' });
     }
     // eslint-disable-next-line no-underscore-dangle
     const token = createSecretToken(user._id.toString());
-    return res.status(201).json({ message: 'User logged in successfully', success: true, token });
+
+    // Exclude sensitive data from the user object before sending it to the client
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _, ...userWithoutPassword } = user;
+
+    console.log('userWithoutPassword');
+    console.log(userWithoutPassword);
+
+    return res.status(200).json({
+      message: 'User logged in successfully',
+      success: true,
+      token,
+      user: userWithoutPassword, // Send the user data without the password
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
