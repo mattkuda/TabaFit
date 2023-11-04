@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import { MongoClient, Collection, ObjectId } from 'mongodb';
 // eslint-disable-next-line import/no-relative-packages
 import { User } from '../../../mobile/src/types/users';
-import authenticate from '../middleware/authenticate';
+import authenticate, { AuthRequest } from '../middleware/authenticate';
 
 const router = express.Router();
 const connectionString = process.env.MONGODB_URI;
@@ -103,17 +103,23 @@ router.get('/search/:query', async (req: Request, res: Response) => {
   }
 });
 
-router.put('/:userId', authenticate, async (req: Request, res: Response) => {
+router.put('/:userId', authenticate, async (req: AuthRequest, res: Response) => {
   try {
-    const userId = new mongoose.Types.ObjectId(req.params.userId);
+    const { userId } = req.params;
     const updateData: Partial<User> = req.body; // Get the data to update from the request body
+
+    // Check if the authenticated user is the same as the user being updated
+    if (req.userId !== userId) {
+      res.status(403).send({ message: 'Forbidden: You cannot update other users\' information.' });
+      return;
+    }
 
     // Prevent updating sensitive fields
     delete updateData._id;
     delete updateData.password;
 
     const result = await usersCollection.updateOne(
-      { _id: userId },
+      { _id: new mongoose.Types.ObjectId(userId) },
       { $set: updateData },
     );
 

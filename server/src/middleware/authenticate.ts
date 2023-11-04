@@ -3,11 +3,11 @@ import {
 } from 'express';
 import jwt from 'jsonwebtoken';
 
-interface Request extends ExpressRequest {
+export interface AuthRequest extends ExpressRequest {
     userId?: string;
 }
 
-const authenticate = (req: Request, res: Response, next: NextFunction): Response | void => {
+const authenticate = (req: AuthRequest, res: Response, next: NextFunction): Response | void => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
