@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { MongoClient, Collection, ObjectId } from 'mongodb';
+import mongoose from 'mongoose';
 import authenticate from '../middleware/authenticate';
 
 const router = express.Router();
@@ -58,12 +59,16 @@ router.delete('/unfollow', authenticate, async (req: Request, res: Response) => 
   }
 });
 
-// Endpoint to get a list of followers for a user
+// Endpoint to get a list of followers for a user, with optional filtering by followerId
 router.get('/:userId/followers', async (req: Request, res: Response) => {
-  const userId = new ObjectId(req.params.userId);
+  console.log('followers');
+  const userId = new mongoose.Types.ObjectId(req.body.userId);
+  const followerId = req.query.followerId
+    ? new mongoose.Types.ObjectId(req.query.followerId as string) : undefined;
 
   try {
-    const followers = await followsCollection.find({ followeeId: userId }).toArray();
+    const query = { followeeId: userId, followerId };
+    const followers = await followsCollection.find(query).toArray();
     res.status(200).send(followers);
   } catch (err) {
     console.error('Failed to fetch followers', err);
@@ -71,12 +76,26 @@ router.get('/:userId/followers', async (req: Request, res: Response) => {
   }
 });
 
-// Endpoint to get a list of users a user is following
+// Endpoint to get a list of users a user is following, with optional filtering by followeeId
 router.get('/:userId/following', async (req: Request, res: Response) => {
-  const userId = new ObjectId(req.params.userId);
+  console.log('9999999');
+  console.log(JSON.stringify(req.params.userId));
+  const userId = new mongoose.Types.ObjectId(req.params.userId as string);
+  const followeeId = req.query.followeeId
+    ? new mongoose.Types.ObjectId(req.query.followeeId as string)
+    : null;
+
+  console.log('userId');
+  console.log(userId);
+
+  console.log('followeeId');
+  console.log(followeeId);
 
   try {
-    const following = await followsCollection.find({ followerId: userId }).toArray();
+    // Construct the query object based on whether followeeId is provided
+    const query = { followerId: userId, followeeId: followeeId || undefined };
+
+    const following = await followsCollection.find(query).toArray();
     res.status(200).send(following);
   } catch (err) {
     console.error('Failed to fetch following', err);

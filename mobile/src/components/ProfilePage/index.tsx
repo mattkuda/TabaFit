@@ -1,21 +1,21 @@
 import React, { useCallback } from 'react';
 import { VStack, Text, Button } from 'native-base';
 import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
-import { useRecoilValue } from 'recoil';
-import { userState } from '../../atoms/userStateAtom';
 import { ProfileScreenRouteProp } from '../../navigation/navigationTypes';
 import { useUserInfo } from '../../hooks/useUserInfo';
 import { EditProfileScreenNavigationProp } from '../../types/navigationTypes';
 import { useAuth } from '../../context/AuthContext';
+import { FollowButton } from './FollowButton';
 
 export const ProfilePage = (): JSX.Element => {
     const { onLogout } = useAuth();
     const navigation = useNavigation<EditProfileScreenNavigationProp>();
     const route = useRoute<ProfileScreenRouteProp>();
-    const { user: userRecoilState } = useRecoilValue(userState);
-    const username = route.params?.username || userRecoilState.username; // Access userId from the route params
-    const userInfo = useUserInfo(username); // Pass userId to your hook
-    const isCurrentUserProfile = userRecoilState && username === userRecoilState.username;
+    const { authState: { userId: authUserId } } = useAuth();
+    const userId = route.params?.userId || authUserId; // Access userId from the route params
+    const userInfo = useUserInfo(userId); // Pass userId to your hook
+    const isCurrentUserProfile = userId === authUserId;
+    // const isCurrentUserProfile = true;
 
     useFocusEffect(
         useCallback(() => {
@@ -44,19 +44,29 @@ export const ProfilePage = (): JSX.Element => {
 
     return (
         <VStack alignItems="center" space={4}>
-            <Text>Profile Page</Text>
+            <Text>Profile Page!</Text>
             {userInfo.data && (
                 <>
                     <Text>{`Username: ${userInfo.data.username}`}</Text>
                     <Text>{`Name: ${userInfo.data.firstName}${userInfo.data.lastName ? ` ${userInfo.data.lastName}` : ''}`}</Text>
                 </>
             )}
-            {isCurrentUserProfile && (
+            {isCurrentUserProfile ? (
                 <>
                     <Button onPress={navigateToEditProfile}>Edit Profile</Button>
                     <Button onPress={handleLogout}>Logout</Button>
                 </>
+            ) : (
+                <>
+                    {/* eslint-disable-next-line no-underscore-dangle */}
+                    <FollowButton profileUserId={userId} />
+                    <Text>other</Text>
+                </>
+
             )}
+            <Text>userState</Text>
+            <Text>{authUserId}</Text>
+            <Button onPress={handleLogout}>Emergency Logout</Button>
         </VStack>
     );
 };

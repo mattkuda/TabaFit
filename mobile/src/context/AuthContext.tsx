@@ -3,7 +3,6 @@ import React, {
 } from 'react';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
-import { User } from '../types/users';
 
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 const tokenKey = process.env.EXPO_PUBLIC_TOKEN_KEY;
@@ -14,7 +13,7 @@ interface AuthProps {
     authState?: {
         token: string | null;
         authenticated: boolean | null;
-        user?: User; // You can replace 'any' with a more specific type for your user data
+        userId?: string; // You can replace 'any' with a more specific type for your user data
     };
     onRegister?: (email: string, password: string) => Promise<any>;
     onLogin?: (email: string, password: string) => Promise<any>;
@@ -30,11 +29,11 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
     const [authState, setAuthState] = useState<{
         token: string | null;
         authenticated: boolean | null;
-        user?: any; // Again, replace 'any' with your user type
+        userId?: string; // Again, replace 'any' with your user type
     }>({
         token: null,
         authenticated: null,
-        user: null,
+        userId: null,
     });
 
     useEffect(() => {
@@ -70,16 +69,21 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
     };
 
     // Update the onLogin function to handle user data
-    const onLogin = async (email: string, password: string): Promise<any> => {
+    const onLogin = async (email: string, password: string): Promise<void> => {
         try {
             const response = await axios.post(`${apiUrl}/login`, { email, password });
             const { token, user } = response.data;
 
-            setAuthState({ token, authenticated: true, user });
+            setAuthState({
+                token,
+                authenticated: true,
+                // eslint-disable-next-line no-underscore-dangle
+                userId: user._id,
+            });
+
             axios.defaults.headers.common.Authorization = `Bearer ${token}`;
             await SecureStore.setItemAsync(tokenKey, token);
-
-            return { success: true, user };
+            // You might also want to store the user ID and username in secure storage
         } catch (error) {
             console.error('Login error:', error);
             throw error;

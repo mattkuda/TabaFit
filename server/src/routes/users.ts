@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
-import { MongoClient, Collection, ObjectId } from 'mongodb';
+import { MongoClient, Collection } from 'mongodb';
 // eslint-disable-next-line import/no-relative-packages
 import { User } from '../../../mobile/src/types/users';
 import authenticate, { AuthRequest } from '../middleware/authenticate';
@@ -31,8 +31,9 @@ let usersCollection: Collection<User>;
 
 router.get('/:userId', async (req: Request, res: Response) => {
   try {
-    const userId = new ObjectId(req.params.userId);
-    const user = await usersCollection.findOne({ _id: userId.toHexString() });
+    const user = await usersCollection.findOne(
+      { _id: new mongoose.Types.ObjectId(req.params.userId) },
+    );
 
     if (!user) {
       res.status(404).send({ message: 'User not found' });
@@ -89,9 +90,6 @@ router.get('/search/:query', async (req: Request, res: Response) => {
     const safeUsers = users.map((user) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...safeUser } = user;
-
-      console.log('safeUser');
-      console.log(safeUser);
 
       return safeUser;
     });

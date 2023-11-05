@@ -6,7 +6,7 @@ import { User } from '../types/users';
 export type HomeStackParamList = {
     Home: undefined;
     Search: undefined;
-    Profile: {username: string|null}
+    Profile: {userId: string | null}
 };
 
 export type SearchScreenNavigationProp = StackNavigationProp<HomeStackParamList, 'Search'>;
@@ -14,7 +14,7 @@ export type SearchScreenNavigationProp = StackNavigationProp<HomeStackParamList,
 
 // Profile Stack
 export type ProfileStackParamList = {
-    Profile: { username?: string };
+    Profile: { userId?: string };
     EditProfile: { user: User };
 };
 

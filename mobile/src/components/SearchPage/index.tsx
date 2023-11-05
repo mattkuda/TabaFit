@@ -15,9 +15,9 @@ export const SearchPage = (): JSX.Element => {
     const { data: users, isLoading } = useSearchUsers(searchQuery);
     const navigation = useNavigation<ProfilePageScreenNavigationProp>(); // Use the hook to get the navigation object
 
-    const handlePressUser = (username: string): void => {
+    const handlePressUser = (userId: string): void => {
         // Navigate to the ProfilePage with the userId as a parameter
-        navigation.navigate('Profile', { username });
+        navigation.navigate('Profile', { userId });
     };
 
     return (
@@ -38,7 +38,7 @@ export const SearchPage = (): JSX.Element => {
                     keyExtractor={(item: User): string => item._id.toString()}
                     renderItem={({ item }): JSX.Element => (
                         // eslint-disable-next-line no-underscore-dangle
-                        <Pressable onPress={(): void => handlePressUser(item.username)}>
+                        <Pressable onPress={(): void => handlePressUser(item._id.toString())}>
                             <Text>
                                 {item?.firstName}
                                 {' '}
