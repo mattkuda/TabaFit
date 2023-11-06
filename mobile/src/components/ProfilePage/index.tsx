@@ -12,10 +12,9 @@ export const ProfilePage = (): JSX.Element => {
     const navigation = useNavigation<EditProfileScreenNavigationProp>();
     const route = useRoute<ProfileScreenRouteProp>();
     const { authState: { userId: authUserId } } = useAuth();
-    const userId = route.params?.userId || authUserId; // Access userId from the route params
-    const userInfo = useUserInfo(userId); // Pass userId to your hook
+    const userId = route.params?.userId || authUserId;
+    const userInfo = useUserInfo(userId);
     const isCurrentUserProfile = userId === authUserId;
-    // const isCurrentUserProfile = true;
 
     useFocusEffect(
         useCallback(() => {

@@ -10,7 +10,6 @@ if (!connectionString) {
   throw new Error('MONGODB_URI environment variable is not set.');
 }
 
-// Connect to MongoDB
 const client = new MongoClient(connectionString);
 
 let followsCollection: Collection;
@@ -28,14 +27,27 @@ let followsCollection: Collection;
 
 // Endpoint to follow a user
 router.post('/follow', authenticate, async (req: Request, res: Response) => {
+  console.log('In post follow');
   const { followerId, followeeId } = req.body;
 
   try {
+    // Check if the follow relationship already exists
+    const existingFollow = await followsCollection.findOne({
+      followerId: new ObjectId(followerId),
+      followeeId: new ObjectId(followeeId),
+    });
+
+    if (existingFollow) {
+      res.status(400).send({ message: 'Already following this user' });
+      return;
+    }
+
     await followsCollection.insertOne({
       followerId: new ObjectId(followerId),
       followeeId: new ObjectId(followeeId),
       createdDate: new Date(),
     });
+
     res.status(200).send({ message: 'Followed successfully' });
   } catch (err) {
     console.error('Failed to follow user', err);
@@ -45,13 +57,26 @@ router.post('/follow', authenticate, async (req: Request, res: Response) => {
 
 // Endpoint to unfollow a user
 router.delete('/unfollow', authenticate, async (req: Request, res: Response) => {
+  console.log('In post unfollow');
   const { followerId, followeeId } = req.body;
 
   try {
+    // Check if the follow relationship exists
+    const existingFollow = await followsCollection.findOne({
+      followerId: new ObjectId(followerId),
+      followeeId: new ObjectId(followeeId),
+    });
+
+    if (!existingFollow) {
+      res.status(400).send({ message: 'Not following this user' });
+      return;
+    }
+
     await followsCollection.deleteOne({
       followerId: new ObjectId(followerId),
       followeeId: new ObjectId(followeeId),
     });
+
     res.status(200).send({ message: 'Unfollowed successfully' });
   } catch (err) {
     console.error('Failed to unfollow user', err);
@@ -78,8 +103,6 @@ router.get('/:userId/followers', async (req: Request, res: Response) => {
 
 // Endpoint to get a list of users a user is following, with optional filtering by followeeId
 router.get('/:userId/following', async (req: Request, res: Response) => {
-  console.log('9999999');
-  console.log(JSON.stringify(req.params.userId));
   const userId = new mongoose.Types.ObjectId(req.params.userId as string);
   const followeeId = req.query.followeeId
     ? new mongoose.Types.ObjectId(req.query.followeeId as string)
