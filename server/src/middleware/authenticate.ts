@@ -19,6 +19,7 @@ const authenticate = (req: AuthRequest, res: Response, next: NextFunction): Resp
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const decodedToken: any = jwt.verify(token, process.env.TOKEN_KEY as string);
+
     req.userId = decodedToken.id;
     return next(); // Explicitly return the result of next()
   } catch (err) {

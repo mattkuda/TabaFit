@@ -38,8 +38,8 @@ export const FollowButton = ({ profileUserId }: PropTypes): JSX.Element => {
     };
 
     return (
-        <Button disabled={isLoading} onPress={data.length ? handleUnfollow : handleFollow}>
-            {data.length ? 'Unfollow' : 'Follow'}
+        <Button disabled={isLoading} onPress={data?.length ? handleUnfollow : handleFollow}>
+            {data?.length ? 'Unfollow' : 'Follow'}
         </Button>
     );
 };

@@ -5,13 +5,17 @@ import {
 } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { useQueryPostsFollowing } from '../../hooks/useQueryPostsFollowing';
 import { SearchScreenNavigationProp } from '../../navigation/navigationTypes';
 import { useQueryPosts } from '../../hooks/useQueryPosts';
 import { useAuth } from '../../context/AuthContext';
 
 export const HomePage = (): JSX.Element => {
     const [token, setToken] = useState<string>('');
-    const { data: postData } = useQueryPosts();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { data: postData2 } = useQueryPosts();
+    const { data: postData } = useQueryPostsFollowing();
+
     const { authState: authenticated } = useAuth();
     const navigation = useNavigation<SearchScreenNavigationProp>();
 
@@ -35,6 +39,8 @@ export const HomePage = (): JSX.Element => {
         <Box flex={1} justifyContent="center">
             {/* <CustomHeader /> */}
             <VStack alignItems="center" space={4}>
+                <Text fontSize="5xl">Abcountable</Text>
+                <Text>TODO: Home Feed</Text>
                 <IconButton
                     _icon={{
                         color: 'primary.500',
@@ -44,8 +50,6 @@ export const HomePage = (): JSX.Element => {
                     icon={<Icon as={Ionicons} name="search-outline" size="sm" />}
                     onPress={(): void => navigation.navigate('Search')}
                 />
-                <Text fontSize="5xl">Abcountable</Text>
-                <Text>TODO: Home Feed</Text>
                 <Text>
                     {JSON.stringify(postData)}
                 </Text>
@@ -53,8 +57,8 @@ export const HomePage = (): JSX.Element => {
                     Token:
                     {' '}
                     {token}
-                    authenticated
-                    {authenticated ? 'y' : 'n'}
+                    authenticated:
+                    {authenticated ? ' y' : ' n'}
                 </Text>
             </VStack>
         </Box>

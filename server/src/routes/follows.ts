@@ -27,7 +27,6 @@ let followsCollection: Collection;
 
 // Endpoint to follow a user
 router.post('/follow', authenticate, async (req: Request, res: Response) => {
-  console.log('In post follow');
   const { followerId, followeeId } = req.body;
 
   try {
@@ -57,7 +56,6 @@ router.post('/follow', authenticate, async (req: Request, res: Response) => {
 
 // Endpoint to unfollow a user
 router.delete('/unfollow', authenticate, async (req: Request, res: Response) => {
-  console.log('In post unfollow');
   const { followerId, followeeId } = req.body;
 
   try {
