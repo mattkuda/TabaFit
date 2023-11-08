@@ -24,7 +24,6 @@ Promise<Response | void> => {
     const user = await User.create({
       email, password, username, createdAt,
     });
-    // eslint-disable-next-line no-underscore-dangle
     const token = createSecretToken(user._id);
     res.cookie('token', token, {
       sameSite: 'strict',

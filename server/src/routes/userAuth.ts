@@ -74,7 +74,6 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
     if (!auth) {
       return res.status(401).json({ message: 'Incorrect password or email' });
     }
-    // eslint-disable-next-line no-underscore-dangle
     const token = createSecretToken(user._id.toString());
 
     // Exclude sensitive data from the user object before sending it to the client

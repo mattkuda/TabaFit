@@ -89,7 +89,7 @@ module.exports = {
         'no-restricted-syntax': 'off',
         // Replaced with typescript rule
         'no-shadow': 'off',
-        'no-underscore-dangle': ['error', { allow: ['_embedded'] }],
+        'no-underscore-dangle': ['error', { allow: ['_id'] }], // This will allow _
         // The reasons for not using the constructor is stylistic
         'prefer-regex-literals': 'off',
         // Prefer single quotes and template literals

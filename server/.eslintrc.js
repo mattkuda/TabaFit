@@ -24,6 +24,7 @@ module.exports = {
       ts: 'never',
       tsx: 'never',
     }],
+    'no-underscore-dangle': ['error', { allow: ['_id'] }],
   },
   settings: {
     'import/parsers': {

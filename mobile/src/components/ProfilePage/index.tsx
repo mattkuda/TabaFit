@@ -57,7 +57,6 @@ export const ProfilePage = (): JSX.Element => {
                 </>
             ) : (
                 <>
-                    {/* eslint-disable-next-line no-underscore-dangle */}
                     <FollowButton profileUserId={userId} />
                     <Text>other</Text>
                 </>

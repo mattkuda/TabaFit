@@ -34,10 +34,8 @@ export const SearchPage = (): JSX.Element => {
             ) : (
                 <FlatList
                     data={users}
-                    // eslint-disable-next-line no-underscore-dangle
                     keyExtractor={(item: User): string => item._id.toString()}
                     renderItem={({ item }): JSX.Element => (
-                        // eslint-disable-next-line no-underscore-dangle
                         <Pressable onPress={(): void => handlePressUser(item._id.toString())}>
                             <Text>
                                 {item?.firstName}

@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import { MongoClient, Collection } from 'mongodb';

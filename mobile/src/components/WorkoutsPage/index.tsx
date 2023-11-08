@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import React, { FC } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import {

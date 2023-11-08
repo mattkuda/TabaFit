@@ -77,7 +77,6 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
             setAuthState({
                 token,
                 authenticated: true,
-                // eslint-disable-next-line no-underscore-dangle
                 userId: user._id,
             });
 

@@ -25,7 +25,6 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
     const handleUpdate = async (): Promise<void> => {
         try {
             // TODO Replace with interchangeable baseURL
-            // eslint-disable-next-line no-underscore-dangle
             const response = await axios.put(`http://localhost:3000/users/${user._id}`, {
                 username,
                 email,
