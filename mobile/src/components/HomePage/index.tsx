@@ -9,6 +9,7 @@ import { useQueryPostsFollowing } from '../../hooks/useQueryPostsFollowing';
 import { SearchScreenNavigationProp } from '../../navigation/navigationTypes';
 import { useQueryPosts } from '../../hooks/useQueryPosts';
 import { useAuth } from '../../context/AuthContext';
+import { PostCard } from '../common/PostCard';
 
 export const HomePage = (): JSX.Element => {
     const [token, setToken] = useState<string>('');
@@ -39,8 +40,6 @@ export const HomePage = (): JSX.Element => {
         <Box flex={1} justifyContent="center">
             {/* <CustomHeader /> */}
             <VStack alignItems="center" space={4}>
-                <Text fontSize="5xl">Abcountable</Text>
-                <Text>TODO: Home Feed</Text>
                 <IconButton
                     _icon={{
                         color: 'primary.500',
@@ -50,9 +49,10 @@ export const HomePage = (): JSX.Element => {
                     icon={<Icon as={Ionicons} name="search-outline" size="sm" />}
                     onPress={(): void => navigation.navigate('Search')}
                 />
-                <Text>
-                    {JSON.stringify(postData)}
-                </Text>
+                <Text fontSize="5xl">Abcountable</Text>
+                {postData.map((post) => (
+                    <PostCard key={post._id} post={post} />
+                ))}
                 <Text>
                     Token:
                     {' '}
