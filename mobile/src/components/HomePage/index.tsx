@@ -50,7 +50,7 @@ export const HomePage = (): JSX.Element => {
                     onPress={(): void => navigation.navigate('Search')}
                 />
                 <Text fontSize="5xl">Abcountable</Text>
-                {postData.map((post) => (
+                {postData?.map((post) => (
                     <PostCard key={post._id} post={post} />
                 ))}
                 <Text>

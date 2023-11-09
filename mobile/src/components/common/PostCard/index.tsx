@@ -3,6 +3,7 @@ import {
     HStack, VStack, Text, Avatar, Icon, IconButton,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
+import { formatDistanceToNow } from 'date-fns';
 import { Post } from '../../../types/posts';
 
 // Define the type for the props
@@ -25,13 +26,15 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <VStack borderColor="coolGray.200" borderRadius="md" borderWidth={1} mt={4} p={4} space={2}>
             <HStack justifyContent="space-between" space={2}>
                 <Avatar size="48px" source={{ uri: 'https://example.com/user-avatar.png' }} />
-                <VStack>
+                <VStack flex={1}>
                     <Text bold fontSize="md">
                         Username
+                        {' '}
+                        @
+                        {post.userId.substring(0, 8)}
                     </Text>
                     <Text color="coolGray.600" fontSize="xs">
-                        @
-                        {post.userId}
+                        {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
                     </Text>
                 </VStack>
             </HStack>
@@ -49,7 +52,6 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                     icon={<Icon as={Ionicons} name="chatbubble-outline" size="sm" />}
                     onPress={handleCommentPress}
                 />
-                {/* ... other buttons like share, etc. */}
             </HStack>
             <HStack color="coolGray.500" fontSize="xs" justifyContent="space-between" mt={2}>
                 <Text>
