@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { PostScreen } from '../components/PostScreen';
 import { ProfilePage } from '../components/ProfilePage';
 import { HomePage } from '../components/HomePage';
 import { SearchPage } from '../components/SearchPage';
@@ -19,5 +20,6 @@ export const HomeStackNavigator = (): JSX.Element => (
             initialParams={{ userId: null }} // Set up initial params for the user ID
             name="Profile"
         />
+        <Stack.Screen component={PostScreen} name="PostScreen" />
     </Stack.Navigator>
 );

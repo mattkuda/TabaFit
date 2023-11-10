@@ -7,6 +7,7 @@ export type HomeStackParamList = {
     Home: undefined;
     Search: undefined;
     Profile: {userId: string | null}
+    PostScreen: {postId: string}
 };
 
 export type SearchScreenNavigationProp = StackNavigationProp<HomeStackParamList, 'Search'>;
@@ -20,4 +21,9 @@ export type ProfileStackParamList = {
 
 export type ProfileScreenRouteProp = RouteProp<ProfileStackParamList, 'Profile'>;
 
-//
+// Post Stack
+export type PostStackParamList = {
+    PostScreen: { postId: string };
+};
+
+export type PostScreenRouteProp = RouteProp<PostStackParamList, 'PostScreen'>;
