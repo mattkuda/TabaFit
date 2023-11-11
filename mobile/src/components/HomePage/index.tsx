@@ -51,7 +51,7 @@ export const HomePage = (): JSX.Element => {
                 />
                 <Text fontSize="5xl">Abcountable</Text>
                 {postData?.map((post) => (
-                    <PostCard key={post._id} post={post} />
+                    <PostCard key={post._id.toString()} post={post} />
                 ))}
                 <Text>
                     Token:

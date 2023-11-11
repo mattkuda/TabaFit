@@ -47,6 +47,32 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/:postId', async (req: Request, res: Response) => {
+  const { postId } = req.params;
+
+  console.log('postId');
+  console.log(postId);
+
+  if (!ObjectId.isValid(postId)) {
+    res.status(400).send({ message: 'Invalid post ID' });
+    return;
+  }
+
+  try {
+    const post = await postsCollection.findOne({ _id: new ObjectId(postId) });
+
+    if (!post) {
+      res.status(404).send({ message: 'Post not found' });
+      return;
+    }
+
+    res.send(post);
+  } catch (err) {
+    console.error('Failed to fetch post', err);
+    res.status(500).send({ message: 'Failed to fetch post' });
+  }
+});
+
 router.get('/following-posts', authenticate, async (req: AuthRequest, res: Response) => {
   const { userId } = req;
 

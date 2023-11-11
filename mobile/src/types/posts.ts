@@ -1,7 +1,8 @@
+import mongoose from 'mongoose';
 import { Workout } from './workouts';
 
 export interface Post {
-    _id: string;
+    _id: mongoose.Types.ObjectId | string;
     userId: string;
     workout: Workout;
     createdAt: string;
