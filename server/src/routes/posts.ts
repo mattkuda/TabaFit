@@ -114,4 +114,38 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
   }
 });
 
+// LIKES ROUTES
+
+router.put('/:postId/like', authenticate, async (req: AuthRequest, res: Response) => {
+  const { postId } = req.params;
+  const { userId } = req;
+
+  try {
+    await postsCollection.updateOne(
+      { _id: postId },
+      { $addToSet: { likes: new ObjectId(userId) } },
+    );
+    res.status(200).send({ message: 'Post liked successfully' });
+  } catch (err) {
+    console.error('Failed to like post', err);
+    res.status(500).send({ message: 'Failed to like post' });
+  }
+});
+
+router.put('/:postId/unlike', authenticate, async (req: AuthRequest, res: Response) => {
+  const { postId } = req.params;
+  const { userId } = req;
+
+  try {
+    await postsCollection.updateOne(
+      { _id: postId },
+      { $pull: { likes: new ObjectId(userId) } },
+    );
+    res.status(200).send({ message: 'Post unliked successfully' });
+  } catch (err) {
+    console.error('Failed to unlike post', err);
+    res.status(500).send({ message: 'Failed to unlike post' });
+  }
+});
+
 export default router;

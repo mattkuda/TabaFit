@@ -10,6 +10,7 @@ export interface Post {
     description: string;
     likeCount: number;
     commentCount: number;
+    likes: mongoose.Types.ObjectId[]
 }
 
 // export const workouts: Workout[] = [
