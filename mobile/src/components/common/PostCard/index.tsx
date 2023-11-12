@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     HStack, VStack, Text, Avatar, Icon, IconButton,
 } from 'native-base';
@@ -6,22 +6,43 @@ import { Ionicons } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native';
+import { useAuth } from '../../../context/AuthContext';
 import { HomeScreenNavigationProp } from '../../../types/navigationTypes';
 import { Post } from '../../../types/posts';
+import { useMutateLike, useMutateUnlike } from '../../../mutations/useMutateLike';
 
-// Define the type for the props
 type PostCardProps = {
     post: Post;
 };
 
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
+    const { authState } = useAuth();
+    const userId = authState?.userId;
     const navigation = useNavigation<HomeScreenNavigationProp>();
+    const likeMutation = useMutateLike();
+    const unlikeMutation = useMutateUnlike();
+
+    const [liked, setLiked] = useState(post.likes.map((id) => id.toString()).includes(userId));
+    const [likeCount, setLikeCount] = useState(post.likes.length);
 
     const handleLikePress = (): void => {
-        console.log('Like button pressed');
+        if (liked) {
+            unlikeMutation.mutate({ postId: post._id.toString(), userId }, {
+                onSuccess: () => {
+                    setLiked(false);
+                    setLikeCount((prev) => prev - 1);
+                },
+            });
+        } else {
+            likeMutation.mutate({ postId: post._id.toString(), userId }, {
+                onSuccess: () => {
+                    setLiked(true);
+                    setLikeCount((prev) => prev + 1);
+                },
+            });
+        }
     };
 
-    // Function to handle when the comment button is pressed
     const handleCommentPress = (): void => {
         console.log('Comment button pressed');
     };
@@ -53,7 +74,14 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 <HStack justifyContent="space-between" mt={2} space={4}>
                     <IconButton
                         borderRadius="full"
-                        icon={<Icon as={Ionicons} name="heart-outline" size="sm" />}
+                        icon={(
+                            <Icon
+                                as={Ionicons}
+                                color={liked ? 'red.500' : 'coolGray.500'}
+                                name={liked ? 'heart' : 'heart-outline'}
+                                size="sm"
+                            />
+                        )}
                         onPress={handleLikePress}
                     />
                     <IconButton
@@ -64,7 +92,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 </HStack>
                 <HStack color="coolGray.500" fontSize="xs" justifyContent="space-between" mt={2}>
                     <Text>
-                        {post.likeCount}
+                        {likeCount}
                         {' '}
                         Likes
                     </Text>

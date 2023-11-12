@@ -36,9 +36,6 @@ export const AuthPage = (): JSX.Element => {
 
             setErrorMessage(JSON.stringify(data));
 
-            console.log('dataa');
-            console.log(data);
-
             if (data.success) {
                 setUser((prevState) => ({
                     ...prevState,

@@ -122,7 +122,7 @@ router.put('/:postId/like', authenticate, async (req: AuthRequest, res: Response
 
   try {
     await postsCollection.updateOne(
-      { _id: postId },
+      { _id: new ObjectId(postId) },
       { $addToSet: { likes: new ObjectId(userId) } },
     );
     res.status(200).send({ message: 'Post liked successfully' });
@@ -138,7 +138,7 @@ router.put('/:postId/unlike', authenticate, async (req: AuthRequest, res: Respon
 
   try {
     await postsCollection.updateOne(
-      { _id: postId },
+      { _id: new ObjectId(postId) },
       { $pull: { likes: new ObjectId(userId) } },
     );
     res.status(200).send({ message: 'Post unliked successfully' });
