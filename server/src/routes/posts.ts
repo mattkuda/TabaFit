@@ -114,8 +114,42 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
   }
 });
 
-// LIKES ROUTES
+// TODO: TEST THESE on 11/14/23!
+// COMMENT ROUTES
+router.post('/:postId/comments', authenticate, async (req, res) => {
+  const { postId } = req.params;
+  const { userId, body } = req.body; // Assuming you send userId and body in the request body
 
+  try {
+    await postsCollection.updateOne(
+      { _id: new ObjectId(postId) },
+      { $push: { comments: { userId, body, createdAt: (new Date()).toString() } } },
+    );
+    res.status(200).send({ message: 'Comment added successfully' });
+  } catch (err) {
+    console.error('Failed to add comment', err);
+    res.status(500).send({ message: 'Failed to add comment' });
+  }
+});
+
+router.delete('/posts/:postId/comments/:commentId', authenticate, async (req, res) => {
+  const { postId, commentId } = req.params;
+
+  try {
+    await postsCollection.updateOne(
+      { _id: postId },
+      { $pull: { comments: { _id: commentId } } },
+    );
+    res.status(200).send({ message: 'Comment deleted successfully' });
+  } catch (err) {
+    console.error('Failed to delete comment', err);
+    res.status(500).send({ message: 'Failed to delete comment' });
+  }
+});
+
+// END COMMENT ROUTES
+
+// LIKES ROUTES
 router.put('/:postId/like', authenticate, async (req: AuthRequest, res: Response) => {
   const { postId } = req.params;
   const { userId } = req;
@@ -147,5 +181,6 @@ router.put('/:postId/unlike', authenticate, async (req: AuthRequest, res: Respon
     res.status(500).send({ message: 'Failed to unlike post' });
   }
 });
+// END LIKE ROUTES
 
 export default router;

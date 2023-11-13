@@ -1,6 +1,13 @@
 import mongoose from 'mongoose';
 import { Workout } from './workouts';
 
+export interface PostComment {
+    _id?: mongoose.Types.ObjectId | string;
+    userId: string;
+    body: string;
+    createdAt: string;
+}
+
 export interface Post {
     _id: mongoose.Types.ObjectId | string;
     userId: string;
@@ -10,7 +17,8 @@ export interface Post {
     description: string;
     likeCount: number;
     commentCount: number;
-    likes: mongoose.Types.ObjectId[]
+    likes: mongoose.Types.ObjectId[];
+    comments: PostComment[];
 }
 
 // export const workouts: Workout[] = [
