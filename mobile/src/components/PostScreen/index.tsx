@@ -1,18 +1,45 @@
-import React from 'react';
-import { View, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import {
+    ScrollView, Button, TextInput,
+} from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import {
-    VStack, HStack, Avatar, Text,
+    VStack, HStack, Avatar, Text, Icon, IconButton,
 } from 'native-base';
 import { formatDistanceToNow } from 'date-fns';
+import { Ionicons } from '@expo/vector-icons';
+import { useAuth } from '../../context/AuthContext';
+import { useMutateAddComment, useMutateDeleteComment } from '../../mutations/commentMutations';
 import { PostScreenRouteProp } from '../../navigation/navigationTypes';
 import { useQueryPost } from '../../hooks/useQueryPost'; // Import the usePost hook
 
 export const PostScreen = (): JSX.Element => {
     const route = useRoute<PostScreenRouteProp>();
     const { postId } = route.params;
-    const { data: post, isLoading, isError } = useQueryPost(postId);
-    const comments = [{ id: 'Comment 1' }, { id: 'Comment 2' }];
+    const {
+        data: post, isLoading, isError, refetch,
+    } = useQueryPost(postId);
+    const addCommentMutation = useMutateAddComment();
+    const deleteCommentMutation = useMutateDeleteComment();
+    const [commentBody, setCommentBody] = useState('');
+    const { authState } = useAuth();
+    const userId = authState?.userId;
+    const handleAddComment = (): void => {
+        addCommentMutation.mutate({ postId, userId, body: commentBody }, {
+            onSuccess: () => {
+                refetch();
+            },
+        });
+        setCommentBody('');
+    };
+
+    const handleDeleteComment = (commentId: string): void => {
+        deleteCommentMutation.mutate({ postId, commentId }, {
+            onSuccess: () => {
+                refetch();
+            },
+        });
+    };
 
     if (isLoading) return <Text>Loading...</Text>;
     if (isError || !post) return <Text>Error loading post</Text>;
@@ -34,13 +61,25 @@ export const PostScreen = (): JSX.Element => {
                     </VStack>
                 </HStack>
                 <Text mt={2}>{post.description}</Text>
-                {/* ... other post details */}
             </VStack>
-            {/* Render comments */}
-            {comments.map((comment) => (
-                <View key={comment.id}>
-                    <Text>{comment.id}</Text>
-                </View>
+            <TextInput
+                placeholder="Write a comment..."
+                style={{
+                    borderWidth: 1, borderColor: 'grey', padding: 10, margin: 10,
+                }}
+                value={commentBody}
+                onChangeText={setCommentBody}
+            />
+            <Button title="Add Comment" onPress={handleAddComment} />
+            {post.comments.map((comment) => (
+                <HStack alignItems="center" justifyContent="space-between" key={comment._id?.toString()}>
+                    <Text>{comment.body}</Text>
+                    <Text>{comment._id?.toString()}</Text>
+                    <IconButton
+                        icon={<Icon as={Ionicons} name="trash-bin" />}
+                        onPress={(): void => handleDeleteComment(comment._id?.toString())}
+                    />
+                </HStack>
             ))}
         </ScrollView>
     );

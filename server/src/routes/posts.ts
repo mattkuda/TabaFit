@@ -118,27 +118,36 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
 // COMMENT ROUTES
 router.post('/:postId/comments', authenticate, async (req, res) => {
   const { postId } = req.params;
-  const { userId, body } = req.body; // Assuming you send userId and body in the request body
+  const { userId, body } = req.body;
 
   try {
+    const comment = {
+      _id: new ObjectId(),
+      userId,
+      body,
+      createdAt: new Date().toISOString(), // Using ISO string for consistency
+    };
+
     await postsCollection.updateOne(
       { _id: new ObjectId(postId) },
-      { $push: { comments: { userId, body, createdAt: (new Date()).toString() } } },
+      { $push: { comments: comment } },
     );
-    res.status(200).send({ message: 'Comment added successfully' });
+
+    res.status(200).send({ message: 'Comment added successfully', commentId: comment._id });
   } catch (err) {
     console.error('Failed to add comment', err);
     res.status(500).send({ message: 'Failed to add comment' });
   }
 });
 
-router.delete('/posts/:postId/comments/:commentId', authenticate, async (req, res) => {
+router.delete('/:postId/comments/:commentId', authenticate, async (req: AuthRequest, res) => {
+  console.log('DELETE');
   const { postId, commentId } = req.params;
 
   try {
     await postsCollection.updateOne(
-      { _id: postId },
-      { $pull: { comments: { _id: commentId } } },
+      { _id: new ObjectId(postId) },
+      { $pull: { comments: { _id: new ObjectId(commentId) } } },
     );
     res.status(200).send({ message: 'Comment deleted successfully' });
   } catch (err) {
