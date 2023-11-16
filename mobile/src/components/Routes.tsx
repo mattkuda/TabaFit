@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useRecoilValue } from 'recoil';
+import { ShuffleStackNavigator } from '../navigation/ShuffleStackNavigator';
 import { HomeStackNavigator } from '../navigation/HomeStackNavigator';
 import { ProfileStackNavigator } from '../navigation/ProfileStackNavigator';
 import { useAuth } from '../context/AuthContext';
@@ -68,7 +69,7 @@ export const Routes = (): JSX.Element => {
                     >
                         <Tab.Screen
                             component={HomeStackNavigator}
-                            name="HomePage"
+                            name="Home"
                             options={{
                                 tabBarIcon: HomeIcon,
                             }}
@@ -81,7 +82,14 @@ export const Routes = (): JSX.Element => {
                                 tabBarStyle: !showFooter ? { display: 'none' } : undefined,
                             }}
                         />
-
+                        <Tab.Screen
+                            component={ShuffleStackNavigator}
+                            name="Shuffle"
+                            options={{
+                                tabBarIcon: TimerIcon,
+                                tabBarStyle: !showFooter ? { display: 'none' } : undefined,
+                            }}
+                        />
                         <Tab.Screen
                             component={ProfileStackNavigator}
                             name="Profile"

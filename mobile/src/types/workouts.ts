@@ -15,6 +15,35 @@ export interface Workout {
     cooldownDuration: number;
 }
 
+type TabataExerciseType = 'Lower Body' | 'Upper Body' | 'Abs' | 'Cardio' | 'Glutes' | 'Spicy'
+
+export interface TabataExercise {
+    _id: string;
+    name: string;
+    types: TabataExerciseType[];
+    description: string;
+    difficulty: 'Easy' | 'Medium' | 'Hard';
+    videoLink: string;
+}
+
+export type TabataCircuit = TabataExercise[]
+
+export interface TabataWorkout {
+    _id: string;
+    name: string;
+    description: string;
+    createdAt: string;
+    updatedAt: string;
+    userId: string;
+    warmupDuration: number;
+    tabatas: TabataCircuit[];
+    restDuration: number;
+    exerciseDuration: number;
+    circuits: number;
+    intermisionDuration: number;
+    cooldownDuration: number;
+}
+
 // export const workouts: Workout[] = [
 //     {
 //         _id: '1',

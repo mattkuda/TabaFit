@@ -26,4 +26,9 @@ export type PostStackParamList = {
     PostScreen: { postId: string };
 };
 
+// Shuffle Stack
+export type ShuffleStackParamList = {
+    ShuffleScreen: { workoutId?: string };
+};
+
 export type PostScreenRouteProp = RouteProp<PostStackParamList, 'PostScreen'>;
