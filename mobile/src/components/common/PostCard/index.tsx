@@ -43,12 +43,14 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         }
     };
 
-    const handleCommentPress = (): void => {
-        console.log('Comment button pressed');
-    };
-
     const handlePress = (): void => {
         navigation.navigate('PostScreen', { postId: post._id });
+    };
+
+    const handleCommentPress = (): void => {
+        console.log('Comment button pressed');
+        // TODO: Auto focus input when naving with prop?
+        handlePress();
     };
 
     return (
@@ -61,7 +63,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                             Username
                             {' '}
                             @
-                            {post.userId.substring(0, 8)}
+                            {post.userId.toString().substring(0, 8)}
                         </Text>
                         <Text color="coolGray.600" fontSize="xs">
                             {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
@@ -97,11 +99,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                         Likes
                     </Text>
                     <Text>
-                        {post.commentCount}
+                        {post.comments.length}
                         {' '}
                         Comments
                     </Text>
-                    {/* ... other info like share count, etc. */}
                 </HStack>
             </VStack>
         </TouchableOpacity>

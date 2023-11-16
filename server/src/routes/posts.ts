@@ -50,9 +50,6 @@ router.get('/', async (req: Request, res: Response) => {
 router.get('/:postId', async (req: Request, res: Response) => {
   const { postId } = req.params;
 
-  console.log('postId');
-  console.log(postId);
-
   if (!ObjectId.isValid(postId)) {
     res.status(400).send({ message: 'Invalid post ID' });
     return;
@@ -73,6 +70,39 @@ router.get('/:postId', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/user-posts/:userId', authenticate, async (req: AuthRequest, res: Response) => {
+  const requestedUserId = req.params.userId;
+  const requestingUserId = req.userId;
+
+  if (!ObjectId.isValid(requestedUserId)) {
+    res.status(400).send({ message: 'Invalid user ID' });
+    return;
+  }
+
+  if (requestingUserId !== requestedUserId) {
+    const isFollowing = await followsCollection.findOne({
+      followerId: new ObjectId(requestingUserId),
+      followeeId: new ObjectId(requestedUserId),
+    });
+
+    if (!isFollowing) {
+      res.status(403).send({ message: 'You are not authorized to view these posts' });
+      return;
+    }
+  }
+
+  try {
+    const userPosts = await postsCollection.find({
+      userId: new ObjectId(requestedUserId),
+    }).toArray();
+
+    res.send(userPosts);
+  } catch (err) {
+    console.error('Failed to fetch user posts', err);
+    res.status(500).send({ message: 'Failed to fetch user posts' });
+  }
+});
+
 router.get('/following-posts', authenticate, async (req: AuthRequest, res: Response) => {
   const { userId } = req;
 
@@ -86,9 +116,6 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
     const following = await followsCollection.find({ followerId: objectIdUserId }).toArray();
     const followees = following.map((follow) => new ObjectId(follow.followeeId));
     followees.push(objectIdUserId);
-
-    console.log('followees');
-    console.log(followees);
 
     const posts = await postsCollection.aggregate([
       {
@@ -114,7 +141,6 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
   }
 });
 
-// TODO: TEST THESE on 11/14/23!
 // COMMENT ROUTES
 router.post('/:postId/comments', authenticate, async (req, res) => {
   const { postId } = req.params;
@@ -125,7 +151,7 @@ router.post('/:postId/comments', authenticate, async (req, res) => {
       _id: new ObjectId(),
       userId,
       body,
-      createdAt: new Date().toISOString(), // Using ISO string for consistency
+      createdAt: new Date().toISOString(),
     };
 
     await postsCollection.updateOne(
@@ -141,7 +167,6 @@ router.post('/:postId/comments', authenticate, async (req, res) => {
 });
 
 router.delete('/:postId/comments/:commentId', authenticate, async (req: AuthRequest, res) => {
-  console.log('DELETE');
   const { postId, commentId } = req.params;
 
   try {

@@ -10,7 +10,7 @@ export interface PostComment {
 
 export interface Post {
     _id: mongoose.Types.ObjectId | string;
-    userId: string;
+    userId: mongoose.Types.ObjectId | string;
     workout: Workout;
     createdAt: string;
     updatedAt: string;

@@ -53,7 +53,7 @@ export const PostScreen = (): JSX.Element => {
                         <Text bold fontSize="md">
                             Username @
                             {' '}
-                            {post.userId.substring(0, 8)}
+                            {post.userId.toString().substring(0, 8)}
                         </Text>
                         <Text color="coolGray.600" fontSize="xs">
                             {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}

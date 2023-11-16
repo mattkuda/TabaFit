@@ -1,11 +1,13 @@
 import React, { useCallback } from 'react';
 import { VStack, Text, Button } from 'native-base';
 import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
+import { useQueryUserPosts } from '../../hooks/useQueryUserPosts';
 import { ProfileScreenRouteProp } from '../../navigation/navigationTypes';
 import { useUserInfo } from '../../hooks/useUserInfo';
 import { EditProfileScreenNavigationProp } from '../../types/navigationTypes';
 import { useAuth } from '../../context/AuthContext';
 import { FollowButton } from './FollowButton';
+import { PostCard } from '../common/PostCard';
 
 export const ProfilePage = (): JSX.Element => {
     const { onLogout } = useAuth();
@@ -15,6 +17,7 @@ export const ProfilePage = (): JSX.Element => {
     const userId = route.params?.userId || authUserId;
     const userInfo = useUserInfo(userId);
     const isCurrentUserProfile = userId === authUserId;
+    const userPosts = useQueryUserPosts(userId);
 
     useFocusEffect(
         useCallback(() => {
@@ -60,7 +63,11 @@ export const ProfilePage = (): JSX.Element => {
                     <FollowButton profileUserId={userId} />
                     <Text>other</Text>
                 </>
-
+            )}
+            {userPosts.data && (
+                userPosts.data.map((post) => (
+                    <PostCard key={post._id.toString()} post={post} />
+                ))
             )}
             <Text>userState</Text>
             <Text>{authUserId}</Text>
