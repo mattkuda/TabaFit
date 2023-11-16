@@ -47,6 +47,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         navigation.navigate('PostScreen', { postId: post._id });
     };
 
+    const handlePressUser = (): void => {
+        navigation.navigate('Profile', { userId: post.userId });
+    };
+
     const handleCommentPress = (): void => {
         console.log('Comment button pressed');
         // TODO: Auto focus input when naving with prop?
@@ -54,12 +58,12 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
     };
 
     return (
-        <TouchableOpacity onPress={handlePress}>
-            <VStack borderColor="coolGray.200" borderRadius="md" borderWidth={1} mt={4} p={4} space={2}>
+        <TouchableOpacity style={{ width: '100%' }} onPress={handlePress}>
+            <VStack borderColor="coolGray.200" borderRadius="md" borderWidth={1} mt={4} p={4} space={2} width="100%">
                 <HStack justifyContent="space-between" space={2}>
                     <Avatar size="48px" source={{ uri: 'https://example.com/user-avatar.png' }} />
                     <VStack flex={1}>
-                        <Text bold fontSize="md">
+                        <Text bold fontSize="md" onPress={handlePressUser}>
                             Username
                             {' '}
                             @
