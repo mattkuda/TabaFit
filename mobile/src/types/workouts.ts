@@ -39,7 +39,8 @@ export interface TabataWorkout {
     tabatas: TabataCircuit[];
     restDuration: number;
     exerciseDuration: number;
-    circuits: number;
+    numberOfTabatas: number;
+    exercisesPerTabata: number;
     intermisionDuration: number;
     cooldownDuration: number;
 }

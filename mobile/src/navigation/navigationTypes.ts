@@ -1,5 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
+import { TabataWorkout } from '../types/workouts';
 import { User } from '../types/users';
 
 // Home Stack
@@ -26,9 +27,12 @@ export type PostStackParamList = {
     PostScreen: { postId: string };
 };
 
+export type PostScreenRouteProp = RouteProp<PostStackParamList, 'PostScreen'>;
+
 // Shuffle Stack
 export type ShuffleStackParamList = {
     ShuffleScreen: { workoutId?: string };
+    TabataTimer: {workout: TabataWorkout};
 };
 
-export type PostScreenRouteProp = RouteProp<PostStackParamList, 'PostScreen'>;
+export type TabataTimerScreenRouteProp = RouteProp<ShuffleStackParamList, 'TabataTimer'>;

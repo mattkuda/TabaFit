@@ -3,8 +3,9 @@ import {
     Button, Checkbox, VStack, HStack, Text, IconButton, Icon, ScrollView,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
-// import { useNavigation } from '@react-navigation/native';
 import { useSetRecoilState } from 'recoil';
+import { useNavigation } from '@react-navigation/native';
+import { TabataTimerScreenNavigationProp } from '../../types/navigationTypes';
 import { showFooterState } from '../../atoms/showFooterAtom';
 import { TabataWorkout } from '../../types/workouts';
 import { shuffleWorkout } from './shuffleWorkouts';
@@ -29,6 +30,7 @@ export const ShuffleScreen: React.FC = () => {
     const [numTabatas, setNumTabatas] = useState<number>(6);
     const [shuffledWorkout, setShuffledWorkout] = useState<TabataWorkout>();
     const setShowFooter = useSetRecoilState(showFooterState);
+    const navigation = useNavigation<TabataTimerScreenNavigationProp>();
 
     useEffect(() => {
         setShowFooter(false);
@@ -57,6 +59,13 @@ export const ShuffleScreen: React.FC = () => {
         triggerShuffle();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [numTabatas, includeUpper, includeLower, includeAbs, includeCardio]);
+
+    const handleStartWorkout = (): void => {
+        // Navigate to the WorkoutTimerPage with the shuffledWorkout
+        if (shuffledWorkout) {
+            navigation.navigate('TabataTimer', { workout: shuffledWorkout });
+        }
+    };
 
     return (
         <VStack flex={1} px={4} space={4}>
@@ -106,7 +115,7 @@ export const ShuffleScreen: React.FC = () => {
                 ))}
             </ScrollView>
             {/* Pinned START button */}
-            <Button bottom={0} position="absolute" width="100%" onPress={(): void => console.log('Start Workout')}>
+            <Button bottom={0} position="absolute" width="100%" onPress={(): void => handleStartWorkout()}>
                 Start
             </Button>
         </VStack>

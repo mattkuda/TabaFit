@@ -91,12 +91,13 @@ export const shuffleWorkout = (
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         userId: 'user-id',
-        warmupDuration: 10,
+        warmupDuration: 1,
         tabatas: createTabataCircuits(types),
-        restDuration: 10,
-        exerciseDuration: 20,
-        circuits: 1,
-        intermisionDuration: 60,
+        restDuration: 1,
+        exerciseDuration: 1,
+        numberOfTabatas: 1,
+        exercisesPerTabata: 8,
+        intermisionDuration: 1,
         cooldownDuration: 0,
     };
 

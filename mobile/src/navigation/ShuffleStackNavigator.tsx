@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { TabataTimerScreen } from '../components/TabataTimerScreen';
 import { ShuffleScreen } from '../components/ShuffleScreen';
 import { ShuffleStackParamList } from './navigationTypes';
 
@@ -11,5 +12,6 @@ export const ShuffleStackNavigator = (): JSX.Element => (
         screenOptions={{ headerShown: false }}
     >
         <Stack.Screen component={ShuffleScreen} name="ShuffleScreen" />
+        <Stack.Screen component={TabataTimerScreen} name="TabataTimer" />
     </Stack.Navigator>
 );
