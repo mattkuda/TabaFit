@@ -15,7 +15,7 @@ export interface Workout {
     cooldownDuration: number;
 }
 
-type TabataExerciseType = 'Lower Body' | 'Upper Body' | 'Abs' | 'Cardio' | 'Glutes' | 'Spicy'
+export type TabataExerciseType = 'Lower Body' | 'Upper Body' | 'Abs' | 'Cardio' | 'Glutes' | 'Spicy'
 
 export interface TabataExercise {
     _id: string;

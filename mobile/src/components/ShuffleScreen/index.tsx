@@ -4,7 +4,8 @@ import {
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 // import { useNavigation } from '@react-navigation/native';
-import { TabataWorkout, TabataCircuit } from '../../types/workouts';
+import { TabataWorkout } from '../../types/workouts';
+import { shuffleWorkout } from './shuffleWorkouts';
 
 type CheckboxItemProps = {
     label: string;
@@ -27,46 +28,28 @@ export const ShuffleScreen: React.FC = () => {
     // Add states for the new exercise types
     const [includeGlutes, setIncludeGlutes] = useState<boolean>(false);
     const [includeSpicy, setIncludeSpicy] = useState<boolean>(false);
-
     const [numTabatas, setNumTabatas] = useState<number>(9);
-    const [shuffledWorkouts, setShuffledWorkouts] = useState<TabataWorkout[]>([]);
 
-    // Placeholder for the actual shuffle function
-    const shuffleWorkout = (): void => {
-        console.log('Shuffling workout...');
-        // TODO: Implement the shuffle logic based on selected types and number of Tabatas
-        // This is where you would access your database or state management to fetch exercises
-        // based on the selected types and then shuffle them into TabataCircuits
+    const [shuffledWorkout, setShuffledWorkout] = useState<TabataWorkout>();
 
-        // For now, we'll just create an array with dummy data
-        // This should be replaced with your actual shuffling and selection logic
-        const dummyTabataCircuit: TabataCircuit = [
-            // ... populate with actual exercises based on selected types
-        ];
+    const triggerShuffle = (): void => {
+        const workout = shuffleWorkout(
+            numTabatas,
+            includeUpper,
+            includeLower,
+            includeAbs,
+            includeCardio,
+        // Pass other types if needed
+        );
 
-        const dummyWorkout: TabataWorkout = {
-            _id: '1',
-            name: 'Shuffled Workout',
-            description: 'This is a shuffled workout based on user preferences',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            userId: 'user-id',
-            warmupDuration: 10,
-            tabatas: new Array(numTabatas).fill(dummyTabataCircuit),
-            restDuration: 10,
-            exerciseDuration: 20,
-            circuits: numTabatas,
-            intermisionDuration: 60,
-            cooldownDuration: 0,
-        };
-
-        setShuffledWorkouts(new Array(numTabatas).fill(dummyWorkout));
+        setShuffledWorkout(workout);
     };
 
+    // Call the shuffleWorkout function to generate the workout
     useEffect(() => {
-        shuffleWorkout();
+        triggerShuffle();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [numTabatas, includeUpper, includeLower, includeAbs, includeCardio, includeGlutes, includeSpicy]);
 
     return (
         <VStack flex={1} px={4} space={4}>
@@ -74,7 +57,7 @@ export const ShuffleScreen: React.FC = () => {
                 {/* Reshuffle and Total Time */}
                 <IconButton
                     icon={<Icon as={Ionicons} name="shuffle" />}
-                    onPress={shuffleWorkout}
+                    onPress={(): void => triggerShuffle()}
                 />
                 <Text fontSize="md">Total Time: 45:00</Text>
                 {/* ... other header content */}
@@ -106,26 +89,23 @@ export const ShuffleScreen: React.FC = () => {
                     onPress={(): void => setNumTabatas((prev) => prev + 1)}
                 />
             </HStack>
-
             {/* More button - to be implemented later */}
             <Button onPress={(): void => console.log('More settings')}>More</Button>
-
             {/* Scrollable Tabata Cards */}
             <ScrollView>
-                {shuffledWorkouts.map((workout, index) => (
-                    <VStack borderColor="coolGray.200" borderRadius="md" borderWidth={1} key={workout._id} mt={2} p={4} space={2}>
+                {shuffledWorkout?.tabatas.map((circuit, index) => (
+                    <VStack borderColor="coolGray.200" borderRadius="md" borderWidth={1} mt={2} p={4} space={2}>
                         <Text bold fontSize="md">
                             Tabata
                             {' '}
                             {index + 1}
                         </Text>
-                        {workout.tabatas[index].map((exercise) => (
-                            <Text key={exercise._id}>{exercise.name}</Text>
+                        {circuit.map((exercise) => (
+                            <Text>{exercise.name}</Text> // Make sure each exercise has a unique key
                         ))}
                     </VStack>
                 ))}
             </ScrollView>
-
             {/* Pinned START button */}
             <Button bottom={0} position="absolute" width="100%" onPress={(): void => console.log('Start Workout')}>
                 Start
