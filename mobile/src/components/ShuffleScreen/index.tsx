@@ -4,6 +4,8 @@ import {
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 // import { useNavigation } from '@react-navigation/native';
+import { useSetRecoilState } from 'recoil';
+import { showFooterState } from '../../atoms/showFooterAtom';
 import { TabataWorkout } from '../../types/workouts';
 import { shuffleWorkout } from './shuffleWorkouts';
 
@@ -20,17 +22,22 @@ const CheckboxItem: React.FC<CheckboxItemProps> = ({ label, value, setValue }) =
 );
 
 export const ShuffleScreen: React.FC = () => {
-    // const navigation = useNavigation();
     const [includeUpper, setIncludeUpper] = useState<boolean>(true);
-    const [includeLower, setIncludeLower] = useState<boolean>(false);
+    const [includeLower, setIncludeLower] = useState<boolean>(true);
     const [includeAbs, setIncludeAbs] = useState<boolean>(true);
-    const [includeCardio, setIncludeCardio] = useState<boolean>(false);
-    // Add states for the new exercise types
-    const [includeGlutes, setIncludeGlutes] = useState<boolean>(false);
-    const [includeSpicy, setIncludeSpicy] = useState<boolean>(false);
-    const [numTabatas, setNumTabatas] = useState<number>(9);
-
+    const [includeCardio, setIncludeCardio] = useState<boolean>(true);
+    const [numTabatas, setNumTabatas] = useState<number>(6);
     const [shuffledWorkout, setShuffledWorkout] = useState<TabataWorkout>();
+    const setShowFooter = useSetRecoilState(showFooterState);
+
+    useEffect(() => {
+        setShowFooter(false);
+
+        return () => {
+            setShowFooter(true);
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const triggerShuffle = (): void => {
         const workout = shuffleWorkout(
@@ -49,7 +56,7 @@ export const ShuffleScreen: React.FC = () => {
     useEffect(() => {
         triggerShuffle();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [numTabatas, includeUpper, includeLower, includeAbs, includeCardio, includeGlutes, includeSpicy]);
+    }, [numTabatas, includeUpper, includeLower, includeAbs, includeCardio]);
 
     return (
         <VStack flex={1} px={4} space={4}>
@@ -60,20 +67,13 @@ export const ShuffleScreen: React.FC = () => {
                     onPress={(): void => triggerShuffle()}
                 />
                 <Text fontSize="md">Total Time: 45:00</Text>
-                {/* ... other header content */}
             </HStack>
-
-            {/* Exercise type checkboxes */}
             <HStack alignItems="center" justifyContent="space-between">
                 <CheckboxItem label="Upper" setValue={setIncludeUpper} value={includeUpper} />
                 <CheckboxItem label="Lower" setValue={setIncludeLower} value={includeLower} />
                 <CheckboxItem label="Abs" setValue={setIncludeAbs} value={includeAbs} />
                 <CheckboxItem label="Cardio" setValue={setIncludeCardio} value={includeCardio} />
-                <CheckboxItem label="Glutes" setValue={setIncludeGlutes} value={includeGlutes} />
-                <CheckboxItem label="Spicy" setValue={setIncludeSpicy} value={includeSpicy} />
             </HStack>
-
-            {/* +/- for numTabatas */}
             <HStack alignItems="center" justifyContent="center">
                 <IconButton
                     icon={<Icon as={Ionicons} name="remove" />}
@@ -91,7 +91,6 @@ export const ShuffleScreen: React.FC = () => {
             </HStack>
             {/* More button - to be implemented later */}
             <Button onPress={(): void => console.log('More settings')}>More</Button>
-            {/* Scrollable Tabata Cards */}
             <ScrollView>
                 {shuffledWorkout?.tabatas.map((circuit, index) => (
                     <VStack borderColor="coolGray.200" borderRadius="md" borderWidth={1} mt={2} p={4} space={2}>
@@ -100,8 +99,8 @@ export const ShuffleScreen: React.FC = () => {
                             {' '}
                             {index + 1}
                         </Text>
-                        {circuit.map((exercise) => (
-                            <Text>{exercise.name}</Text> // Make sure each exercise has a unique key
+                        {circuit.slice(0, 4).map((exercise) => (
+                            <Text>{exercise.name}</Text>
                         ))}
                     </VStack>
                 ))}
