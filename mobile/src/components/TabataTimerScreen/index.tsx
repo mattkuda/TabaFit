@@ -84,70 +84,80 @@ export const TabataTimerScreen = (): JSX.Element => {
 
         if (isActive && !isReset) {
             interval = setInterval(() => {
-                if (seconds > 0) {
-                    setSeconds(seconds - 1);
+                let nextInterval = currentInterval;
+                let nextSeconds = seconds;
+                let nextExercise = currentExercise;
+                let nextExercisesDone = exercisesDone;
+                let nextCircuitsDone = circuitsDone;
+
+                if (seconds > 1) {
+                    nextSeconds = seconds - 1;
                     setRemainingTime(remainingTime - 1);
                 } else {
                     switch (currentInterval) {
                         case Intervals.Warmup:
-                            setCurrentInterval(Intervals.Exercise);
-                            setSeconds(exerciseDuration);
-                            setCurrentExercise(currentTabata[exercisesDone < exercisesPerTabata
-                                ? exercisesDone : exercisesPerTabata - 1]);
+                            nextInterval = Intervals.Exercise;
+                            nextSeconds = exerciseDuration;
+                            [nextExercise] = currentTabata;
                             break;
                         case Intervals.Exercise:
-                            setCurrentInterval(Intervals.Rest);
-                            setSeconds(restDuration);
-                            setCurrentExercise(null);
+                            nextInterval = Intervals.Rest;
+                            nextSeconds = restDuration;
+                            nextExercise = null;
                             break;
                         case Intervals.Rest:
                             if (exercisesDone < exercisesPerTabata - 1) {
-                                setCurrentInterval(Intervals.Exercise);
-                                setSeconds(exerciseDuration);
-                                setExercisesDone(exercisesDone + 1);
-                                setCurrentExercise(tabatas[circuitsDone][exercisesDone + 1]);
+                                nextInterval = Intervals.Exercise;
+                                nextSeconds = exerciseDuration;
+                                nextExercisesDone = exercisesDone + 1;
+                                nextExercise = currentTabata[nextExercisesDone];
                             } else {
-                                setCurrentInterval(Intervals.Intermission);
-                                setSeconds(intermisionDuration);
-                                setCircuitsDone(circuitsDone + 1);
-                                setCurrentExercise(null);
+                                nextInterval = Intervals.Intermission;
+                                nextSeconds = intermisionDuration;
+                                nextExercise = null;
+                                nextCircuitsDone = circuitsDone + 1;
                             }
                             break;
                         case Intervals.Intermission:
                             if (circuitsDone < numberOfTabatas - 1) {
-                                setCurrentInterval(Intervals.Exercise);
-                                setSeconds(exerciseDuration);
-                                setExercisesDone(0);
-                                setCurrentExercise(tabatas[circuitsDone][0]);
+                                nextInterval = Intervals.Exercise;
+                                nextSeconds = exerciseDuration;
+                                nextExercisesDone = 0;
+                                [nextExercise] = currentTabata;
                             } else {
-                                setCurrentInterval(Intervals.Cooldown);
-                                setSeconds(cooldownDuration);
+                                nextInterval = Intervals.Cooldown;
+                                nextSeconds = cooldownDuration;
                             }
                             break;
                         case Intervals.Cooldown:
                             setIsActive(false);
                             setShowAlert(true);
+                            clearInterval(interval);
+                            return;
+                        default:
                             break;
-                        default: break;
                     }
                 }
+
+                setCurrentInterval(nextInterval);
+                setSeconds(nextSeconds);
+                setCurrentExercise(nextExercise);
+                setExercisesDone(nextExercisesDone);
+                setCircuitsDone(nextCircuitsDone);
             }, 1000);
-        } else if (!isActive && seconds !== 0 && !isReset) {
-            if (interval) {
-                clearInterval(interval);
-            }
-        } else if (isReset) {
+        } else if (!isActive && isReset) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            clearInterval(interval!);
             setIsReset(false);
         }
 
         return () => {
-            if (interval) {
-                clearInterval(interval);
-            }
+            if (interval) clearInterval(interval);
         };
-    }, [isActive, seconds, isReset, exerciseDuration, numberOfTabatas, currentInterval,
-        remainingTime, cooldownDuration, intermisionDuration, exercisesDone, circuitsDone,
-        restDuration, currentTabata, exercisesPerTabata, tabatas]);
+    }, [isActive, isReset, seconds, remainingTime, currentInterval,
+        exercisesDone, circuitsDone, warmupDuration, exerciseDuration,
+        restDuration, exercisesPerTabata, numberOfTabatas, intermisionDuration,
+        cooldownDuration, currentTabata, currentExercise]);
 
     const handleReturnHome = (): void => {
         navigation.reset({
