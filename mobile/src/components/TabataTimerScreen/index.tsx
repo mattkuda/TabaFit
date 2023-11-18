@@ -58,6 +58,14 @@ export const TabataTimerScreen = (): JSX.Element => {
         setCurrentExercise(null);
     };
 
+    const navigateToSharePostScreen = (): void => {
+        navigation.navigate('ShareWorkoutScreen', {
+            // Pass any data you need for sharing the workout
+            workout: route.params.workout,
+            completedAt: new Date(),
+        });
+    };
+
     const formatTime = (time: number): string => {
         const hours = Math.floor(time / 3600);
         const minutes = Math.floor((time - (hours * 3600)) / 60);
@@ -131,8 +139,8 @@ export const TabataTimerScreen = (): JSX.Element => {
                             break;
                         case Intervals.Cooldown:
                             setIsActive(false);
-                            setShowAlert(true);
                             clearInterval(interval);
+                            navigateToSharePostScreen();
                             return;
                         default:
                             break;
@@ -154,10 +162,10 @@ export const TabataTimerScreen = (): JSX.Element => {
         return () => {
             if (interval) clearInterval(interval);
         };
-    }, [isActive, isReset, seconds, remainingTime, currentInterval,
-        exercisesDone, circuitsDone, warmupDuration, exerciseDuration,
-        restDuration, exercisesPerTabata, numberOfTabatas, intermisionDuration,
-        cooldownDuration, currentTabata, currentExercise]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isActive, isReset, seconds, remainingTime, currentInterval, exercisesDone, circuitsDone,
+        warmupDuration, exerciseDuration, restDuration, exercisesPerTabata, numberOfTabatas,
+        intermisionDuration, cooldownDuration, currentTabata, currentExercise]);
 
     const handleReturnHome = (): void => {
         navigation.reset({
@@ -208,6 +216,7 @@ export const TabataTimerScreen = (): JSX.Element => {
             <Text>{currentExercise ? `Current Exercise: ${currentExercise.name}` : `Current: ${currentInterval.toUpperCase()}`}</Text>
             <Button onPress={toggle}>{isActive ? 'Pause' : 'Start'}</Button>
             <Button onPress={reset}>Reset</Button>
+            <Button onPress={navigateToSharePostScreen}>Mock Finish</Button>
             <Modal isOpen={showAlert} onClose={(): void => setShowAlert(false)}>
                 <Modal.Content maxWidth="400px">
                     <Modal.CloseButton />

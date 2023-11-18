@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { ShareWorkoutScreen } from '../components/ShareWorkoutScreen';
 import { TabataTimerScreen } from '../components/TabataTimerScreen';
 import { ShuffleScreen } from '../components/ShuffleScreen';
 import { ShuffleStackParamList } from './navigationTypes';
@@ -13,5 +14,6 @@ export const ShuffleStackNavigator = (): JSX.Element => (
     >
         <Stack.Screen component={ShuffleScreen} name="ShuffleScreen" />
         <Stack.Screen component={TabataTimerScreen} name="TabataTimer" />
+        <Stack.Screen component={ShareWorkoutScreen} name="ShareWorkoutScreen" />
     </Stack.Navigator>
 );
