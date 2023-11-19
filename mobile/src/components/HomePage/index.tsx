@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-    VStack, Box, Text, Icon, IconButton,
+    VStack, Box, Text, Icon, IconButton, ScrollView,
 } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -38,29 +38,31 @@ export const HomePage = (): JSX.Element => {
 
     return (
         <Box flex={1} justifyContent="center">
-            {/* <CustomHeader /> */}
-            <VStack alignItems="center" space={4}>
-                <IconButton
-                    _icon={{
-                        color: 'primary.500',
-                        size: 'md',
-                    }}
-                    borderRadius="full"
-                    icon={<Icon as={Ionicons} name="search-outline" size="sm" />}
-                    onPress={(): void => navigation.navigate('Search')}
-                />
-                <Text fontSize="5xl">Abcountable</Text>
-                {postData?.map((post) => (
-                    <PostCard key={post._id.toString()} post={post} />
-                ))}
-                <Text>
-                    Token:
-                    {' '}
-                    {token}
-                    authenticated:
-                    {authenticated ? ' y' : ' n'}
-                </Text>
-            </VStack>
+            <ScrollView>
+                {/* <CustomHeader /> */}
+                <VStack alignItems="center" space={4}>
+                    <IconButton
+                        _icon={{
+                            color: 'primary.500',
+                            size: 'md',
+                        }}
+                        borderRadius="full"
+                        icon={<Icon as={Ionicons} name="search-outline" size="sm" />}
+                        onPress={(): void => navigation.navigate('Search')}
+                    />
+                    <Text fontSize="5xl">Abcountable</Text>
+                    {postData?.map((post) => (
+                        <PostCard key={post._id.toString()} post={post} />
+                    ))}
+                    <Text>
+                        Token:
+                        {' '}
+                        {token}
+                        authenticated:
+                        {authenticated ? ' y' : ' n'}
+                    </Text>
+                </VStack>
+            </ScrollView>
         </Box>
     );
 };
