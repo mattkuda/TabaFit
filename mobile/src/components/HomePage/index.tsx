@@ -5,20 +5,25 @@ import {
 } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { RefreshControl } from 'react-native';
 import { useQueryPostsFollowing } from '../../hooks/useQueryPostsFollowing';
 import { SearchScreenNavigationProp } from '../../navigation/navigationTypes';
-import { useQueryPosts } from '../../hooks/useQueryPosts';
 import { useAuth } from '../../context/AuthContext';
 import { PostCard } from '../common/PostCard';
 
 export const HomePage = (): JSX.Element => {
     const [token, setToken] = useState<string>('');
+    const [refreshing, setRefreshing] = useState(false);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { data: postData2 } = useQueryPosts();
-    const { data: postData } = useQueryPostsFollowing();
-
+    const { data: postData, refetch } = useQueryPostsFollowing();
     const { authState: authenticated } = useAuth();
     const navigation = useNavigation<SearchScreenNavigationProp>();
+
+    const onRefresh = async (): Promise<void> => {
+        setRefreshing(true);
+        await refetch();
+        setRefreshing(false);
+    };
 
     useEffect(() => {
         const fetchToken = async (): Promise<void> => {
@@ -38,7 +43,15 @@ export const HomePage = (): JSX.Element => {
 
     return (
         <Box flex={1} justifyContent="center">
-            <ScrollView>
+            <ScrollView
+                refreshControl={(
+                    <RefreshControl
+                        colors={['#9Bd35A', '#689F38']}
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                  )}
+            >
                 {/* <CustomHeader /> */}
                 <VStack alignItems="center" space={4}>
                     <IconButton

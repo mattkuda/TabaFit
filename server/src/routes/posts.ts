@@ -39,6 +39,7 @@ router.get('/', async (req: Request, res: Response) => {
           as: 'workout',
         },
       },
+      { $sort: { createdAt: -1 } },
     ]).toArray();
     res.send(posts);
   } catch (err) {
@@ -94,7 +95,7 @@ router.get('/user-posts/:userId', authenticate, async (req: AuthRequest, res: Re
   try {
     const userPosts = await postsCollection.find({
       userId: new ObjectId(requestedUserId),
-    }).toArray();
+    }).sort({ createdAt: -1 }).toArray();
 
     res.send(userPosts);
   } catch (err) {
@@ -132,6 +133,7 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
           as: 'workout',
         },
       },
+      { $sort: { createdAt: -1 } },
     ]).toArray();
 
     res.send(posts);
