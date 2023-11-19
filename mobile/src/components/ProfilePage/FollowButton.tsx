@@ -10,7 +10,7 @@ type PropTypes = {
 
 export const FollowButton = ({ profileUserId }: PropTypes): JSX.Element => {
     const { authState } = useAuth();
-    const userId = authState?.userId; // Make sure this is always defined and is a string
+    const userId = authState?.userId;
     const {
         data, refetch, isLoading,
     } = useQueryFollowing(userId, profileUserId);
@@ -21,7 +21,7 @@ export const FollowButton = ({ profileUserId }: PropTypes): JSX.Element => {
         if (userId) {
             followMutation.mutate({ followerId: userId, followeeId: profileUserId }, {
                 onSuccess: () => {
-                    refetch(); // Refetch following status after following
+                    refetch();
                 },
             });
         }

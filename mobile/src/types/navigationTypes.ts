@@ -31,3 +31,7 @@ export type EditProfileScreenNavigationProp = StackNavigationProp<TabNavigatorPa
 export type TabataTimerScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'TabataTimer'> & {
     params: TabataWorkout;
 };
+
+export type ShareWorkoutrScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'ShareWorkout'> & {
+    params: TabataWorkout;
+};

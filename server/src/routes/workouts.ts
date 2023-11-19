@@ -2,7 +2,7 @@
 import express, { Request, Response } from 'express';
 import { MongoClient, Collection } from 'mongodb';
 // eslint-disable-next-line import/no-relative-packages
-import { Workout } from '../../../mobile/src/types/workouts';
+import { TabataWorkout } from '../../../mobile/src/types/workouts';
 
 const router = express.Router();
 const connectionString = process.env.MONGODB_URI;
@@ -14,13 +14,13 @@ if (!connectionString) {
 // Connect to MongoDB
 const client = new MongoClient(connectionString);
 
-let workoutsCollection: Collection<Workout>;
+let workoutsCollection: Collection<TabataWorkout>;
 
 (async () => {
   try {
     await client.connect();
     console.log('Connected to MongoDB');
-    workoutsCollection = client.db('AbcountableDB').collection<Workout>('workouts');
+    workoutsCollection = client.db('AbcountableDB').collection<TabataWorkout>('workouts');
   } catch (err) {
     console.error('Failed to connect to MongoDB', err);
     process.exit(1);
@@ -43,6 +43,20 @@ router.get('/', async (req: Request, res: Response) => {
   } catch (err) {
     console.error('Failed to fetch workouts', err);
     res.status(500).send({ message: 'Failed to fetch workouts' });
+  }
+});
+
+router.post('/save', async (req: Request, res: Response) => {
+  console.log('in save workout');
+  const { workout } = req.body;
+
+  try {
+    await workoutsCollection.insertOne(workout);
+
+    res.status(201).send({ message: 'TabataWorkout saved successfully' });
+  } catch (err) {
+    console.error('Failed to save workout', err);
+    res.status(500).send({ message: 'Failed to save workout' });
   }
 });
 

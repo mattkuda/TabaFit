@@ -1,9 +1,7 @@
 import { useQuery, UseQueryResult } from 'react-query';
-import { Workout } from '../types/workouts';
+import { TabataWorkout } from '../types/workouts';
 
-// Define the type for a workout, based on your actual data structure
-
-const fetchWorkouts = async (): Promise<Workout[]> => {
+const fetchWorkouts = async (): Promise<TabataWorkout[]> => {
     const response = await fetch('http://localhost:3000/workouts');
 
     if (!response.ok) {
@@ -12,4 +10,4 @@ const fetchWorkouts = async (): Promise<Workout[]> => {
     return response.json();
 };
 
-export const useQueryWorkouts = (): UseQueryResult<Workout[], Error> => useQuery('workouts', fetchWorkouts);
+export const useQueryWorkouts = (): UseQueryResult<TabataWorkout[], Error> => useQuery('workouts', fetchWorkouts);

@@ -1,14 +1,52 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, TextInput, Button } from 'react-native';
-import { VStack, Text } from 'native-base';
-import { useRoute } from '@react-navigation/native';
+import { ScrollView, TextInput } from 'react-native';
+import {
+    VStack, Text, Button, Icon,
+} from 'native-base';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+
+import { ShareWorkoutrScreenNavigationProp } from '../../types/navigationTypes';
+import { useAuth } from '../../context/AuthContext';
+import { useMutateShareWorkout } from '../../mutations/useMutateSharePost';
 import { ShareWorkoutScreenRouteProp } from '../../navigation/navigationTypes';
+import { useMutateSaveWorkout } from '../../mutations/useMutateSaveWorkout';
 
 export const ShareWorkoutScreen = (): JSX.Element => {
     const route = useRoute<ShareWorkoutScreenRouteProp>();
     const { workout, completedAt } = route.params;
-    const [workoutName, setWorkoutName] = useState('');
+    const [workoutTitle, setWorkoutTitle] = useState('');
     const [workoutDescription, setWorkoutDescription] = useState('');
+    const shareWorkoutMutation = useMutateShareWorkout();
+    const { authState } = useAuth();
+    const userId = authState?.userId;
+    const navigation = useNavigation<ShareWorkoutrScreenNavigationProp>();
+    const saveWorkoutMutation = useMutateSaveWorkout();
+    const [isWorkoutSaved, setIsWorkoutSaved] = useState(false);
+
+    const handleSaveWorkout = (): void => {
+        if (authState?.userId && workout) {
+            saveWorkoutMutation.mutate({
+                workout,
+            }, {
+                onSuccess: () => {
+                    setIsWorkoutSaved(true);
+                },
+            });
+        }
+    };
+    const handleReturnHome = (): void => {
+        navigation.navigate('Home');
+    };
+
+    const handleShareWorkout = (): void => {
+        shareWorkoutMutation.mutate({
+            userId,
+            workout,
+            title: workoutTitle,
+            description: workoutDescription,
+        }, { onSuccess: handleReturnHome });
+    };
 
     const getTimeOfDay = (date: Date): string => {
         const hour = date.getHours();
@@ -19,11 +57,10 @@ export const ShareWorkoutScreen = (): JSX.Element => {
         return 'Evening';
     };
 
-    // Usage
     useEffect(() => {
         const timeOfDay = getTimeOfDay(completedAt);
 
-        setWorkoutName(`${timeOfDay} Tabata`);
+        setWorkoutTitle(`${timeOfDay} Tabata`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -31,26 +68,17 @@ export const ShareWorkoutScreen = (): JSX.Element => {
         // Logic to discard the workout
     };
 
-    const handleSaveWorkout = (): void => {
-        // Logic to save the workout
-    };
-
-    const handleShareWorkout = (): void => {
-        // Logic to share the workout
-    };
-
     return (
         <ScrollView>
             <VStack p={4} space={4}>
                 <Text bold fontSize="xl">Share Workout</Text>
-                <Text bold fontSize="xl">{JSON.stringify(workout)}</Text>
                 <TextInput
                     placeholder="Workout Name"
                     style={{
                         borderWidth: 1, borderColor: 'grey', padding: 10, margin: 10,
                     }}
-                    value={workoutName}
-                    onChangeText={setWorkoutName}
+                    value={workoutTitle}
+                    onChangeText={setWorkoutTitle}
                 />
                 <TextInput
                     multiline
@@ -66,9 +94,19 @@ export const ShareWorkoutScreen = (): JSX.Element => {
                     value={workoutDescription}
                     onChangeText={setWorkoutDescription}
                 />
-                <Button color="red" title="Discard Workout" onPress={handleDiscardWorkout} />
-                <Button title="Save Workout" onPress={handleSaveWorkout} />
-                <Button title="Share Workout" onPress={handleShareWorkout} />
+                <Button color="red" onPress={handleDiscardWorkout}>Discard Workout</Button>
+                <Button
+                    disabled={isWorkoutSaved}
+                    leftIcon={
+                        isWorkoutSaved
+                            ? <Icon as={<Ionicons name="checkmark" />} color="green.500" size="sm" />
+                            : <Icon as={<Ionicons name="save-outline" />} size="sm" />
+                    }
+                    onPress={handleSaveWorkout}
+                >
+                    {isWorkoutSaved ? 'Workout Saved' : 'Save Workout'}
+                </Button>
+                <Button onPress={handleShareWorkout}>Share Workout</Button>
             </VStack>
         </ScrollView>
     );

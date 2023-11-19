@@ -141,6 +141,40 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
   }
 });
 
+router.post('/share', authenticate, async (req: Request, res: Response) => {
+  const {
+    userId, workout, title, description,
+  } = req.body;
+
+  console.log('userId');
+  console.log(userId);
+  console.log('workout');
+  console.log(workout);
+  console.log('description');
+  console.log(description);
+
+  try {
+    const newPost = {
+      userId: new ObjectId(userId),
+      workout,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      title,
+      description,
+      likes: [],
+      comments: [],
+    };
+
+    // @ts-expect-error Todo at partial type
+    await postsCollection.insertOne(newPost);
+
+    res.status(201).send({ message: 'Workout shared successfully' });
+  } catch (err) {
+    console.error('Failed to share workout', err);
+    res.status(500).send({ message: 'Failed to share workout' });
+  }
+});
+
 // COMMENT ROUTES
 router.post('/:postId/comments', authenticate, async (req, res) => {
   const { postId } = req.params;

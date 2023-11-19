@@ -14,9 +14,8 @@ export interface Post {
     workout: Workout;
     createdAt: string;
     updatedAt: string;
+    title: string;
     description: string;
-    likeCount: number;
-    commentCount: number;
     likes: mongoose.Types.ObjectId[];
     comments: PostComment[];
 }

@@ -63,7 +63,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 <HStack justifyContent="space-between" space={2}>
                     <Avatar size="48px" source={{ uri: 'https://example.com/user-avatar.png' }} />
                     <VStack flex={1}>
-                        <Text bold fontSize="md" onPress={handlePressUser}>
+                        <Text fontSize="sm" onPress={handlePressUser}>
                             Username
                             {' '}
                             @
@@ -74,6 +74,9 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                         </Text>
                     </VStack>
                 </HStack>
+                <Text bold fontSize="md" mt={2}>
+                    {post.title}
+                </Text>
                 <Text mt={2}>
                     {post.description}
                 </Text>

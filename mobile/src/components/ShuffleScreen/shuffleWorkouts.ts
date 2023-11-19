@@ -11,6 +11,7 @@ export const shuffleWorkout = (
     includeLower: boolean,
     includeAbs: boolean,
     includeCardio: boolean,
+    userId: string,
 ): TabataWorkout => {
     // Helper function to shuffle an array
     const shuffleArray = <T, >(array: T[]): T[] => {
@@ -90,7 +91,7 @@ export const shuffleWorkout = (
         description: 'A shuffled Tabata workout based on user preferences.',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        userId: 'user-id',
+        userId,
         warmupDuration: 1,
         tabatas: createTabataCircuits(types),
         restDuration: 1,

@@ -5,6 +5,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useSetRecoilState } from 'recoil';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../context/AuthContext';
 import { TabataTimerScreenNavigationProp } from '../../types/navigationTypes';
 import { showFooterState } from '../../atoms/showFooterAtom';
 import { TabataWorkout } from '../../types/workouts';
@@ -31,6 +32,8 @@ export const ShuffleScreen: React.FC = () => {
     const [shuffledWorkout, setShuffledWorkout] = useState<TabataWorkout>();
     const setShowFooter = useSetRecoilState(showFooterState);
     const navigation = useNavigation<TabataTimerScreenNavigationProp>();
+    const { authState } = useAuth();
+    const userId = authState?.userId;
 
     useEffect(() => {
         setShowFooter(false);
@@ -48,7 +51,7 @@ export const ShuffleScreen: React.FC = () => {
             includeLower,
             includeAbs,
             includeCardio,
-        // Pass other types if needed
+            userId,
         );
 
         setShuffledWorkout(workout);
