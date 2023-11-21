@@ -73,7 +73,7 @@ export const ShuffleScreen: React.FC = () => {
     return (
         <VStack flex={1} px={4} space={4}>
             <HStack alignItems="center" justifyContent="space-between" pt={4}>
-                {/* Reshuffle and Total Time */}
+                <Button onPress={(): void => navigation.goBack()}>Go Back</Button>
                 <IconButton
                     icon={<Icon as={Ionicons} name="shuffle" />}
                     onPress={(): void => triggerShuffle()}

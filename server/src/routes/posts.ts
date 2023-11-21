@@ -48,29 +48,6 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/:postId', async (req: Request, res: Response) => {
-  const { postId } = req.params;
-
-  if (!ObjectId.isValid(postId)) {
-    res.status(400).send({ message: 'Invalid post ID' });
-    return;
-  }
-
-  try {
-    const post = await postsCollection.findOne({ _id: new ObjectId(postId) });
-
-    if (!post) {
-      res.status(404).send({ message: 'Post not found' });
-      return;
-    }
-
-    res.send(post);
-  } catch (err) {
-    console.error('Failed to fetch post', err);
-    res.status(500).send({ message: 'Failed to fetch post' });
-  }
-});
-
 router.get('/user-posts/:userId', authenticate, async (req: AuthRequest, res: Response) => {
   const requestedUserId = req.params.userId;
   const requestingUserId = req.userId;
@@ -107,10 +84,14 @@ router.get('/user-posts/:userId', authenticate, async (req: AuthRequest, res: Re
 router.get('/following-posts', authenticate, async (req: AuthRequest, res: Response) => {
   const { userId } = req;
 
+  console.log(1);
+
   if (!userId) {
     res.status(400).send({ message: 'User ID is required' });
     return;
   }
+
+  console.log(2);
 
   try {
     const objectIdUserId = new ObjectId(userId);
@@ -140,6 +121,29 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
   } catch (err) {
     console.error('Failed to fetch following posts', err);
     res.status(500).send({ message: 'Failed to fetch following posts' });
+  }
+});
+
+router.get('/post/:postId', async (req: Request, res: Response) => {
+  const { postId } = req.params;
+
+  if (!ObjectId.isValid(postId)) {
+    res.status(400).send({ message: 'Invalid post ID' });
+    return;
+  }
+
+  try {
+    const post = await postsCollection.findOne({ _id: new ObjectId(postId) });
+
+    if (!post) {
+      res.status(404).send({ message: 'Post not found' });
+      return;
+    }
+
+    res.send(post);
+  } catch (err) {
+    console.error('Failed to fetch post', err);
+    res.status(500).send({ message: 'Failed to fetch post' });
   }
 });
 

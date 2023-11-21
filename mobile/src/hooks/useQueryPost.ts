@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { Post } from '../types/posts';
 
 const fetchPost = async (postId: string): Promise<Post> => {
-    const response = await fetch(`http://localhost:3000/posts/${postId}`);
+    const response = await fetch(`http://localhost:3000/posts/post/${postId}`);
 
     if (!response.ok) {
         throw new Error('An error occurred while fetching the post');
