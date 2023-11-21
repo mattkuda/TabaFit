@@ -5,26 +5,24 @@ import {
 } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useQueryWorkouts } from '../../hooks/useQueryWorkouts';
-import { Workout } from '../../types/workouts';
+import { TabataWorkout } from '../../types/workouts';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 
 type WorkoutsPageNavigationProp = StackNavigationProp<TabNavigatorParamList, 'WorkoutsPage'>;
 
 interface WorkoutCardProps {
-    workout: Workout;
+    workout: TabataWorkout;
     navigation: WorkoutsPageNavigationProp;
 }
 
 const WorkoutCard: FC<WorkoutCardProps> = ({ workout, navigation }) => {
     const handleQuickStart = (): void => {
-        navigation.navigate('Workout', {
-            screen: 'WorkoutTimerPage',
-            params: workout,
-        });
+        navigation.navigate('TabataTimer', { workout });
     };
 
     const handleCustomize = (): void => {
-        navigation.navigate('TabataSetup', { workoutId: workout._id });
+        console.log('TODO: Go to shuffle with preloaded stuff');
+        console.log('and add the typs (upper vs lower) into Tabata Workout Type');
     };
 
     return (
@@ -33,8 +31,7 @@ const WorkoutCard: FC<WorkoutCardProps> = ({ workout, navigation }) => {
                 <Box>
                     <Heading>{workout.name}</Heading>
                     <Text>{`Created at: ${workout.createdAt}`}</Text>
-                    <Text>{`Number of exercises: ${workout.exercises.length}`}</Text>
-                    <Text>{`Number of circuits: ${workout.circuits}`}</Text>
+                    <Text>{`Number of tabatas: ${workout.tabatas.length}`}</Text>
                 </Box>
 
                 <HStack space={3}>
@@ -53,7 +50,6 @@ export const WorkoutsPage: FC = () => {
     return (
         <VStack>
             <Heading>Workouts:</Heading>
-            <Text>{JSON.stringify(data)}</Text>
             {data?.map((workout) => (
                 <WorkoutCard key={workout._id} navigation={navigation} workout={workout} />
             ))}
