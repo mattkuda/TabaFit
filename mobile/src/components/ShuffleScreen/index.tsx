@@ -4,12 +4,13 @@ import {
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useSetRecoilState } from 'recoil';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
 import { TabataTimerScreenNavigationProp } from '../../types/navigationTypes';
 import { showFooterState } from '../../atoms/showFooterAtom';
 import { TabataWorkout } from '../../types/workouts';
 import { shuffleWorkout } from './shuffleWorkouts';
+import { ShuffleScreenRouteProp } from '../../navigation/navigationTypes';
 
 type CheckboxItemProps = {
     label: string;
@@ -24,12 +25,14 @@ const CheckboxItem: React.FC<CheckboxItemProps> = ({ label, value, setValue }) =
 );
 
 export const ShuffleScreen: React.FC = () => {
+    const route = useRoute<ShuffleScreenRouteProp>();
+    const routeWorkout = route.params?.workout;
     const [includeUpper, setIncludeUpper] = useState<boolean>(true);
     const [includeLower, setIncludeLower] = useState<boolean>(true);
     const [includeAbs, setIncludeAbs] = useState<boolean>(true);
     const [includeCardio, setIncludeCardio] = useState<boolean>(true);
     const [numTabatas, setNumTabatas] = useState<number>(6);
-    const [shuffledWorkout, setShuffledWorkout] = useState<TabataWorkout>();
+    const [shuffledWorkout, setShuffledWorkout] = useState<TabataWorkout>(routeWorkout);
     const setShowFooter = useSetRecoilState(showFooterState);
     const navigation = useNavigation<TabataTimerScreenNavigationProp>();
     const { authState } = useAuth();
@@ -59,9 +62,37 @@ export const ShuffleScreen: React.FC = () => {
 
     // Call the shuffleWorkout function to generate the workout
     useEffect(() => {
+        if (!routeWorkout) {
+            triggerShuffle();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // Call the shuffleWorkout function to generate the workout
+    useEffect(() => {
         triggerShuffle();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [numTabatas, includeUpper, includeLower, includeAbs, includeCardio]);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            if (!route.params?.workout) {
+                const workout = shuffleWorkout(
+                    numTabatas,
+                    includeUpper,
+                    includeLower,
+                    includeAbs,
+                    includeCardio,
+                    userId,
+                );
+
+                setShuffledWorkout(workout);
+            } else {
+                setShuffledWorkout(route.params.workout);
+            }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [route.params?.workout]),
+    );
 
     const handleStartWorkout = (): void => {
         // Navigate to the WorkoutTimerPage with the shuffledWorkout
@@ -100,6 +131,11 @@ export const ShuffleScreen: React.FC = () => {
                     icon={<Icon as={Ionicons} name="add" />}
                     onPress={(): void => setNumTabatas((prev) => prev + 1)}
                 />
+                <Text mx={2}>
+                    Route workout:
+                    {' '}
+                    {routeWorkout ? 'Y' : 'N'}
+                </Text>
             </HStack>
             {/* More button - to be implemented later */}
             <Button onPress={(): void => console.log('More settings')}>More</Button>

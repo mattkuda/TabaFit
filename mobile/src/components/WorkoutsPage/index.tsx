@@ -23,6 +23,7 @@ const WorkoutCard: FC<WorkoutCardProps> = ({ workout, navigation }) => {
     const handleCustomize = (): void => {
         console.log('TODO: Go to shuffle with preloaded stuff');
         console.log('and add the typs (upper vs lower) into Tabata Workout Type');
+        navigation.navigate('ShuffleScreen', { workout });
     };
 
     return (

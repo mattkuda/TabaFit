@@ -31,10 +31,11 @@ export type PostScreenRouteProp = RouteProp<PostStackParamList, 'PostScreen'>;
 
 // Shuffle Stack
 export type ShuffleStackParamList = {
-    ShuffleScreen: { workoutId?: string };
+    ShuffleScreen: { workout?: TabataWorkout };
     TabataTimer: {workout: TabataWorkout};
     ShareWorkoutScreen: {workout: TabataWorkout, completedAt: Date};
 };
 
+export type ShuffleScreenRouteProp = RouteProp<ShuffleStackParamList, 'ShuffleScreen'>;
 export type TabataTimerScreenRouteProp = RouteProp<ShuffleStackParamList, 'TabataTimer'>;
 export type ShareWorkoutScreenRouteProp = RouteProp<ShuffleStackParamList, 'ShareWorkoutScreen'>;

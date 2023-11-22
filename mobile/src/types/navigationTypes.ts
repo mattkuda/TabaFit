@@ -11,6 +11,7 @@ export interface TabNavigatorParamList extends ParamListBase {
     EditProfile: { user: User };
     Search: undefined;
     TabataTimerScreen: {workout: TabataWorkout};
+    ShuffleScreen: {workout?: TabataWorkout};
 }
 
 export type HomeScreenRouteProp = RouteProp<TabNavigatorParamList, 'Home'>;
@@ -26,6 +27,10 @@ export type ProfilePageScreenNavigationProp = StackNavigationProp<TabNavigatorPa
 
 export type EditProfileScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'EditProfile'> & {
     params: User;
+};
+
+export type ShuffleScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'ShuffleScreen'> & {
+    params: TabataWorkout;
 };
 
 export type TabataTimerScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'TabataTimer'> & {
