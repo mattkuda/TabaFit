@@ -4,6 +4,7 @@ import {
     VStack, Heading, Text, Button, Card, Box, HStack,
 } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { format } from 'date-fns';
 import { useQueryWorkouts } from '../../hooks/useQueryWorkouts';
 import { TabataWorkout } from '../../types/workouts';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
@@ -16,6 +17,8 @@ interface WorkoutCardProps {
 }
 
 const WorkoutCard: FC<WorkoutCardProps> = ({ workout, navigation }) => {
+    const formattedDate = format(new Date(workout.createdAt), 'MMMM do, yyyy');
+
     const handleQuickStart = (): void => {
         navigation.navigate('TabataTimer', { workout });
     };
@@ -31,8 +34,8 @@ const WorkoutCard: FC<WorkoutCardProps> = ({ workout, navigation }) => {
             <VStack alignItems="center" space={3}>
                 <Box>
                     <Heading>{workout.name}</Heading>
-                    <Text>{`Created at: ${workout.createdAt}`}</Text>
                     <Text>{`Number of tabatas: ${workout.tabatas.length}`}</Text>
+                    <Text>{`Created on ${formattedDate}`}</Text>
                 </Box>
 
                 <HStack space={3}>
