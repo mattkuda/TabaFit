@@ -16,10 +16,18 @@ type CheckboxItemProps = {
     label: string;
     value: boolean;
     setValue: React.Dispatch<React.SetStateAction<boolean>>;
+    disabled: boolean;
 };
 
-const CheckboxItem: React.FC<CheckboxItemProps> = ({ label, value, setValue }) => (
-    <Checkbox isChecked={value} value="" onChange={(): void => setValue(!value)}>
+const CheckboxItem: React.FC<CheckboxItemProps> = ({
+    label, value, setValue, disabled,
+}) => (
+    <Checkbox
+        isChecked={value}
+        isDisabled={disabled}
+        value=""
+        onChange={(): void => setValue(!value)}
+    >
         {label}
     </Checkbox>
 );
@@ -46,6 +54,16 @@ export const ShuffleScreen: React.FC = () => {
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // Function to determine if a checkbox should be disabled
+    const shouldDisableCheckbox = (checkboxValue: boolean): boolean => {
+        // Count how many checkboxes are checked
+        const checkedCount = [includeUpper, includeLower, includeAbs, includeCardio]
+            .filter((val) => val).length;
+
+        // If only one checkbox is checked and it's the current one, disable it
+        return checkedCount === 1 && checkboxValue;
+    };
 
     const triggerShuffle = (): void => {
         const workout = shuffleWorkout(
@@ -101,6 +119,13 @@ export const ShuffleScreen: React.FC = () => {
         }
     };
 
+    const isOnlyOneChecked = [
+        includeUpper,
+        includeLower,
+        includeAbs,
+        includeCardio,
+    ].filter((val) => val === true).length === 1;
+
     return (
         <VStack flex={1} px={4} space={4}>
             <HStack alignItems="center" justifyContent="space-between" pt={4}>
@@ -110,12 +135,13 @@ export const ShuffleScreen: React.FC = () => {
                     onPress={(): void => triggerShuffle()}
                 />
                 <Text fontSize="md">Total Time: 45:00</Text>
+                <Text fontSize="md">{isOnlyOneChecked.toString()}</Text>
             </HStack>
             <HStack alignItems="center" justifyContent="space-between">
-                <CheckboxItem label="Upper" setValue={setIncludeUpper} value={includeUpper} />
-                <CheckboxItem label="Lower" setValue={setIncludeLower} value={includeLower} />
-                <CheckboxItem label="Abs" setValue={setIncludeAbs} value={includeAbs} />
-                <CheckboxItem label="Cardio" setValue={setIncludeCardio} value={includeCardio} />
+                <CheckboxItem disabled={shouldDisableCheckbox(includeUpper)} label="Upper" setValue={setIncludeUpper} value={includeUpper} />
+                <CheckboxItem disabled={shouldDisableCheckbox(includeLower)} label="Lower" setValue={setIncludeLower} value={includeLower} />
+                <CheckboxItem disabled={shouldDisableCheckbox(includeAbs)} label="Abs" setValue={setIncludeAbs} value={includeAbs} />
+                <CheckboxItem disabled={shouldDisableCheckbox(includeCardio)} label="Cardio" setValue={setIncludeCardio} value={includeCardio} />
             </HStack>
             <HStack alignItems="center" justifyContent="center">
                 <IconButton
