@@ -1,6 +1,7 @@
 import {
     SafeAreaView,
     Text,
+    ViewStyle,
 } from 'react-native';
 import { NativeBaseProvider } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
@@ -59,6 +60,15 @@ export const Routes = (): JSX.Element => {
         );
     }
 
+    const tabBarStyle: ViewStyle = {
+        paddingBottom: 0,
+        height: 49,
+    };
+    const tabBarStyleNoFooter: ViewStyle = {
+        ...tabBarStyle,
+        display: 'none',
+    };
+
     return (
         <NativeBaseProvider>
             <SafeAreaView style={{ flex: 1 }}>
@@ -67,11 +77,6 @@ export const Routes = (): JSX.Element => {
                         initialRouteName="HomePage"
                         screenOptions={{
                             headerShown: false,
-                            tabBarStyle: {
-                                paddingBottom: 0,
-                                height: 49,
-                                display: showFooter ? 'flex' : 'none',
-                            },
                         }}
                     >
                         <Tab.Screen
@@ -79,6 +84,7 @@ export const Routes = (): JSX.Element => {
                             name="Home"
                             options={{
                                 tabBarIcon: HomeIcon,
+                                tabBarStyle,
                             }}
                         />
                         <Tab.Screen
@@ -86,7 +92,7 @@ export const Routes = (): JSX.Element => {
                             name="Workout"
                             options={{
                                 tabBarIcon: TimerIcon,
-                                tabBarStyle: !showFooter ? { display: 'none' } : undefined,
+                                tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
                             }}
                         />
                         <Tab.Screen
@@ -94,7 +100,7 @@ export const Routes = (): JSX.Element => {
                             name="Shuffle"
                             options={{
                                 tabBarIcon: TimerIcon,
-                                tabBarStyle: !showFooter ? { display: 'none' } : undefined,
+                                tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
                             }}
                         />
                         <Tab.Screen
@@ -102,6 +108,7 @@ export const Routes = (): JSX.Element => {
                             name="Profile"
                             options={{
                                 tabBarIcon: ProfilePageIcon,
+                                tabBarStyle,
                             }}
                         />
                     </Tab.Navigator>

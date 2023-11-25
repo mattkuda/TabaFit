@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
     Button, Checkbox, VStack, HStack, Text, IconButton, Icon, ScrollView,
 } from 'native-base';
@@ -46,14 +46,13 @@ export const ShuffleScreen: React.FC = () => {
     const { authState } = useAuth();
     const userId = authState?.userId;
 
-    useEffect(() => {
-        setShowFooter(false);
+    useFocusEffect(
+        useCallback(() => {
+            setShowFooter(false);
 
-        return () => {
-            setShowFooter(true);
-        };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+            return () => setShowFooter(true);
+        }, [setShowFooter]),
+    );
 
     // Function to determine if a checkbox should be disabled
     const shouldDisableCheckbox = (checkboxValue: boolean): boolean => {

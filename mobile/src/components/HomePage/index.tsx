@@ -3,9 +3,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     VStack, Box, Text, Icon, IconButton, ScrollView,
 } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { RefreshControl } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useQueryPostsFollowing } from '../../hooks/useQueryPostsFollowing';
 import { SearchScreenNavigationProp } from '../../navigation/navigationTypes';
 import { useAuth } from '../../context/AuthContext';
@@ -13,8 +13,7 @@ import { PostCard } from '../common/PostCard';
 
 export const HomePage = (): JSX.Element => {
     const [token, setToken] = useState<string>('');
-    const [refreshing, setRefreshing] = useState(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [refreshing, setRefreshing] = useState<boolean>(false);
     const { data: postData, refetch } = useQueryPostsFollowing();
     const { authState: authenticated } = useAuth();
     const navigation = useNavigation<SearchScreenNavigationProp>();
@@ -44,15 +43,8 @@ export const HomePage = (): JSX.Element => {
     return (
         <Box flex={1} justifyContent="center">
             <ScrollView
-                refreshControl={(
-                    <RefreshControl
-                        colors={['#9Bd35A', '#689F38']}
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                    />
-                  )}
+                refreshControl={<RefreshControl colors={['#9Bd35A', '#689F38']} refreshing={refreshing} onRefresh={onRefresh} />}
             >
-                {/* <CustomHeader /> */}
                 <VStack alignItems="center" space={4}>
                     <IconButton
                         _icon={{
@@ -71,8 +63,10 @@ export const HomePage = (): JSX.Element => {
                         Token:
                         {' '}
                         {token}
+                        {' '}
                         authenticated:
-                        {authenticated ? ' y' : ' n'}
+                        {' '}
+                        {authenticated ? 'y' : 'n'}
                     </Text>
                 </VStack>
             </ScrollView>

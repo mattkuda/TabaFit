@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
     VStack, Text, Button, IconButton, Icon,
     Modal, Box, Heading, Divider,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { useSetRecoilState } from 'recoil';
 import { TabataTimerScreenRouteProp } from '../../navigation/navigationTypes';
 import { TabataExercise } from '../../types/workouts';
@@ -34,14 +34,13 @@ export const TabataTimerScreen = (): JSX.Element => {
     const [showAlert, setShowAlert] = useState(false);
     const setShowFooter = useSetRecoilState(showFooterState);
 
-    useEffect(() => {
-        setShowFooter(false); // Hide the tab bar when the Timer component is mounted
+    useFocusEffect(
+        useCallback(() => {
+            setShowFooter(false);
 
-        return () => {
-            setShowFooter(true); // Show the tab bar when the Timer component is unmounted
-        };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+            return () => setShowFooter(true);
+        }, [setShowFooter]),
+    );
 
     const toggle = (): void => {
         setIsActive(!isActive);
