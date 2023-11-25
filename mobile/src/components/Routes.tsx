@@ -65,7 +65,14 @@ export const Routes = (): JSX.Element => {
                 <NavigationContainer>
                     <Tab.Navigator
                         initialRouteName="HomePage"
-                        screenOptions={{ headerShown: false }}
+                        screenOptions={{
+                            headerShown: false,
+                            tabBarStyle: {
+                                paddingBottom: 0,
+                                height: 49,
+                                display: showFooter ? 'flex' : 'none',
+                            },
+                        }}
                     >
                         <Tab.Screen
                             component={HomeStackNavigator}
