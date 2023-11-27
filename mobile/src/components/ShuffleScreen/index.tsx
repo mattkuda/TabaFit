@@ -209,7 +209,7 @@ export const ShuffleScreen: React.FC = () => {
                     <Modal.Header>Select Equipment</Modal.Header>
                     <Modal.Body>
                         {/* List of checkboxes for equipment */}
-                        {['Kettlebells', 'Box Platform', 'Yoga Ball', 'Workout Band', 'Dumbells', 'Hanging Bar'].map((equipment, index) => (
+                        {['Kettlebell', 'Box Platform', 'Yoga Ball', 'Workout Band', 'Dumbells', 'Hanging Bar'].map((equipment, index) => (
                             <Checkbox
                                 isChecked={selectedEquipmentTemp.includes(equipment as TabataEquipmentType)}
                                 // eslint-disable-next-line react/no-array-index-key
