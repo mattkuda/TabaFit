@@ -84,14 +84,10 @@ router.get('/user-posts/:userId', authenticate, async (req: AuthRequest, res: Re
 router.get('/following-posts', authenticate, async (req: AuthRequest, res: Response) => {
   const { userId } = req;
 
-  console.log(1);
-
   if (!userId) {
     res.status(400).send({ message: 'User ID is required' });
     return;
   }
-
-  console.log(2);
 
   try {
     const objectIdUserId = new ObjectId(userId);
