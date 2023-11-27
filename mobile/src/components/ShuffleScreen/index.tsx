@@ -60,11 +60,6 @@ export const ShuffleScreen: React.FC = () => {
         });
     };
 
-    const handleEquipmentDone = (): void => {
-        setShowEquipmentModal(false);
-        setSelectedEquipment(selectedEquipmentTemp);
-    };
-
     const handleEquipmentCancel = (): void => {
         setShowEquipmentModal(false);
         setSelectedEquipmentTemp(selectedEquipment);
@@ -91,6 +86,7 @@ export const ShuffleScreen: React.FC = () => {
     const triggerShuffle = (): void => {
         const workout = shuffleWorkout(
             numTabatas,
+            selectedEquipment,
             includeUpper,
             includeLower,
             includeAbs,
@@ -99,6 +95,12 @@ export const ShuffleScreen: React.FC = () => {
         );
 
         setShuffledWorkout(workout);
+    };
+
+    const handleEquipmentDone = (): void => {
+        setShowEquipmentModal(false);
+        setSelectedEquipment(selectedEquipmentTemp);
+        triggerShuffle();
     };
 
     // Call the shuffleWorkout function to generate the workout
@@ -120,6 +122,7 @@ export const ShuffleScreen: React.FC = () => {
             if (!route.params?.workout) {
                 const workout = shuffleWorkout(
                     numTabatas,
+                    selectedEquipment,
                     includeUpper,
                     includeLower,
                     includeAbs,
@@ -142,13 +145,6 @@ export const ShuffleScreen: React.FC = () => {
         }
     };
 
-    const isOnlyOneChecked = [
-        includeUpper,
-        includeLower,
-        includeAbs,
-        includeCardio,
-    ].filter((val) => val === true).length === 1;
-
     return (
         <VStack flex={1} px={4} space={4}>
             <HStack alignItems="center" justifyContent="space-between" pt={4}>
@@ -158,7 +154,6 @@ export const ShuffleScreen: React.FC = () => {
                     onPress={(): void => triggerShuffle()}
                 />
                 <Text fontSize="md">Total Time: 45:00</Text>
-                <Text fontSize="md">{isOnlyOneChecked.toString()}</Text>
             </HStack>
             <HStack alignItems="center" justifyContent="space-between">
                 <CheckboxItem disabled={shouldDisableCheckbox(includeUpper)} label="Upper" setValue={setIncludeUpper} value={includeUpper} />
@@ -182,8 +177,10 @@ export const ShuffleScreen: React.FC = () => {
                 />
             </HStack>
             <HStack alignItems="center" justifyContent="space-between" space={2}>
-                <Button flex={1} onPress={(): void => setShowEquipmentModal(true)}>Equipment</Button>
-                <Button flex={1} onPress={(): void => console.log('More settings')}>More</Button>
+                <Button flex={1} onPress={(): void => setShowEquipmentModal(true)}>
+                    {selectedEquipment.length ? `Equipment (${selectedEquipment.length})` : 'Equipment'}
+                </Button>
+                <Button flex={1} onPress={(): void => console.log('TODO: More settings')}>More</Button>
             </HStack>
             <ScrollView>
                 {shuffledWorkout?.tabatas.map((circuit, index) => (

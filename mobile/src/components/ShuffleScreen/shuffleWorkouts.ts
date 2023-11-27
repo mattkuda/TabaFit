@@ -2,11 +2,12 @@ import {
     lowerBodyExercises, upperBodyExercises, absExercises, cardioExercises,
 } from '../../util/constants';
 import {
-    TabataCircuit, TabataExercise, TabataExerciseType, TabataWorkout,
+    TabataCircuit, TabataEquipmentType, TabataExercise, TabataExerciseType, TabataWorkout,
 } from '../../types/workouts';
 
 export const shuffleWorkout = (
     numberOfTabatas: number,
+    selectedEquipment: TabataEquipmentType[],
     includeUpper: boolean,
     includeLower: boolean,
     includeAbs: boolean,
@@ -49,10 +50,12 @@ export const shuffleWorkout = (
             default:
                 exercises = [];
         }
-        return exercises[0]; // Return the first exercise after shuffling
+
+        const filteredExercises = exercises.filter((exercise) => exercise.equipment.some((equip) => selectedEquipment.includes(equip) || equip === 'None'));
+
+        return filteredExercises.length > 0 ? filteredExercises[0] : exercises[0];
     };
 
-    // Function to create a Tabata circuit
     const createTabataCircuit = (types: TabataExerciseType[]): TabataCircuit => {
         const circuit: TabataCircuit = [];
 
