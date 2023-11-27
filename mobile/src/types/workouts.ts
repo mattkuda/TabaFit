@@ -16,11 +16,13 @@ export interface Workout {
 }
 
 export type TabataExerciseType = 'Lower Body' | 'Upper Body' | 'Abs' | 'Cardio' | 'Glutes' | 'Spicy'
+export type TabataEquipmentType = 'Kettlebells' | 'Box Platform' | 'Yoga Ball' | 'Workout Band' | 'Dumbells' | 'Hanging Bar' | 'None';
 
 export interface TabataExercise {
     _id: string;
     name: string;
     types: TabataExerciseType[];
+    equipment: TabataEquipmentType[];
     description: string;
     difficulty: 'Easy' | 'Medium' | 'Hard';
     videoLink: string;
@@ -34,6 +36,7 @@ export interface TabataWorkout {
     description: string;
     createdAt: string;
     updatedAt: string;
+    equipment: TabataEquipmentType[];
     userId: string;
     warmupDuration: number;
     tabatas: TabataCircuit[];

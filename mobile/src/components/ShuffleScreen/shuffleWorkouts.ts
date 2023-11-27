@@ -100,6 +100,7 @@ export const shuffleWorkout = (
         exercisesPerTabata: 8,
         intermisionDuration: 1,
         cooldownDuration: 0,
+        equipment: [],
     };
 
     return workout;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
     Button, Checkbox, VStack, HStack, Text, IconButton, Icon, ScrollView,
+    Modal,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useSetRecoilState } from 'recoil';
@@ -8,7 +9,7 @@ import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/nativ
 import { useAuth } from '../../context/AuthContext';
 import { TabataTimerScreenNavigationProp } from '../../types/navigationTypes';
 import { showFooterState } from '../../atoms/showFooterAtom';
-import { TabataWorkout } from '../../types/workouts';
+import { TabataEquipmentType, TabataWorkout } from '../../types/workouts';
 import { shuffleWorkout } from './shuffleWorkouts';
 import { ShuffleScreenRouteProp } from '../../navigation/navigationTypes';
 
@@ -45,6 +46,29 @@ export const ShuffleScreen: React.FC = () => {
     const navigation = useNavigation<TabataTimerScreenNavigationProp>();
     const { authState } = useAuth();
     const userId = authState?.userId;
+    const [showEquipmentModal, setShowEquipmentModal] = useState(false);
+    const [selectedEquipment, setSelectedEquipment] = useState<TabataEquipmentType[]>([]);
+    const [selectedEquipmentTemp, setSelectedEquipmentTemp] = useState<TabataEquipmentType[]>([]);
+
+    // Function to toggle equipment selection
+    const toggleEquipment = (equipment: TabataEquipmentType): void => {
+        setSelectedEquipmentTemp((prev) => {
+            if (prev.includes(equipment)) {
+                return prev.filter((item) => item !== equipment);
+            }
+            return [...prev, equipment];
+        });
+    };
+
+    const handleEquipmentDone = (): void => {
+        setShowEquipmentModal(false);
+        setSelectedEquipment(selectedEquipmentTemp);
+    };
+
+    const handleEquipmentCancel = (): void => {
+        setShowEquipmentModal(false);
+        setSelectedEquipmentTemp(selectedEquipment);
+    };
 
     useFocusEffect(
         useCallback(() => {
@@ -156,14 +180,11 @@ export const ShuffleScreen: React.FC = () => {
                     icon={<Icon as={Ionicons} name="add" />}
                     onPress={(): void => setNumTabatas((prev) => prev + 1)}
                 />
-                <Text mx={2}>
-                    Route workout:
-                    {' '}
-                    {routeWorkout ? 'Y' : 'N'}
-                </Text>
             </HStack>
-            {/* More button - to be implemented later */}
-            <Button onPress={(): void => console.log('More settings')}>More</Button>
+            <HStack alignItems="center" justifyContent="space-between" space={2}>
+                <Button flex={1} onPress={(): void => setShowEquipmentModal(true)}>Equipment</Button>
+                <Button flex={1} onPress={(): void => console.log('More settings')}>More</Button>
+            </HStack>
             <ScrollView>
                 {shuffledWorkout?.tabatas.map((circuit, index) => (
                     <VStack borderColor="coolGray.200" borderRadius="md" borderWidth={1} mt={2} p={4} space={2}>
@@ -182,6 +203,30 @@ export const ShuffleScreen: React.FC = () => {
             <Button bottom={0} position="absolute" width="100%" onPress={(): void => handleStartWorkout()}>
                 Start
             </Button>
+            <Modal isOpen={showEquipmentModal} onClose={(): void => setShowEquipmentModal(false)}>
+                <Modal.Content maxWidth="400px">
+                    <Modal.CloseButton />
+                    <Modal.Header>Select Equipment</Modal.Header>
+                    <Modal.Body>
+                        {/* List of checkboxes for equipment */}
+                        {['Kettlebells', 'Box Platform', 'Yoga Ball', 'Workout Band', 'Dumbells', 'Hanging Bar'].map((equipment, index) => (
+                            <Checkbox
+                                isChecked={selectedEquipmentTemp.includes(equipment as TabataEquipmentType)}
+                                // eslint-disable-next-line react/no-array-index-key
+                                key={index} // Use index as key
+                                value={index.toString()} // Use index as value
+                                onChange={(): void => toggleEquipment(equipment as TabataEquipmentType)}
+                            >
+                                {equipment}
+                            </Checkbox>
+                        ))}
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onPress={handleEquipmentDone}>Done</Button>
+                        <Button variant="ghost" onPress={handleEquipmentCancel}>Cancel</Button>
+                    </Modal.Footer>
+                </Modal.Content>
+            </Modal>
         </VStack>
     );
 };
