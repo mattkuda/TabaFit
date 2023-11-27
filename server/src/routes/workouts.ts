@@ -47,8 +47,9 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 router.post('/save', async (req: Request, res: Response) => {
-  console.log('in save workout');
   const { workout } = req.body;
+
+  delete workout._id;
 
   try {
     await workoutsCollection.insertOne(workout);
