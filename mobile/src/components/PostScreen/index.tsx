@@ -19,6 +19,7 @@ export const PostScreen = (): JSX.Element => {
     const {
         data: post, isLoading, isError, refetch,
     } = useQueryPost(postId);
+
     const addCommentMutation = useMutateAddComment();
     const deleteCommentMutation = useMutateDeleteComment();
     const [commentBody, setCommentBody] = useState('');
@@ -51,9 +52,7 @@ export const PostScreen = (): JSX.Element => {
                     <Avatar size="48px" source={{ uri: 'https://iava.org/wp-content/uploads/2020/10/DGoggins-Rnd-1.png' }} />
                     <VStack flex={1}>
                         <Text bold fontSize="md">
-                            Username @
-                            {' '}
-                            {post.userId.toString().substring(0, 8)}
+                            {`${post.user.firstName} ${post.user.lastName} @${post.user.username}`}
                         </Text>
                         <Text color="coolGray.600" fontSize="xs">
                             {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}

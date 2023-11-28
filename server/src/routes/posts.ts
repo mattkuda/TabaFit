@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express';
 import { MongoClient, Collection, ObjectId } from 'mongodb';
 // eslint-disable-next-line import/no-relative-packages
 import { Post } from '../../../mobile/src/types/posts';
+// eslint-disable-next-line import/no-relative-packages
+import { User } from '../../../mobile/src/types/users';
 import authenticate, { AuthRequest } from '../middleware/authenticate';
 
 const router = express.Router();
@@ -28,6 +30,20 @@ let followsCollection: Collection;
   }
 })();
 
+// Generic function to add user info to posts
+const addUserInfoToPosts = async (posts: Post[]) => Promise.all(posts.map(async (post) => {
+  const user = await client.db('AbcountableDB').collection<User>('users').findOne({ _id: new ObjectId(post.userId) });
+  return {
+    ...post,
+    user: {
+      username: user?.username,
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      profilePicture: user?.profilePicture,
+    },
+  };
+}));
+
 router.get('/', async (req: Request, res: Response) => {
   try {
     const posts = await postsCollection.aggregate([
@@ -39,9 +55,20 @@ router.get('/', async (req: Request, res: Response) => {
           as: 'workout',
         },
       },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      { $unwind: '$user' }, // Unwind the user array
       { $sort: { createdAt: -1 } },
     ]).toArray();
-    res.send(posts);
+
+    const transformedPosts = await addUserInfoToPosts(posts as Post[]);
+    res.send(transformedPosts);
   } catch (err) {
     console.error('Failed to fetch posts', err);
     res.status(500).send({ message: 'Failed to fetch posts' });
@@ -74,7 +101,8 @@ router.get('/user-posts/:userId', authenticate, async (req: AuthRequest, res: Re
       userId: new ObjectId(requestedUserId),
     }).sort({ createdAt: -1 }).toArray();
 
-    res.send(userPosts);
+    const transformedPosts = await addUserInfoToPosts(userPosts as Post[]);
+    res.send(transformedPosts);
   } catch (err) {
     console.error('Failed to fetch user posts', err);
     res.status(500).send({ message: 'Failed to fetch user posts' });
@@ -113,7 +141,8 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
       { $sort: { createdAt: -1 } },
     ]).toArray();
 
-    res.send(posts);
+    const transformedPosts = await addUserInfoToPosts(posts as Post[]);
+    res.send(transformedPosts);
   } catch (err) {
     console.error('Failed to fetch following posts', err);
     res.status(500).send({ message: 'Failed to fetch following posts' });
@@ -136,7 +165,10 @@ router.get('/post/:postId', async (req: Request, res: Response) => {
       return;
     }
 
-    res.send(post);
+    console.log([post]);
+
+    const transformedPosts = await addUserInfoToPosts([post] as Post[]);
+    res.send(transformedPosts.length ? transformedPosts[0] : null);
   } catch (err) {
     console.error('Failed to fetch post', err);
     res.status(500).send({ message: 'Failed to fetch post' });

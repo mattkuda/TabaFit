@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from 'react-query';
-import { Post } from '../types/posts';
+import { PostModel } from '../types/posts';
 
-const fetchPost = async (postId: string): Promise<Post> => {
+const fetchPost = async (postId: string): Promise<PostModel> => {
     const response = await fetch(`http://localhost:3000/posts/post/${postId}`);
 
     if (!response.ok) {
@@ -10,6 +10,6 @@ const fetchPost = async (postId: string): Promise<Post> => {
     return response.json();
 };
 
-export const useQueryPost = (postId: string): UseQueryResult<Post, Error> => useQuery(['post', postId], () => fetchPost(postId), {
-    enabled: !!postId, // Only run the query if there's a postId
+export const useQueryPost = (postId: string): UseQueryResult<PostModel, Error> => useQuery(['post', postId], () => fetchPost(postId), {
+    enabled: !!postId,
 });

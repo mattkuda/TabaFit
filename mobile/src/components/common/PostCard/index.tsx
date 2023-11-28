@@ -8,11 +8,11 @@ import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native';
 import { useAuth } from '../../../context/AuthContext';
 import { HomeScreenNavigationProp } from '../../../types/navigationTypes';
-import { Post } from '../../../types/posts';
+import { PostModel } from '../../../types/posts';
 import { useMutateLike, useMutateUnlike } from '../../../mutations/useMutateLike';
 
 type PostCardProps = {
-    post: Post;
+    post: PostModel;
 };
 
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
@@ -64,10 +64,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                     <Avatar size="48px" source={{ uri: 'https://iava.org/wp-content/uploads/2020/10/DGoggins-Rnd-1.png' }} />
                     <VStack flex={1}>
                         <Text fontSize="sm" onPress={handlePressUser}>
-                            Username
-                            {' '}
-                            @
-                            {post.userId.toString().substring(0, 8)}
+                            {`${post.user.firstName} ${post.user.lastName} @${post.user.username}`}
+
                         </Text>
                         <Text color="coolGray.600" fontSize="xs">
                             {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}

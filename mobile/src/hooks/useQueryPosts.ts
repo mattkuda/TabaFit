@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from 'react-query';
-import { Post } from '../types/posts';
+import { PostModel } from '../types/posts';
 
-const fetchPosts = async (): Promise<Post[]> => {
+const fetchPosts = async (): Promise<PostModel[]> => {
     const response = await fetch('http://localhost:3000/posts');
 
     if (!response.ok) {
@@ -10,4 +10,4 @@ const fetchPosts = async (): Promise<Post[]> => {
     return response.json();
 };
 
-export const useQueryPosts = (): UseQueryResult<Post[], Error> => useQuery('posts', fetchPosts);
+export const useQueryPosts = (): UseQueryResult<PostModel[], Error> => useQuery('posts', fetchPosts);
