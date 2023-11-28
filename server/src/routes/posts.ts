@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { MongoClient, Collection, ObjectId } from 'mongodb';
 // eslint-disable-next-line import/no-relative-packages
-import { Post } from '../../../mobile/src/types/posts';
+import { PostSchema } from '../../../mobile/src/types/posts';
 // eslint-disable-next-line import/no-relative-packages
 import { User } from '../../../mobile/src/types/users';
 import authenticate, { AuthRequest } from '../middleware/authenticate';
@@ -15,14 +15,14 @@ if (!connectionString) {
 
 const client = new MongoClient(connectionString);
 
-let postsCollection: Collection<Post>;
+let postsCollection: Collection<PostSchema>;
 let followsCollection: Collection;
 
 (async () => {
   try {
     await client.connect();
     console.log('Connected to MongoDB');
-    postsCollection = client.db('AbcountableDB').collection<Post>('posts');
+    postsCollection = client.db('AbcountableDB').collection<PostSchema>('posts');
     followsCollection = client.db('AbcountableDB').collection('follows');
   } catch (err) {
     console.error('Failed to connect to MongoDB', err);
@@ -31,7 +31,7 @@ let followsCollection: Collection;
 })();
 
 // Generic function to add user info to posts
-const addUserInfoToPosts = async (posts: Post[]) => Promise.all(posts.map(async (post) => {
+const addUserInfoToPosts = async (posts: PostSchema[]) => Promise.all(posts.map(async (post) => {
   const user = await client.db('AbcountableDB').collection<User>('users').findOne({ _id: new ObjectId(post.userId) });
   return {
     ...post,
@@ -67,7 +67,7 @@ router.get('/', async (req: Request, res: Response) => {
       { $sort: { createdAt: -1 } },
     ]).toArray();
 
-    const transformedPosts = await addUserInfoToPosts(posts as Post[]);
+    const transformedPosts = await addUserInfoToPosts(posts as PostSchema[]);
     res.send(transformedPosts);
   } catch (err) {
     console.error('Failed to fetch posts', err);
@@ -101,7 +101,7 @@ router.get('/user-posts/:userId', authenticate, async (req: AuthRequest, res: Re
       userId: new ObjectId(requestedUserId),
     }).sort({ createdAt: -1 }).toArray();
 
-    const transformedPosts = await addUserInfoToPosts(userPosts as Post[]);
+    const transformedPosts = await addUserInfoToPosts(userPosts as PostSchema[]);
     res.send(transformedPosts);
   } catch (err) {
     console.error('Failed to fetch user posts', err);
@@ -141,7 +141,7 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
       { $sort: { createdAt: -1 } },
     ]).toArray();
 
-    const transformedPosts = await addUserInfoToPosts(posts as Post[]);
+    const transformedPosts = await addUserInfoToPosts(posts as PostSchema[]);
     res.send(transformedPosts);
   } catch (err) {
     console.error('Failed to fetch following posts', err);
@@ -167,7 +167,7 @@ router.get('/post/:postId', async (req: Request, res: Response) => {
 
     console.log([post]);
 
-    const transformedPosts = await addUserInfoToPosts([post] as Post[]);
+    const transformedPosts = await addUserInfoToPosts([post] as PostSchema[]);
     res.send(transformedPosts.length ? transformedPosts[0] : null);
   } catch (err) {
     console.error('Failed to fetch post', err);

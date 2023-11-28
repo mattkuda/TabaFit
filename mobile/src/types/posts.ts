@@ -8,19 +8,7 @@ export interface PostComment {
     createdAt: string;
 }
 
-export interface Post {
-    _id: mongoose.Types.ObjectId | string;
-    userId: mongoose.Types.ObjectId | string;
-    workout: Workout;
-    createdAt: string;
-    updatedAt: string;
-    title: string;
-    description: string;
-    likes: mongoose.Types.ObjectId[];
-    comments: PostComment[];
-}
-
-export interface CreatePostModel {
+export interface PostSchema {
     _id: mongoose.Types.ObjectId | string;
     userId: mongoose.Types.ObjectId | string;
     workout: Workout;
