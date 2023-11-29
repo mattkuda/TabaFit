@@ -72,7 +72,7 @@ export const TabataTimerScreen = (): JSX.Element => {
 
         const hoursStr = hours < 10 ? `0${hours}` : hours;
         const minsStr = minutes < 10 ? `0${minutes}` : minutes;
-        const secsStr = seconds < 10 ? `0${currSeconds}` : currSeconds;
+        const secsStr = currSeconds < 10 ? `0${currSeconds}` : currSeconds;
 
         return hours > 0 ? `${hoursStr}:${minsStr}:${secsStr}` : `${minsStr}:${secsStr}`;
     };
@@ -99,7 +99,6 @@ export const TabataTimerScreen = (): JSX.Element => {
 
                 if (seconds > 1) {
                     nextSeconds = seconds - 1;
-                    setRemainingTime(remainingTime - 1);
                 } else {
                     switch (currentInterval) {
                         case Intervals.Warmup:
@@ -153,6 +152,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                 setCurrentExercise(nextExercise);
                 setExercisesDone(nextExercisesDone);
                 setCircuitsDone(nextCircuitsDone);
+                setRemainingTime(remainingTime - 1);
             }, 1000);
         } else if (!isActive && isReset) {
             clearInterval(interval);
