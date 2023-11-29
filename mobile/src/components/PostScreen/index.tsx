@@ -12,6 +12,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useMutateAddComment, useMutateDeleteComment } from '../../mutations/commentMutations';
 import { PostScreenRouteProp } from '../../navigation/navigationTypes';
 import { useQueryPost } from '../../hooks/useQueryPost'; // Import the usePost hook
+import { useMutateLike, useMutateUnlike } from '../../mutations/useMutateLike';
 
 export const PostScreen = (): JSX.Element => {
     const route = useRoute<PostScreenRouteProp>();
@@ -19,12 +20,39 @@ export const PostScreen = (): JSX.Element => {
     const {
         data: post, isLoading, isError, refetch,
     } = useQueryPost(postId);
-
     const addCommentMutation = useMutateAddComment();
     const deleteCommentMutation = useMutateDeleteComment();
     const [commentBody, setCommentBody] = useState('');
     const { authState } = useAuth();
     const userId = authState?.userId;
+    const likeMutation = useMutateLike();
+    const unlikeMutation = useMutateUnlike();
+
+    const [liked, setLiked] = useState(post.likes.map((id) => id.toString()).includes(userId));
+    const [likeCount, setLikeCount] = useState(post.likes.length);
+
+    const handleLikePress = (): void => {
+        if (liked) {
+            unlikeMutation.mutate({ postId: post._id.toString(), userId }, {
+                onSuccess: () => {
+                    setLiked(false);
+                    setLikeCount((prev) => prev - 1);
+                },
+            });
+        } else {
+            likeMutation.mutate({ postId: post._id.toString(), userId }, {
+                onSuccess: () => {
+                    setLiked(true);
+                    setLikeCount((prev) => prev + 1);
+                },
+            });
+        }
+    };
+
+    const handleCommentPress = (): void => {
+        console.log('TODO: Highlight input when button pressed');
+    };
+
     const handleAddComment = (): void => {
         addCommentMutation.mutate({ postId, userId, body: commentBody }, {
             onSuccess: () => {
@@ -60,6 +88,37 @@ export const PostScreen = (): JSX.Element => {
                     </VStack>
                 </HStack>
                 <Text mt={2}>{post.description}</Text>
+                <HStack justifyContent="space-between" mt={2} space={4}>
+                    <IconButton
+                        borderRadius="full"
+                        icon={(
+                            <Icon
+                                as={Ionicons}
+                                color={liked ? 'red.500' : 'coolGray.500'}
+                                name={liked ? 'heart' : 'heart-outline'}
+                                size="sm"
+                            />
+                        )}
+                        onPress={handleLikePress}
+                    />
+                    <IconButton
+                        borderRadius="full"
+                        icon={<Icon as={Ionicons} name="chatbubble-outline" size="sm" />}
+                        onPress={handleCommentPress}
+                    />
+                </HStack>
+                <HStack color="coolGray.500" fontSize="xs" justifyContent="space-between" mt={2}>
+                    <Text>
+                        {likeCount}
+                        {' '}
+                        Likes
+                    </Text>
+                    <Text>
+                        {post.comments.length}
+                        {' '}
+                        Comments
+                    </Text>
+                </HStack>
             </VStack>
             <TextInput
                 placeholder="Write a comment..."
