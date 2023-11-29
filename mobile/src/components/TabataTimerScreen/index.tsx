@@ -119,22 +119,24 @@ export const TabataTimerScreen = (): JSX.Element => {
                                 nextExercisesDone = exercisesDone + 1;
                                 nextExercise = currentTabata[nextExercisesDone];
                             } else {
-                                nextInterval = Intervals.Intermission;
-                                nextSeconds = intermisionDuration;
+                                if (circuitsDone < numberOfTabatas - 1) {
+                                    // Only go to Intermission if there are more circuits to go
+                                    nextInterval = Intervals.Intermission;
+                                    nextSeconds = intermisionDuration;
+                                } else {
+                                    // If it was the last circuit, go to Cooldown
+                                    nextInterval = Intervals.Cooldown;
+                                    nextSeconds = cooldownDuration;
+                                }
                                 nextExercise = null;
                                 nextCircuitsDone = circuitsDone + 1;
                             }
                             break;
                         case Intervals.Intermission:
-                            if (circuitsDone < numberOfTabatas - 1) {
-                                nextInterval = Intervals.Exercise;
-                                nextSeconds = exerciseDuration;
-                                nextExercisesDone = 0;
-                                [nextExercise] = currentTabata;
-                            } else {
-                                nextInterval = Intervals.Cooldown;
-                                nextSeconds = cooldownDuration;
-                            }
+                            nextInterval = Intervals.Exercise;
+                            nextSeconds = exerciseDuration;
+                            nextExercisesDone = 0;
+                            [nextExercise] = currentTabata;
                             break;
                         case Intervals.Cooldown:
                             setIsActive(false);
@@ -153,8 +155,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                 setCircuitsDone(nextCircuitsDone);
             }, 1000);
         } else if (!isActive && isReset) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            clearInterval(interval!);
+            clearInterval(interval);
             setIsReset(false);
         }
 
