@@ -14,7 +14,6 @@ export const shuffleWorkout = (
     includeCardio: boolean,
     userId: string,
 ): TabataWorkout => {
-    // Helper function to shuffle an array
     const shuffleArray = <T, >(array: T[]): T[] => {
         let currentIndex = array.length;
         let randomIndex;
@@ -29,7 +28,6 @@ export const shuffleWorkout = (
         return array;
     };
 
-    // Function to get a random exercise of a given type
     const getRandomExercise = (type: TabataExerciseType): TabataExercise => {
         let exercises;
 
@@ -68,7 +66,6 @@ export const shuffleWorkout = (
         return [...circuit, ...circuit]; // Each exercise is done twice
     };
 
-    // Function to create Tabata circuits
     const createTabataCircuits = (types: TabataExerciseType[]): TabataCircuit[] => {
         const circuits: TabataCircuit[] = [];
 
@@ -79,7 +76,6 @@ export const shuffleWorkout = (
         return circuits;
     };
 
-    // Define the types included in the workout
     const types: TabataExerciseType[] = [];
 
     if (includeUpper) types.push('Upper Body');
@@ -87,7 +83,6 @@ export const shuffleWorkout = (
     if (includeAbs) types.push('Abs');
     if (includeCardio) types.push('Cardio');
 
-    // Create the Tabata workout
     const workout: TabataWorkout = {
         _id: `workout-shuffle`,
         name: `Tabata Shuffle`,

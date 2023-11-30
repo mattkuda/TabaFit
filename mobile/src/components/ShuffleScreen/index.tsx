@@ -12,6 +12,7 @@ import { showFooterState } from '../../atoms/showFooterAtom';
 import { TabataEquipmentType, TabataWorkout } from '../../types/workouts';
 import { shuffleWorkout } from './shuffleWorkouts';
 import { ShuffleScreenRouteProp } from '../../navigation/navigationTypes';
+import { calculateTotalWorkoutTime, formatTime } from '../TabataTimerScreen/util';
 
 type CheckboxItemProps = {
     label: string;
@@ -145,6 +146,17 @@ export const ShuffleScreen: React.FC = () => {
         }
     };
 
+    // TODO: Replace with real values from the workout
+    const totalWorkoutTime = formatTime(calculateTotalWorkoutTime(
+        0,
+        20,
+        10,
+        numTabatas,
+        8,
+        60,
+        0,
+    ));
+
     return (
         <VStack flex={1} px={4} space={4}>
             <HStack alignItems="center" justifyContent="space-between" pt={4}>
@@ -153,7 +165,7 @@ export const ShuffleScreen: React.FC = () => {
                     icon={<Icon as={Ionicons} name="shuffle" />}
                     onPress={(): void => triggerShuffle()}
                 />
-                <Text fontSize="md">Total Time: 45:00</Text>
+                <Text fontSize="md">{`Total Time: ${totalWorkoutTime}`}</Text>
             </HStack>
             <HStack alignItems="center" justifyContent="space-between">
                 <CheckboxItem disabled={shouldDisableCheckbox(includeUpper)} label="Upper" setValue={setIncludeUpper} value={includeUpper} />

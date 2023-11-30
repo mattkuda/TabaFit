@@ -11,6 +11,7 @@ import { TabataExercise } from '../../types/workouts';
 import { Intervals } from '../../util/constants';
 import { TimerScreenNavigationProp } from '../../types/navigationTypes';
 import { showFooterState } from '../../atoms/showFooterAtom';
+import { calculateTotalWorkoutTime, formatTime } from './util';
 
 export const TabataTimerScreen = (): JSX.Element => {
     const route = useRoute<TabataTimerScreenRouteProp>();
@@ -65,24 +66,19 @@ export const TabataTimerScreen = (): JSX.Element => {
         });
     };
 
-    const formatTime = (time: number): string => {
-        const hours = Math.floor(time / 3600);
-        const minutes = Math.floor((time - (hours * 3600)) / 60);
-        const currSeconds = time - (hours * 3600) - (minutes * 60);
-
-        const hoursStr = hours < 10 ? `0${hours}` : hours;
-        const minsStr = minutes < 10 ? `0${minutes}` : minutes;
-        const secsStr = currSeconds < 10 ? `0${currSeconds}` : currSeconds;
-
-        return hours > 0 ? `${hoursStr}:${minsStr}:${secsStr}` : `${minsStr}:${secsStr}`;
-    };
-
     useEffect(() => {
-        setTotalWorkoutTime(warmupDuration + numberOfTabatas * (exercisesPerTabata * (exerciseDuration + restDuration)
-        + intermisionDuration) + cooldownDuration - intermisionDuration);
-        setRemainingTime(warmupDuration + numberOfTabatas * (
-            exercisesPerTabata * (exerciseDuration + restDuration) + intermisionDuration)
-        + cooldownDuration - intermisionDuration);
+        const calculatedTotal = calculateTotalWorkoutTime(
+            warmupDuration,
+            exerciseDuration,
+            restDuration,
+            numberOfTabatas,
+            exercisesPerTabata,
+            intermisionDuration,
+            cooldownDuration,
+        );
+
+        setTotalWorkoutTime(calculatedTotal);
+        setRemainingTime(calculatedTotal);
     }, [warmupDuration, exerciseDuration, restDuration, numberOfTabatas,
         exercisesPerTabata, intermisionDuration, cooldownDuration]);
 
