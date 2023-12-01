@@ -15,8 +15,6 @@ import { HomeStackNavigator } from '../navigation/HomeStackNavigator';
 import { ProfileStackNavigator } from '../navigation/ProfileStackNavigator';
 import { useAuth } from '../context/AuthContext';
 import { TabNavigatorParamList } from '../types/navigationTypes';
-import { TabataSetup } from './TabataSetupPage/TabataSetup';
-import { WorkoutTimerPage } from './WorkoutTimerPage';
 import { showFooterState } from '../atoms/showFooterAtom';
 import { WorkoutsPage } from './WorkoutsPage';
 import { AuthPage } from './AuthPage';
@@ -30,14 +28,6 @@ const TimerStackNavigator = (): JSX.Element => (
         screenOptions={{ headerShown: false }}
     >
         <TimerStack.Screen component={WorkoutsPage} name="WorkoutsPage" />
-        <TimerStack.Screen
-            component={TabataSetup}
-            name="TabataSetup"
-        />
-        <TimerStack.Screen
-            component={WorkoutTimerPage}
-            name="WorkoutTimerPage"
-        />
     </TimerStack.Navigator>
 );
 
