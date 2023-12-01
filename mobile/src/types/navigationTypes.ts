@@ -1,11 +1,10 @@
 import { RouteProp, ParamListBase } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { TabataWorkout, Workout } from './workouts';
+import { TabataWorkout } from './workouts';
 import { User } from './users';
 
 export interface TabNavigatorParamList extends ParamListBase {
     Home: undefined,
-    WorkoutTimerPage: Workout,
     WorkoutsPage: undefined,
     ProfilePage: undefined,
     EditProfile: { user: User };
@@ -17,9 +16,6 @@ export interface TabNavigatorParamList extends ParamListBase {
 export type HomeScreenRouteProp = RouteProp<TabNavigatorParamList, 'Home'>;
 export type HomeScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'Home'>;
 
-export type TimerScreenRouteProp = RouteProp<TabNavigatorParamList, 'WorkoutTimerPage'> & {
-    params: Workout;
-};
 export type TimerScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'WorkoutTimerPage'>;
 
 export type ProfilePageScreenRouteProp = RouteProp<TabNavigatorParamList, 'ProfilePage'>;

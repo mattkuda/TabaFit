@@ -5,15 +5,14 @@ import {
     TabataCircuit, TabataEquipmentType, TabataExercise, TabataExerciseType, TabataWorkout,
 } from '../../types/workouts';
 
-export const shuffleWorkout = (
+export const shuffleExercises = (
     numberOfTabatas: number,
     selectedEquipment: TabataEquipmentType[],
     includeUpper: boolean,
     includeLower: boolean,
     includeAbs: boolean,
     includeCardio: boolean,
-    userId: string,
-): TabataWorkout => {
+): TabataCircuit[] => {
     const shuffleArray = <T, >(array: T[]): T[] => {
         let currentIndex = array.length;
         let randomIndex;
@@ -83,23 +82,25 @@ export const shuffleWorkout = (
     if (includeAbs) types.push('Abs');
     if (includeCardio) types.push('Cardio');
 
-    const workout: TabataWorkout = {
-        _id: `workout-shuffle`,
-        name: `Tabata Shuffle`,
-        description: 'A shuffled Tabata workout based on user preferences.',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        userId,
-        warmupDuration: 1,
-        tabatas: createTabataCircuits(types),
-        restDuration: 1,
-        exerciseDuration: 1,
-        numberOfTabatas: 1,
-        exercisesPerTabata: 8,
-        intermisionDuration: 1,
-        cooldownDuration: 0,
-        equipment: [],
-    };
+    const tabtats: TabataCircuit[] = createTabataCircuits(types);
 
-    return workout;
+    return tabtats;
+};
+
+export const defaultTabataWorkout: TabataWorkout = {
+    _id: `workout-shuffle`,
+    name: `Tabata Shuffle`,
+    description: 'A shuffled Tabata workout based on user preferences.',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    userId: null,
+    warmupDuration: 1,
+    tabatas: [],
+    restDuration: 1,
+    exerciseDuration: 1,
+    numberOfTabatas: 1,
+    exercisesPerTabata: 8,
+    intermisionDuration: 1,
+    cooldownDuration: 0,
+    equipment: [],
 };

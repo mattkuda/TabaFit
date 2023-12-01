@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
     Button, Checkbox, VStack, HStack, Text, IconButton, Icon, ScrollView,
     Modal,
+    Input,
+    Divider, FormControl,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useSetRecoilState } from 'recoil';
@@ -10,7 +12,7 @@ import { useAuth } from '../../context/AuthContext';
 import { TabataTimerScreenNavigationProp } from '../../types/navigationTypes';
 import { showFooterState } from '../../atoms/showFooterAtom';
 import { TabataEquipmentType, TabataWorkout } from '../../types/workouts';
-import { shuffleWorkout } from './shuffleWorkouts';
+import { defaultTabataWorkout, shuffleExercises } from './util';
 import { ShuffleScreenRouteProp } from '../../navigation/navigationTypes';
 import { calculateTotalWorkoutTime, formatTime } from '../TabataTimerScreen/util';
 
@@ -36,18 +38,19 @@ const CheckboxItem: React.FC<CheckboxItemProps> = ({
 
 export const ShuffleScreen: React.FC = () => {
     const route = useRoute<ShuffleScreenRouteProp>();
-    const routeWorkout = route.params?.workout;
+    const routeWorkout = route.params?.workout ?? defaultTabataWorkout;
+    const [shuffledWorkout, setShuffledWorkout] = useState<TabataWorkout>(routeWorkout);
     const [includeUpper, setIncludeUpper] = useState<boolean>(true);
     const [includeLower, setIncludeLower] = useState<boolean>(true);
     const [includeAbs, setIncludeAbs] = useState<boolean>(true);
     const [includeCardio, setIncludeCardio] = useState<boolean>(true);
-    const [numTabatas, setNumTabatas] = useState<number>(6);
-    const [shuffledWorkout, setShuffledWorkout] = useState<TabataWorkout>(routeWorkout);
+    const [modalWorkout, setModalWorkout] = useState<TabataWorkout>(routeWorkout);
     const setShowFooter = useSetRecoilState(showFooterState);
     const navigation = useNavigation<TabataTimerScreenNavigationProp>();
     const { authState } = useAuth();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const userId = authState?.userId;
-    const [showEquipmentModal, setShowEquipmentModal] = useState(false);
+    const [showSettingsModal, setShowSettingsModal] = useState(false);
     const [selectedEquipment, setSelectedEquipment] = useState<TabataEquipmentType[]>([]);
     const [selectedEquipmentTemp, setSelectedEquipmentTemp] = useState<TabataEquipmentType[]>([]);
 
@@ -59,11 +62,6 @@ export const ShuffleScreen: React.FC = () => {
             }
             return [...prev, equipment];
         });
-    };
-
-    const handleEquipmentCancel = (): void => {
-        setShowEquipmentModal(false);
-        setSelectedEquipmentTemp(selectedEquipment);
     };
 
     useFocusEffect(
@@ -85,23 +83,32 @@ export const ShuffleScreen: React.FC = () => {
     };
 
     const triggerShuffle = (): void => {
-        const workout = shuffleWorkout(
-            numTabatas,
+        const tabatas = shuffleExercises(
+            shuffledWorkout.numberOfTabatas,
             selectedEquipment,
             includeUpper,
             includeLower,
             includeAbs,
             includeCardio,
-            userId,
         );
 
-        setShuffledWorkout(workout);
+        setShuffledWorkout((prev) => ({
+            ...prev,
+            tabatas,
+        }));
     };
 
-    const handleEquipmentDone = (): void => {
-        setShowEquipmentModal(false);
+    const handleModalDone = (): void => {
+        setShowSettingsModal(false);
         setSelectedEquipment(selectedEquipmentTemp);
+        setShuffledWorkout(modalWorkout);
         triggerShuffle();
+    };
+
+    const handleModalCancel = (): void => {
+        setShowSettingsModal(false);
+        setSelectedEquipmentTemp(selectedEquipment);
+        setModalWorkout(shuffledWorkout);
     };
 
     // Call the shuffleWorkout function to generate the workout
@@ -116,22 +123,31 @@ export const ShuffleScreen: React.FC = () => {
     useEffect(() => {
         triggerShuffle();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [numTabatas, includeUpper, includeLower, includeAbs, includeCardio]);
+    }, [shuffledWorkout.numberOfTabatas, includeUpper, includeLower, includeAbs, includeCardio]);
+
+    const handleWorkoutSettingChange = (name, value): void => {
+        setModalWorkout((prevWorkout) => ({
+            ...prevWorkout,
+            [name]: value,
+        }));
+    };
 
     useFocusEffect(
         React.useCallback(() => {
             if (!route.params?.workout) {
-                const workout = shuffleWorkout(
-                    numTabatas,
+                const tabatas = shuffleExercises(
+                    shuffledWorkout.numberOfTabatas,
                     selectedEquipment,
                     includeUpper,
                     includeLower,
                     includeAbs,
                     includeCardio,
-                    userId,
                 );
 
-                setShuffledWorkout(workout);
+                setShuffledWorkout((prev) => ({
+                    ...prev,
+                    tabatas,
+                }));
             } else {
                 setShuffledWorkout(route.params.workout);
             }
@@ -151,7 +167,7 @@ export const ShuffleScreen: React.FC = () => {
         0,
         20,
         10,
-        numTabatas,
+        shuffledWorkout.numberOfTabatas,
         8,
         60,
         0,
@@ -176,23 +192,24 @@ export const ShuffleScreen: React.FC = () => {
             <HStack alignItems="center" justifyContent="center">
                 <IconButton
                     icon={<Icon as={Ionicons} name="remove" />}
-                    onPress={(): void => setNumTabatas((prev) => Math.max(prev - 1, 1))}
+                    onPress={(): void => setShuffledWorkout((prev) => ({
+                        ...prev,
+                        numberOfTabatas: Math.max(prev.numberOfTabatas - 1, 1),
+                    }))}
                 />
                 <Text mx={2}>
-                    {numTabatas}
-                    {' '}
-                    Tabatas
+                    {`${shuffledWorkout.numberOfTabatas} Tabatas`}
                 </Text>
                 <IconButton
                     icon={<Icon as={Ionicons} name="add" />}
-                    onPress={(): void => setNumTabatas((prev) => prev + 1)}
+                    onPress={(): void => setShuffledWorkout((prev) => ({
+                        ...prev,
+                        numberOfTabatas: prev.numberOfTabatas + 1,
+                    }))}
                 />
             </HStack>
             <HStack alignItems="center" justifyContent="space-between" space={2}>
-                <Button flex={1} onPress={(): void => setShowEquipmentModal(true)}>
-                    {selectedEquipment.length ? `Equipment (${selectedEquipment.length})` : 'Equipment'}
-                </Button>
-                <Button flex={1} onPress={(): void => console.log('TODO: More settings')}>More</Button>
+                <Button flex={1} onPress={(): void => setShowSettingsModal(true)}>Settings</Button>
             </HStack>
             <ScrollView>
                 {shuffledWorkout?.tabatas.map((circuit, index) => (
@@ -212,8 +229,8 @@ export const ShuffleScreen: React.FC = () => {
             <Button bottom={0} position="absolute" width="100%" onPress={(): void => handleStartWorkout()}>
                 Start
             </Button>
-            <Modal isOpen={showEquipmentModal} onClose={(): void => setShowEquipmentModal(false)}>
-                <Modal.Content maxWidth="400px">
+            <Modal isOpen={showSettingsModal} size="full" onClose={(): void => setShowSettingsModal(false)}>
+                <Modal.Content>
                     <Modal.CloseButton />
                     <Modal.Header>Select Equipment</Modal.Header>
                     <Modal.Body>
@@ -229,10 +246,61 @@ export const ShuffleScreen: React.FC = () => {
                                 {equipment}
                             </Checkbox>
                         ))}
+                        <Divider my="2" />
+                        {/* Input fields for each setting (Example for warmupDuration) */}
+                        <FormControl.Label>Warmup</FormControl.Label>
+                        <Input
+                            keyboardType="numeric"
+                            placeholder="Warmup Duration (seconds)"
+                            value={modalWorkout?.warmupDuration.toString()}
+                            onChangeText={(text): void => handleWorkoutSettingChange('warmupDuration', parseInt(text, 10) || 0)}
+                        />
+                        <FormControl.Label>Exercise Duration</FormControl.Label>
+                        <Input
+                            keyboardType="numeric"
+                            placeholder="Exercise Duration (seconds)"
+                            value={modalWorkout?.exerciseDuration.toString()}
+                            onChangeText={(text): void => handleWorkoutSettingChange('exerciseDuration', parseInt(text, 10) || 0)}
+                        />
+                        <FormControl.Label>Rest Duration</FormControl.Label>
+                        <Input
+                            keyboardType="numeric"
+                            placeholder="Rest Duration (seconds)"
+                            value={modalWorkout?.restDuration.toString()}
+                            onChangeText={(text): void => handleWorkoutSettingChange('restDuration', parseInt(text, 10) || 0)}
+                        />
+                        <FormControl.Label>Number of Tabatas</FormControl.Label>
+                        <Input
+                            keyboardType="numeric"
+                            placeholder="Number of Tabatas"
+                            value={modalWorkout?.numberOfTabatas.toString()}
+                            onChangeText={(text): void => handleWorkoutSettingChange('numberOfTabatas', parseInt(text, 10) || 0)}
+                        />
+                        <FormControl.Label>Exercises Per Tabata</FormControl.Label>
+                        <Input
+                            keyboardType="numeric"
+                            placeholder="Exercises Per Tabata"
+                            value={modalWorkout?.exercisesPerTabata.toString()}
+                            onChangeText={(text): void => handleWorkoutSettingChange('exercisesPerTabata', parseInt(text, 10) || 0)}
+                        />
+                        <FormControl.Label>Intermission Duration</FormControl.Label>
+                        <Input
+                            keyboardType="numeric"
+                            placeholder="Intermission Duration (seconds)"
+                            value={modalWorkout?.intermisionDuration.toString()}
+                            onChangeText={(text): void => handleWorkoutSettingChange('intermisionDuration', parseInt(text, 10) || 0)}
+                        />
+                        <FormControl.Label>Coooldown Duration</FormControl.Label>
+                        <Input
+                            keyboardType="numeric"
+                            placeholder="Cooldown Duration (seconds)"
+                            value={modalWorkout?.cooldownDuration.toString()}
+                            onChangeText={(text): void => handleWorkoutSettingChange('cooldownDuration', parseInt(text, 10) || 0)}
+                        />
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onPress={handleEquipmentDone}>Done</Button>
-                        <Button variant="ghost" onPress={handleEquipmentCancel}>Cancel</Button>
+                        <Button onPress={handleModalDone}>Done</Button>
+                        <Button variant="ghost" onPress={handleModalCancel}>Cancel</Button>
                     </Modal.Footer>
                 </Modal.Content>
             </Modal>

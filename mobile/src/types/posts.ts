@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Workout } from './workouts';
+import { TabataWorkout } from './workouts';
 
 export interface PostComment {
     _id?: mongoose.Types.ObjectId | string;
@@ -11,7 +11,7 @@ export interface PostComment {
 export interface PostSchema {
     _id: mongoose.Types.ObjectId | string;
     userId: mongoose.Types.ObjectId | string;
-    workout: Workout;
+    workout: TabataWorkout;
     createdAt: string;
     updatedAt: string;
     title: string;
@@ -31,7 +31,7 @@ export interface PostModel {
     _id: mongoose.Types.ObjectId | string;
     userId: mongoose.Types.ObjectId | string;
     user: UserPostInfo;
-    workout: Workout;
+    workout: TabataWorkout;
     createdAt: string;
     updatedAt: string;
     title: string;

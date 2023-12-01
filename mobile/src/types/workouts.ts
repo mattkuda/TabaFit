@@ -1,20 +1,3 @@
-import { Exercise } from './exercises';
-
-export interface Workout {
-    _id: string;
-    name: string;
-    createdAt: string;
-    updatedAt: string;
-    userId: string;
-    warmupDuration: number;
-    exercises: Exercise[];
-    restDuration: number;
-    exerciseDuration: number;
-    circuits: number;
-    intermisionDuration: number;
-    cooldownDuration: number;
-}
-
 export type TabataExerciseType = 'Lower Body' | 'Upper Body' | 'Abs' | 'Cardio' | 'Glutes' | 'Spicy'
 export type TabataEquipmentType = 'Kettlebell' | 'Box Platform' | 'Yoga Ball' | 'Workout Band' | 'Dumbells' | 'Hanging Bar' | 'None';
 
