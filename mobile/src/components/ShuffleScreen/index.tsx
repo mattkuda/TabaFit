@@ -164,13 +164,13 @@ export const ShuffleScreen: React.FC = () => {
 
     // TODO: Replace with real values from the workout
     const totalWorkoutTime = formatTime(calculateTotalWorkoutTime(
-        0,
-        20,
-        10,
+        shuffledWorkout.warmupDuration,
+        shuffledWorkout.exerciseDuration,
+        shuffledWorkout.restDuration,
         shuffledWorkout.numberOfTabatas,
-        8,
-        60,
-        0,
+        shuffledWorkout.exercisesPerTabata,
+        shuffledWorkout.intermisionDuration,
+        shuffledWorkout.cooldownDuration,
     ));
 
     return (
