@@ -54,7 +54,6 @@ export const ShuffleScreen: React.FC = () => {
     const [selectedEquipment, setSelectedEquipment] = useState<TabataEquipmentType[]>([]);
     const [selectedEquipmentTemp, setSelectedEquipmentTemp] = useState<TabataEquipmentType[]>([]);
 
-    // Function to toggle equipment selection
     const toggleEquipment = (equipment: TabataEquipmentType): void => {
         setSelectedEquipmentTemp((prev) => {
             if (prev.includes(equipment)) {
@@ -72,13 +71,10 @@ export const ShuffleScreen: React.FC = () => {
         }, [setShowFooter]),
     );
 
-    // Function to determine if a checkbox should be disabled
     const shouldDisableCheckbox = (checkboxValue: boolean): boolean => {
-        // Count how many checkboxes are checked
         const checkedCount = [includeUpper, includeLower, includeAbs, includeCardio]
             .filter((val) => val).length;
 
-        // If only one checkbox is checked and it's the current one, disable it
         return checkedCount === 1 && checkboxValue;
     };
 
@@ -111,7 +107,6 @@ export const ShuffleScreen: React.FC = () => {
         setModalWorkout(shuffledWorkout);
     };
 
-    // Call the shuffleWorkout function to generate the workout
     useEffect(() => {
         if (!routeWorkout) {
             triggerShuffle();
@@ -119,7 +114,6 @@ export const ShuffleScreen: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // Call the shuffleWorkout function to generate the workout
     useEffect(() => {
         triggerShuffle();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -156,13 +150,11 @@ export const ShuffleScreen: React.FC = () => {
     );
 
     const handleStartWorkout = (): void => {
-        // Navigate to the WorkoutTimerPage with the shuffledWorkout
         if (shuffledWorkout) {
             navigation.navigate('TabataTimer', { workout: shuffledWorkout });
         }
     };
 
-    // TODO: Replace with real values from the workout
     const totalWorkoutTime = formatTime(calculateTotalWorkoutTime(
         shuffledWorkout.warmupDuration,
         shuffledWorkout.exerciseDuration,
