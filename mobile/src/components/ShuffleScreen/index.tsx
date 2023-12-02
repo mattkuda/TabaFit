@@ -155,6 +155,10 @@ export const ShuffleScreen: React.FC = () => {
         }
     };
 
+    const handleLoadWorkout = (): void => {
+        navigation.navigate('LoadWorkoutScreen');
+    };
+
     const totalWorkoutTime = formatTime(calculateTotalWorkoutTime(
         shuffledWorkout.warmupDuration,
         shuffledWorkout.exerciseDuration,
@@ -202,6 +206,7 @@ export const ShuffleScreen: React.FC = () => {
             </HStack>
             <HStack alignItems="center" justifyContent="space-between" space={2}>
                 <Button flex={1} onPress={(): void => setShowSettingsModal(true)}>Settings</Button>
+                <Button flex={1} onPress={handleLoadWorkout}>Load Workout</Button>
             </HStack>
             <ScrollView>
                 {shuffledWorkout?.tabatas.map((circuit, index) => (
