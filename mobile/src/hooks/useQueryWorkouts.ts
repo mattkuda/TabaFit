@@ -10,4 +10,5 @@ const fetchWorkouts = async (): Promise<TabataWorkout[]> => {
     return response.json();
 };
 
+// TODO: Transform into querying featured workouts perhaps
 export const useQueryWorkouts = (): UseQueryResult<TabataWorkout[], Error> => useQuery('workouts', fetchWorkouts);

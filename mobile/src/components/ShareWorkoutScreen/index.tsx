@@ -27,7 +27,10 @@ export const ShareWorkoutScreen = (): JSX.Element => {
     const handleSaveWorkout = (): void => {
         if (authState?.userId && workout) {
             saveWorkoutMutation.mutate({
-                workout,
+                workout: {
+                    ...workout,
+                    userId,
+                },
             }, {
                 onSuccess: () => {
                     setIsWorkoutSaved(true);
@@ -72,6 +75,12 @@ export const ShareWorkoutScreen = (): JSX.Element => {
         <ScrollView>
             <VStack p={4} space={4}>
                 <Text bold fontSize="xl">Share Workout</Text>
+                <Text bold fontSize="xl">
+                    UserId:
+                    {' '}
+                    {userId}
+                </Text>
+
                 <TextInput
                     placeholder="Workout Name"
                     style={{

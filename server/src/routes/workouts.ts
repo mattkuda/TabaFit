@@ -3,6 +3,7 @@ import express, { Request, Response } from 'express';
 import { MongoClient, Collection } from 'mongodb';
 // eslint-disable-next-line import/no-relative-packages
 import { TabataWorkout } from '../../../mobile/src/types/workouts';
+import authenticate, { AuthRequest } from '../middleware/authenticate';
 
 const router = express.Router();
 const connectionString = process.env.MONGODB_URI;
@@ -27,6 +28,7 @@ let workoutsCollection: Collection<TabataWorkout>;
   }
 })();
 
+// Gets all workouts
 router.get('/', async (req: Request, res: Response) => {
   try {
     const workouts = await workoutsCollection.aggregate([
@@ -43,6 +45,22 @@ router.get('/', async (req: Request, res: Response) => {
   } catch (err) {
     console.error('Failed to fetch workouts', err);
     res.status(500).send({ message: 'Failed to fetch workouts' });
+  }
+});
+
+// Gets a user's saved workouts
+router.get('/my-saved', authenticate, async (req: AuthRequest, res: Response) => {
+  const requestingUserId = req.userId;
+
+  try {
+    const savedWorkouts = await workoutsCollection.find({
+      userId: requestingUserId,
+    }).toArray();
+
+    res.send(savedWorkouts);
+  } catch (err) {
+    console.error('Failed to fetch saved workouts', err);
+    res.status(500).send({ message: 'Failed to fetch saved workouts' });
   }
 });
 

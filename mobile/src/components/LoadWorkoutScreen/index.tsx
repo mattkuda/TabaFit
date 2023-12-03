@@ -5,9 +5,9 @@ import {
 } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { format } from 'date-fns';
-import { useQueryWorkouts } from '../../hooks/useQueryWorkouts';
 import { TabataWorkout } from '../../types/workouts';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
+import { useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
 
 type LoadWorkoutScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'LoadWorkoutScreen'>;
 
@@ -17,7 +17,7 @@ interface WorkoutCardProps {
 }
 
 const WorkoutCard: FC<WorkoutCardProps> = ({ workout, navigation }) => {
-    const formattedDate = format(new Date(workout.createdAt), 'MMMM do, yyyy');
+    const formattedDate = format(new Date(workout.createdAt), 'MMMM do, yyyy, HH:mm:ss.SSS');
 
     const handleQuickStart = (): void => {
         navigation.navigate('TabataTimer', { workout });
@@ -49,12 +49,11 @@ const WorkoutCard: FC<WorkoutCardProps> = ({ workout, navigation }) => {
 
 export const LoadWorkoutScreen: FC = () => {
     const navigation = useNavigation<LoadWorkoutScreenNavigationProp>();
-    const { data } = useQueryWorkouts();
+    const { data } = useQueryMySavedWorkouts();
 
     return (
         <VStack>
             <Heading>My Saved Workouts:</Heading>
-            <Heading>Next task: show my workouts here</Heading>
             {data?.map((workout) => (
                 <WorkoutCard key={workout._id} navigation={navigation} workout={workout} />
             ))}
