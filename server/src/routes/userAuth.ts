@@ -80,9 +80,6 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...userWithoutPassword } = user;
 
-    console.log('userWithoutPassword');
-    console.log(userWithoutPassword);
-
     return res.status(200).json({
       message: 'User logged in successfully',
       success: true,

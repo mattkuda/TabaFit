@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     ScrollView, Button, TextInput,
 } from 'react-native';
@@ -28,22 +28,33 @@ export const PostScreen = (): JSX.Element => {
     const likeMutation = useMutateLike();
     const unlikeMutation = useMutateUnlike();
 
-    const [liked, setLiked] = useState(post.likes.map((id) => id.toString()).includes(userId));
-    const [likeCount, setLikeCount] = useState(post.likes.length);
+    const [liked, setLiked] = useState(false);
+    const [likeCount, setLikeCount] = useState(0);
+
+    useEffect(() => {
+        if (post) {
+            setLiked(post.likes.map((id) => id.toString()).includes(userId));
+            setLikeCount(post.likes.length);
+        }
+    }, [post, userId]);
 
     const handleLikePress = (): void => {
+        // Optimistic update
+        setLiked(!liked);
+        setLikeCount(liked ? likeCount - 1 : likeCount + 1);
+
         if (liked) {
             unlikeMutation.mutate({ postId: post._id.toString(), userId }, {
-                onSuccess: () => {
-                    setLiked(false);
-                    setLikeCount((prev) => prev - 1);
+                onError: () => {
+                    setLiked(true);
+                    setLikeCount(likeCount);
                 },
             });
         } else {
             likeMutation.mutate({ postId: post._id.toString(), userId }, {
-                onSuccess: () => {
-                    setLiked(true);
-                    setLikeCount((prev) => prev + 1);
+                onError: () => {
+                    setLiked(false);
+                    setLikeCount(likeCount);
                 },
             });
         }
