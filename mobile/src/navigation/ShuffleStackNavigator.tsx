@@ -11,11 +11,18 @@ const Stack = createStackNavigator<ShuffleStackParamList>();
 export const ShuffleStackNavigator = (): JSX.Element => (
     <Stack.Navigator
         initialRouteName="ShuffleScreen"
-        screenOptions={{ headerShown: false }}
+        // screenOptions={{ headerShown: false }}
     >
         <Stack.Screen component={ShuffleScreen} name="ShuffleScreen" />
-        <Stack.Screen component={TabataTimerScreen} name="TabataTimer" />
-        <Stack.Screen component={ShareWorkoutScreen} name="ShareWorkoutScreen" />
+        <Stack.Screen
+            component={TabataTimerScreen}
+            name="TabataTimer"
+            options={{ headerShown: false }} // This line hides the header
+        />
+        <Stack.Screen
+            component={ShareWorkoutScreen}
+            name="ShareWorkoutScreen"
+        />
         <Stack.Screen component={LoadWorkoutScreen} name="LoadWorkoutScreen" />
     </Stack.Navigator>
 );

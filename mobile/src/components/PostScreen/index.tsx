@@ -39,7 +39,6 @@ export const PostScreen = (): JSX.Element => {
     }, [post, userId]);
 
     const handleLikePress = (): void => {
-        // Optimistic update
         setLiked(!liked);
         setLikeCount(liked ? likeCount - 1 : likeCount + 1);
 

@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-    VStack, Box, Text, Icon, IconButton, ScrollView,
+    VStack, Box, Text, ScrollView,
 } from 'native-base';
-import { Ionicons } from '@expo/vector-icons';
 import { RefreshControl } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { useQueryPostsFollowing } from '../../hooks/useQueryPostsFollowing';
-import { SearchScreenNavigationProp } from '../../navigation/navigationTypes';
 import { useAuth } from '../../context/AuthContext';
 import { PostCard } from '../common/PostCard';
 
@@ -16,7 +13,6 @@ export const HomePage = (): JSX.Element => {
     const [refreshing, setRefreshing] = useState<boolean>(false);
     const { data: postData, refetch } = useQueryPostsFollowing();
     const { authState: authenticated } = useAuth();
-    const navigation = useNavigation<SearchScreenNavigationProp>();
 
     const onRefresh = async (): Promise<void> => {
         setRefreshing(true);
@@ -46,15 +42,6 @@ export const HomePage = (): JSX.Element => {
                 refreshControl={<RefreshControl colors={['#9Bd35A', '#689F38']} refreshing={refreshing} onRefresh={onRefresh} />}
             >
                 <VStack alignItems="center" space={4}>
-                    <IconButton
-                        _icon={{
-                            color: 'primary.500',
-                            size: 'md',
-                        }}
-                        borderRadius="full"
-                        icon={<Icon as={Ionicons} name="search-outline" size="sm" />}
-                        onPress={(): void => navigation.navigate('Search')}
-                    />
                     <Text fontSize="5xl">Abcountable</Text>
                     {postData?.map((post) => (
                         <PostCard key={post._id.toString()} post={post} />
