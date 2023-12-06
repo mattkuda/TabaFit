@@ -79,4 +79,24 @@ router.post('/save', async (req: Request, res: Response) => {
   }
 });
 
+router.delete('/:workoutId', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { workoutId } = req.params;
+    const requestingUserId = req.userId;
+    const workoutToDelete = await workoutsCollection.findOne(
+      { _id: workoutId, userId: requestingUserId },
+    );
+
+    if (!workoutToDelete) {
+      res.status(404).send({ message: 'Workout not found or you do not have permission to delete it.' });
+    }
+
+    await workoutsCollection.deleteOne({ _id: workoutId });
+    res.status(200).send({ message: 'Workout deleted successfully.' });
+  } catch (err) {
+    console.error('Failed to delete workout', err);
+    res.status(500).send({ message: 'Failed to delete workout' });
+  }
+});
+
 export default router;
