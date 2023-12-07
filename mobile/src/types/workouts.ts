@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 export type TabataExerciseType = 'Lower Body' | 'Upper Body' | 'Abs' | 'Cardio' | 'Glutes' | 'Spicy'
 export type TabataEquipmentType = 'Kettlebell' | 'Box Platform' | 'Yoga Ball' | 'Workout Band' | 'Dumbells' | 'Hanging Bar' | 'None';
 
@@ -14,7 +16,7 @@ export interface TabataExercise {
 export type TabataCircuit = TabataExercise[]
 
 export interface TabataWorkout {
-    _id: string;
+    _id: mongoose.Types.ObjectId | string;
     name: string;
     description: string;
     createdAt: string;

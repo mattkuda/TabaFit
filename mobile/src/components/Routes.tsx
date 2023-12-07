@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useRecoilValue } from 'recoil';
+import React from 'react';
 import { ShuffleStackNavigator } from '../navigation/ShuffleStackNavigator';
 import { HomeStackNavigator } from '../navigation/HomeStackNavigator';
 import { ProfileStackNavigator } from '../navigation/ProfileStackNavigator';
@@ -66,45 +67,47 @@ export const Routes = (): JSX.Element => {
     return (
         <NativeBaseProvider>
             <NavigationContainer>
-                <Tab.Navigator
-                    initialRouteName="HomePage"
-                    screenOptions={{
-                        headerShown: false,
-                    }}
-                >
-                    <Tab.Screen
-                        component={HomeStackNavigator}
-                        name="Home"
-                        options={{
-                            tabBarIcon: HomeIcon,
-                            tabBarStyle,
+                <SafeAreaView style={{ flex: 1 }}>
+                    <Tab.Navigator
+                        initialRouteName="HomePage"
+                        screenOptions={{
+                            headerShown: false,
                         }}
-                    />
-                    <Tab.Screen
-                        component={TimerStackNavigator}
-                        name="My Workouts"
-                        options={{
-                            tabBarIcon: TimerIcon,
-                            tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
-                        }}
-                    />
-                    <Tab.Screen
-                        component={ShuffleStackNavigator}
-                        name="Shuffle"
-                        options={{
-                            tabBarIcon: TimerIcon,
-                            tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
-                        }}
-                    />
-                    <Tab.Screen
-                        component={ProfileStackNavigator}
-                        name="Profile"
-                        options={{
-                            tabBarIcon: ProfilePageIcon,
-                            tabBarStyle,
-                        }}
-                    />
-                </Tab.Navigator>
+                    >
+                        <Tab.Screen
+                            component={HomeStackNavigator}
+                            name="Home"
+                            options={{
+                                tabBarIcon: HomeIcon,
+                                tabBarStyle,
+                            }}
+                        />
+                        <Tab.Screen
+                            component={TimerStackNavigator}
+                            name="My Workouts"
+                            options={{
+                                tabBarIcon: TimerIcon,
+                                tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
+                            }}
+                        />
+                        <Tab.Screen
+                            component={ShuffleStackNavigator}
+                            name="Shuffle"
+                            options={{
+                                tabBarIcon: TimerIcon,
+                                tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
+                            }}
+                        />
+                        <Tab.Screen
+                            component={ProfileStackNavigator}
+                            name="Profile"
+                            options={{
+                                tabBarIcon: ProfilePageIcon,
+                                tabBarStyle,
+                            }}
+                        />
+                    </Tab.Navigator>
+                </SafeAreaView>
             </NavigationContainer>
         </NativeBaseProvider>
     );

@@ -55,7 +55,7 @@ export const WorkoutsPage: FC = () => {
         <VStack>
             <Heading>Workouts:</Heading>
             {data?.map((workout) => (
-                <WorkoutCard key={workout._id} navigation={navigation} workout={workout} />
+                <WorkoutCard key={workout._id.toString()} navigation={navigation} workout={workout} />
             ))}
         </VStack>
     );

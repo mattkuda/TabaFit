@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import express, { Request, Response } from 'express';
-import { MongoClient, Collection } from 'mongodb';
+import { MongoClient, Collection, ObjectId } from 'mongodb';
 // eslint-disable-next-line import/no-relative-packages
 import { TabataWorkout } from '../../../mobile/src/types/workouts';
 import authenticate, { AuthRequest } from '../middleware/authenticate';
@@ -84,14 +84,22 @@ router.delete('/:workoutId', authenticate, async (req: AuthRequest, res: Respons
     const { workoutId } = req.params;
     const requestingUserId = req.userId;
     const workoutToDelete = await workoutsCollection.findOne(
-      { _id: workoutId, userId: requestingUserId },
+      {
+        _id: new ObjectId(workoutId),
+        userId: requestingUserId,
+      },
     );
+
+    console.log('requestingUserId');
+    console.log(requestingUserId);
+    console.log('workoutId');
+    console.log(workoutId);
 
     if (!workoutToDelete) {
       res.status(404).send({ message: 'Workout not found or you do not have permission to delete it.' });
     }
 
-    await workoutsCollection.deleteOne({ _id: workoutId });
+    await workoutsCollection.deleteOne({ _id: new ObjectId(workoutId) });
     res.status(200).send({ message: 'Workout deleted successfully.' });
   } catch (err) {
     console.error('Failed to delete workout', err);
