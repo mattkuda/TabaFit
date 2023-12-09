@@ -5,6 +5,8 @@ import { PostSchema } from '../../../mobile/src/types/posts';
 // eslint-disable-next-line import/no-relative-packages
 import { User } from '../../../mobile/src/types/users';
 import authenticate, { AuthRequest } from '../middleware/authenticate';
+// eslint-disable-next-line import/no-relative-packages
+import { NotificationSchema } from '../../../mobile/src/types/notifications';
 
 const router = express.Router();
 const connectionString = process.env.MONGODB_URI;
@@ -16,6 +18,7 @@ if (!connectionString) {
 const client = new MongoClient(connectionString);
 
 let postsCollection: Collection<PostSchema>;
+let notificationsCollection: Collection<NotificationSchema>;
 let followsCollection: Collection;
 
 (async () => {
@@ -24,6 +27,7 @@ let followsCollection: Collection;
     console.log('Connected to MongoDB');
     postsCollection = client.db('AbcountableDB').collection<PostSchema>('posts');
     followsCollection = client.db('AbcountableDB').collection('follows');
+    notificationsCollection = client.db('AbcountableDB').collection('notifications');
   } catch (err) {
     console.error('Failed to connect to MongoDB', err);
     process.exit(1);
@@ -227,6 +231,20 @@ router.post('/:postId/comments', authenticate, async (req, res) => {
       { $push: { comments: comment } },
     );
 
+    // Create a notification for the post owner
+    const post = await postsCollection.findOne({ _id: new ObjectId(postId) });
+    if (post && post.userId.toString() !== userId) {
+      const notification: NotificationSchema = {
+        type: 'comment',
+        targetId: new ObjectId(postId),
+        initiatorUserId: new ObjectId(userId),
+        recipientUserId: new ObjectId(post.userId),
+        createdAt: new Date(),
+        read: false,
+      };
+      await notificationsCollection.insertOne(notification);
+    }
+
     res.status(200).send({ message: 'Comment added successfully', commentId: comment._id });
   } catch (err) {
     console.error('Failed to add comment', err);
@@ -261,6 +279,20 @@ router.put('/:postId/like', authenticate, async (req: AuthRequest, res: Response
       { _id: new ObjectId(postId) },
       { $addToSet: { likes: new ObjectId(userId) } },
     );
+
+    const post = await postsCollection.findOne({ _id: new ObjectId(postId) });
+    if (post && post.userId.toString() !== userId) {
+      const notification: NotificationSchema = {
+        type: 'like',
+        targetId: new ObjectId(postId),
+        initiatorUserId: new ObjectId(userId),
+        recipientUserId: new ObjectId(post.userId),
+        createdAt: new Date(),
+        read: false,
+      };
+      await notificationsCollection.insertOne(notification);
+    }
+
     res.status(200).send({ message: 'Post liked successfully' });
   } catch (err) {
     console.error('Failed to like post', err);
