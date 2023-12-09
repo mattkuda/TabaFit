@@ -9,9 +9,11 @@ export type HomeStackParamList = {
     Search: undefined;
     Profile: {userId: string | null}
     PostScreen: {postId: string}
+    NotificationsScreen: undefined
 };
 
 export type SearchScreenNavigationProp = StackNavigationProp<HomeStackParamList, 'Search'>;
+export type NotificationsScreenNavigationProp = StackNavigationProp<HomeStackParamList, 'NotificationsScreen'>;
 //
 
 // Profile Stack

@@ -2,6 +2,8 @@ import express, { Response } from 'express';
 import { MongoClient, Collection, ObjectId } from 'mongodb';
 // eslint-disable-next-line import/no-relative-packages
 import { NotificationSchema } from '../../../mobile/src/types/notifications';
+// eslint-disable-next-line import/no-relative-packages
+import { User } from '../../../mobile/src/types/users';
 
 import authenticate, { AuthRequest } from '../middleware/authenticate';
 
@@ -27,6 +29,21 @@ let notificationsCollection: Collection<NotificationSchema>;
   }
 })();
 
+const addUserInfoToNotifications = async (notifcations: NotificationSchema[]) => Promise.all(
+  notifcations.map(async (notif) => {
+    const user = await client.db('AbcountableDB').collection<User>('users').findOne({ _id: new ObjectId(notif.initiatorUserId) });
+    return {
+      ...notif,
+      initiatorUser: {
+        username: user?.username,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        profilePicture: user?.profilePicture,
+      },
+    };
+  }),
+);
+
 // Fetch notifications for a user
 router.get('/', authenticate, async (req: AuthRequest, res: Response) => {
   const { userId } = req;
@@ -36,7 +53,9 @@ router.get('/', authenticate, async (req: AuthRequest, res: Response) => {
       { recipientUserId: new ObjectId(userId) },
     )
       .sort({ createdAt: -1 }).toArray();
-    res.send(notifications);
+
+    const notificationsWithUserInfo = await addUserInfoToNotifications(notifications);
+    res.send(notificationsWithUserInfo);
   } catch (err) {
     console.error('Failed to fetch notifications', err);
     res.status(500).send({ message: 'Failed to fetch notifications' });

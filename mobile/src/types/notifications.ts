@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { UserPostInfo } from './posts';
 
 export interface NotificationSchema {
     _id?: mongoose.Types.ObjectId;
@@ -8,4 +9,8 @@ export interface NotificationSchema {
     recipientUserId: mongoose.Types.ObjectId;
     createdAt: Date;
     read: boolean;
+}
+
+export type NotificationModel = NotificationSchema & {
+    initiatorUser: UserPostInfo;
 }

@@ -11,6 +11,7 @@ import postRoutes from './routes/posts';
 import userAuthRoutes from './routes/userAuth';
 import usersRoutes from './routes/users';
 import followsRoutes from './routes/follows';
+import notificationsRoutes from './routes/notifications';
 
 const app = express();
 const port = 3000;
@@ -43,6 +44,7 @@ app.use('/workouts', workoutRoutes);
 app.use('/posts', postRoutes);
 app.use('/users', usersRoutes);
 app.use('/follows', followsRoutes);
+app.use('/notifications', notificationsRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
