@@ -4,9 +4,11 @@ import { NotificationModel } from '../types/notifications';
 
 const apiUrl = 'http://localhost:3000';
 
-const fetchNotifications = async (): Promise<NotificationModel[]> => {
+const fetchNotifications = async (unreadOnly: boolean): Promise<NotificationModel[]> => {
     try {
-        const response = await axios.get(`${apiUrl}/notifications`);
+        const response = await axios.get(`${apiUrl}/notifications`, {
+            params: { unreadOnly }, // Pass the parameter to the API call
+        });
 
         return response.data;
     } catch (error) {
@@ -17,4 +19,4 @@ const fetchNotifications = async (): Promise<NotificationModel[]> => {
     }
 };
 
-export const useQueryNotifications = (): UseQueryResult<NotificationModel[], Error> => useQuery('notifications', fetchNotifications);
+export const useQueryNotifications = (unreadOnly = false): UseQueryResult<NotificationModel[], Error> => useQuery(['notifications', { unreadOnly }], () => fetchNotifications(unreadOnly));

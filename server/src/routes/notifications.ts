@@ -47,11 +47,17 @@ const addUserInfoToNotifications = async (notifcations: NotificationSchema[]) =>
 // Fetch notifications for a user
 router.get('/', authenticate, async (req: AuthRequest, res: Response) => {
   const { userId } = req;
+  const unreadOnly = req.query.unreadOnly === 'true';
 
   try {
-    const notifications = await notificationsCollection.find(
-      { recipientUserId: new ObjectId(userId) },
-    )
+    const query: Partial<NotificationSchema> & { recipientUserId: ObjectId } = {
+      recipientUserId: new ObjectId(userId),
+    };
+    if (unreadOnly) {
+      query.read = false; // If unreadOnly is true, add read: false to the query
+    }
+
+    const notifications = await notificationsCollection.find(query)
       .sort({ createdAt: -1 }).toArray();
 
     const notificationsWithUserInfo = await addUserInfoToNotifications(notifications);
