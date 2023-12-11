@@ -9,12 +9,9 @@ import { useQueryNotifications } from '../hooks/useQueryNotifications';
 
 export const NotificationsButton = (): JSX.Element => {
     const navigation = useNavigation<NotificationsScreenNavigationProp>();
-    // Inside your NotificationsButton component
-    const { data: notifications } = useQueryNotifications(true); // Pass true to only fetch unread notifications
+    const { data: notifications } = useQueryNotifications(true);
 
     const unreadNotificationsCount = notifications?.filter((notif) => !notif.read).length || 0;
-
-    // ... rest of your component code, including badge display logic
 
     return (
         <Box>

@@ -91,4 +91,20 @@ router.post('/', authenticate, async (req: AuthRequest, res: Response) => {
   }
 });
 
+// Mark all notifications as read
+router.put('/mark-as-read', authenticate, async (req: AuthRequest, res: Response) => {
+  const { userId } = req;
+
+  try {
+    await notificationsCollection.updateMany(
+      { recipientUserId: new ObjectId(userId), read: false },
+      { $set: { read: true } },
+    );
+    res.status(200).send({ message: 'Notifications marked as read' });
+  } catch (err) {
+    console.error('Failed to mark notifications as read', err);
+    res.status(500).send({ message: 'Failed to mark notifications as read' });
+  }
+});
+
 export default router;
