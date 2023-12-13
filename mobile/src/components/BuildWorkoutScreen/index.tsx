@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { useState } from 'react';
 import {
     VStack, Input, Button, IconButton, Icon, HStack, Text,
@@ -9,13 +10,13 @@ import { TabataExercise } from '../../types/workouts';
 export type TabataCircuit = (TabataExercise | null)[]
 
 const TabataItem = ({
-    tabata,
+    tabataCircuit,
     index,
     updateExercise,
     removeTabata,
     drag,
 }): JSX.Element => (
-    <VStack borderColor="coolGray.300" borderRadius="md" borderWidth={1} mb={4} mt={4} p={4} space={4}>
+    <VStack borderColor="coolGray.300" borderRadius="md" borderWidth={1} mb={4} mt={4} space={4}>
         <HStack alignItems="center" justifyContent="space-between">
             <Text bold fontSize="lg">
                 Tabata
@@ -27,9 +28,9 @@ const TabataItem = ({
                 onPress={(): void => removeTabata(index)}
             />
         </HStack>
-        {tabata.exercises.slice(0, 4).map((exercise, exerciseIndex) => (
+        {tabataCircuit?.slice(0, 4).map((exercise, exerciseIndex) => (
             // eslint-disable-next-line react/no-array-index-key
-            <Button key={exerciseIndex} variant="ghost" onPress={(): void => updateExercise(index, exerciseIndex)}>
+            <Button key={exerciseIndex} style={{ padding: 0 }} variant="ghost" onPress={(): void => updateExercise(index, exerciseIndex)}>
                 {exercise?.name || <Text style={{ fontStyle: 'italic' }}>Select exercise</Text>}
             </Button>
         ))}
@@ -77,7 +78,7 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
                         drag={drag}
                         index={getIndex()}
                         removeTabata={removeTabata}
-                        tabata={item}
+                        tabataCircuit={item}
                         updateExercise={updateExercise}
                     />
                 )}
