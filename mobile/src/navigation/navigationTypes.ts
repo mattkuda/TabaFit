@@ -43,3 +43,8 @@ export type ShuffleScreenRouteProp = RouteProp<ShuffleStackParamList, 'ShuffleSc
 export type TabataTimerScreenRouteProp = RouteProp<ShuffleStackParamList, 'TabataTimer'>;
 export type ShareWorkoutScreenRouteProp = RouteProp<ShuffleStackParamList, 'ShareWorkoutScreen'>;
 export type LoadWorkoutScreenRouteProp = RouteProp<ShuffleStackParamList, 'LoadWorkoutScreen'>;
+
+// Workouts Stack
+export type WorkoutsStackParamList = {
+    BuildWorkoutScreen;
+}

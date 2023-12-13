@@ -7,7 +7,6 @@ import { NativeBaseProvider } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
 
 import { Ionicons } from '@expo/vector-icons';
-import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useRecoilValue } from 'recoil';
 import React from 'react';
@@ -17,21 +16,11 @@ import { ProfileStackNavigator } from '../navigation/ProfileStackNavigator';
 import { useAuth } from '../context/AuthContext';
 import { TabNavigatorParamList } from '../types/navigationTypes';
 import { showFooterState } from '../atoms/showFooterAtom';
-import { WorkoutsPage } from './WorkoutsPage';
 import { AuthPage } from './AuthPage';
 import { Searchbutton } from './SearchButtons';
+import { WorkoutsStackNavigator } from '../navigation/WorkoutsStackNavigator';
 
-const TimerStack = createStackNavigator<TabNavigatorParamList>();
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
-
-const TimerStackNavigator = (): JSX.Element => (
-    <TimerStack.Navigator
-        initialRouteName="WorkoutsPage"
-        screenOptions={{ headerShown: false }}
-    >
-        <TimerStack.Screen component={WorkoutsPage} name="WorkoutsPage" />
-    </TimerStack.Navigator>
-);
 
 const HomeIcon = ({ color, size }): JSX.Element => <Ionicons color={color} name="home-outline" size={size} />;
 const TimerIcon = ({ color, size }): JSX.Element => <Ionicons color={color} name="timer-outline" size={size} />;
@@ -83,8 +72,8 @@ export const Routes = (): JSX.Element => {
                             }}
                         />
                         <Tab.Screen
-                            component={TimerStackNavigator}
-                            name="My Workouts"
+                            component={WorkoutsStackNavigator}
+                            name="View Workouts"
                             options={{
                                 tabBarIcon: TimerIcon,
                                 tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
