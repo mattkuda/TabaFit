@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import {
-    VStack, Input, Button, IconButton, Icon, HStack, Text, Pressable, ScrollView,
+    VStack, Input, Button, IconButton, Icon, HStack, Text, Pressable,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
-// import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { TabataExercise } from '../../types/workouts';
 import { BuildWorkoutScreenRouteProp } from '../../navigation/navigationTypes';
@@ -50,27 +49,25 @@ const TabataItem = ({
                 onPress={(): void => removeTabata(circuitIndex)}
             />
         </HStack>
-        <NestableScrollContainer>
-            <NestableDraggableFlatList<TabataExercise>
-                data={tabataCircuit}
-                keyExtractor={(item, index): string => `exercise-${circuitIndex}-${index}`}
-                renderItem={({ item, drag, getIndex }): JSX.Element => {
-                    const index = getIndex();
+        <NestableDraggableFlatList<TabataExercise>
+            data={tabataCircuit}
+            keyExtractor={(item, index): string => `exercise-${circuitIndex}-${index}`}
+            renderItem={({ item, drag, getIndex }): JSX.Element => {
+                const index = getIndex();
 
-                    return (
-                        <ScaleDecorator>
-                            <HStack alignItems="center" justifyContent="space-between">
-                                <Pressable flex={1} onPress={(): void => changeExercise(circuitIndex, index)}>
-                                    <Text style={item ? {} : { fontStyle: 'italic' }}>{item?.name || `Select exercise ${index}`}</Text>
-                                </Pressable>
-                                <IconButton icon={<Icon as={Ionicons} name="menu" />} onLongPress={drag} />
-                            </HStack>
-                        </ScaleDecorator>
-                    );
-                }}
-                onDragEnd={({ data }): void => updateExercisesOrder(circuitIndex, data)}
-            />
-        </NestableScrollContainer>
+                return (
+                    <ScaleDecorator>
+                        <HStack alignItems="center" justifyContent="space-between">
+                            <Pressable flex={1} onPress={(): void => changeExercise(circuitIndex, index)}>
+                                <Text style={item ? {} : { fontStyle: 'italic' }}>{item?.name || `Select exercise ${index}`}</Text>
+                            </Pressable>
+                            <IconButton icon={<Icon as={Ionicons} name="menu" />} onLongPress={drag} />
+                        </HStack>
+                    </ScaleDecorator>
+                );
+            }}
+            onDragEnd={({ data }): void => updateExercisesOrder(circuitIndex, data)}
+        />
     </VStack>
 );
 
@@ -144,8 +141,6 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
         });
     };
 
-    const [scrollEnabled, setScrollEnabled] = useState(false); // New state variable to control scrolling
-
     return (
         <VStack space={4}>
             <Input
@@ -153,12 +148,7 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
                 value={workoutName}
                 onChangeText={setWorkoutName}
             />
-            <Text>
-                Recent:
-                {recent}
-            </Text>
-
-            <ScrollView scrollEnabled={scrollEnabled}>
+            <NestableScrollContainer>
                 {tabatas.map((tabataCircuit, index) => (
                     <TabataItem
                         changeExercise={handleSelectExercise}
@@ -170,7 +160,7 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
                         updateExercisesOrder={updateExercisesOrder}
                     />
                 ))}
-            </ScrollView>
+            </NestableScrollContainer>
             <Button mt={2} onPress={addTabata}>Add Tabata</Button>
             <Button mt={2} onPress={saveWorkout}>Save Workout</Button>
         </VStack>
