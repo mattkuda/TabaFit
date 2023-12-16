@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
-import { TabataWorkout } from '../types/workouts';
+import { TabataExercise, TabataWorkout } from '../types/workouts';
 import { User } from '../types/users';
 
 // Home Stack
@@ -47,4 +47,7 @@ export type LoadWorkoutScreenRouteProp = RouteProp<ShuffleStackParamList, 'LoadW
 // Workouts Stack
 export type WorkoutsStackParamList = {
     BuildWorkoutScreen;
+    SelectExerciseScreen: {onSelectWorkout: (exercise: TabataExercise) => void };
 }
+export type BuildWorkoutScreenRouteProp = StackNavigationProp<WorkoutsStackParamList, 'BuildWorkoutScreen'>;
+export type SelectExerciseScreenRouteProp = StackNavigationProp<WorkoutsStackParamList, 'SelectExerciseScreen'>;

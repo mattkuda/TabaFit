@@ -1,23 +1,35 @@
-/* eslint-disable react/no-array-index-key */
 import React, { useState } from 'react';
 import {
-    VStack, Input, Button, IconButton, Icon, HStack, Text, Pressable,
+    VStack, Input, Button, IconButton, Icon, HStack, Text, Pressable, ScrollView,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
-import DraggableFlatList from 'react-native-draggable-flatlist';
+import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
+// import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { TabataExercise } from '../../types/workouts';
+import { BuildWorkoutScreenRouteProp } from '../../navigation/navigationTypes';
 
 export type TabataCircuit = (TabataExercise | null)[];
+
+type TabataItemProps = {
+    tabataCircuit: TabataCircuit;
+    circuitIndex: number;
+    changeExercise: (tabataIndex: number, exerciseIndex: number) => void;
+    moveTabataUp: (index: number) => void;
+    moveTabataDown: (index: number) => void;
+    removeTabata: (index: number) => void;
+    updateExercisesOrder: (tabataIndex: number, newExercisesOrder: TabataExercise[]) => void;
+};
 
 const TabataItem = ({
     tabataCircuit,
     circuitIndex,
-    updateExercise,
+    changeExercise,
     moveTabataUp,
     moveTabataDown,
     removeTabata,
     updateExercisesOrder,
-}): JSX.Element => (
+}: TabataItemProps): JSX.Element => (
     <VStack borderColor="coolGray.300" borderRadius="md" borderWidth={1} mb={4} mt={4} space={4}>
         <HStack alignItems="center" justifyContent="space-between">
             <IconButton
@@ -38,36 +50,51 @@ const TabataItem = ({
                 onPress={(): void => removeTabata(circuitIndex)}
             />
         </HStack>
-        <DraggableFlatList<TabataExercise>
-            data={tabataCircuit.slice(0, 4)}
-            keyExtractor={(index): string => `exercise-${circuitIndex}-${index}`}
-            renderItem={({ item, drag, getIndex }): JSX.Element => {
-                const index = getIndex();
+        <NestableScrollContainer>
+            <NestableDraggableFlatList<TabataExercise>
+                data={tabataCircuit}
+                keyExtractor={(item, index): string => `exercise-${circuitIndex}-${index}`}
+                renderItem={({ item, drag, getIndex }): JSX.Element => {
+                    const index = getIndex();
 
-                return (
-                    <HStack alignItems="center" justifyContent="space-between">
-                        <Pressable flex={1} onPress={(): void => updateExercise(circuitIndex, index)}>
-                            <Text style={item ? {} : { fontStyle: 'italic' }}>
-                                {item?.name || `Select exercise ${index}`}
-                            </Text>
-                        </Pressable>
-                        <IconButton icon={<Icon as={Ionicons} name="menu" />} onPress={drag} />
-                    </HStack>
-                );
-            }}
-            onDragEnd={({ data }): void => updateExercisesOrder(circuitIndex, data)}
-        />
+                    return (
+                        <ScaleDecorator>
+                            <HStack alignItems="center" justifyContent="space-between">
+                                <Pressable flex={1} onPress={(): void => changeExercise(circuitIndex, index)}>
+                                    <Text style={item ? {} : { fontStyle: 'italic' }}>{item?.name || `Select exercise ${index}`}</Text>
+                                </Pressable>
+                                <IconButton icon={<Icon as={Ionicons} name="menu" />} onLongPress={drag} />
+                            </HStack>
+                        </ScaleDecorator>
+                    );
+                }}
+                onDragEnd={({ data }): void => updateExercisesOrder(circuitIndex, data)}
+            />
+        </NestableScrollContainer>
     </VStack>
 );
+
+const dummyData: TabataCircuit = [{
+    _id: 'lb1', name: 'Squats', types: ['Lower Body'], description: 'Standard squats.', difficulty: 'Easy', videoLink: '', equipment: ['None'],
+},
+{
+    _id: 'lb2', name: 'Lunges', types: ['Lower Body'], description: 'Alternating lunges.', difficulty: 'Easy', videoLink: '', equipment: ['None'],
+},
+{
+    _id: 'lb3', name: 'Glute Bridges', types: ['Lower Body'], description: 'Hip lifts for glute strength.', difficulty: 'Easy', videoLink: '', equipment: ['None'],
+}, {
+    _id: 'lb4', name: 'Step-Ups', types: ['Lower Body'], description: 'Step onto a raised platform.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
+}];
 
 export const BuildTabataScreen: React.FC = (): JSX.Element => {
     const [workoutName, setWorkoutName] = useState<string>('');
     const [tabatas, setTabatas] = useState<TabataCircuit[]>([
-        [null, null, null, null],
+        dummyData,
     ]);
+    const navigation = useNavigation<BuildWorkoutScreenRouteProp>();
 
     const addTabata = (): void => {
-        setTabatas([...tabatas, [null, null, null, null]]);
+        setTabatas([...tabatas, dummyData]);
     };
 
     const removeTabata = (index: number): void => {
@@ -90,11 +117,6 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
         setTabatas(newTabatas);
     };
 
-    const updateExercise = (tabataIndex: number, exerciseIndex: number): void => {
-        console.log('Update exercise at Tabata:', tabataIndex, 'Exercise:', exerciseIndex);
-        // Implement exercise update functionality
-    };
-
     const saveWorkout = (): void => {
         // Implement workout save functionality
     };
@@ -106,6 +128,21 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
         setTabatas(updatedTabatas);
     };
 
+    const handleSelectExercise = (tabataIndex: number, exerciseIndex: number): void => {
+        navigation.navigate('SelectExerciseScreen', {
+            onSelectWorkout: (selectedExercise) => {
+                const updatedTabatas = [...tabatas];
+
+                if (updatedTabatas[tabataIndex]) {
+                    updatedTabatas[tabataIndex][exerciseIndex] = selectedExercise;
+                    setTabatas(updatedTabatas);
+                }
+            },
+        });
+    };
+
+    const [scrollEnabled, setScrollEnabled] = useState(false); // New state variable to control scrolling
+
     return (
         <VStack space={4}>
             <Input
@@ -113,19 +150,19 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
                 value={workoutName}
                 onChangeText={setWorkoutName}
             />
-            {tabatas.map((tabataCircuit, index) => (
-                <TabataItem
-                    circuitIndex={index}
-                    key={`tabata-${index}`}
-                    moveTabataDown={moveTabataDown}
-                    moveTabataUp={moveTabataUp}
-                    removeTabata={removeTabata}
-                    tabataCircuit={tabataCircuit}
-                    updateExercise={updateExercise}
-                    updateExercisesOrder={updateExercisesOrder}
-
-                />
-            ))}
+            <ScrollView scrollEnabled={scrollEnabled}>
+                {tabatas.map((tabataCircuit, index) => (
+                    <TabataItem
+                        changeExercise={handleSelectExercise}
+                        circuitIndex={index}
+                        moveTabataDown={moveTabataDown}
+                        moveTabataUp={moveTabataUp}
+                        removeTabata={removeTabata}
+                        tabataCircuit={tabataCircuit}
+                        updateExercisesOrder={updateExercisesOrder}
+                    />
+                ))}
+            </ScrollView>
             <Button mt={2} onPress={addTabata}>Add Tabata</Button>
             <Button mt={2} onPress={saveWorkout}>Save Workout</Button>
         </VStack>
