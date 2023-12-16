@@ -131,12 +131,15 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
     const handleSelectExercise = (tabataIndex: number, exerciseIndex: number): void => {
         navigation.navigate('SelectExerciseScreen', {
             onSelectWorkout: (selectedExercise) => {
-                const updatedTabatas = [...tabatas];
+                setTabatas((currentTabatas) => {
+                    const updatedTabatas = [...currentTabatas];
+                    const updatedExercises = [...updatedTabatas[tabataIndex]];
 
-                if (updatedTabatas[tabataIndex]) {
-                    updatedTabatas[tabataIndex][exerciseIndex] = selectedExercise;
-                    setTabatas(updatedTabatas);
-                }
+                    updatedExercises[exerciseIndex] = selectedExercise;
+                    updatedTabatas[tabataIndex] = updatedExercises;
+
+                    return updatedTabatas;
+                });
             },
         });
     };
@@ -150,6 +153,11 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
                 value={workoutName}
                 onChangeText={setWorkoutName}
             />
+            <Text>
+                Recent:
+                {recent}
+            </Text>
+
             <ScrollView scrollEnabled={scrollEnabled}>
                 {tabatas.map((tabataCircuit, index) => (
                     <TabataItem
