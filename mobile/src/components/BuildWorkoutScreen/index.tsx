@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    VStack, Input, Button, IconButton, Icon, HStack, Text, Pressable,
+    VStack, Button, IconButton, Icon, HStack, Text, Pressable,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
@@ -84,7 +84,6 @@ const dummyData: TabataCircuit = [{
 }];
 
 export const BuildTabataScreen: React.FC = (): JSX.Element => {
-    const [workoutName, setWorkoutName] = useState<string>('');
     const [tabatas, setTabatas] = useState<TabataCircuit[]>([
         dummyData,
     ]);
@@ -143,11 +142,6 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
 
     return (
         <VStack space={4}>
-            <Input
-                placeholder="Enter workout name"
-                value={workoutName}
-                onChangeText={setWorkoutName}
-            />
             <NestableScrollContainer>
                 {tabatas.map((tabataCircuit, index) => (
                     <TabataItem

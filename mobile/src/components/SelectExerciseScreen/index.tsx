@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-    VStack, FlatList, Pressable, Text,
+    VStack, FlatList, Pressable, Text, Input,
 } from 'native-base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -29,11 +29,17 @@ export const SelectExerciseScreen = (): JSX.Element => {
         onSelectWorkout(exercise);
         navigation.goBack();
     };
+    const [search, setSearch] = useState<string>('');
 
     return (
         <VStack>
+            <Input
+                placeholder="Enter workout name"
+                value={search}
+                onChangeText={setSearch}
+            />
             <FlatList
-                data={exercises}
+                data={exercises.filter((e) => e.name.startsWith(search))}
                 keyExtractor={(item): string => item._id}
                 renderItem={({ item }): JSX.Element => (
                     <Pressable onPress={(): void => handleSelectExercise(item)}>
