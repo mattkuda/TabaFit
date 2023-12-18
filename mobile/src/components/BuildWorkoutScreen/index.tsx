@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-    VStack, Button, IconButton, Icon, HStack, Text, Pressable,
+    VStack, IconButton, Icon, HStack, Text, Pressable,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
 import { useNavigation } from '@react-navigation/native';
+import { Button } from 'react-native';
 import { TabataExercise } from '../../types/workouts';
 import { BuildWorkoutScreenRouteProp } from '../../navigation/navigationTypes';
 
@@ -114,8 +115,18 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
     };
 
     const saveWorkout = (): void => {
-        // Implement workout save functionality
+        // Logic to save the workout
+        console.log('Workout saved!');
     };
+
+    useEffect(() => {
+        navigation.setOptions({
+            // eslint-disable-next-line react/no-unstable-nested-components
+            headerRight: (): JSX.Element => (
+                <Button title="Save" onPress={saveWorkout} />
+            ),
+        });
+    }, [navigation]);
 
     const updateExercisesOrder = (tabataIndex: number, newExercisesOrder: TabataExercise[]): void => {
         const updatedTabatas = [...tabatas];
@@ -155,8 +166,8 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
                     />
                 ))}
             </NestableScrollContainer>
-            <Button mt={2} onPress={addTabata}>Add Tabata</Button>
-            <Button mt={2} onPress={saveWorkout}>Save Workout</Button>
+            <Button title="Add Tabata" onPress={addTabata} />
+            <Button title="Save Workout" onPress={saveWorkout} />
         </VStack>
     );
 };
