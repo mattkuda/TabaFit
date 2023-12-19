@@ -6,8 +6,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native';
-import { TabataExercise } from '../../types/workouts';
+import { TabataExercise, TabataWorkout } from '../../types/workouts';
 import { BuildWorkoutScreenRouteProp } from '../../navigation/navigationTypes';
+import { useMutateSaveWorkout } from '../../mutations/useMutateSaveWorkout';
+import { defaultTabataWorkout } from '../ShuffleScreen/util';
 
 export type TabataCircuit = (TabataExercise | null)[];
 
@@ -89,6 +91,7 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
         dummyData,
     ]);
     const navigation = useNavigation<BuildWorkoutScreenRouteProp>();
+    const saveWorkoutMutation = useMutateSaveWorkout();
 
     const addTabata = (): void => {
         setTabatas([...tabatas, dummyData]);
@@ -115,8 +118,25 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
     };
 
     const saveWorkout = (): void => {
-        // Logic to save the workout
-        console.log('Workout saved!');
+        const workoutToSave: TabataWorkout = {
+            ...defaultTabataWorkout,
+            name: `Custom ${new Date().toDateString()}`,
+            createdAt: new Date().toDateString(),
+            tabatas,
+            // ... construct your workout object here ...
+        };
+
+        saveWorkoutMutation.mutate({
+            workout: {
+                ...workoutToSave,
+            },
+        }, {
+            onSuccess: () => {
+                console.log('Workout saved!');
+                console.log('Todo: handle nav to my workouts');
+                // navigation.navigate('MyWorkoutsScreen');
+            },
+        });
     };
 
     useEffect(() => {
@@ -126,6 +146,7 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
                 <Button title="Save" onPress={saveWorkout} />
             ),
         });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigation]);
 
     const updateExercisesOrder = (tabataIndex: number, newExercisesOrder: TabataExercise[]): void => {
@@ -167,7 +188,6 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
                 ))}
             </NestableScrollContainer>
             <Button title="Add Tabata" onPress={addTabata} />
-            <Button title="Save Workout" onPress={saveWorkout} />
         </VStack>
     );
 };
