@@ -46,6 +46,7 @@ export type LoadWorkoutScreenRouteProp = RouteProp<ShuffleStackParamList, 'LoadW
 
 // Workouts Stack
 export type WorkoutsStackParamList = {
+    LoadWorkoutScreen;
     BuildWorkoutScreen;
     SelectExerciseScreen: {onSelectWorkout: (exercise: TabataExercise) => void };
 }

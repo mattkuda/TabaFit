@@ -6,10 +6,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native';
+import { useQueryClient } from 'react-query';
 import { TabataExercise, TabataWorkout } from '../../types/workouts';
 import { BuildWorkoutScreenRouteProp } from '../../navigation/navigationTypes';
 import { useMutateSaveWorkout } from '../../mutations/useMutateSaveWorkout';
 import { defaultTabataWorkout } from '../ShuffleScreen/util';
+import { useAuth } from '../../context/AuthContext';
 
 export type TabataCircuit = (TabataExercise | null)[];
 
@@ -92,6 +94,8 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
     ]);
     const navigation = useNavigation<BuildWorkoutScreenRouteProp>();
     const saveWorkoutMutation = useMutateSaveWorkout();
+    const { authState } = useAuth();
+    const queryClient = useQueryClient();
 
     const addTabata = (): void => {
         setTabatas([...tabatas, dummyData]);
@@ -123,6 +127,7 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
             name: `Custom ${new Date().toDateString()}`,
             createdAt: new Date().toDateString(),
             tabatas,
+            userId: authState.userId,
             // ... construct your workout object here ...
         };
 
@@ -134,7 +139,8 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
             onSuccess: () => {
                 console.log('Workout saved!');
                 console.log('Todo: handle nav to my workouts');
-                // navigation.navigate('MyWorkoutsScreen');
+                queryClient.invalidateQueries('my-saved-workouts');
+                navigation.navigate('LoadWorkoutScreen');
             },
         });
     };

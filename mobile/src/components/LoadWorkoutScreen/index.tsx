@@ -1,11 +1,12 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import {
-    VStack, Heading, Text, Button, Card, Box, HStack, Modal, Icon, IconButton,
+    VStack, Heading, Text, Button, Card, Box, HStack, Modal, Icon, IconButton, ScrollView,
 } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { format } from 'date-fns';
 import { Ionicons } from '@expo/vector-icons';
+import { RefreshControl } from 'react-native';
 import { TabataWorkout } from '../../types/workouts';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
@@ -46,7 +47,6 @@ const WorkoutCard: FC<WorkoutCardProps> = ({ workout, navigation, onDelete }) =>
                         onPress={(): void => onDelete(workout)}
                     />
                 </Box>
-
                 <HStack space={3}>
                     <Button onPress={handleQuickStart}>Quick Start</Button>
                     <Button onPress={handleCustomize}>Customize</Button>
@@ -59,13 +59,20 @@ const WorkoutCard: FC<WorkoutCardProps> = ({ workout, navigation, onDelete }) =>
 export const LoadWorkoutScreen: FC = () => {
     const navigation = useNavigation<LoadWorkoutScreenNavigationProp>();
     const { data, refetch } = useQueryMySavedWorkouts();
+    const [refreshing, setRefreshing] = useState(false);
+    // ... other state variables ...
+
+    // Refresh handler
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true);
+        await refetch();
+        setRefreshing(false);
+    }, [refetch]);
     const [showModal, setShowModal] = useState(false);
     const [selectedWorkout, setSelectedWorkout] = useState<TabataWorkout | null>(null);
     const deleteWorkoutMutation = useMutateDeleteWorkout();
 
     const handleDelete = (workout: TabataWorkout): void => {
-        // Your delete logic here
-        // For example, you could call a mutation to delete the workout from the database
         console.log(`Deleting workout with ID: ${workout._id}`);
         deleteWorkoutMutation.mutate({ workoutId: workout._id.toString() }, {
             onSuccess: () => {
@@ -86,35 +93,50 @@ export const LoadWorkoutScreen: FC = () => {
     };
 
     return (
-        <VStack>
-            <Heading>My Saved Workouts:</Heading>
-            {data?.map((workout) => (
-                <WorkoutCard
-                    key={workout._id.toString()}
-                    navigation={navigation}
-                    workout={workout}
-                    onDelete={handleDeletePress}
+        <ScrollView
+            refreshControl={(
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    // You can customize colors, tintColor, etc.
                 />
-            ))}
-            <Modal isOpen={showModal} onClose={closeModal}>
-                <Modal.Content>
-                    <Modal.CloseButton />
-                    <Modal.Header>Delete Workout</Modal.Header>
-                    <Modal.Body>
-                        Are you sure you want to delete this workout?
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button.Group space={2}>
-                            <Button colorScheme="blueGray" variant="ghost" onPress={closeModal}>
-                                Cancel
-                            </Button>
-                            <Button colorScheme="danger" onPress={(): void => handleDelete(selectedWorkout)}>
-                                Delete
-                            </Button>
-                        </Button.Group>
-                    </Modal.Footer>
-                </Modal.Content>
-            </Modal>
-        </VStack>
+              )}
+        >
+            <VStack>
+                <Heading>My Saved Workouts:</Heading>
+                <Button
+                    onPress={(): void => navigation.navigate('BuildWorkoutScreen')}
+                >
+                    Create New Workout
+                </Button>
+                {data?.map((workout) => (
+                    <WorkoutCard
+                        key={workout._id.toString()}
+                        navigation={navigation}
+                        workout={workout}
+                        onDelete={handleDeletePress}
+                    />
+                ))}
+                <Modal isOpen={showModal} onClose={closeModal}>
+                    <Modal.Content>
+                        <Modal.CloseButton />
+                        <Modal.Header>Delete Workout</Modal.Header>
+                        <Modal.Body>
+                            Are you sure you want to delete this workout?
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button.Group space={2}>
+                                <Button colorScheme="blueGray" variant="ghost" onPress={closeModal}>
+                                    Cancel
+                                </Button>
+                                <Button colorScheme="danger" onPress={(): void => handleDelete(selectedWorkout)}>
+                                    Delete
+                                </Button>
+                            </Button.Group>
+                        </Modal.Footer>
+                    </Modal.Content>
+                </Modal>
+            </VStack>
+        </ScrollView>
     );
 };
