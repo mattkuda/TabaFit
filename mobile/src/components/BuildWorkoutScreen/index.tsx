@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-    VStack, IconButton, Icon, HStack, Text, Pressable,
+    VStack, IconButton, Icon, HStack, Text, Pressable, Input,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
@@ -96,6 +96,7 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
     const saveWorkoutMutation = useMutateSaveWorkout();
     const { authState } = useAuth();
     const queryClient = useQueryClient();
+    const [workoutName, setWorkoutName] = useState('');
 
     const addTabata = (): void => {
         setTabatas([...tabatas, dummyData]);
@@ -124,7 +125,7 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
     const saveWorkout = (): void => {
         const workoutToSave: TabataWorkout = {
             ...defaultTabataWorkout,
-            name: `Custom ${new Date().toDateString()}`,
+            name: workoutName,
             createdAt: new Date().toDateString(),
             tabatas,
             userId: authState.userId,
@@ -132,9 +133,7 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
         };
 
         saveWorkoutMutation.mutate({
-            workout: {
-                ...workoutToSave,
-            },
+            workout: workoutToSave,
         }, {
             onSuccess: () => {
                 console.log('Workout saved!');
@@ -180,6 +179,13 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
 
     return (
         <VStack space={4}>
+            <Input
+                mb={4}
+                placeholder="Enter Workout Name"
+                value={workoutName}
+                onChangeText={setWorkoutName}
+            />
+            <Text>{JSON.stringify(workoutName)}</Text>
             <NestableScrollContainer>
                 {tabatas.map((tabataCircuit, index) => (
                     <TabataItem
