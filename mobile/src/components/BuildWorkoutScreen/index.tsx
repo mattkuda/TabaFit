@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     VStack, IconButton, Icon, HStack, Text, Pressable, Input,
 } from 'native-base';
@@ -122,14 +122,13 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
         setTabatas(newTabatas);
     };
 
-    const saveWorkout = (): void => {
+    const saveWorkout = useCallback((): void => {
         const workoutToSave: TabataWorkout = {
             ...defaultTabataWorkout,
             name: workoutName,
             createdAt: new Date().toDateString(),
             tabatas,
             userId: authState.userId,
-            // ... construct your workout object here ...
         };
 
         saveWorkoutMutation.mutate({
@@ -142,7 +141,8 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
                 navigation.navigate('LoadWorkoutScreen');
             },
         });
-    };
+    }, [workoutName, tabatas, authState.userId,
+        saveWorkoutMutation, queryClient, navigation]);
 
     useEffect(() => {
         navigation.setOptions({
@@ -152,7 +152,7 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
             ),
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [navigation]);
+    }, [navigation, saveWorkout]);
 
     const updateExercisesOrder = (tabataIndex: number, newExercisesOrder: TabataExercise[]): void => {
         const updatedTabatas = [...tabatas];
@@ -177,15 +177,16 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
         });
     };
 
+    const handleChange = (text: string): void => setWorkoutName(text);
+
     return (
         <VStack space={4}>
             <Input
                 mb={4}
                 placeholder="Enter Workout Name"
                 value={workoutName}
-                onChangeText={setWorkoutName}
+                onChangeText={handleChange}
             />
-            <Text>{JSON.stringify(workoutName)}</Text>
             <NestableScrollContainer>
                 {tabatas.map((tabataCircuit, index) => (
                     <TabataItem
