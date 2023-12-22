@@ -12,5 +12,6 @@ export interface NotificationSchema {
 }
 
 export type NotificationModel = NotificationSchema & {
-    initiatorUser: UserPostInfo;
+    initiatorUserInfo: UserPostInfo;
+    summaryText: string;
 }

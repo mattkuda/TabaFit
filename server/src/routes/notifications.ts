@@ -29,17 +29,30 @@ let notificationsCollection: Collection<NotificationSchema>;
   }
 })();
 
+const generatesummaryText = (
+  notification: NotificationSchema,
+  initiatorName: string,
+): string => {
+  switch (notification.type) {
+    case 'like': return `${initiatorName} liked your workout.`;
+    case 'comment': return `${initiatorName} commented on your workout.`;
+    case 'follow': return `${initiatorName} followed you.`;
+    default: return 'New notificaiton';
+  }
+};
+
 const addUserInfoToNotifications = async (notifcations: NotificationSchema[]) => Promise.all(
   notifcations.map(async (notif) => {
     const user = await client.db('AbcountableDB').collection<User>('users').findOne({ _id: new ObjectId(notif.initiatorUserId) });
     return {
       ...notif,
-      initiatorUser: {
+      initiatorUserInfo: {
         username: user?.username,
         firstName: user?.firstName,
         lastName: user?.lastName,
         profilePicture: user?.profilePicture,
       },
+      summaryText: generatesummaryText(notif, `${user?.firstName} + ${user?.lastName}`),
     };
   }),
 );
