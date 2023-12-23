@@ -1,11 +1,16 @@
 import express, { Request, Response } from 'express';
+import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
 import mongoose from 'mongoose';
 import { MongoClient, Collection } from 'mongodb';
+import multer from 'multer';
 // eslint-disable-next-line import/no-relative-packages
 import { User } from '../../../mobile/src/types/users';
 import authenticate, { AuthRequest } from '../middleware/authenticate';
+import { bucket } from '../config/firebaseConfig';
 
 const router = express.Router();
+const upload = multer({ dest: 'uploads/' });
 const connectionString = process.env.MONGODB_URI;
 
 if (!connectionString) {
@@ -66,6 +71,48 @@ router.get('/username/:username', async (req: Request, res: Response) => {
   } catch (err) {
     console.error('Failed to get user by username', err);
     res.status(500).send({ message: 'Failed to get user by username' });
+  }
+});
+
+// Function to upload file to Firebase Storage
+async function uploadFile(file: Express.Multer.File) {
+  const metadata = {
+    metadata: {
+      firebaseStorageDownloadTokens: uuidv4(),
+    },
+    contentType: file.mimetype,
+    cacheControl: 'public, max-age=31536000',
+  };
+
+  await bucket.upload(file.path, {
+    gzip: true,
+    metadata,
+  });
+
+  // Delete the file from local storage
+  fs.unlink(file.path, (err) => {
+    if (err) console.error('Error deleting file:', err);
+  });
+
+  // Construct the public URL for the file
+  const publicUrl = `https://storage.googleapis.com/${bucket.name}/${file.filename}`;
+  return publicUrl;
+}
+
+router.post('/upload', upload.single('file'), async (req, res) => {
+  const { file } = req;
+
+  if (!file) {
+    res.status(400).send('No file uploaded');
+    return;
+  }
+
+  try {
+    const uploadedFileUrl = await uploadFile(file);
+    res.status(200).send({ url: uploadedFileUrl });
+  } catch (error) {
+    console.error('Upload failed:', error);
+    res.status(500).send('Error uploading file');
   }
 });
 

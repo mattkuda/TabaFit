@@ -24,7 +24,7 @@
     "expo-secure-store": "~12.3.1",
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
-    "firebase": "^10.2.0",
+    "firebase": "^10.7.1",
     "mongoose": "^7.6.0",
     "native-base": "3.4.28",
     "react": "18.2.0",

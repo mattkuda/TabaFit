@@ -70,6 +70,16 @@ This will open Expo Dev Tools in the browser. You can then use an emulator or a 
 
 The server will start running at http://localhost:3000.
 
+### Setting Up Firebase Service Account for Local Development
+
+When running the server locally, you will need to set up a Firebase service account key to ensure proper interaction with Firebase services, such as Firebase Storage. Follow the steps below to set up the key:
+
+1. Navigate to Firebase Console: Go to the Firebase Console for the Abcountable project.
+
+2. Generate and Download the Key: In the Firebase Console, generate a new private key for your service account. This will download a JSON file containing the key.
+
+3. Save the downloaded JSON file in a secure folder within /server/config as firebaseServiceAccountKey.ts.
+
 ## Features
 
 - Configurable number of exercises

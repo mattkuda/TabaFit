@@ -231,7 +231,6 @@ router.post('/:postId/comments', authenticate, async (req, res) => {
       { $push: { comments: comment } },
     );
 
-    // Create a notification for the post owner
     const post = await postsCollection.findOne({ _id: new ObjectId(postId) });
     if (post && post.userId.toString() !== userId) {
       const notification: NotificationSchema = {
