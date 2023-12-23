@@ -24,7 +24,7 @@ export interface UserPostInfo {
     username: string;
     firstName?: string;
     lastName?: string;
-    profilePicture?: string;
+    profilePictureUrl?: string;
 }
 
 export interface PostModel {

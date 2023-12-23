@@ -17,7 +17,7 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({ notification
         <TouchableOpacity>
             <Box backgroundColor={backgroundColor} borderColor="coolGray.200" borderRadius="md" borderWidth="1" mt="2" p="4">
                 <HStack alignItems="center" space={3}>
-                    <Avatar size="48px" source={{ uri: notification.initiatorUserInfo.profilePicture }} />
+                    <Avatar size="48px" source={{ uri: notification.initiatorUserInfo.profilePictureUrl }} />
                     <VStack>
                         <Text bold fontSize="sm">{notification.summaryText}</Text>
                         <Text color="coolGray.600" fontSize="xs">

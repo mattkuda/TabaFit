@@ -50,7 +50,7 @@ const addUserInfoToNotifications = async (notifcations: NotificationSchema[]) =>
         username: user?.username,
         firstName: user?.firstName,
         lastName: user?.lastName,
-        profilePicture: user?.profilePicture,
+        profilePictureUrl: user?.profilePictureUrl,
       },
       summaryText: generatesummaryText(notif, `${user?.firstName} + ${user?.lastName}`),
     };

@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
+import sharp from 'sharp';
 import mongoose from 'mongoose';
 import { MongoClient, Collection } from 'mongodb';
 import multer from 'multer';
@@ -73,42 +74,92 @@ router.get('/username/:username', async (req: Request, res: Response) => {
     res.status(500).send({ message: 'Failed to get user by username' });
   }
 });
-
 // Function to upload file to Firebase Storage
-async function uploadFile(file: Express.Multer.File) {
-  const metadata = {
+async function uploadFile(
+  fileBuffer: Buffer,
+  mimeType: string,
+  originalName: string,
+): Promise<string> {
+  // Create a unique file name
+  const fileName = `${Date.now()}-${originalName}`;
+  const file = bucket.file(fileName);
+
+  // Save the file to Firebase Storage
+  const stream = file.createWriteStream({
     metadata: {
+      contentType: mimeType,
       firebaseStorageDownloadTokens: uuidv4(),
     },
-    contentType: file.mimetype,
-    cacheControl: 'public, max-age=31536000',
-  };
-
-  await bucket.upload(file.path, {
-    gzip: true,
-    metadata,
   });
 
-  // Delete the file from local storage
-  fs.unlink(file.path, (err) => {
-    if (err) console.error('Error deleting file:', err);
+  stream.on('error', (err) => {
+    console.error('File upload error:', err);
   });
+
+  stream.on('finish', async () => {
+    // The file upload is complete and you can now get the public URL
+  });
+
+  stream.end(fileBuffer);
 
   // Construct the public URL for the file
-  const publicUrl = `https://storage.googleapis.com/${bucket.name}/${file.filename}`;
+  const publicUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
   return publicUrl;
 }
 
-router.post('/upload', upload.single('file'), async (req, res) => {
+function extractFileName(url: string): string | null {
+  const matches = url.match(/\/([^/?#]+)[^/]*$/);
+  if (matches && matches.length > 1) {
+    return matches[1];
+  }
+  return null;
+}
+
+router.post('/upload/:userId', upload.single('file'), async (req, res) => {
   const { file } = req;
+  const { userId } = req.params;
 
   if (!file) {
-    res.status(400).send('No file uploaded');
+    res.status(400).send('No file uploaded.');
     return;
   }
 
   try {
-    const uploadedFileUrl = await uploadFile(file);
+    // Resize and crop the image to a square (if not already)
+    const processedImage = await sharp(file.path)
+      .resize(512, 512, {
+        fit: sharp.fit.cover, // Cover ensures the image is cropped to the desired aspect ratio
+        position: sharp.strategy.entropy, // Focus on the center/most interesting part of the image
+      })
+      .toBuffer();
+
+    // Delete the temporary file
+    fs.unlinkSync(file.path);
+
+    // Upload the processed image
+    const uploadedFileUrl = await uploadFile(processedImage, file.mimetype, file.originalname);
+
+    // Get the current user's data
+    const currentUser = await usersCollection.findOne({ _id: new mongoose.Types.ObjectId(userId) });
+
+    // Attempt to delete the previous image if it exists
+    if (currentUser && currentUser.profilePictureUrl) {
+      const oldFileName = extractFileName(currentUser.profilePictureUrl);
+      if (oldFileName) {
+        try {
+          await bucket.file(oldFileName).delete();
+        } catch (error) {
+          // Log the error and continue - allows graceful failure
+          console.error('Error deleting old profile picture:', error);
+        }
+      }
+    }
+
+    await usersCollection.updateOne(
+      { _id: new mongoose.Types.ObjectId(userId) },
+      { $set: { profilePictureUrl: uploadedFileUrl } },
+    );
+
     res.status(200).send({ url: uploadedFileUrl });
   } catch (error) {
     console.error('Upload failed:', error);

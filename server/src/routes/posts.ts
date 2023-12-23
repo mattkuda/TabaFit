@@ -43,7 +43,7 @@ const addUserInfoToPosts = async (posts: PostSchema[]) => Promise.all(posts.map(
       username: user?.username,
       firstName: user?.firstName,
       lastName: user?.lastName,
-      profilePicture: user?.profilePicture,
+      profilePictureUrl: user?.profilePictureUrl,
     },
   };
 }));

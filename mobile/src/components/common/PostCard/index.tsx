@@ -61,11 +61,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <TouchableOpacity style={{ width: '100%' }} onPress={handlePress}>
             <VStack borderColor="coolGray.200" borderRadius="md" borderWidth={1} mt={4} p={4} space={2} width="100%">
                 <HStack justifyContent="space-between" space={2}>
-                    <Avatar size="48px" source={{ uri: 'https://iava.org/wp-content/uploads/2020/10/DGoggins-Rnd-1.png' }} />
+                    <Avatar size="48px" source={{ uri: post.user.profilePictureUrl }} />
                     <VStack flex={1}>
                         <Text fontSize="sm" onPress={handlePressUser}>
                             {`${post.user.firstName} ${post.user.lastName} @${post.user.username}`}
-
                         </Text>
                         <Text color="coolGray.600" fontSize="xs">
                             {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}

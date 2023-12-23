@@ -7,7 +7,7 @@ export interface User {
     password: string;
     firstName?: string;
     lastName?: string;
-    profilePicture?: string;
+    profilePictureUrl?: string;
     createdAt: string;
     updatedAt: string;
 }
