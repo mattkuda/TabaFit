@@ -18,4 +18,4 @@ web-build/
 .metro-health-check*
 
 # Remove firebase keys
-/server/src/config/firebaseServiceAccountKey1.ts
+/server/src/config/firebaseServiceAccountKey.ts
