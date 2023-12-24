@@ -1,6 +1,7 @@
+import { Avatar } from 'native-base';
 import React, { useState } from 'react';
 import {
-    View, TextInput, Button, TouchableOpacity, Text,
+    View, TextInput, Button, TouchableOpacity,
 } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
@@ -19,11 +20,11 @@ interface EditProfileProps {
 
 export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation }) => {
     const { user } = route.params;
-
     const [username, setUsername] = useState(user.username);
     const [email, setEmail] = useState(user.email);
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
+    const [profilePictureUrl, setProfilePictureUrl] = useState(user.profilePictureUrl);
     const updateProfileMutation = useMutateUpdateProfile();
     const updateProfilePictureMutation = useMutateProfilePicture();
 
@@ -63,14 +64,29 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
             updateProfilePictureMutation.mutate({
                 formData,
                 userId: user._id.toString(),
+            }, {
+                onSuccess: (data) => {
+                    if (data?.url) {
+                        setProfilePictureUrl(data.url);
+                    } else {
+                        console.error('No URL returned from the upload API');
+                    }
+                },
             });
         }
     };
 
     return (
         <View style={{ padding: 20 }}>
-            <TouchableOpacity style={{ marginBottom: 20 }} onPress={handleProfilePictureUpdate}>
-                <Text>Update Profile Picture</Text>
+            <TouchableOpacity onPress={handleProfilePictureUpdate}>
+                <Avatar
+                    borderColor="blue.500"
+                    borderWidth={2}
+                    size="xl"
+                    source={{
+                        uri: profilePictureUrl, // make sure you have the correct uri
+                    }}
+                />
             </TouchableOpacity>
             <TextInput
                 placeholder="Username"

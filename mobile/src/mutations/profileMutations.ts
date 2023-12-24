@@ -7,9 +7,13 @@ interface ProfilePictureVariables {
     formData: FormData;
     userId: string;
 }
+interface UploadResponse {
+    url: string;
+}
 
-export const useMutateProfilePicture = (): UseMutationResult<void, AxiosError, ProfilePictureVariables> => useMutation<void, AxiosError, ProfilePictureVariables>(
-    ({ formData, userId }) => axios.post(`${apiUrl}/users/upload/${userId}`, formData), // Adjusted URL to match the server endpoint
+export const useMutateProfilePicture = (): UseMutationResult<UploadResponse, AxiosError, ProfilePictureVariables> => useMutation<UploadResponse, AxiosError, ProfilePictureVariables>(
+    ({ formData, userId }) => axios.post<UploadResponse>(`${apiUrl}/users/upload/${userId}`, formData)
+        .then((response) => response.data), // Here we ensure we return the data from the axios response
     {
         onError: (error) => {
             console.error('Error updating profile picture', error.message);
