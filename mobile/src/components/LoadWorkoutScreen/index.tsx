@@ -60,7 +60,6 @@ export const LoadWorkoutScreen: FC = () => {
     const navigation = useNavigation<LoadWorkoutScreenNavigationProp>();
     const { data, refetch } = useQueryMySavedWorkouts();
     const [refreshing, setRefreshing] = useState(false);
-    // ... other state variables ...
 
     // Refresh handler
     const onRefresh = useCallback(async () => {
@@ -98,7 +97,6 @@ export const LoadWorkoutScreen: FC = () => {
                 <RefreshControl
                     refreshing={refreshing}
                     onRefresh={onRefresh}
-                    // You can customize colors, tintColor, etc.
                 />
               )}
         >

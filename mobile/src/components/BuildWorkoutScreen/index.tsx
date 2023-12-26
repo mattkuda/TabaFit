@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native';
 import { useQueryClient } from 'react-query';
 import { TabataExercise, TabataWorkout } from '../../types/workouts';
-import { BuildWorkoutScreenRouteProp } from '../../navigation/navigationTypes';
+import { OldBuildWorkoutScreenRouteProp } from '../../navigation/navigationTypes';
 import { useMutateSaveWorkout } from '../../mutations/useMutateSaveWorkout';
 import { defaultTabataWorkout } from '../ShuffleScreen/util';
 import { useAuth } from '../../context/AuthContext';
@@ -92,7 +92,7 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
     const [tabatas, setTabatas] = useState<TabataCircuit[]>([
         dummyData,
     ]);
-    const navigation = useNavigation<BuildWorkoutScreenRouteProp>();
+    const navigation = useNavigation<OldBuildWorkoutScreenRouteProp>();
     const saveWorkoutMutation = useMutateSaveWorkout();
     const { authState } = useAuth();
     const queryClient = useQueryClient();

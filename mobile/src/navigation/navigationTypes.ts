@@ -44,10 +44,21 @@ export type TabataTimerScreenRouteProp = RouteProp<ShuffleStackParamList, 'Tabat
 export type ShareWorkoutScreenRouteProp = RouteProp<ShuffleStackParamList, 'ShareWorkoutScreen'>;
 export type LoadWorkoutScreenRouteProp = RouteProp<ShuffleStackParamList, 'LoadWorkoutScreen'>;
 
-// Workouts Stack
-export type WorkoutsStackParamList = {
+// OldWorkouts Stack
+export type OldWorkoutsStackParamList = {
     LoadWorkoutScreen;
     BuildWorkoutScreen;
+    SelectExerciseScreen: {onSelectWorkout: (exercise: TabataExercise) => void };
+}
+export type OldBuildWorkoutScreenRouteProp = StackNavigationProp<OldWorkoutsStackParamList, 'BuildWorkoutScreen'>;
+export type OldSelectExerciseScreenRouteProp = StackNavigationProp<OldWorkoutsStackParamList, 'SelectExerciseScreen'>;
+
+// (New) Workouts Stack
+export type WorkoutsStackParamList = {
+    WorkoutsScreen;
+    LoadWorkoutScreen;
+    BuildWorkoutScreen;
+    ShuffleScreen: { workout?: TabataWorkout };
     SelectExerciseScreen: {onSelectWorkout: (exercise: TabataExercise) => void };
 }
 export type BuildWorkoutScreenRouteProp = StackNavigationProp<WorkoutsStackParamList, 'BuildWorkoutScreen'>;

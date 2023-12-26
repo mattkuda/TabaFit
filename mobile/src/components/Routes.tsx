@@ -17,6 +17,7 @@ import { TabNavigatorParamList } from '../types/navigationTypes';
 import { showFooterState } from '../atoms/showFooterAtom';
 import { AuthPage } from './AuthPage';
 import { Searchbutton } from './SearchButtons';
+import { OldWorkoutsStackNavigator } from '../navigation/OldWorkoutsStackNavigator';
 import { WorkoutsStackNavigator } from '../navigation/WorkoutsStackNavigator';
 import { useUserInfo } from '../hooks/useUserInfo';
 
@@ -93,8 +94,16 @@ export const Routes = (): JSX.Element => {
                             }}
                         />
                         <Tab.Screen
-                            component={WorkoutsStackNavigator}
+                            component={OldWorkoutsStackNavigator}
                             name="View Workouts"
+                            options={{
+                                tabBarIcon: TimerIcon,
+                                tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
+                            }}
+                        />
+                        <Tab.Screen
+                            component={WorkoutsStackNavigator}
+                            name="NEW Workouts"
                             options={{
                                 tabBarIcon: TimerIcon,
                                 tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,

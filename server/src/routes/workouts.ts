@@ -51,11 +51,16 @@ router.get('/', async (req: Request, res: Response) => {
 // Gets a user's saved workouts
 router.get('/my-saved', authenticate, async (req: AuthRequest, res: Response) => {
   const requestingUserId = req.userId;
+  const offset = parseInt(req.query.offset as string, 10);
+  const limit = parseInt(req.query.limit as string, 10);
 
   try {
     const savedWorkouts = await workoutsCollection.find({
       userId: requestingUserId,
-    }).toArray();
+    })
+      .skip(offset)
+      .limit(limit)
+      .toArray();
 
     res.send(savedWorkouts);
   } catch (err) {

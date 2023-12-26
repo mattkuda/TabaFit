@@ -10,18 +10,18 @@ import {
     absExercises,
     cardioExercises,
 } from '../../util/constants';
-import { WorkoutsStackParamList } from '../../navigation/navigationTypes';
+import { OldWorkoutsStackParamList } from '../../navigation/navigationTypes';
 import { TabataExercise } from '../../types/workouts';
 
-type SelectExerciseScreenNavigationProp = StackNavigationProp<WorkoutsStackParamList, 'SelectExerciseScreen'>;
-type SelectExerciseScreenRouteProp = RouteProp<WorkoutsStackParamList, 'SelectExerciseScreen'>;
+type SelectExerciseScreenNavigationProp = StackNavigationProp<OldWorkoutsStackParamList, 'SelectExerciseScreen'>;
+type OldSelectExerciseScreenRouteProp = RouteProp<OldWorkoutsStackParamList, 'SelectExerciseScreen'>;
 
 export const SelectExerciseScreen = (): JSX.Element => {
     const exercises = [...lowerBodyExercises, ...upperBodyExercises, ...absExercises, ...cardioExercises].sort(
         (a, b) => a.name.localeCompare(b.name),
     );
     const navigation = useNavigation<SelectExerciseScreenNavigationProp>();
-    const route = useRoute<SelectExerciseScreenRouteProp>();
+    const route = useRoute<OldSelectExerciseScreenRouteProp>();
 
     const handleSelectExercise = (exercise: TabataExercise): void => {
         const { onSelectWorkout } = route.params;
