@@ -78,6 +78,22 @@ export const WorkoutsScreen = (): JSX.Element => {
                         </Pressable>
                     ))}
                 </HStack>
+
+                {/* Abcountable Workouts Header */}
+                <HStack alignItems="center" justifyContent="space-between">
+                    <Heading size="md">Abcountable Workouts</Heading>
+                    <Button onPress={handlePressBrowseWorkouts}>Browse all</Button>
+                </HStack>
+
+                {/* Example Abcountable Workouts */}
+                <HStack space={2}>
+                    <Pressable onPress={(): void => console.log('Navigate to Abcountable workout 1')}>
+                        <Box><Text>Abcountable workout 1</Text></Box>
+                    </Pressable>
+                    <Pressable onPress={(): void => console.log('Navigate to Abcountable workout 2')}>
+                        <Box><Text>Abcountable workout 2</Text></Box>
+                    </Pressable>
+                </HStack>
             </VStack>
         </ScrollView>
     );
