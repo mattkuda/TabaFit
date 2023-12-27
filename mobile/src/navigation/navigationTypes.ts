@@ -53,11 +53,19 @@ export type OldWorkoutsStackParamList = {
 export type OldBuildWorkoutScreenRouteProp = StackNavigationProp<OldWorkoutsStackParamList, 'BuildWorkoutScreen'>;
 export type OldSelectExerciseScreenRouteProp = StackNavigationProp<OldWorkoutsStackParamList, 'SelectExerciseScreen'>;
 
+export interface BuildWorkoutScreenProps {
+    isShuffle?: boolean;
+    customWorkout?: TabataWorkout;
+}
+
 // (New) Workouts Stack
 export type WorkoutsStackParamList = {
     WorkoutsScreen;
     LoadWorkoutScreen;
-    BuildWorkoutScreen;
+    BuildWorkoutScreen: {
+        isShuffle?: boolean;
+        customWorkout?: TabataWorkout;
+    };
     ShuffleScreen: { workout?: TabataWorkout };
     SelectExerciseScreen: {onSelectWorkout: (exercise: TabataExercise) => void };
 }

@@ -4,14 +4,15 @@ import {
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Button } from 'react-native';
 import { useQueryClient } from 'react-query';
 import { TabataExercise, TabataWorkout } from '../../types/workouts';
-import { OldBuildWorkoutScreenRouteProp } from '../../navigation/navigationTypes';
+import { WorkoutsStackParamList } from '../../navigation/navigationTypes';
 import { useMutateSaveWorkout } from '../../mutations/useMutateSaveWorkout';
-import { defaultTabataWorkout } from '../ShuffleScreen/util';
+import { buildNewTabataInitialState, shuffleExercises } from '../ShuffleScreen/util';
 import { useAuth } from '../../context/AuthContext';
+import { BuildWorkoutScreenNavigationProp } from '../../types/navigationTypes';
 
 export type TabataCircuit = (TabataExercise | null)[];
 
@@ -76,7 +77,7 @@ const TabataItem = ({
     </VStack>
 );
 
-const dummyData: TabataCircuit = [{
+const emptyTabata: TabataCircuit = [{
     _id: 'lb1', name: 'Squats', types: ['Lower Body'], description: 'Standard squats.', difficulty: 'Easy', videoLink: '', equipment: ['None'],
 },
 {
@@ -88,46 +89,60 @@ const dummyData: TabataCircuit = [{
     _id: 'lb4', name: 'Step-Ups', types: ['Lower Body'], description: 'Step onto a raised platform.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
 }];
 
-export const BuildTabataScreen: React.FC = (): JSX.Element => {
-    const [tabatas, setTabatas] = useState<TabataCircuit[]>([
-        dummyData,
-    ]);
-    const navigation = useNavigation<OldBuildWorkoutScreenRouteProp>();
+type BuildWorkoutScreenRouteProp = RouteProp<WorkoutsStackParamList, 'BuildWorkoutScreen'>;
+
+export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = (): JSX.Element => {
+    const navigation = useNavigation<BuildWorkoutScreenNavigationProp>();
+    const route = useRoute<BuildWorkoutScreenRouteProp>();
+
+    const { isShuffle, customWorkout } = route.params;
+
+    const [workout, setWorkout] = useState<TabataWorkout>(customWorkout || buildNewTabataInitialState);
+    // const navigation = useNavigation<BuildWorkoutScreenRouteProp>();
     const saveWorkoutMutation = useMutateSaveWorkout();
     const { authState } = useAuth();
     const queryClient = useQueryClient();
     const [workoutName, setWorkoutName] = useState('');
+    // const [showSettingsModal, setShowSettingsModal] = useState(false);
 
     const addTabata = (): void => {
-        setTabatas([...tabatas, dummyData]);
+        setWorkout((currentWorkout) => ({
+            ...currentWorkout,
+            tabatas: [...workout.tabatas, emptyTabata],
+        }));
     };
 
     const removeTabata = (index: number): void => {
-        setTabatas(tabatas.filter((_, i) => i !== index));
+        setWorkout((currentWorkout) => ({
+            ...currentWorkout,
+            tabatas: currentWorkout.tabatas.filter((_, i) => i !== index),
+        }));
     };
 
     const moveTabataUp = (index: number): void => {
         if (index === 0) return;
-        const newTabatas = [...tabatas];
+        setWorkout((currentWorkout) => {
+            const newTabatas = [...currentWorkout.tabatas];
 
-        [newTabatas[index - 1], newTabatas[index]] = [newTabatas[index], newTabatas[index - 1]];
-        setTabatas(newTabatas);
+            [newTabatas[index - 1], newTabatas[index]] = [newTabatas[index], newTabatas[index - 1]];
+            return { ...currentWorkout, tabatas: newTabatas };
+        });
     };
 
     const moveTabataDown = (index: number): void => {
-        if (index === tabatas.length - 1) return;
-        const newTabatas = [...tabatas];
+        if (index === workout.tabatas.length - 1) return;
+        setWorkout((currentWorkout) => {
+            const newTabatas = [...currentWorkout.tabatas];
 
-        [newTabatas[index], newTabatas[index + 1]] = [newTabatas[index + 1], newTabatas[index]];
-        setTabatas(newTabatas);
+            [newTabatas[index], newTabatas[index + 1]] = [newTabatas[index + 1], newTabatas[index]];
+            return { ...currentWorkout, tabatas: newTabatas };
+        });
     };
-
     const saveWorkout = useCallback((): void => {
         const workoutToSave: TabataWorkout = {
-            ...defaultTabataWorkout,
+            ...workout,
             name: workoutName,
             createdAt: new Date().toDateString(),
-            tabatas,
             userId: authState.userId,
         };
 
@@ -141,8 +156,7 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
                 navigation.navigate('LoadWorkoutScreen');
             },
         });
-    }, [workoutName, tabatas, authState.userId,
-        saveWorkoutMutation, queryClient, navigation]);
+    }, [workout, workoutName, authState.userId, saveWorkoutMutation, queryClient, navigation]);
 
     useEffect(() => {
         navigation.setOptions({
@@ -155,23 +169,24 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
     }, [navigation, saveWorkout]);
 
     const updateExercisesOrder = (tabataIndex: number, newExercisesOrder: TabataExercise[]): void => {
-        const updatedTabatas = [...tabatas];
+        setWorkout((currentWorkout) => {
+            const updatedTabatas = [...currentWorkout.tabatas];
 
-        updatedTabatas[tabataIndex] = newExercisesOrder;
-        setTabatas(updatedTabatas);
+            updatedTabatas[tabataIndex] = newExercisesOrder;
+            return { ...currentWorkout, tabatas: updatedTabatas };
+        });
     };
 
     const handleSelectExercise = (tabataIndex: number, exerciseIndex: number): void => {
         navigation.navigate('SelectExerciseScreen', {
             onSelectWorkout: (selectedExercise) => {
-                setTabatas((currentTabatas) => {
-                    const updatedTabatas = [...currentTabatas];
+                setWorkout((currentWorkout) => {
+                    const updatedTabatas = [...currentWorkout.tabatas];
                     const updatedExercises = [...updatedTabatas[tabataIndex]];
 
                     updatedExercises[exerciseIndex] = selectedExercise;
                     updatedTabatas[tabataIndex] = updatedExercises;
-
-                    return updatedTabatas;
+                    return { ...currentWorkout, tabatas: updatedTabatas };
                 });
             },
         });
@@ -179,16 +194,51 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
 
     const handleChange = (text: string): void => setWorkoutName(text);
 
+    const triggerShuffle = (): void => {
+        // Assuming 'workout' is the current state of the workout being built
+        // and it contains the settings for the shuffle
+        if (workout.includeSettings) {
+            const {
+                includeUpper, includeLower, includeAbs, includeCardio,
+            } = workout.includeSettings;
+            const selectedEquipment = workout.equipment; // Assuming this is where the selected equipment is stored
+
+            const shuffledTabatas = shuffleExercises(
+                workout.numberOfTabatas,
+                selectedEquipment,
+                includeUpper,
+                includeLower,
+                includeAbs,
+                includeCardio,
+            );
+
+            console.log('shuffledTabatas');
+            console.log(shuffledTabatas);
+
+            setWorkout((prev) => ({
+                ...prev,
+                tabatas: shuffledTabatas,
+            }));
+        }
+    };
+
     return (
         <VStack space={4}>
-            <Input
-                mb={4}
-                placeholder="Enter Workout Name"
-                value={workoutName}
-                onChangeText={handleChange}
-            />
+            {isShuffle ? (
+                <IconButton
+                    icon={<Icon as={Ionicons} name="shuffle" />}
+                    onPress={(): void => triggerShuffle()}
+                />
+            ) : (
+                <Input
+                    mb={4}
+                    placeholder="Enter Workout Name"
+                    value={workoutName}
+                    onChangeText={handleChange}
+                />
+            )}
             <NestableScrollContainer>
-                {tabatas.map((tabataCircuit, index) => (
+                {workout.tabatas.map((tabataCircuit, index) => (
                     <TabataItem
                         changeExercise={handleSelectExercise}
                         circuitIndex={index}
@@ -200,6 +250,16 @@ export const BuildTabataScreen: React.FC = (): JSX.Element => {
                     />
                 ))}
             </NestableScrollContainer>
+            <Text>
+                isShuffle:
+                {' '}
+                {isShuffle}
+            </Text>
+            <Text>
+                customWorkout:
+                {' '}
+                {JSON.stringify(customWorkout)}
+            </Text>
             <Button title="Add Tabata" onPress={addTabata} />
         </VStack>
     );

@@ -6,21 +6,22 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
+import { buildNewTabataInitialState } from '../ShuffleScreen/util';
+import { BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
 
 type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'WorkoutsScreen'>;
 
 export const WorkoutsScreen = (): JSX.Element => {
     const navigation = useNavigation<WorkoutsScreenNavigationProp>();
-    const { data: mySavedWorkouts } = useQueryMySavedWorkouts();
+    const { data: mySavedWorkouts } = useQueryMySavedWorkouts({ limit: 2, offset: 0 });
 
     const handlePressQuickShuffle = (): void => {
-        // TODO: Implement or navigate to Quick Shuffle functionality
-        navigation.navigate('ShuffleScreen');
+        // First go to customizable settings screen (to-build)
+        navigation.navigate('BuildWorkoutScreen', { customWorkout: buildNewTabataInitialState, isShuffle: true } as BuildWorkoutScreenProps);
     };
 
     const handlePressBuildWorkout = (): void => {
-        // TODO: Implement or navigate to Build Workout functionality
-        navigation.navigate('BuildWorkoutScreen');
+        navigation.navigate('BuildWorkoutScreen', { isShuffle: false });
     };
 
     const handlePressViewMyWorkouts = (): void => {

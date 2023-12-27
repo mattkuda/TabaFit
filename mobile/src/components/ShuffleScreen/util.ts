@@ -104,3 +104,27 @@ export const defaultTabataWorkout: TabataWorkout = {
     cooldownDuration: 0,
     equipment: [],
 };
+
+export const buildNewTabataInitialState: TabataWorkout = {
+    _id: `workout-shuffle`,
+    name: `Tabata Shuffle`,
+    description: 'A shuffled Tabata workout based on user preferences.',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    userId: null,
+    warmupDuration: 1,
+    tabatas: [],
+    restDuration: 1,
+    exerciseDuration: 1,
+    numberOfTabatas: 1,
+    exercisesPerTabata: 8,
+    intermisionDuration: 1,
+    cooldownDuration: 0,
+    equipment: [],
+    includeSettings: {
+        includeAbs: true,
+        includeCardio: true,
+        includeLower: true,
+        includeUpper: true,
+    },
+};

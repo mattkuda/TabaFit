@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { WorkoutsStackParamList } from './navigationTypes';
-import { BuildTabataScreen } from '../components/BuildWorkoutScreen';
+import { BuildWorkoutScreen } from '../components/BuildWorkoutScreen';
 import { SelectExerciseScreen } from '../components/SelectExerciseScreen';
 import { WorkoutsScreen } from '../components/WorkoutsScreen';
 
@@ -13,7 +13,7 @@ export const WorkoutsStackNavigator = (): JSX.Element => (
         // screenOptions={{ headerShown: false }}
     >
         <Stack.Screen component={WorkoutsScreen} name="WorkoutsScreen" />
-        <Stack.Screen component={BuildTabataScreen} name="BuildWorkoutScreen" />
+        <Stack.Screen component={BuildWorkoutScreen} name="BuildWorkoutScreen" />
         <Stack.Screen component={SelectExerciseScreen} name="SelectExerciseScreen" />
     </Stack.Navigator>
 );

@@ -11,6 +11,11 @@ export interface TabNavigatorParamList extends ParamListBase {
     Search: undefined;
     TabataTimerScreen: {workout: TabataWorkout};
     ShuffleScreen: {workout?: TabataWorkout};
+    // BuildWorkoutScreen: BuildWorkoutScreenProps
+    BuildWorkoutScreen: {
+        isShuffle?: boolean;
+        customWorkout?: TabataWorkout;
+    }
 }
 
 export type HomeScreenRouteProp = RouteProp<TabNavigatorParamList, 'Home'>;
@@ -36,3 +41,8 @@ export type TabataTimerScreenNavigationProp = StackNavigationProp<TabNavigatorPa
 export type ShareWorkoutrScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'ShareWorkout'> & {
     params: TabataWorkout;
 };
+
+export type BuildWorkoutScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'BuildWorkoutScreen'> & {
+    params: {isShuffle: boolean, customWorkout: TabataWorkout};
+};
+// I think I can delete the above params

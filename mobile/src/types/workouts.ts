@@ -15,6 +15,13 @@ export interface TabataExercise {
 
 export type TabataCircuit = TabataExercise[]
 
+export interface WorkoutIncludeSettings {
+    includeUpper: boolean,
+    includeLower: boolean,
+    includeAbs: boolean,
+    includeCardio: boolean,
+}
+
 export interface TabataWorkout {
     _id: mongoose.Types.ObjectId | string;
     name: string;
@@ -31,4 +38,5 @@ export interface TabataWorkout {
     exercisesPerTabata: number;
     intermisionDuration: number;
     cooldownDuration: number;
+    includeSettings?: WorkoutIncludeSettings;
 }
