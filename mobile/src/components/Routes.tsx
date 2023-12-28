@@ -3,7 +3,7 @@ import {
     Text,
     ViewStyle,
 } from 'react-native';
-import { NativeBaseProvider, Avatar } from 'native-base';
+import { Avatar } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -76,58 +76,56 @@ export const Routes = (): JSX.Element => {
     };
 
     return (
-        <NativeBaseProvider>
-            <NavigationContainer>
-                <SafeAreaView style={{ flex: 1 }}>
-                    <Tab.Navigator
-                        initialRouteName="HomePage"
-                        screenOptions={{
-                            headerShown: false,
+        <NavigationContainer>
+            <SafeAreaView style={{ flex: 1 }}>
+                <Tab.Navigator
+                    initialRouteName="HomePage"
+                    screenOptions={{
+                        headerShown: false,
+                    }}
+                >
+                    <Tab.Screen
+                        component={HomeStackNavigator}
+                        name="Home"
+                        options={{
+                            tabBarIcon: HomeIcon,
+                            tabBarStyle,
                         }}
-                    >
-                        <Tab.Screen
-                            component={HomeStackNavigator}
-                            name="Home"
-                            options={{
-                                tabBarIcon: HomeIcon,
-                                tabBarStyle,
-                            }}
-                        />
-                        <Tab.Screen
-                            component={OldWorkoutsStackNavigator}
-                            name="View Workouts"
-                            options={{
-                                tabBarIcon: TimerIcon,
-                                tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
-                            }}
-                        />
-                        <Tab.Screen
-                            component={WorkoutsStackNavigator}
-                            name="NEW Workouts"
-                            options={{
-                                tabBarIcon: TimerIcon,
-                                tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
-                            }}
-                        />
-                        <Tab.Screen
-                            component={ShuffleStackNavigator}
-                            name="Shuffle"
-                            options={{
-                                tabBarIcon: TimerIcon,
-                                tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
-                            }}
-                        />
-                        <Tab.Screen
-                            component={ProfileStackNavigator}
-                            name="Profile"
-                            options={{
-                                tabBarIcon: ProfileTabIcon,
-                                tabBarStyle,
-                            }}
-                        />
-                    </Tab.Navigator>
-                </SafeAreaView>
-            </NavigationContainer>
-        </NativeBaseProvider>
+                    />
+                    <Tab.Screen
+                        component={OldWorkoutsStackNavigator}
+                        name="View Workouts"
+                        options={{
+                            tabBarIcon: TimerIcon,
+                            tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
+                        }}
+                    />
+                    <Tab.Screen
+                        component={WorkoutsStackNavigator}
+                        name="NEW Workouts"
+                        options={{
+                            tabBarIcon: TimerIcon,
+                            tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
+                        }}
+                    />
+                    <Tab.Screen
+                        component={ShuffleStackNavigator}
+                        name="Shuffle"
+                        options={{
+                            tabBarIcon: TimerIcon,
+                            tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
+                        }}
+                    />
+                    <Tab.Screen
+                        component={ProfileStackNavigator}
+                        name="Profile"
+                        options={{
+                            tabBarIcon: ProfileTabIcon,
+                            tabBarStyle,
+                        }}
+                    />
+                </Tab.Navigator>
+            </SafeAreaView>
+        </NavigationContainer>
     );
 };
