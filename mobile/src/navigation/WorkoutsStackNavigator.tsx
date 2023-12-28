@@ -4,6 +4,8 @@ import { WorkoutsStackParamList } from './navigationTypes';
 import { BuildWorkoutScreen } from '../components/BuildWorkoutScreen';
 import { SelectExerciseScreen } from '../components/SelectExerciseScreen';
 import { WorkoutsScreen } from '../components/WorkoutsScreen';
+import { TabataTimerScreen } from '../components/TabataTimerScreen';
+import { ShareWorkoutScreen } from '../components/ShareWorkoutScreen';
 
 const Stack = createStackNavigator<WorkoutsStackParamList>();
 
@@ -15,5 +17,7 @@ export const WorkoutsStackNavigator = (): JSX.Element => (
         <Stack.Screen component={WorkoutsScreen} name="WorkoutsScreen" />
         <Stack.Screen component={BuildWorkoutScreen} name="BuildWorkoutScreen" />
         <Stack.Screen component={SelectExerciseScreen} name="SelectExerciseScreen" />
+        <Stack.Screen component={TabataTimerScreen} name="TabataTimerScreen" />
+        <Stack.Screen component={ShareWorkoutScreen} name="ShareWorkoutScreen" />
     </Stack.Navigator>
 );

@@ -138,6 +138,11 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             return { ...currentWorkout, tabatas: newTabatas };
         });
     };
+
+    const startWorkout = (): void => {
+        navigation.navigate('TabataTimerScreen', { workout });
+    };
+
     const saveWorkout = useCallback((): void => {
         const workoutToSave: TabataWorkout = {
             ...workout,
@@ -159,12 +164,22 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     }, [workout, workoutName, authState.userId, saveWorkoutMutation, queryClient, navigation]);
 
     useEffect(() => {
-        navigation.setOptions({
-            // eslint-disable-next-line react/no-unstable-nested-components
-            headerRight: (): JSX.Element => (
-                <Button title="Save" onPress={saveWorkout} />
-            ),
-        });
+        if (isShuffle) {
+            navigation.setOptions({
+                // eslint-disable-next-line react/no-unstable-nested-components
+                headerRight: (): JSX.Element => (
+                    <Button title="Start" onPress={startWorkout} />
+                ),
+            });
+        } else {
+            navigation.setOptions({
+                // eslint-disable-next-line react/no-unstable-nested-components
+                headerRight: (): JSX.Element => (
+                    <Button title="Save" onPress={saveWorkout} />
+                ),
+            });
+        }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigation, saveWorkout]);
 
@@ -222,6 +237,13 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         }
     };
 
+    useEffect(() => {
+        if (isShuffle) {
+            triggerShuffle();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <VStack space={4}>
             {isShuffle ? (
@@ -250,16 +272,6 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                     />
                 ))}
             </NestableScrollContainer>
-            <Text>
-                isShuffle:
-                {' '}
-                {isShuffle}
-            </Text>
-            <Text>
-                customWorkout:
-                {' '}
-                {JSON.stringify(customWorkout)}
-            </Text>
             <Button title="Add Tabata" onPress={addTabata} />
         </VStack>
     );

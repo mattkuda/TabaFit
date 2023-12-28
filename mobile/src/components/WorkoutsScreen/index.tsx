@@ -7,7 +7,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
-import { buildNewTabataInitialState, defaultShuffleTabataWorkout } from '../ShuffleScreen/util';
+import { defaultShuffleTabataWorkout } from '../ShuffleScreen/util';
 import { BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
 import { TabataWorkout } from '../../types/workouts';
 
@@ -40,7 +40,7 @@ export const WorkoutsScreen = (): JSX.Element => {
 
     const handlePressQuickShuffle = (): void => {
         // First go to customizable settings screen (to-build)
-        navigation.navigate('BuildWorkoutScreen', { customWorkout: buildNewTabataInitialState, isShuffle: true } as BuildWorkoutScreenProps);
+        navigation.navigate('BuildWorkoutScreen', { customWorkout: shuffledWorkout, isShuffle: true } as BuildWorkoutScreenProps);
     };
 
     const handlePressBuildWorkout = (): void => {
