@@ -39,6 +39,10 @@ export const ShareWorkoutScreen = (): JSX.Element => {
         }
     };
     const handleReturnHome = (): void => {
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'WorkoutsScreen' }],
+        });
         navigation.navigate('Home');
     };
 
