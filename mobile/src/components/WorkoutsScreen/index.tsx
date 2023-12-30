@@ -47,6 +47,10 @@ export const WorkoutsScreen = (): JSX.Element => {
         navigation.navigate('BuildWorkoutScreen', { isShuffle: false });
     };
 
+    const handlePressViewWorkout = (workout: TabataWorkout): void => {
+        navigation.navigate('ViewWorkoutScreen', { workout });
+    };
+
     const handlePressViewMyWorkouts = (): void => {
         // TODO: Implement or navigate to View My Workouts functionality
     };
@@ -175,7 +179,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                 {/* Example Saved Workouts */}
                 <HStack space={2}>
                     {mySavedWorkouts?.map((savedWorkout) => (
-                        <Pressable onPress={(): void => console.log('Navigate to Saved workout 1')}>
+                        <Pressable onPress={(): void => handlePressViewWorkout(savedWorkout)}>
                             <Box><Text>{savedWorkout.name}</Text></Box>
                         </Pressable>
                     ))}
