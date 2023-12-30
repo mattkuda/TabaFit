@@ -52,7 +52,7 @@ export const WorkoutsScreen = (): JSX.Element => {
     };
 
     const handlePressViewMyWorkouts = (): void => {
-        // TODO: Implement or navigate to View My Workouts functionality
+        navigation.navigate('LoadWorkoutScreen');
     };
 
     const handlePressBrowseWorkouts = (): void => {

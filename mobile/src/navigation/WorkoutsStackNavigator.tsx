@@ -7,12 +7,13 @@ import { WorkoutsScreen } from '../components/WorkoutsScreen';
 import { TabataTimerScreen } from '../components/TabataTimerScreen';
 import { ShareWorkoutScreen } from '../components/ShareWorkoutScreen';
 import { ViewWorkoutScreen } from '../components/ViewWorkoutScreen';
+import { LoadWorkoutScreen } from '../components/LoadWorkoutScreen';
 
 const Stack = createStackNavigator<WorkoutsStackParamList>();
 
 export const WorkoutsStackNavigator = (): JSX.Element => (
     <Stack.Navigator
-        initialRouteName="LoadWorkoutScreen"
+        initialRouteName="WorkoutsScreen"
         // screenOptions={{ headerShown: false }}
     >
         <Stack.Screen component={WorkoutsScreen} name="WorkoutsScreen" />
@@ -21,5 +22,6 @@ export const WorkoutsStackNavigator = (): JSX.Element => (
         <Stack.Screen component={TabataTimerScreen} name="TabataTimerScreen" />
         <Stack.Screen component={ShareWorkoutScreen} name="ShareWorkoutScreen" />
         <Stack.Screen component={ViewWorkoutScreen} name="ViewWorkoutScreen" />
+        <Stack.Screen component={LoadWorkoutScreen} name="LoadWorkoutScreen" />
     </Stack.Navigator>
 );

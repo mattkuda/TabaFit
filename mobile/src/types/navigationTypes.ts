@@ -18,6 +18,7 @@ export interface TabNavigatorParamList extends ParamListBase {
     }
     WorkoutsScreen: undefined;
     ViewWorkoutScreen: { workout: TabataWorkout };
+    LoadWorkoutScreen;
 }
 
 export type HomeScreenRouteProp = RouteProp<TabNavigatorParamList, 'Home'>;

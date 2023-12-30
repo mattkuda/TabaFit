@@ -77,17 +77,7 @@ const TabataItem = ({
     </VStack>
 );
 
-const emptyTabata: TabataCircuit = [{
-    _id: 'lb1', name: 'Squats', types: ['Lower Body'], description: 'Standard squats.', difficulty: 'Easy', videoLink: '', equipment: ['None'],
-},
-{
-    _id: 'lb2', name: 'Lunges', types: ['Lower Body'], description: 'Alternating lunges.', difficulty: 'Easy', videoLink: '', equipment: ['None'],
-},
-{
-    _id: 'lb3', name: 'Glute Bridges', types: ['Lower Body'], description: 'Hip lifts for glute strength.', difficulty: 'Easy', videoLink: '', equipment: ['None'],
-}, {
-    _id: 'lb4', name: 'Step-Ups', types: ['Lower Body'], description: 'Step onto a raised platform.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
-}];
+const emptyTabata: TabataCircuit = [null, null, null, null];
 
 type BuildWorkoutScreenRouteProp = RouteProp<WorkoutsStackParamList, 'BuildWorkoutScreen'>;
 
@@ -102,7 +92,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     const saveWorkoutMutation = useMutateSaveWorkout();
     const { authState } = useAuth();
     const queryClient = useQueryClient();
-    const [workoutName, setWorkoutName] = useState('');
+    const [workoutName, setWorkoutName] = useState(customWorkout?.name || '');
     // const [showSettingsModal, setShowSettingsModal] = useState(false);
 
     const addTabata = (): void => {
@@ -158,7 +148,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 console.log('Workout saved!');
                 console.log('Todo: handle nav to my workouts');
                 queryClient.invalidateQueries('my-saved-workouts');
-                navigation.navigate('LoadWorkoutScreen');
+                navigation.goBack();
             },
         });
     }, [workout, workoutName, authState.userId, saveWorkoutMutation, queryClient, navigation]);
