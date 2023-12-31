@@ -1,8 +1,9 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import {
-    ScrollView, Text, VStack, Button,
+    ScrollView, Text, VStack, Button, Icon,
 } from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { TabataCircuit } from '../../types/workouts';
@@ -26,10 +27,22 @@ export const ViewWorkoutScreen = (): JSX.Element => {
         );
     };
 
+    const handleStartWorkout = (): void => {
+        navigation.navigate('TabataTimerScreen', { workout });
+    };
+
     return (
         <ScrollView>
             <VStack px={5} py={4} space={4}>
                 <Text bold fontSize="xl">{workout.name}</Text>
+                <Button
+                    rightIcon={<Icon as={Ionicons} name="pencil" size="sm" />}
+                    size="sm"
+                    variant="outline"
+                    onPress={handleEditWorkout}
+                >
+                    Edit
+                </Button>
                 <Text fontSize="md">
                     Created on:
                     {' '}
@@ -40,12 +53,6 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                     {' '}
                     {workout.numberOfTabatas}
                 </Text>
-                <Text fontSize="md">
-                    Exercises per Tabata:
-                    {' '}
-                    {workout.exercisesPerTabata}
-                </Text>
-
                 {workout.tabatas.map((circuit: TabataCircuit, index: number) => (
                     <VStack borderColor="coolGray.200" borderRadius="md" borderWidth={1} key={index} mt={2} p={4} space={2}>
                         <Text bold fontSize="md">
@@ -59,7 +66,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                     </VStack>
                 ))}
             </VStack>
-            <Button mt={4} onPress={handleEditWorkout}>Edit Workout</Button>
+            <Button mt={4} onPress={handleStartWorkout}>Start</Button>
         </ScrollView>
     );
 };
