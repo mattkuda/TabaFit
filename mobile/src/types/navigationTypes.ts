@@ -17,7 +17,7 @@ export interface TabNavigatorParamList extends ParamListBase {
         customWorkout?: TabataWorkout;
     }
     WorkoutsScreen: undefined;
-    ViewWorkoutScreen: { workout: TabataWorkout };
+    ViewWorkoutScreen: { workoutId: string };
     LoadWorkoutScreen;
 }
 

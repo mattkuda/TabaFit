@@ -148,6 +148,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 console.log('Workout saved!');
                 console.log('Todo: handle nav to my workouts');
                 queryClient.invalidateQueries('my-saved-workouts');
+                queryClient.invalidateQueries(['workout', workout._id]); // Invalidate the query for the individual workout
                 navigation.goBack();
             },
         });

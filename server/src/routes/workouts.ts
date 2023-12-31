@@ -48,6 +48,26 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/workout/:workoutId', async (req: Request, res: Response) => {
+  try {
+    const { workoutId } = req.params;
+
+    console.log('workoutId');
+    console.log(workoutId);
+    const workout = await workoutsCollection.findOne({ _id: new ObjectId(workoutId) });
+
+    if (!workout) {
+      res.status(404).send({ message: 'Workout not found.' });
+      return;
+    }
+
+    res.send(workout);
+  } catch (err) {
+    console.error('Failed to fetch workout', err);
+    res.status(500).send({ message: 'Failed to fetch workout' });
+  }
+});
+
 // Gets a user's saved workouts
 router.get('/my-saved', authenticate, async (req: AuthRequest, res: Response) => {
   const requestingUserId = req.userId;

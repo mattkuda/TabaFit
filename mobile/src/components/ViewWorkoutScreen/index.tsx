@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import {
-    ScrollView, Text, VStack, Button, Icon,
+    ScrollView, Text, VStack, Button, Icon, Center, Spinner,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -9,12 +9,15 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { TabataCircuit } from '../../types/workouts';
 import { ViewWorkoutScreenRouteProp, BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
+import { useQueryWorkoutById } from '../../hooks/useQueryWorkoutById';
 
 type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'WorkoutsScreen'>;
 
 export const ViewWorkoutScreen = (): JSX.Element => {
     const route = useRoute<ViewWorkoutScreenRouteProp>();
-    const { workout } = route.params; // Assuming workout is passed through route params
+    const workoutId = route.params?.workoutId; // Get workout ID from route params
+    const { data: workout, isLoading, isError } = useQueryWorkoutById(workoutId); // Fetch workout data
+
     const navigation = useNavigation<WorkoutsScreenNavigationProp>();
 
     const handleEditWorkout = (): void => {
@@ -30,6 +33,14 @@ export const ViewWorkoutScreen = (): JSX.Element => {
     const handleStartWorkout = (): void => {
         navigation.navigate('TabataTimerScreen', { workout });
     };
+
+    if (isLoading) {
+        return <Center flex={1}><Spinner /></Center>; // Show loading indicator while data is loading
+    }
+
+    if (isError || !workout) {
+        return <Center flex={1}><Text>Error loading workout or workout not found</Text></Center>; // Show error message
+    }
 
     return (
         <ScrollView>

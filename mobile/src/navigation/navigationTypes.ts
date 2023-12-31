@@ -67,7 +67,7 @@ export type WorkoutsStackParamList = {
         customWorkout?: TabataWorkout;
     };
     ShuffleScreen: { workout?: TabataWorkout };
-    ViewWorkoutScreen: { workout: TabataWorkout };
+    ViewWorkoutScreen: { workoutId: string };
     SelectExerciseScreen: {onSelectWorkout: (exercise: TabataExercise) => void };
     TabataTimerScreen: {workout?: TabataWorkout}
     ShareWorkoutScreen: {workout: TabataWorkout, completedAt: Date};

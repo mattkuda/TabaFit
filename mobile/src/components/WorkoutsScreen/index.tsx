@@ -48,7 +48,7 @@ export const WorkoutsScreen = (): JSX.Element => {
     };
 
     const handlePressViewWorkout = (workout: TabataWorkout): void => {
-        navigation.navigate('ViewWorkoutScreen', { workout });
+        navigation.navigate('ViewWorkoutScreen', { workoutId: workout._id.toString() });
     };
 
     const handlePressViewMyWorkouts = (): void => {
