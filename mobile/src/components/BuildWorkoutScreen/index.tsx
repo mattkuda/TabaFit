@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Button } from 'react-native';
+import { useQueryClient } from 'react-query';
 import { TabataExercise, TabataWorkout } from '../../types/workouts';
 import { WorkoutsStackParamList } from '../../navigation/navigationTypes';
 import { useMutateSaveWorkout, useMutateUpdateWorkout } from '../../mutations/useMutateSaveWorkout';
@@ -87,6 +88,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     const saveWorkoutMutation = useMutateSaveWorkout();
     const { authState } = useAuth();
     const [workoutName, setWorkoutName] = useState(customWorkout?.name || '');
+    const queryClient = useQueryClient();
 
     const addTabata = (): void => {
         setWorkout((currentWorkout) => ({
@@ -146,25 +148,29 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             userId: authState.userId,
         };
 
+        const onSuccessCallback = (): void => {
+            // Invalidate queries to refresh data
+            queryClient.invalidateQueries('my-saved-workouts');
+            queryClient.invalidateQueries(['workout', workout._id.toString()]);
+            navigation.goBack();
+        };
+
         if (isEdit) {
             updateWorkoutMutation.mutate({
                 workoutId: workout._id.toString(),
                 workout: workoutData,
             }, {
-                onSuccess: () => {
-                    // Handle success for update
-                },
+                onSuccess: onSuccessCallback,
             });
         } else {
             saveWorkoutMutation.mutate({
                 workout: workoutData,
             }, {
-                onSuccess: () => {
-                    // Handle success for save
-                },
+                onSuccess: onSuccessCallback,
             });
         }
-    }, [workout, workoutName, authState.userId, isEdit, updateWorkoutMutation, saveWorkoutMutation]);
+    }, [workout, workoutName, authState.userId, isEdit,
+        queryClient, navigation, updateWorkoutMutation, saveWorkoutMutation]);
 
     useEffect(() => {
         if (isShuffle) {

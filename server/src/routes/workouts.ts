@@ -137,6 +137,9 @@ router.put('/:workoutId', authenticate, async (req: AuthRequest, res: Response) 
   const workoutData = req.body;
   const requestingUserId = req.userId;
 
+  // Remove the _id field from the workoutData
+  delete workoutData._id;
+
   try {
     const updatedWorkout = await workoutsCollection.findOneAndUpdate(
       { _id: new ObjectId(workoutId), userId: requestingUserId },
