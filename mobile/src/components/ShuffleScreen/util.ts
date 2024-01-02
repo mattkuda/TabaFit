@@ -129,15 +129,17 @@ export const defaultShuffleTabataWorkout: TabataWorkout = {
     },
 };
 
+export const emptyTabata: TabataCircuit = [null, null, null, null];
+
 export const buildNewTabataInitialState: TabataWorkout = {
     _id: `workout-shuffle`,
     name: `Tabata Shuffle`,
-    description: 'A shuffled Tabata workout based on user preferences.',
+    description: 'A Tabata workout built by the user.',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     userId: null,
     warmupDuration: 1,
-    tabatas: [],
+    tabatas: [emptyTabata],
     restDuration: 1,
     exerciseDuration: 1,
     numberOfTabatas: 1,

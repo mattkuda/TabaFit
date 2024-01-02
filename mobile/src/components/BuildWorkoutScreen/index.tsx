@@ -9,7 +9,7 @@ import { Button } from 'react-native';
 import { TabataExercise, TabataWorkout } from '../../types/workouts';
 import { WorkoutsStackParamList } from '../../navigation/navigationTypes';
 import { useMutateSaveWorkout, useMutateUpdateWorkout } from '../../mutations/useMutateSaveWorkout';
-import { buildNewTabataInitialState, shuffleExercises } from '../ShuffleScreen/util';
+import { buildNewTabataInitialState, emptyTabata, shuffleExercises } from '../ShuffleScreen/util';
 import { useAuth } from '../../context/AuthContext';
 import { BuildWorkoutScreenNavigationProp } from '../../types/navigationTypes';
 
@@ -75,8 +75,6 @@ const TabataItem = ({
         />
     </VStack>
 );
-
-const emptyTabata: TabataCircuit = [null, null, null, null];
 
 type BuildWorkoutScreenRouteProp = RouteProp<WorkoutsStackParamList, 'BuildWorkoutScreen'>;
 
