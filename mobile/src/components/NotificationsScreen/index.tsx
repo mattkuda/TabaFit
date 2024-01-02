@@ -1,15 +1,14 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
-    VStack, ScrollView, Center,
+    VStack, Center,
 } from 'native-base';
-import { RefreshControl } from 'react-native';
 import { useQueryNotifications } from '../../hooks/useQueryNotifications';
 import { NotificationCard } from './NotificationCard';
 import { useMutateNotificationsRead } from '../../mutations/useMutateNotificationsRead';
 import { useAuth } from '../../context/AuthContext';
+import { RefreshableScrollView } from '../RefreshableScrollView';
 
 export const NotificationsScreen = (): JSX.Element => {
-    const [refreshing, setRefreshing] = useState(false);
     const {
         data: notifications, isLoading, isError, refetch,
     } = useQueryNotifications();
@@ -32,25 +31,20 @@ export const NotificationsScreen = (): JSX.Element => {
         }
     }, [notifications, markNotificationsRead, userId]);
 
-    const onRefresh = useCallback(async () => {
-        setRefreshing(true);
+    const onRefresh = async (): Promise<void> => {
         await refetch();
-        setRefreshing(false);
-    }, [refetch]);
+    };
 
     if (isLoading) return <Center>Loading...</Center>;
     if (isError || !notifications) return <Center>Error loading notifications</Center>;
 
     return (
-        <ScrollView
-            _contentContainerStyle={{ px: '4', mb: '4' }}
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-        >
+        <RefreshableScrollView onRefresh={onRefresh}>
             <VStack space={4}>
                 {notifications.map((notification) => (
                     <NotificationCard key={notification._id.toString()} notification={notification} />
                 ))}
             </VStack>
-        </ScrollView>
+        </RefreshableScrollView>
     );
 };

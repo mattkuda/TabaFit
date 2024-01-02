@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import {
-    VStack, Heading, Button, ScrollView, Pressable, Text, Box, HStack, Icon, IconButton, Checkbox,
+    VStack, Heading, Button, Pressable, Text, Box, HStack, Icon, IconButton, Checkbox,
 } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
-import { RefreshControl } from 'react-native';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
 import { defaultShuffleTabataWorkout } from '../ShuffleScreen/util';
 import { BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
 import { TabataWorkout } from '../../types/workouts';
+import { RefreshableScrollView } from '../RefreshableScrollView';
 
 type CheckboxItemProps = {
     label: string;
@@ -38,7 +38,6 @@ export const WorkoutsScreen = (): JSX.Element => {
     const navigation = useNavigation<WorkoutsScreenNavigationProp>();
     const { data: mySavedWorkouts, refetch } = useQueryMySavedWorkouts({ limit: 2, offset: 0 });
     const [shuffledWorkout, setShuffledWorkout] = useState<TabataWorkout>(defaultShuffleTabataWorkout);
-    const [refreshing, setRefreshing] = useState(false); // State to manage refreshing
 
     const handlePressQuickShuffle = (): void => {
         // First go to customizable settings screen (to-build)
@@ -70,19 +69,12 @@ export const WorkoutsScreen = (): JSX.Element => {
         return checkedCount === 1 && checkboxValue;
     };
 
-    // Define a function to handle the refresh action
-    const onRefresh = React.useCallback(async () => {
-        setRefreshing(true);
-        await refetch(); // Refetch your workouts data
-        setRefreshing(false); // Set refreshing to false when data is fetched
-    }, [refetch]);
+    const refetchData = async (): Promise<void> => {
+        refetch();
+    };
 
     return (
-        <ScrollView
-            refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        >
+        <RefreshableScrollView onRefresh={refetchData}>
             <VStack mt={4} px={5} space={4}>
                 <Box
                     bg="orange.500" // Set the background to orange
@@ -214,6 +206,6 @@ export const WorkoutsScreen = (): JSX.Element => {
                     </Pressable>
                 </HStack>
             </VStack>
-        </ScrollView>
+        </RefreshableScrollView>
     );
 };

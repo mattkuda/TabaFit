@@ -1,16 +1,16 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import {
-    VStack, Heading, Text, Button, Card, Box, HStack, Modal, Icon, IconButton, ScrollView,
+    VStack, Heading, Text, Button, Card, Box, HStack, Modal, Icon, IconButton,
 } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { format } from 'date-fns';
 import { Ionicons } from '@expo/vector-icons';
-import { RefreshControl } from 'react-native';
 import { TabataWorkout } from '../../types/workouts';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
 import { useMutateDeleteWorkout } from '../../mutations/useMutateSaveWorkout';
+import { RefreshableScrollView } from '../RefreshableScrollView';
 
 type LoadWorkoutScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'LoadWorkoutScreen'>;
 
@@ -59,17 +59,13 @@ const WorkoutCard: FC<WorkoutCardProps> = ({ workout, navigation, onDelete }) =>
 export const LoadWorkoutScreen: FC = () => {
     const navigation = useNavigation<LoadWorkoutScreenNavigationProp>();
     const { data, refetch } = useQueryMySavedWorkouts();
-    const [refreshing, setRefreshing] = useState(false);
-
-    // Refresh handler
-    const onRefresh = useCallback(async () => {
-        setRefreshing(true);
-        await refetch();
-        setRefreshing(false);
-    }, [refetch]);
     const [showModal, setShowModal] = useState(false);
     const [selectedWorkout, setSelectedWorkout] = useState<TabataWorkout | null>(null);
     const deleteWorkoutMutation = useMutateDeleteWorkout();
+
+    const refetchData = async (): Promise<void> => {
+        refetch();
+    };
 
     const handleDelete = (workout: TabataWorkout): void => {
         console.log(`Deleting workout with ID: ${workout._id}`);
@@ -92,14 +88,7 @@ export const LoadWorkoutScreen: FC = () => {
     };
 
     return (
-        <ScrollView
-            refreshControl={(
-                <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                />
-              )}
-        >
+        <RefreshableScrollView onRefresh={refetchData}>
             <VStack>
                 <Heading>My Saved Workouts:</Heading>
                 <Button
@@ -135,6 +124,6 @@ export const LoadWorkoutScreen: FC = () => {
                     </Modal.Content>
                 </Modal>
             </VStack>
-        </ScrollView>
+        </RefreshableScrollView>
     );
 };
