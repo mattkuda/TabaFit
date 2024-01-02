@@ -42,10 +42,11 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
 
             if (token) {
                 axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-                setAuthState({
+                setAuthState((prev) => ({
                     token,
                     authenticated: true,
-                });
+                    userId: prev.userId,
+                }));
             }
         };
 
