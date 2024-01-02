@@ -81,7 +81,8 @@ type BuildWorkoutScreenRouteProp = RouteProp<WorkoutsStackParamList, 'BuildWorko
 export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = (): JSX.Element => {
     const navigation = useNavigation<BuildWorkoutScreenNavigationProp>();
     const route = useRoute<BuildWorkoutScreenRouteProp>();
-    const { isShuffle, customWorkout } = route.params;
+    const { customWorkout } = route.params;
+    const isShuffle = route.params.isShuffle || false;
     const [workout, setWorkout] = useState<TabataWorkout>(customWorkout || buildNewTabataInitialState);
     const saveWorkoutMutation = useMutateSaveWorkout();
     const { authState } = useAuth();

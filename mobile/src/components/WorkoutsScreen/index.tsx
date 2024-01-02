@@ -5,6 +5,7 @@ import {
 } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
+import { RefreshControl } from 'react-native';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
 import { defaultShuffleTabataWorkout } from '../ShuffleScreen/util';
@@ -35,8 +36,9 @@ type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, '
 
 export const WorkoutsScreen = (): JSX.Element => {
     const navigation = useNavigation<WorkoutsScreenNavigationProp>();
-    const { data: mySavedWorkouts } = useQueryMySavedWorkouts({ limit: 2, offset: 0 });
+    const { data: mySavedWorkouts, refetch } = useQueryMySavedWorkouts({ limit: 2, offset: 0 });
     const [shuffledWorkout, setShuffledWorkout] = useState<TabataWorkout>(defaultShuffleTabataWorkout);
+    const [refreshing, setRefreshing] = useState(false); // State to manage refreshing
 
     const handlePressQuickShuffle = (): void => {
         // First go to customizable settings screen (to-build)
@@ -68,8 +70,19 @@ export const WorkoutsScreen = (): JSX.Element => {
         return checkedCount === 1 && checkboxValue;
     };
 
+    // Define a function to handle the refresh action
+    const onRefresh = React.useCallback(async () => {
+        setRefreshing(true);
+        await refetch(); // Refetch your workouts data
+        setRefreshing(false); // Set refreshing to false when data is fetched
+    }, [refetch]);
+
     return (
-        <ScrollView>
+        <ScrollView
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        >
             <VStack mt={4} px={5} space={4}>
                 <Box
                     bg="orange.500" // Set the background to orange
