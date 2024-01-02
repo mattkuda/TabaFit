@@ -26,3 +26,18 @@ export const useMutateDeleteWorkout = (): UseMutationResult<void, AxiosError, De
         // You can add onSuccess here to refetch queries or update the UI accordingly
     },
 );
+
+interface UpdateWorkoutVariables {
+    workoutId: string;
+    workout: TabataWorkout;
+}
+
+export const useMutateUpdateWorkout = (): UseMutationResult<void, AxiosError, UpdateWorkoutVariables> => useMutation<void, AxiosError, UpdateWorkoutVariables>(
+    ({ workoutId, workout }) => axios.put(`${apiUrl}/workouts/${workoutId}`, workout),
+    {
+        onError: (error) => {
+            console.error('Error updating workout', error.message);
+        },
+        // You can add onSuccess here to refetch queries or update the UI accordingly
+    },
+);

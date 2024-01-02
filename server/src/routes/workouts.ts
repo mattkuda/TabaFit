@@ -132,4 +132,28 @@ router.delete('/:workoutId', authenticate, async (req: AuthRequest, res: Respons
   }
 });
 
+router.put('/:workoutId', authenticate, async (req: AuthRequest, res: Response) => {
+  const { workoutId } = req.params;
+  const workoutData = req.body;
+  const requestingUserId = req.userId;
+
+  try {
+    const updatedWorkout = await workoutsCollection.findOneAndUpdate(
+      { _id: new ObjectId(workoutId), userId: requestingUserId },
+      { $set: workoutData },
+      { returnDocument: 'after' },
+    );
+
+    if (!updatedWorkout.value) {
+      res.status(404).send({ message: 'Workout not found or not owned by user.' });
+      return;
+    }
+
+    res.send(updatedWorkout.value);
+  } catch (err) {
+    console.error('Failed to update workout', err);
+    res.status(500).send({ message: 'Failed to update workout' });
+  }
+});
+
 export default router;
