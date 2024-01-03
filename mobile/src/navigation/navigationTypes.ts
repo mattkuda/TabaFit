@@ -71,8 +71,10 @@ export type WorkoutsStackParamList = {
     SelectExerciseScreen: {onSelectWorkout: (exercise: TabataExercise) => void };
     TabataTimerScreen: {workout?: TabataWorkout}
     ShareWorkoutScreen: {workout: TabataWorkout, completedAt: Date};
+    DiscoverWorkoutsScreen;
 }
 export type BuildWorkoutScreenRouteProp = StackNavigationProp<WorkoutsStackParamList, 'BuildWorkoutScreen'>;
 export type SelectExerciseScreenRouteProp = StackNavigationProp<WorkoutsStackParamList, 'SelectExerciseScreen'>;
 export type ShareWorkoutScreenNavigationProp = StackNavigationProp<WorkoutsStackParamList, 'ShareWorkoutScreen'>;
 export type ViewWorkoutScreenRouteProp = RouteProp<WorkoutsStackParamList, 'ViewWorkoutScreen'>;
+export type DiscoverWorkoutsScreenRouteProp = RouteProp<WorkoutsStackParamList, 'DiscoverWorkoutsScreen'>;

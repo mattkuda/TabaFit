@@ -1,9 +1,10 @@
+/* eslint-disable import/no-relative-packages */
 /* eslint-disable import/no-unresolved */
 import express, { Request, Response } from 'express';
 import { MongoClient, Collection, ObjectId } from 'mongodb';
-// eslint-disable-next-line import/no-relative-packages
-import { TabataWorkout } from '../../../mobile/src/types/workouts';
 import authenticate, { AuthRequest } from '../middleware/authenticate';
+import { TabataWorkout, TabataWorkoutWithUserInfo } from '../../../mobile/src/types/workouts';
+import { User } from '../../../mobile/src/types/users';
 
 const router = express.Router();
 const connectionString = process.env.MONGODB_URI;
@@ -28,20 +29,52 @@ let workoutsCollection: Collection<TabataWorkout>;
   }
 })();
 
+const addUserInfoToWorkouts = async (workouts: TabataWorkout[]):
+ Promise<TabataWorkoutWithUserInfo[]> => Promise.all(workouts.map(async (workout) => {
+  try {
+    const user = await client.db('AbcountableDB').collection<User>('users').findOne({ _id: new ObjectId(workout.userId) });
+
+    if (!user) {
+      return {
+        ...workout,
+        user: {
+          username: 'Unknown',
+          firstName: 'N/A',
+          lastName: 'N/A',
+          profilePictureUrl: 'default_image_url', // Replace with actual default image URL if applicable
+        },
+      };
+    }
+
+    return {
+      ...workout,
+      user: {
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        profilePictureUrl: user.profilePictureUrl,
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching user info for workout', error);
+    return {
+      ...workout,
+      user: {
+        username: 'Error',
+        firstName: 'N/A',
+        lastName: 'N/A',
+        profilePictureUrl: 'error_image_url', // Replace with actual error image URL if applicable
+      },
+    };
+  }
+}));
+
 // Gets all workouts
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const workouts = await workoutsCollection.aggregate([
-      {
-        $lookup: {
-          from: 'exercises',
-          localField: 'exercises',
-          foreignField: '_id',
-          as: 'exercises',
-        },
-      },
-    ]).toArray();
-    res.send(workouts);
+    const workouts = await workoutsCollection.find({}).toArray();
+    const workoutsWithUserInfo = await addUserInfoToWorkouts(workouts);
+    res.send(workoutsWithUserInfo);
   } catch (err) {
     console.error('Failed to fetch workouts', err);
     res.status(500).send({ message: 'Failed to fetch workouts' });

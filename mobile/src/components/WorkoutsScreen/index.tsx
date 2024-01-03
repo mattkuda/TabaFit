@@ -56,8 +56,8 @@ export const WorkoutsScreen = (): JSX.Element => {
         navigation.navigate('LoadWorkoutScreen');
     };
 
-    const handlePressBrowseWorkouts = (): void => {
-        // TODO: Implement or navigate to Browse Workouts functionality
+    const handlePressDiscoverWorkouts = (): void => {
+        navigation.navigate('DiscoverWorkoutsScreen');
     };
 
     const shouldDisableCheckbox = (checkboxValue: boolean): boolean => {
@@ -162,7 +162,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                 {/* Discover Workouts Header */}
                 <HStack alignItems="center" justifyContent="space-between">
                     <Heading size="md">Discover Workouts</Heading>
-                    <Button onPress={handlePressBrowseWorkouts}>Browse all</Button>
+                    <Button onPress={handlePressDiscoverWorkouts}>Browse all</Button>
                 </HStack>
 
                 {/* Example Discoverable Workouts */}
@@ -193,7 +193,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                 {/* Abcountable Workouts Header */}
                 <HStack alignItems="center" justifyContent="space-between">
                     <Heading size="md">Abcountable Workouts</Heading>
-                    <Button onPress={handlePressBrowseWorkouts}>Browse all</Button>
+                    <Button onPress={handlePressDiscoverWorkouts}>Browse all</Button>
                 </HStack>
 
                 {/* Example Abcountable Workouts */}

@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from 'react-query';
-import { TabataWorkout } from '../types/workouts';
+import { TabataWorkoutWithUserInfo } from '../types/workouts';
 
-const fetchWorkouts = async (): Promise<TabataWorkout[]> => {
+const fetchWorkouts = async (): Promise<TabataWorkoutWithUserInfo[]> => {
     const response = await fetch('http://localhost:3000/workouts');
 
     if (!response.ok) {
@@ -11,4 +11,4 @@ const fetchWorkouts = async (): Promise<TabataWorkout[]> => {
 };
 
 // TODO: Transform into querying featured workouts perhaps
-export const useQueryWorkouts = (): UseQueryResult<TabataWorkout[], Error> => useQuery('workouts', fetchWorkouts);
+export const useQueryWorkouts = (): UseQueryResult<TabataWorkoutWithUserInfo[], Error> => useQuery('workouts', fetchWorkouts);

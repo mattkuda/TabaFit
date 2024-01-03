@@ -40,3 +40,15 @@ export interface TabataWorkout {
     cooldownDuration: number;
     includeSettings?: WorkoutIncludeSettings;
 }
+
+export interface UserInfo {
+    username: string;
+    firstName?: string;
+    lastName?: string;
+    profilePictureUrl?: string;
+}
+
+// Extended workout type to include user info
+export interface TabataWorkoutWithUserInfo extends TabataWorkout {
+    user: UserInfo;
+}
