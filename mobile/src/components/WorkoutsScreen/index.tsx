@@ -159,13 +159,11 @@ export const WorkoutsScreen = (): JSX.Element => {
                     </Box>
                 </Pressable>
 
-                {/* Discover Workouts Header */}
+                {/* Discover Workouts */}
                 <HStack alignItems="center" justifyContent="space-between">
                     <Heading size="md">Discover Workouts</Heading>
                     <Button onPress={handlePressDiscoverWorkouts}>Browse all</Button>
                 </HStack>
-
-                {/* Example Discoverable Workouts */}
                 <HStack space={2}>
                     <Pressable onPress={(): void => console.log('Navigate to Discoverable workout 1')}>
                         <Box><Text>Discoverable workout 1</Text></Box>
@@ -175,13 +173,11 @@ export const WorkoutsScreen = (): JSX.Element => {
                     </Pressable>
                 </HStack>
 
-                {/* My Workouts Header */}
+                {/* My Workouts */}
                 <HStack alignItems="center" justifyContent="space-between">
                     <Heading size="md">My Workouts</Heading>
                     <Button onPress={handlePressViewMyWorkouts}>View all</Button>
                 </HStack>
-
-                {/* Example Saved Workouts */}
                 <HStack space={2}>
                     {mySavedWorkouts?.map((savedWorkout) => (
                         <Pressable onPress={(): void => handlePressViewWorkout(savedWorkout)}>
@@ -190,13 +186,11 @@ export const WorkoutsScreen = (): JSX.Element => {
                     ))}
                 </HStack>
 
-                {/* Abcountable Workouts Header */}
+                {/* Abcountable Workouts */}
                 <HStack alignItems="center" justifyContent="space-between">
                     <Heading size="md">Abcountable Workouts</Heading>
                     <Button onPress={handlePressDiscoverWorkouts}>Browse all</Button>
                 </HStack>
-
-                {/* Example Abcountable Workouts */}
                 <HStack space={2}>
                     <Pressable onPress={(): void => console.log('Navigate to Abcountable workout 1')}>
                         <Box><Text>Abcountable workout 1</Text></Box>

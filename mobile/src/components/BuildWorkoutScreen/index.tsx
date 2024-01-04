@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-    VStack, IconButton, Icon, HStack, Text, Pressable, Input,
+    VStack, IconButton, Icon, HStack, Text, Pressable, Input, Toast,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
@@ -140,7 +140,36 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
 
     const updateWorkoutMutation = useMutateUpdateWorkout(); // New update mutation
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const validateWorkout = (): boolean => {
+        if (!workoutName.trim()) {
+            Toast.show({
+                title: 'Workout name required',
+                bgColor: 'red.500',
+                placement: 'top',
+            });
+            return false;
+        }
+
+        for (let i = 0; i < workout.tabatas.length; i++) {
+            if (workout.tabatas[i].some((exercise) => exercise === null)) {
+                Toast.show({
+                    title: `Incomplete Tabata: Circuit ${i + 1}`,
+                    bgColor: 'red.500',
+                    placement: 'top',
+                });
+                return false;
+            }
+        }
+
+        return true;
+    };
+
     const handleSaveOrUpdateWorkout = useCallback((): void => {
+        if (!validateWorkout()) {
+            return;
+        }
+
         const workoutData: TabataWorkout = {
             ...workout,
             name: workoutName,
@@ -169,8 +198,8 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 onSuccess: onSuccessCallback,
             });
         }
-    }, [workout, workoutName, authState.userId, isEdit,
-        queryClient, navigation, updateWorkoutMutation, saveWorkoutMutation]);
+    }, [validateWorkout, workout, workoutName, authState.userId, isEdit, queryClient,
+        navigation, updateWorkoutMutation, saveWorkoutMutation]);
 
     useEffect(() => {
         if (isShuffle) {

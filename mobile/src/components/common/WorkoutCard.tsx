@@ -23,7 +23,7 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
     workout, isInMyWorkouts, onDelete, onEdit, onSave, onUnsave,
 }) => {
     const navigation = useNavigation<StackNavigationProp<TabNavigatorParamList>>();
-    const formattedDate = format(new Date(workout.createdAt), 'MMMM do, yyyy, HH:mm:ss.SSS');
+    const formattedDate = format(new Date(workout.createdAt), 'MMMM do, yyyy');
 
     const handleQuickStart = (): void => {
         navigation.navigate('TabataTimerScreen', { workout });
@@ -52,11 +52,11 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                                         onPress={(): void => onDelete(workout)}
                                     />
                                     {onEdit && (
-                                    <IconButton
-                                        icon={<Icon as={Ionicons} name="pencil" />}
-                                        size="sm"
-                                        onPress={onEdit}
-                                    />
+                                        <IconButton
+                                            icon={<Icon as={Ionicons} name="pencil" />}
+                                            size="sm"
+                                            onPress={onEdit}
+                                        />
                                     )}
                                 </>
                             )}

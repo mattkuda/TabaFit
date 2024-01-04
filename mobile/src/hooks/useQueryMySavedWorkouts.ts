@@ -1,11 +1,12 @@
 import { useQuery, UseQueryResult } from 'react-query';
 import axios from 'axios';
-import { TabataWorkout } from '../types/workouts';
+import { TabataWorkoutWithUserInfo } from '../types/workouts';
 import { defaultTilePagingParams, PagingParams } from '../types/common';
 
 const apiUrl = 'http://localhost:3000';
 
-const fetchMySavedWorkouts = async (pagingParams: PagingParams = defaultTilePagingParams): Promise<TabataWorkout[]> => {
+const fetchMySavedWorkouts = async (pagingParams: PagingParams = defaultTilePagingParams):
+Promise<TabataWorkoutWithUserInfo[]> => {
     const { offset, limit } = pagingParams;
 
     try {
@@ -22,7 +23,7 @@ const fetchMySavedWorkouts = async (pagingParams: PagingParams = defaultTilePagi
     }
 };
 
-export const useQueryMySavedWorkouts = (pagingParams?: PagingParams): UseQueryResult<TabataWorkout[], Error> => useQuery([
+export const useQueryMySavedWorkouts = (pagingParams?: PagingParams): UseQueryResult<TabataWorkoutWithUserInfo[], Error> => useQuery([
     'my-saved-workouts', pagingParams], () => fetchMySavedWorkouts(
     pagingParams,
 ));

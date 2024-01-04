@@ -80,13 +80,9 @@ router.get('/', async (req: Request, res: Response) => {
     res.status(500).send({ message: 'Failed to fetch workouts' });
   }
 });
-
 router.get('/workout/:workoutId', async (req: Request, res: Response) => {
   try {
     const { workoutId } = req.params;
-
-    console.log('workoutId');
-    console.log(workoutId);
     const workout = await workoutsCollection.findOne({ _id: new ObjectId(workoutId) });
 
     if (!workout) {
@@ -94,7 +90,8 @@ router.get('/workout/:workoutId', async (req: Request, res: Response) => {
       return;
     }
 
-    res.send(workout);
+    const workoutWithUserInfo = await addUserInfoToWorkouts([workout]);
+    res.send(workoutWithUserInfo[0]);
   } catch (err) {
     console.error('Failed to fetch workout', err);
     res.status(500).send({ message: 'Failed to fetch workout' });
@@ -115,7 +112,8 @@ router.get('/my-saved', authenticate, async (req: AuthRequest, res: Response) =>
       .limit(limit)
       .toArray();
 
-    res.send(savedWorkouts);
+    const savedWorkoutsWithUserInfo = await addUserInfoToWorkouts(savedWorkouts);
+    res.send(savedWorkoutsWithUserInfo);
   } catch (err) {
     console.error('Failed to fetch saved workouts', err);
     res.status(500).send({ message: 'Failed to fetch saved workouts' });
