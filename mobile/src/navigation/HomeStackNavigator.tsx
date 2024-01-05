@@ -8,6 +8,8 @@ import { HomeStackParamList } from './navigationTypes';
 import { Searchbutton } from '../components/SearchButtons';
 import { NotificationsScreen } from '../components/NotificationsScreen';
 import { NotificationsButton } from '../components/NotificationsButton';
+import { ViewWorkoutScreen } from '../components/ViewWorkoutScreen';
+import { BuildWorkoutScreen } from '../components/BuildWorkoutScreen';
 
 const Stack = createStackNavigator<HomeStackParamList>();
 
@@ -32,5 +34,7 @@ export const HomeStackNavigator = (): JSX.Element => (
         />
         <Stack.Screen component={PostScreen} name="PostScreen" />
         <Stack.Screen component={NotificationsScreen} name="NotificationsScreen" />
+        <Stack.Screen component={ViewWorkoutScreen} name="ViewWorkoutScreen" />
+        <Stack.Screen component={BuildWorkoutScreen} name="BuildWorkoutScreen" />
     </Stack.Navigator>
 );

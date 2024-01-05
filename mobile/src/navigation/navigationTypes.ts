@@ -10,6 +10,11 @@ export type HomeStackParamList = {
     Profile: {userId: string | null}
     PostScreen: {postId: string}
     NotificationsScreen: undefined
+    ViewWorkoutScreen: { workoutId?: string, workout?: TabataWorkout};
+    BuildWorkoutScreen: {
+        isShuffle?: boolean;
+        customWorkout?: TabataWorkout;
+    }
 };
 
 export type SearchScreenNavigationProp = StackNavigationProp<HomeStackParamList, 'Search'>;
@@ -67,7 +72,7 @@ export type WorkoutsStackParamList = {
         customWorkout?: TabataWorkout;
     };
     ShuffleScreen: { workout?: TabataWorkout };
-    ViewWorkoutScreen: { workoutId: string };
+    ViewWorkoutScreen: { workoutId?: string, workout?: TabataWorkout};
     SelectExerciseScreen: {onSelectWorkout: (exercise: TabataExercise) => void };
     TabataTimerScreen: {workout?: TabataWorkout}
     ShareWorkoutScreen: {workout: TabataWorkout, completedAt: Date};

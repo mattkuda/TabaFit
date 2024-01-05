@@ -134,14 +134,6 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
           userId: { $in: followees },
         },
       },
-      {
-        $lookup: {
-          from: 'workouts',
-          localField: 'workout',
-          foreignField: '_id',
-          as: 'workout',
-        },
-      },
       { $sort: { createdAt: -1 } },
     ]).toArray();
 

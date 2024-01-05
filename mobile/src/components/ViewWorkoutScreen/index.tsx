@@ -6,7 +6,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { TabataCircuit } from '../../types/workouts';
+import { TabataCircuit, TabataWorkout } from '../../types/workouts';
 import { ViewWorkoutScreenRouteProp, BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useQueryWorkoutById } from '../../hooks/useQueryWorkoutById';
@@ -15,8 +15,11 @@ type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, '
 
 export const ViewWorkoutScreen = (): JSX.Element => {
     const route = useRoute<ViewWorkoutScreenRouteProp>();
-    const workoutId = route.params?.workoutId; // Get workout ID from route params
-    const { data: workout, isLoading, isError } = useQueryWorkoutById(workoutId); // Fetch workout data
+    const workoutId = route.params?.workoutId;
+    const customWorkout = route.params?.workout as TabataWorkout | undefined;
+    const { data: queriedWorkout, isLoading, isError } = useQueryWorkoutById(workoutId);
+
+    const workout = customWorkout ?? queriedWorkout;
 
     const navigation = useNavigation<WorkoutsScreenNavigationProp>();
 

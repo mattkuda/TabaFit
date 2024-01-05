@@ -10,4 +10,6 @@ const fetchWorkoutById = async (workoutId: string): Promise<TabataWorkout> => {
     return response.data;
 };
 
-export const useQueryWorkoutById = (workoutId: string): UseQueryResult<TabataWorkout, Error> => useQuery(['workout', workoutId], () => fetchWorkoutById(workoutId));
+export const useQueryWorkoutById = (workoutId: string): UseQueryResult<TabataWorkout, Error> => useQuery(['workout', workoutId], () => fetchWorkoutById(workoutId), {
+    enabled: !!workoutId,
+});

@@ -57,6 +57,13 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         handlePress();
     };
 
+    const handleWorkoutNamePress = (): void => {
+        if (post.workout && post.workout._id) {
+            navigation.navigate('ViewWorkoutScreen', { workout: post.workout });
+            // navigation.navigate('WorkoutsStack', { screen: 'EditWorkoutScreen', params: { workout: post.workout } });
+        }
+    };
+
     return (
         <TouchableOpacity style={{ width: '100%' }} onPress={handlePress}>
             <VStack borderColor="coolGray.200" borderRadius="md" borderWidth={1} mt={4} p={4} space={2} width="100%">
@@ -74,9 +81,20 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 <Text bold fontSize="md" mt={2}>
                     {post.title}
                 </Text>
-                <Text mt={2}>
-                    {post.description}
+                <Text mt={2} onPress={handleWorkoutNamePress}>
+                    {post.workout.name}
+                    {' '}
+                    (
+                    {post.workout.numberOfTabatas}
+                    {' '}
+                    tabatas
+                    )
                 </Text>
+                {post.description?.length > 0 && (
+                    <Text mt={2}>
+                        {post.description}
+                    </Text>
+                )}
                 <HStack justifyContent="space-between" mt={2} space={4}>
                     <IconButton
                         borderRadius="full"
