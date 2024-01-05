@@ -9,7 +9,7 @@ export interface TabNavigatorParamList extends ParamListBase {
     ProfilePage: undefined,
     EditProfile: { user: User };
     Search: undefined;
-    TabataTimerScreen: {workout: TabataWorkout};
+    TabataTimerScreen: {workout: TabataWorkout, isInMyWorkouts?: boolean};
     ShuffleScreen: {workout?: TabataWorkout};
     // BuildWorkoutScreen: BuildWorkoutScreenProps
     BuildWorkoutScreen: {
@@ -17,7 +17,7 @@ export interface TabNavigatorParamList extends ParamListBase {
         customWorkout?: TabataWorkout;
     }
     WorkoutsScreen: undefined;
-    ViewWorkoutScreen: { workoutId: string };
+    ViewWorkoutScreen: { workoutId?: string, workout?: TabataWorkout, isInMyWorkouts?: boolean};
     LoadWorkoutScreen;
 }
 

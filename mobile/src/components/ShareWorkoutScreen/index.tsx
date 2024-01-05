@@ -14,7 +14,7 @@ import { useMutateSaveWorkout } from '../../mutations/useMutateSaveWorkout';
 
 export const ShareWorkoutScreen = (): JSX.Element => {
     const route = useRoute<ShareWorkoutScreenRouteProp>();
-    const { workout, completedAt } = route.params;
+    const { workout, completedAt, isInMyWorkouts } = route.params;
     const [workoutTitle, setWorkoutTitle] = useState('');
     const [workoutDescription, setWorkoutDescription] = useState('');
     const shareWorkoutMutation = useMutateShareWorkout();
@@ -38,6 +38,7 @@ export const ShareWorkoutScreen = (): JSX.Element => {
             });
         }
     };
+
     const handleReturnHome = (): void => {
         navigation.reset({
             index: 0,
@@ -71,10 +72,6 @@ export const ShareWorkoutScreen = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleDiscardWorkout = (): void => {
-        // Logic to discard the workout
-    };
-
     return (
         <ScrollView>
             <VStack p={4} space={4}>
@@ -107,19 +104,21 @@ export const ShareWorkoutScreen = (): JSX.Element => {
                     value={workoutDescription}
                     onChangeText={setWorkoutDescription}
                 />
-                <Button color="red" onPress={handleDiscardWorkout}>Discard Workout</Button>
-                <Button
-                    disabled={isWorkoutSaved}
-                    leftIcon={
-                        isWorkoutSaved
-                            ? <Icon as={<Ionicons name="checkmark" />} color="green.500" size="sm" />
-                            : <Icon as={<Ionicons name="save-outline" />} size="sm" />
-                    }
-                    onPress={handleSaveWorkout}
-                >
-                    {isWorkoutSaved ? 'Workout Saved' : 'Save Workout'}
-                </Button>
                 <Button onPress={handleShareWorkout}>Share Workout</Button>
+                {!isInMyWorkouts && (
+                    <Button
+                        disabled={isWorkoutSaved}
+                        leftIcon={
+                            isWorkoutSaved
+                                ? <Icon as={<Ionicons name="checkmark" />} color="green.500" size="sm" />
+                                : <Icon as={<Ionicons name="save-outline" />} size="sm" />
+                        }
+                        onPress={handleSaveWorkout}
+                    >
+                        {isWorkoutSaved ? 'Workout Saved' : 'Save Workout'}
+                    </Button>
+                )}
+                <Button color="red" onPress={handleReturnHome}>Return home</Button>
             </VStack>
         </ScrollView>
     );

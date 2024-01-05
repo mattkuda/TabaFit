@@ -15,6 +15,8 @@ export type HomeStackParamList = {
         isShuffle?: boolean;
         customWorkout?: TabataWorkout;
     }
+    TabataTimerScreen: {workout: TabataWorkout, isInMyWorkouts?: boolean};
+    ShareWorkoutScreen: {workout: TabataWorkout, completedAt: Date};
 };
 
 export type SearchScreenNavigationProp = StackNavigationProp<HomeStackParamList, 'Search'>;
@@ -40,8 +42,8 @@ export type PostScreenRouteProp = RouteProp<PostStackParamList, 'PostScreen'>;
 export type ShuffleStackParamList = {
     ShuffleScreen: { workout?: TabataWorkout };
     LoadWorkoutScreen;
-    TabataTimer: {workout: TabataWorkout};
-    ShareWorkoutScreen: {workout: TabataWorkout, completedAt: Date};
+    TabataTimer: {workout: TabataWorkout, isInMyWorkouts?: boolean};
+    ShareWorkoutScreen: {workout: TabataWorkout, completedAt: Date, isInMyWorkouts?: boolean};
 };
 
 export type ShuffleScreenRouteProp = RouteProp<ShuffleStackParamList, 'ShuffleScreen'>;
@@ -72,9 +74,9 @@ export type WorkoutsStackParamList = {
         customWorkout?: TabataWorkout;
     };
     ShuffleScreen: { workout?: TabataWorkout };
-    ViewWorkoutScreen: { workoutId?: string, workout?: TabataWorkout};
+    ViewWorkoutScreen: { workoutId?: string, workout?: TabataWorkout, isInMyWorkouts?: boolean};
     SelectExerciseScreen: {onSelectWorkout: (exercise: TabataExercise) => void };
-    TabataTimerScreen: {workout?: TabataWorkout}
+    TabataTimerScreen: {workout: TabataWorkout, isInMyWorkouts?: boolean};
     ShareWorkoutScreen: {workout: TabataWorkout, completedAt: Date};
     DiscoverWorkoutsScreen;
 }

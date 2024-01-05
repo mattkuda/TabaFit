@@ -15,10 +15,9 @@ type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, '
 
 export const ViewWorkoutScreen = (): JSX.Element => {
     const route = useRoute<ViewWorkoutScreenRouteProp>();
-    const workoutId = route.params?.workoutId;
+    const { workoutId, isInMyWorkouts } = route.params;
     const customWorkout = route.params?.workout as TabataWorkout | undefined;
     const { data: queriedWorkout, isLoading, isError } = useQueryWorkoutById(workoutId);
-
     const workout = customWorkout ?? queriedWorkout;
 
     const navigation = useNavigation<WorkoutsScreenNavigationProp>();
@@ -34,7 +33,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
     };
 
     const handleStartWorkout = (): void => {
-        navigation.navigate('TabataTimerScreen', { workout });
+        navigation.navigate('TabataTimerScreen', { workout, isInMyWorkouts });
     };
 
     if (isLoading) {
@@ -55,7 +54,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                     variant="outline"
                     onPress={handleEditWorkout}
                 >
-                    Edit
+                    {isInMyWorkouts ? 'Edit' : 'Save'}
                 </Button>
                 <Text fontSize="md">
                     Created on:

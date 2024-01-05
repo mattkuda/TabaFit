@@ -26,7 +26,7 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
     const formattedDate = format(new Date(workout.createdAt), 'MMMM do, yyyy');
 
     const handleQuickStart = (): void => {
-        navigation.navigate('TabataTimerScreen', { workout });
+        navigation.navigate('TabataTimerScreen', { workout, isInMyWorkouts });
     };
 
     const handleClickCard = (): void => {
@@ -61,9 +61,9 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                                 </>
                             )}
                             {!isInMyWorkouts && (
-                            <Button onPress={onSave || onUnsave}>
-                                {onSave ? 'Save' : 'Unsave'}
-                            </Button>
+                                <Button onPress={onSave || onUnsave}>
+                                    {onSave ? 'Save' : 'Unsave'}
+                                </Button>
                             )}
                         </HStack>
                         <Button onPress={handleQuickStart}>Quick Start</Button>

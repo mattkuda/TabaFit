@@ -20,6 +20,7 @@ export const TabataTimerScreen = (): JSX.Element => {
         tabatas, exercisesPerTabata, numberOfTabatas,
         intermisionDuration, cooldownDuration,
     } = route.params.workout;
+    const { isInMyWorkouts } = route.params;
 
     const navigation = useNavigation<TimerScreenNavigationProp>();
     const [currentInterval, setCurrentInterval] = useState<Intervals>(Intervals.Warmup);
@@ -63,6 +64,7 @@ export const TabataTimerScreen = (): JSX.Element => {
             // Pass any data you need for sharing the workout
             workout: route.params.workout,
             completedAt: new Date(),
+            isInMyWorkouts,
         });
     };
 
