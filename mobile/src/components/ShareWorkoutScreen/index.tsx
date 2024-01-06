@@ -105,19 +105,21 @@ export const ShareWorkoutScreen = (): JSX.Element => {
                     onChangeText={setWorkoutDescription}
                 />
                 <Button onPress={handleShareWorkout}>Share Workout</Button>
-                {!isInMyWorkouts && (
-                    <Button
-                        disabled={isWorkoutSaved}
-                        leftIcon={
+                {isInMyWorkouts
+                    ? <Text>Workout Saved</Text>
+                    : (
+                        <Button
+                            disabled={isWorkoutSaved}
+                            leftIcon={
                             isWorkoutSaved
                                 ? <Icon as={<Ionicons name="checkmark" />} color="green.500" size="sm" />
                                 : <Icon as={<Ionicons name="save-outline" />} size="sm" />
                         }
-                        onPress={handleSaveWorkout}
-                    >
-                        {isWorkoutSaved ? 'Workout Saved' : 'Save Workout'}
-                    </Button>
-                )}
+                            onPress={handleSaveWorkout}
+                        >
+                            {isWorkoutSaved ? 'Workout Saved' : 'Save Workout'}
+                        </Button>
+                    )}
                 <Button color="red" onPress={handleReturnHome}>Return home</Button>
             </VStack>
         </ScrollView>
