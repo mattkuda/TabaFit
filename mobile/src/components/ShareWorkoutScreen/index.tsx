@@ -6,6 +6,7 @@ import {
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
+import { useQueryClient } from 'react-query';
 import { ShareWorkoutrScreenNavigationProp } from '../../types/navigationTypes';
 import { useAuth } from '../../context/AuthContext';
 import { useMutateShareWorkout } from '../../mutations/useMutateSharePost';
@@ -23,6 +24,7 @@ export const ShareWorkoutScreen = (): JSX.Element => {
     const navigation = useNavigation<ShareWorkoutrScreenNavigationProp>();
     const saveWorkoutMutation = useMutateSaveWorkout();
     const [isWorkoutSaved, setIsWorkoutSaved] = useState(false);
+    const queryClient = useQueryClient();
 
     const handleSaveWorkout = (): void => {
         if (authState?.userId && workout) {
@@ -53,7 +55,12 @@ export const ShareWorkoutScreen = (): JSX.Element => {
             workout,
             title: workoutTitle,
             description: workoutDescription,
-        }, { onSuccess: handleReturnHome });
+        }, {
+            onSuccess: () => {
+                queryClient.invalidateQueries('following-posts');
+                handleReturnHome();
+            },
+        });
     };
 
     const getTimeOfDay = (date: Date): string => {
