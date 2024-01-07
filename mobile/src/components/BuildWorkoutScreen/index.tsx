@@ -276,9 +276,6 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 includeCardio,
             );
 
-            console.log('shuffledTabatas');
-            console.log(shuffledTabatas);
-
             setWorkout((prev) => ({
                 ...prev,
                 tabatas: shuffledTabatas,

@@ -161,8 +161,6 @@ router.get('/post/:postId', async (req: Request, res: Response) => {
       return;
     }
 
-    console.log([post]);
-
     const transformedPosts = await addUserInfoToPosts([post] as PostSchema[]);
     res.send(transformedPosts.length ? transformedPosts[0] : null);
   } catch (err) {
@@ -175,13 +173,6 @@ router.post('/share', authenticate, async (req: Request, res: Response) => {
   const {
     userId, workout, title, description,
   } = req.body;
-
-  console.log('userId');
-  console.log(userId);
-  console.log('workout');
-  console.log(workout);
-  console.log('description');
-  console.log(description);
 
   try {
     const newPost = {

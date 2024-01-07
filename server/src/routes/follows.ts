@@ -106,12 +106,6 @@ router.get('/:userId/following', async (req: Request, res: Response) => {
     ? new mongoose.Types.ObjectId(req.query.followeeId as string)
     : null;
 
-  console.log('userId');
-  console.log(userId);
-
-  console.log('followeeId');
-  console.log(followeeId);
-
   try {
     // Construct the query object based on whether followeeId is provided
     const query = { followerId: userId, followeeId: followeeId || undefined };

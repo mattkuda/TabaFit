@@ -22,7 +22,6 @@ export const useMutateDeleteComment = (): UseMutationResult<void, AxiosError, De
     ({ postId, commentId }) => {
         const url = `${apiUrl}/posts/${postId}/comments/${commentId}`;
 
-        console.log(url); // Log the URL
-        return axios.delete(url); // Return the Axios delete request
+        return axios.delete(url);
     },
 );

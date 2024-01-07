@@ -146,11 +146,6 @@ router.delete('/:workoutId', authenticate, async (req: AuthRequest, res: Respons
       },
     );
 
-    console.log('requestingUserId');
-    console.log(requestingUserId);
-    console.log('workoutId');
-    console.log(workoutId);
-
     if (!workoutToDelete) {
       res.status(404).send({ message: 'Workout not found or you do not have permission to delete it.' });
     }
@@ -167,6 +162,8 @@ router.put('/:workoutId', authenticate, async (req: AuthRequest, res: Response) 
   const { workoutId } = req.params;
   const workoutData = req.body;
   const requestingUserId = req.userId;
+
+  console.log(workoutId);
 
   // Remove the _id field from the workoutData
   delete workoutData._id;

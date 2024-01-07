@@ -15,6 +15,9 @@ type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, '
 
 export const ViewWorkoutScreen = (): JSX.Element => {
     const route = useRoute<ViewWorkoutScreenRouteProp>();
+
+    console.log('route.params');
+    console.log(route.params);
     const { workoutId, isInMyWorkouts } = route.params;
     const customWorkout = route.params?.workout as TabataWorkout | undefined;
     const { data: queriedWorkout, isLoading, isError } = useQueryWorkoutById(workoutId);

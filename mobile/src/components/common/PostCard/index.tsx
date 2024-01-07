@@ -44,7 +44,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
     };
 
     const handlePress = (): void => {
-        navigation.navigate('PostScreen', { postId: post._id });
+        navigation.navigate('PostScreen', { postId: post._id.toString() });
     };
 
     const handlePressUser = (): void => {

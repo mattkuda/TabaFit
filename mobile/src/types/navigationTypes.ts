@@ -19,10 +19,13 @@ export interface TabNavigatorParamList extends ParamListBase {
     WorkoutsScreen: undefined;
     ViewWorkoutScreen: { workoutId?: string, workout?: TabataWorkout, isInMyWorkouts?: boolean};
     LoadWorkoutScreen;
+    PostScreen: {postId: string}
 }
 
 export type HomeScreenRouteProp = RouteProp<TabNavigatorParamList, 'Home'>;
 export type HomeScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'Home'>;
+
+export type PostScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'PostScreen'>;
 
 export type TimerScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'WorkoutTimerPage'>;
 

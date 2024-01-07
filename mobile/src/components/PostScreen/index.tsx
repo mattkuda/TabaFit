@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
     ScrollView, Button, TextInput,
 } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import {
     VStack, HStack, Avatar, Text, Icon, IconButton,
 } from 'native-base';
@@ -13,6 +13,7 @@ import { useMutateAddComment, useMutateDeleteComment } from '../../mutations/com
 import { PostScreenRouteProp } from '../../navigation/navigationTypes';
 import { useQueryPost } from '../../hooks/useQueryPost'; // Import the usePost hook
 import { useMutateLike, useMutateUnlike } from '../../mutations/useMutateLike';
+import { PostScreenNavigationProp } from '../../types/navigationTypes';
 
 export const PostScreen = (): JSX.Element => {
     const route = useRoute<PostScreenRouteProp>();
@@ -27,6 +28,7 @@ export const PostScreen = (): JSX.Element => {
     const userId = authState?.userId;
     const likeMutation = useMutateLike();
     const unlikeMutation = useMutateUnlike();
+    const navigation = useNavigation<PostScreenNavigationProp>();
 
     const [liked, setLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
@@ -80,6 +82,12 @@ export const PostScreen = (): JSX.Element => {
         });
     };
 
+    const handleWorkoutNamePress = (): void => {
+        if (post?.workout && post.workout._id) {
+            navigation.navigate('ViewWorkoutScreen', { workout: post.workout });
+        }
+    };
+
     if (isLoading) return <Text>Loading...</Text>;
     if (isError || !post) return <Text>Error loading post</Text>;
 
@@ -97,6 +105,15 @@ export const PostScreen = (): JSX.Element => {
                         </Text>
                     </VStack>
                 </HStack>
+                <Text mt={2} onPress={handleWorkoutNamePress}>
+                    {post.workout.name}
+                    {' '}
+                    (
+                    {post.workout.numberOfTabatas}
+                    {' '}
+                    tabatas
+                    )
+                </Text>
                 <Text mt={2}>{post.description}</Text>
                 <HStack justifyContent="space-between" mt={2} space={4}>
                     <IconButton
