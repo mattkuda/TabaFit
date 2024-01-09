@@ -60,7 +60,6 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
     const handleWorkoutNamePress = (): void => {
         if (post.workout && post.workout._id) {
             navigation.navigate('ViewWorkoutScreen', { workout: post.workout });
-            // navigation.navigate('WorkoutsStack', { screen: 'EditWorkoutScreen', params: { workout: post.workout } });
         }
     };
 

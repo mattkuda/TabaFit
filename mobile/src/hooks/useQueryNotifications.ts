@@ -7,7 +7,7 @@ const apiUrl = 'http://localhost:3000';
 const fetchNotifications = async (unreadOnly: boolean): Promise<NotificationModel[]> => {
     try {
         const response = await axios.get(`${apiUrl}/notifications`, {
-            params: { unreadOnly }, // Pass the parameter to the API call
+            params: { unreadOnly },
         });
 
         return response.data;
