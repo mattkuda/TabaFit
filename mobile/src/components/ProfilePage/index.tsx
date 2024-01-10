@@ -67,17 +67,19 @@ export const ProfilePage = (): JSX.Element => {
                     </VStack>
                 </HStack>
             )}
-            {isCurrentUserProfile ? (
-                <>
-                    <Button onPress={navigateToEditProfile}>Edit Profile</Button>
-                    <Button onPress={handleLogout}>Logout</Button>
-                </>
-            ) : (
-                <>
-                    <FollowButton profileUserId={userId} />
-                    <Text>other</Text>
-                </>
-            )}
+            <HStack alignItems="center" px={4} space={4} width="100%">
+                {isCurrentUserProfile ? (
+                    <>
+                        <Button onPress={navigateToEditProfile}>Edit Profile</Button>
+                        <Button onPress={handleLogout}>Logout</Button>
+                    </>
+                ) : (
+                    <>
+                        <FollowButton profileUserId={userId} />
+                        <Text>other</Text>
+                    </>
+                )}
+            </HStack>
             {userPosts.data && (
                 userPosts.data.map((post) => (
                     <PostCard key={post._id.toString()} post={post} />
