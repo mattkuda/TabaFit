@@ -1,6 +1,9 @@
 import React, { useCallback } from 'react';
-import { VStack, Text, Button } from 'native-base';
+import {
+    VStack, Text, Button, Avatar, HStack,
+} from 'native-base';
 import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
+import { format } from 'date-fns';
 import { useQueryUserPosts } from '../../hooks/useQueryUserPosts';
 import { ProfileScreenRouteProp } from '../../navigation/navigationTypes';
 import { useUserInfo } from '../../hooks/useUserInfo';
@@ -46,12 +49,23 @@ export const ProfilePage = (): JSX.Element => {
 
     return (
         <VStack alignItems="center" space={4}>
-            <Text>Profile Page!</Text>
             {userInfo.data && (
-                <>
-                    <Text>{`Username: ${userInfo.data.username}`}</Text>
-                    <Text>{`Name: ${userInfo.data.firstName}${userInfo.data.lastName ? ` ${userInfo.data.lastName}` : ''}`}</Text>
-                </>
+                <HStack alignItems="center" px={4} space={4} width="100%">
+                    <Avatar
+                        borderColor="blue.500"
+                        borderWidth={2}
+                        size="xl"
+                        source={{ uri: userInfo.data.profilePictureUrl }}
+                    />
+                    <VStack>
+                        <Text bold fontSize="lg">{`${userInfo.data.firstName} ${userInfo.data.lastName} @${userInfo.data.username}`}</Text>
+                        <Text fontSize="sm">
+                            Member since
+                            {' '}
+                            {format(new Date(userInfo.data.createdAt), 'PPP')}
+                        </Text>
+                    </VStack>
+                </HStack>
             )}
             {isCurrentUserProfile ? (
                 <>
