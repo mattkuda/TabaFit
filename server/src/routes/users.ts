@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import sharp from 'sharp';
 import mongoose from 'mongoose';
-import { MongoClient, Collection } from 'mongodb';
+import { MongoClient, Collection, ObjectId } from 'mongodb';
 import multer from 'multer';
 // eslint-disable-next-line import/no-relative-packages
 import { User } from '../../../mobile/src/types/users';
@@ -34,10 +34,17 @@ let usersCollection: Collection<User>;
   }
 })();
 
-router.get('/:userId', async (req: Request, res: Response) => {
+router.get('/:userId', async (req: AuthRequest, res: Response) => {
+  const requestedUserId = req.params.userId;
+
+  if (!ObjectId.isValid(requestedUserId)) {
+    res.status(400).send({ message: 'Invalid user ID' });
+    return;
+  }
+
   try {
     const user = await usersCollection.findOne(
-      { _id: new mongoose.Types.ObjectId(req.params.userId) },
+      { _id: new mongoose.Types.ObjectId(req?.params?.userId) },
     );
 
     if (!user) {
