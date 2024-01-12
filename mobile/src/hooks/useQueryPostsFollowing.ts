@@ -1,20 +1,32 @@
-import { useQuery, UseQueryResult } from 'react-query';
+import { useInfiniteQuery, UseInfiniteQueryResult } from 'react-query';
 import axios from 'axios';
 import { PostModel } from '../types/posts';
 
 const apiUrl = 'http://localhost:3000';
+const limit = 10;
 
-const fetchPostsFollowing = async (): Promise<PostModel[]> => {
-    try {
-        const response = await axios.get(`${apiUrl}/posts/following-posts`);
+// Example of infinite scrolling with React Query in React Native:
+// https://levelup.gitconnected.com/react-native-infinite-scrolling-with-react-query-3c2cc69790be
 
-        return response.data;
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            throw new Error(error.response?.data.message || 'An error occurred while fetching posts from following');
-        }
-        throw new Error('An error occurred while fetching user posts');
-    }
+export type FetchPostsResponse = PostModel[];
+
+const fetchPostsFollowing = async ({ pageParam = 0 }): Promise<FetchPostsResponse> => {
+    const response = await axios.get<FetchPostsResponse>(`${apiUrl}/posts/following-posts`, {
+        params: { offset: pageParam, limit },
+    });
+
+    return response.data;
 };
 
-export const useQueryPostsFollowing = (): UseQueryResult<PostModel[], Error> => useQuery('following-posts', fetchPostsFollowing);
+export const useQueryPostsFollowing = (): UseInfiniteQueryResult<FetchPostsResponse, Error> => useInfiniteQuery<FetchPostsResponse, Error>('following-posts', fetchPostsFollowing, {
+    getNextPageParam: (lastPage, allPages) => {
+        // Check if the last fetched page has less than 'limit' posts. If so, no more pages are left.
+        if (lastPage.length < limit) {
+            return undefined;
+        }
+        // The next offset is the current offset plus the limit
+        const nextOffset = allPages.length * limit;
+
+        return nextOffset;
+    },
+});
