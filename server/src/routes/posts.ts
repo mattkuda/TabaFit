@@ -115,6 +115,8 @@ router.get('/user-posts/:userId', authenticate, async (req: AuthRequest, res: Re
 
 router.get('/following-posts', authenticate, async (req: AuthRequest, res: Response) => {
   const { userId } = req;
+  const offset = parseInt(req.query.offset as string, 10);
+  const limit = parseInt(req.query.limit as string, 10);
 
   if (!userId) {
     res.status(400).send({ message: 'User ID is required' });
@@ -135,7 +137,12 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
         },
       },
       { $sort: { createdAt: -1 } },
+      { $skip: offset },
+      { $limit: limit },
     ]).toArray();
+
+    console.log('posts');
+    console.log(posts);
 
     const transformedPosts = await addUserInfoToPosts(posts as PostSchema[]);
     res.send(transformedPosts);
