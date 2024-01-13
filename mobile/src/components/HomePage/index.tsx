@@ -1,9 +1,8 @@
 import React from 'react';
-import { Box, Text } from 'native-base';
-import { FlashList } from '@shopify/flash-list';
+import { Box } from 'native-base';
 import { useQueryPostsFollowing, FetchPostsResponse } from '../../hooks/useQueryPostsFollowing';
 import { PostCard } from '../common/PostCard';
-import { RefreshableScrollView } from '../RefreshableScrollView';
+import { InfiniteScrollList } from '../common/InfiniteScrollList';
 
 export const HomePage = (): JSX.Element => {
     const {
@@ -22,18 +21,16 @@ export const HomePage = (): JSX.Element => {
 
     return (
         <Box flex={1} justifyContent="center">
-            <RefreshableScrollView onRefresh={onRefresh}>
-                <FlashList
-                    data={flatMap}
-                    estimatedItemSize={100}
-                    keyExtractor={(_, index): string => `post-${index}`}
-                    refreshing={isFetchingNextPage}
-                    renderItem={({ item }): JSX.Element => <PostCard post={item} />}
-                    onEndReached={hasNextPage ? fetchNextPage : undefined}
-                    onEndReachedThreshold={0.2}
-                />
-                {isFetchingNextPage && <Text>Loading more...</Text>}
-            </RefreshableScrollView>
+            <InfiniteScrollList
+                data={flatMap}
+                estimatedItemSize={285}
+                fetchData={fetchNextPage}
+                hasNextPage={hasNextPage}
+                isFetchingNextPage={isFetchingNextPage}
+                keyExtractor={(_, index): string => `post-${index}`}
+                renderItem={(item): JSX.Element => <PostCard post={item} />}
+                onRefresh={onRefresh}
+            />
         </Box>
     );
 };
