@@ -1,20 +1,31 @@
-import { useQuery, UseQueryResult } from 'react-query';
+import {
+    useInfiniteQuery, UseInfiniteQueryResult, useQuery, UseQueryResult,
+} from 'react-query';
 import axios from 'axios';
 import { PostModel } from '../types/posts';
 
 const apiUrl = 'http://localhost:3000';
+const limit = 10;
 
-const fetchUserPosts = async (userId: string): Promise<PostModel[]> => {
-    try {
-        const response = await axios.get(`${apiUrl}/posts/user-posts/${userId}`);
+export type FetchUserPostsResponse = PostModel[];
 
-        return response.data;
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            throw new Error(error.response?.data.message || 'An error occurred while fetching user posts');
-        }
-        throw new Error('An error occurred while fetching user posts');
-    }
+const fetchUserPosts = async ({ userId, pageParam = 0 }): Promise<FetchUserPostsResponse> => {
+    const response = await axios.get<FetchUserPostsResponse>(`${apiUrl}/posts/user-posts/${userId}`, {
+        params: { offset: pageParam, limit },
+    });
+
+    return response.data;
 };
 
-export const useQueryUserPosts = (userId: string): UseQueryResult<PostModel[], Error> => useQuery(['userPosts', userId], () => fetchUserPosts(userId));
+export const useQueryUserPosts = (userId: string): UseQueryResult<PostModel[], Error> => useQuery(['userPosts', userId], () => fetchUserPosts({ userId }));
+
+export const useInfiniteQueryUserPosts = (userId: string): UseInfiniteQueryResult<FetchUserPostsResponse, Error> => useInfiniteQuery(['userPosts', userId], ({ pageParam = 0 }) => fetchUserPosts({ userId, pageParam }), {
+    getNextPageParam: (lastPage, allPages) => {
+        if (lastPage.length < limit) {
+            return undefined;
+        }
+        const nextOffset = allPages.length * limit;
+
+        return nextOffset;
+    },
+});

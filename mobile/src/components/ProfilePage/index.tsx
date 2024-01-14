@@ -4,13 +4,14 @@ import {
 } from 'native-base';
 import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
 import { format } from 'date-fns';
-import { useQueryUserPosts } from '../../hooks/useQueryUserPosts';
+import { useInfiniteQueryUserPosts } from '../../hooks/useQueryUserPosts';
 import { ProfileScreenRouteProp } from '../../navigation/navigationTypes';
 import { useUserInfo } from '../../hooks/useUserInfo';
 import { EditProfileScreenNavigationProp } from '../../types/navigationTypes';
 import { useAuth } from '../../context/AuthContext';
 import { FollowButton } from './FollowButton';
 import { PostCard } from '../common/PostCard';
+import { InfiniteScrollList } from '../common/InfiniteScrollList';
 
 export const ProfilePage = (): JSX.Element => {
     const { onLogout } = useAuth();
@@ -20,7 +21,16 @@ export const ProfilePage = (): JSX.Element => {
     const userId = route.params?.userId || authUserId;
     const userInfo = useUserInfo(userId);
     const isCurrentUserProfile = userId === authUserId;
-    const userPosts = useQueryUserPosts(userId);
+
+    const {
+        data,
+        hasNextPage,
+        fetchNextPage,
+        isFetchingNextPage,
+        refetch,
+    } = useInfiniteQueryUserPosts(userId);
+
+    const flatMap = data?.pages.flatMap((page) => page);
 
     useFocusEffect(
         useCallback(() => {
@@ -47,8 +57,12 @@ export const ProfilePage = (): JSX.Element => {
         }
     };
 
+    const onRefresh = async (): Promise<void> => {
+        await refetch();
+    };
+
     return (
-        <VStack alignItems="center" space={4}>
+        <VStack flex={1} space={4} width="100%">
             {userInfo.data && (
                 <HStack alignItems="center" px={4} space={4} width="100%">
                     <Avatar
@@ -79,15 +93,18 @@ export const ProfilePage = (): JSX.Element => {
                         <Text>other</Text>
                     </>
                 )}
+                <Button onPress={handleLogout}>E-Logout</Button>
             </HStack>
-            {userPosts.data && (
-                userPosts.data.map((post) => (
-                    <PostCard key={post._id.toString()} post={post} />
-                ))
-            )}
-            <Text>userState</Text>
-            <Text>{authUserId}</Text>
-            <Button onPress={handleLogout}>Emergency Logout</Button>
+            <InfiniteScrollList
+                data={flatMap}
+                estimatedItemSize={285}
+                fetchData={fetchNextPage}
+                hasNextPage={hasNextPage}
+                isFetchingNextPage={isFetchingNextPage}
+                keyExtractor={(_, index): string => `post-${index}`}
+                renderItem={(item): JSX.Element => <PostCard post={item} />}
+                onRefresh={onRefresh}
+            />
         </VStack>
     );
 };

@@ -78,10 +78,11 @@ router.get('/', async (req: Request, res: Response) => {
     res.status(500).send({ message: 'Failed to fetch posts' });
   }
 });
-
 router.get('/user-posts/:userId', authenticate, async (req: AuthRequest, res: Response) => {
   const requestedUserId = req.params.userId;
   const requestingUserId = req.userId;
+  const offset = parseInt(req.query.offset as string, 10) || 0; // Set a default value for offset
+  const limit = parseInt(req.query.limit as string, 10) || 10; // Set a default value for limit
 
   if (!ObjectId.isValid(requestedUserId)) {
     res.status(400).send({ message: 'Invalid user ID' });
@@ -103,7 +104,11 @@ router.get('/user-posts/:userId', authenticate, async (req: AuthRequest, res: Re
   try {
     const userPosts = await postsCollection.find({
       userId: new ObjectId(requestedUserId),
-    }).sort({ createdAt: -1 }).toArray();
+    })
+      .sort({ createdAt: -1 })
+      .skip(offset) // Skip the number of posts defined by offset
+      .limit(limit) // Limit the number of posts to the limit
+      .toArray();
 
     const transformedPosts = await addUserInfoToPosts(userPosts as PostSchema[]);
     res.send(transformedPosts);
@@ -145,6 +150,7 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
     console.log(posts);
 
     const transformedPosts = await addUserInfoToPosts(posts as PostSchema[]);
+    console.log('transformedPosts', transformedPosts);
     res.send(transformedPosts);
   } catch (err) {
     console.error('Failed to fetch following posts', err);
