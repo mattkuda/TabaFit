@@ -7,19 +7,26 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useQueryClient } from 'react-query';
 import { TabataWorkout } from '../../types/workouts';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
-import { useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
+import { useInfiniteQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
 import { useMutateDeleteWorkout } from '../../mutations/useMutateSaveWorkout';
-import { RefreshableScrollView } from '../RefreshableScrollView';
 import { WorkoutCard } from '../common/WorkoutCard';
+import { InfiniteScrollList } from '../common/InfiniteScrollList';
 
 type LoadWorkoutScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'LoadWorkoutScreen'>;
 
 export const LoadWorkoutScreen: FC = () => {
     const navigation = useNavigation<LoadWorkoutScreenNavigationProp>();
-    const { data, refetch } = useQueryMySavedWorkouts();
     const [showModal, setShowModal] = useState(false);
     const [selectedWorkout, setSelectedWorkout] = useState<TabataWorkout | null>(null);
     const deleteWorkoutMutation = useMutateDeleteWorkout();
+    const {
+        data: workouts,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        refetch,
+    } = useInfiniteQueryMySavedWorkouts();
+
     const queryClient = useQueryClient();
     const refetchData = async (): Promise<void> => {
         refetch();
@@ -46,43 +53,51 @@ export const LoadWorkoutScreen: FC = () => {
         setSelectedWorkout(null);
     };
 
+    // ... other parts of the component ...
+
     return (
-        <RefreshableScrollView onRefresh={refetchData}>
-            <VStack>
-                <Heading>My Saved Workouts:</Heading>
-                <Button
-                    onPress={(): void => navigation.navigate('BuildWorkoutScreen')}
-                >
-                    Create New Workout
-                </Button>
-                {data?.map((workout) => (
+        <VStack flex={1} space={4} width="100%">
+            <Heading>My Saved Workouts:</Heading>
+            <Button
+                onPress={(): void => navigation.navigate('BuildWorkoutScreen')}
+            >
+                Create New Workout
+            </Button>
+            <InfiniteScrollList
+                data={workouts?.pages.flatMap((page) => page)}
+                estimatedItemSize={100} // Adjust estimatedItemSize as needed
+                fetchData={fetchNextPage}
+                hasNextPage={hasNextPage}
+                isFetchingNextPage={isFetchingNextPage}
+                keyExtractor={(_, index): string => `post-${index}`}
+                renderItem={(workout): JSX.Element => (
                     <WorkoutCard
                         isInMyWorkouts
-                        key={workout._id.toString()}
                         workout={workout}
                         onDelete={handleDeletePress}
                     />
-                ))}
-                <Modal isOpen={showModal} onClose={closeModal}>
-                    <Modal.Content>
-                        <Modal.CloseButton />
-                        <Modal.Header>Delete Workout</Modal.Header>
-                        <Modal.Body>
-                            Are you sure you want to delete this workout?
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button.Group space={2}>
-                                <Button colorScheme="blueGray" variant="ghost" onPress={closeModal}>
-                                    Cancel
-                                </Button>
-                                <Button colorScheme="danger" onPress={(): void => handleDelete(selectedWorkout)}>
-                                    Delete
-                                </Button>
-                            </Button.Group>
-                        </Modal.Footer>
-                    </Modal.Content>
-                </Modal>
-            </VStack>
-        </RefreshableScrollView>
+                )}
+                onRefresh={refetchData}
+            />
+            <Modal isOpen={showModal} onClose={closeModal}>
+                <Modal.Content>
+                    <Modal.CloseButton />
+                    <Modal.Header>Delete Workout</Modal.Header>
+                    <Modal.Body>
+                        Are you sure you want to delete this workout?
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button.Group space={2}>
+                            <Button colorScheme="blueGray" variant="ghost" onPress={closeModal}>
+                                Cancel
+                            </Button>
+                            <Button colorScheme="danger" onPress={(): void => handleDelete(selectedWorkout)}>
+                                Delete
+                            </Button>
+                        </Button.Group>
+                    </Modal.Footer>
+                </Modal.Content>
+            </Modal>
+        </VStack>
     );
 };
