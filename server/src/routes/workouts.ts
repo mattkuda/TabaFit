@@ -72,7 +72,12 @@ const addUserInfoToWorkouts = async (workouts: TabataWorkout[]):
 // Gets all workouts
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const workouts = await workoutsCollection.find({}).toArray();
+    const offset = parseInt(req.query.offset as string, 10);
+    const limit = parseInt(req.query.limit as string, 10);
+    const workouts = await workoutsCollection.find({})
+      .skip(offset)
+      .limit(limit)
+      .toArray();
     const workoutsWithUserInfo = await addUserInfoToWorkouts(workouts);
     res.send(workoutsWithUserInfo);
   } catch (err) {
