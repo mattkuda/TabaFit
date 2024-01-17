@@ -50,6 +50,8 @@ const addUserInfoToPosts = async (posts: PostSchema[]) => Promise.all(posts.map(
 
 router.get('/', async (req: Request, res: Response) => {
   try {
+    const offset = parseInt(req.query.offset as string, 10) || 0; // Set a default value for offset
+    const limit = parseInt(req.query.limit as string, 10) || 10; // Set a default value for limit
     const posts = await postsCollection.aggregate([
       {
         $lookup: {
@@ -69,6 +71,8 @@ router.get('/', async (req: Request, res: Response) => {
       },
       { $unwind: '$user' }, // Unwind the user array
       { $sort: { createdAt: -1 } },
+      { $skip: offset }, // Skip the number of posts defined by offset
+      { $limit: limit }, // Limit the number of posts to the limit
     ]).toArray();
 
     const transformedPosts = await addUserInfoToPosts(posts as PostSchema[]);
