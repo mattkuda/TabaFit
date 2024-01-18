@@ -150,11 +150,7 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
       { $limit: limit },
     ]).toArray();
 
-    console.log('posts');
-    console.log(posts);
-
     const transformedPosts = await addUserInfoToPosts(posts as PostSchema[]);
-    console.log('transformedPosts', transformedPosts);
     res.send(transformedPosts);
   } catch (err) {
     console.error('Failed to fetch following posts', err);

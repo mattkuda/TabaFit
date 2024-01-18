@@ -168,8 +168,6 @@ router.put('/:workoutId', authenticate, async (req: AuthRequest, res: Response) 
   const workoutData = req.body;
   const requestingUserId = req.userId;
 
-  console.log(workoutId);
-
   // Remove the _id field from the workoutData
   delete workoutData._id;
 
