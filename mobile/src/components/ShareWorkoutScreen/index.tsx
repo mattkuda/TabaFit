@@ -46,7 +46,7 @@ export const ShareWorkoutScreen = (): JSX.Element => {
             index: 0,
             routes: [{ name: 'WorkoutsScreen' }],
         });
-        navigation.navigate('Home');
+        navigation.navigate('HomePage');
     };
 
     const handleShareWorkout = (): void => {

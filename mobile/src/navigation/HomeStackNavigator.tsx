@@ -21,11 +21,11 @@ const NotificationsButtonComponent = (): JSX.Element => <NotificationsButton />;
 
 export const HomeStackNavigator = (): JSX.Element => (
     <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="HomePage"
     >
         <Stack.Screen
             component={HomePage}
-            name="Home"
+            name="HomePage"
             options={{
                 headerLeft: SearchButtonComponent,
                 headerRight: NotificationsButtonComponent,

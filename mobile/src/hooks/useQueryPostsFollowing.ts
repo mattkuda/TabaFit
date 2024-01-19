@@ -18,7 +18,7 @@ const fetchPostsFollowing = async ({ pageParam = 0 }): Promise<FetchPostsRespons
     return response.data;
 };
 
-export const useQueryPostsFollowing = (): UseInfiniteQueryResult<FetchPostsResponse, Error> => useInfiniteQuery<FetchPostsResponse, Error>('following-posts', fetchPostsFollowing, {
+export const useInfiniteQueryPostsFollowing = (): UseInfiniteQueryResult<FetchPostsResponse, Error> => useInfiniteQuery<FetchPostsResponse, Error>('following-posts', fetchPostsFollowing, {
     getNextPageParam: (lastPage, allPages) => {
         // Check if the last fetched page has less than 'limit' posts. If so, no more pages are left.
         if (lastPage.length < limit) {

@@ -10,15 +10,15 @@ const limit = 10;
 
 export type FetchPostsResponse = PostModel[];
 
-const fetchPostsFollowing = async ({ pageParam = 0 }): Promise<FetchPostsResponse> => {
-    const response = await axios.get<FetchPostsResponse>(`${apiUrl}/posts`, {
+const fetchPosts = async ({ pageParam = 0 }): Promise<FetchPostsResponse> => {
+    const response = await axios.get<FetchPostsResponse>(`${apiUrl}/posts/global`, {
         params: { offset: pageParam, limit },
     });
 
     return response.data;
 };
 
-export const useInfiniteQueryPosts = (): UseInfiniteQueryResult<FetchPostsResponse, Error> => useInfiniteQuery<FetchPostsResponse, Error>('following-posts', fetchPostsFollowing, {
+export const useInfiniteQueryPosts = (): UseInfiniteQueryResult<FetchPostsResponse, Error> => useInfiniteQuery<FetchPostsResponse, Error>('global-posts', fetchPosts, {
     getNextPageParam: (lastPage, allPages) => {
         // Check if the last fetched page has less than 'limit' posts. If so, no more pages are left.
         if (lastPage.length < limit) {

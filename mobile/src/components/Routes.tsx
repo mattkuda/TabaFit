@@ -79,7 +79,7 @@ export const Routes = (): JSX.Element => {
         <NavigationContainer>
             <SafeAreaView style={{ flex: 1 }}>
                 <Tab.Navigator
-                    initialRouteName="HomePage"
+                    initialRouteName="Home"
                     screenOptions={{
                         headerShown: false,
                     }}

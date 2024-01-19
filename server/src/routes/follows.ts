@@ -84,7 +84,6 @@ router.delete('/unfollow', authenticate, async (req: Request, res: Response) => 
 
 // Endpoint to get a list of followers for a user, with optional filtering by followerId
 router.get('/:userId/followers', async (req: Request, res: Response) => {
-  console.log('followers');
   const userId = new mongoose.Types.ObjectId(req.body.userId);
   const followerId = req.query.followerId
     ? new mongoose.Types.ObjectId(req.query.followerId as string) : undefined;

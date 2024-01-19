@@ -5,7 +5,7 @@ import { User } from '../types/users';
 
 // Home Stack
 export type HomeStackParamList = {
-    Home: undefined;
+    HomePage: undefined;
     Search: undefined;
     Profile: {userId: string | null}
     PostScreen: {postId: string}

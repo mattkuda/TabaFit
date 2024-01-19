@@ -22,8 +22,8 @@ export interface TabNavigatorParamList extends ParamListBase {
     PostScreen: {postId: string}
 }
 
-export type HomeScreenRouteProp = RouteProp<TabNavigatorParamList, 'Home'>;
-export type HomeScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'Home'>;
+export type HomeScreenRouteProp = RouteProp<TabNavigatorParamList, 'HomePage'>;
+export type HomeScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'HomePage'>;
 
 export type PostScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'PostScreen'>;
 

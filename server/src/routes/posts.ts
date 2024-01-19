@@ -48,40 +48,26 @@ const addUserInfoToPosts = async (posts: PostSchema[]) => Promise.all(posts.map(
   };
 }));
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/global', async (req: Request, res: Response) => {
   try {
     const offset = parseInt(req.query.offset as string, 10) || 0; // Set a default value for offset
     const limit = parseInt(req.query.limit as string, 10) || 10; // Set a default value for limit
-    const posts = await postsCollection.aggregate([
-      {
-        $lookup: {
-          from: 'workouts',
-          localField: 'workout',
-          foreignField: '_id',
-          as: 'workout',
-        },
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'userId',
-          foreignField: '_id',
-          as: 'user',
-        },
-      },
-      { $unwind: '$user' }, // Unwind the user array
-      { $sort: { createdAt: -1 } },
-      { $skip: offset }, // Skip the number of posts defined by offset
-      { $limit: limit }, // Limit the number of posts to the limit
-    ]).toArray();
+
+    const posts = await postsCollection.find({})
+      .sort({ createdAt: -1 })
+      .skip(offset) // Skip the number of posts defined by offset
+      .limit(limit) // Limit the number of posts to the limit
+      .toArray();
 
     const transformedPosts = await addUserInfoToPosts(posts as PostSchema[]);
+    console.log('first post in global: ', transformedPosts[0]);
     res.send(transformedPosts);
   } catch (err) {
-    console.error('Failed to fetch posts', err);
-    res.status(500).send({ message: 'Failed to fetch posts' });
+    console.error('Failed to fetch global posts', err);
+    res.status(500).send({ message: 'Failed to fetch global posts' });
   }
 });
+
 router.get('/user-posts/:userId', authenticate, async (req: AuthRequest, res: Response) => {
   const requestedUserId = req.params.userId;
   const requestingUserId = req.userId;
@@ -151,6 +137,7 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
     ]).toArray();
 
     const transformedPosts = await addUserInfoToPosts(posts as PostSchema[]);
+    console.log('first post in following: ', transformedPosts[0]);
     res.send(transformedPosts);
   } catch (err) {
     console.error('Failed to fetch following posts', err);

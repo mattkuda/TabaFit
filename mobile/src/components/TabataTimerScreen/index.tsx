@@ -170,7 +170,7 @@ export const TabataTimerScreen = (): JSX.Element => {
             index: 0,
             routes: [{ name: 'WorkoutsPage' }],
         });
-        navigation.navigate('Home');
+        navigation.navigate('HomePage');
         setShowAlert(false);
     };
 

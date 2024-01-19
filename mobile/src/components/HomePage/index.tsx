@@ -1,30 +1,27 @@
 import React from 'react';
 import { Box } from 'native-base';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { useQueryPostsFollowing, FetchPostsResponse } from '../../hooks/useQueryPostsFollowing';
+import { useInfiniteQueryPostsFollowing, FetchPostsResponse } from '../../hooks/useQueryPostsFollowing';
 import { PostCard } from '../common/PostCard';
 import { InfiniteScrollList } from '../common/InfiniteScrollList';
 import { useInfiniteQueryPosts } from '../../hooks/useQueryPosts';
 
 const Tab = createMaterialTopTabNavigator();
 
-// FollowingTab Component
 const FollowingTab = (): JSX.Element => {
-    // Logic for fetching posts from followed users
-    // Similar structure to your current HomePage component
     const {
         data: postData,
         hasNextPage,
         fetchNextPage,
         isFetchingNextPage,
         refetch,
-    } = useQueryPostsFollowing();
+    } = useInfiniteQueryPostsFollowing();
+
+    const flatMap = postData?.pages.flatMap((page: FetchPostsResponse) => page);
 
     const onRefresh = async (): Promise<void> => {
         await refetch();
     };
-
-    const flatMap = postData?.pages.flatMap((page: FetchPostsResponse) => page);
 
     return (
         <Box flex={1} justifyContent="center">
@@ -42,10 +39,7 @@ const FollowingTab = (): JSX.Element => {
     );
 };
 
-// GlobalTab Component
 const GlobalTab = (): JSX.Element => {
-    // Logic for fetching posts from followed users
-    // Similar structure to your current HomePage component
     const {
         data: postData,
         hasNextPage,
@@ -58,12 +52,12 @@ const GlobalTab = (): JSX.Element => {
         await refetch();
     };
 
-    const flatMap = postData?.pages.flatMap((page: FetchPostsResponse) => page);
+    const flatMap2 = postData?.pages.flatMap((page: FetchPostsResponse) => page);
 
     return (
         <Box flex={1} justifyContent="center">
             <InfiniteScrollList
-                data={flatMap}
+                data={flatMap2}
                 estimatedItemSize={285}
                 fetchData={fetchNextPage}
                 hasNextPage={hasNextPage}
