@@ -60,7 +60,6 @@ router.get('/global', async (req: Request, res: Response) => {
       .toArray();
 
     const transformedPosts = await addUserInfoToPosts(posts as PostSchema[]);
-    console.log('first post in global: ', transformedPosts[0]);
     res.send(transformedPosts);
   } catch (err) {
     console.error('Failed to fetch global posts', err);
@@ -137,7 +136,6 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
     ]).toArray();
 
     const transformedPosts = await addUserInfoToPosts(posts as PostSchema[]);
-    console.log('first post in following: ', transformedPosts[0]);
     res.send(transformedPosts);
   } catch (err) {
     console.error('Failed to fetch following posts', err);
