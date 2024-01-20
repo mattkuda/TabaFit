@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import sharp from 'sharp';
@@ -61,7 +61,7 @@ router.get('/:userId', async (req: AuthRequest, res: Response) => {
   }
 });
 
-router.get('/username/:username', async (req: Request, res: Response) => {
+router.get('/username/:username', async (req: AuthRequest, res: Response) => {
   try {
     const { username } = req.params; // Extract username from params
 
@@ -122,9 +122,14 @@ function extractFileName(url: string): string | null {
   return null;
 }
 
-router.post('/upload/:userId', upload.single('file'), async (req, res) => {
+router.post('/upload/:userId', upload.single('file'), async (req: AuthRequest, res: Response) => {
   const { file } = req;
   const { userId } = req.params;
+
+  if (req.userId !== userId) {
+    res.status(403).send({ message: 'Forbidden: You are not authorized to make this request.' });
+    return;
+  }
 
   if (!file) {
     res.status(400).send('No file uploaded.');
@@ -174,7 +179,7 @@ router.post('/upload/:userId', upload.single('file'), async (req, res) => {
   }
 });
 
-router.get('/search/:query', async (req: Request, res: Response) => {
+router.get('/search/:query', async (req: AuthRequest, res: Response) => {
   try {
     const { query } = req.params;
 

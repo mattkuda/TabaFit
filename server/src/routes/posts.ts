@@ -167,7 +167,7 @@ router.get('/post/:postId', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/share', authenticate, async (req: Request, res: Response) => {
+router.post('/share', authenticate, async (req: AuthRequest, res: Response) => {
   const {
     userId, workout, title, description,
   } = req.body;
