@@ -88,8 +88,13 @@ export const PostScreen = (): JSX.Element => {
         }
     };
 
+    const handlePressUser = (): void => {
+        navigation.navigate('Profile', { userId: post.userId });
+    };
+
     if (isLoading) return <Text>Loading...</Text>;
     if (isError || !post) return <Text>Error loading post</Text>;
+    const userFound = post?.user?.username;
 
     return (
         <ScrollView>
@@ -97,8 +102,8 @@ export const PostScreen = (): JSX.Element => {
                 <HStack justifyContent="space-between" space={2}>
                     <Avatar size="48px" source={{ uri: post.user.profilePictureUrl }} />
                     <VStack flex={1}>
-                        <Text bold fontSize="md">
-                            {`${post.user.firstName} ${post.user.lastName} @${post.user.username}`}
+                        <Text fontSize="md" onPress={userFound && handlePressUser}>
+                            {userFound ? `${post.user.firstName} ${post.user.lastName} @${post.user.username}` : 'Unknown User'}
                         </Text>
                         <Text color="coolGray.600" fontSize="xs">
                             {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
