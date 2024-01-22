@@ -234,12 +234,37 @@ router.post('/:postId/comments', authenticate, async (req, res) => {
 
 router.delete('/:postId/comments/:commentId', authenticate, async (req: AuthRequest, res) => {
   const { postId, commentId } = req.params;
+  const { userId } = req; // Authenticated user's ID from the authentication middleware
 
   try {
+    // First, find the post to get the comment
+    const post = await postsCollection.findOne({ _id: new ObjectId(postId) });
+    if (!post) {
+      res.status(404).send({ message: 'Post not found' });
+      return;
+    }
+
+    // Check if the comment exists and get the userId of the commenter
+    const comment = post.comments.find(
+      (foundComment) => foundComment?._id?.toString() === commentId,
+    );
+    if (!comment) {
+      res.status(404).send({ message: 'Comment not found' });
+      return;
+    }
+
+    // Check if the authenticated user is the owner of the comment or the post
+    if (comment.userId !== userId && post.userId.toString() !== userId) {
+      res.status(403).send({ message: 'Not authorized to delete this comment' });
+      return;
+    }
+
+    // If the check passes, proceed to delete the comment
     await postsCollection.updateOne(
       { _id: new ObjectId(postId) },
       { $pull: { comments: { _id: new ObjectId(commentId) } } },
     );
+
     res.status(200).send({ message: 'Comment deleted successfully' });
   } catch (err) {
     console.error('Failed to delete comment', err);
