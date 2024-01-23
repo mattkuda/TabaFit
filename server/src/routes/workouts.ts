@@ -125,10 +125,12 @@ router.get('/my-saved', authenticate, async (req: AuthRequest, res: Response) =>
   }
 });
 
-router.post('/save', async (req: Request, res: Response) => {
+router.post('/save', async (req: AuthRequest, res: Response) => {
   const { workout } = req.body;
+  const { userId } = req;
 
   delete workout._id;
+  workout.userId = userId;
 
   try {
     await workoutsCollection.insertOne(workout);
@@ -144,6 +146,7 @@ router.delete('/:workoutId', authenticate, async (req: AuthRequest, res: Respons
   try {
     const { workoutId } = req.params;
     const requestingUserId = req.userId;
+    const { userId } = req;
     const workoutToDelete = await workoutsCollection.findOne(
       {
         _id: new ObjectId(workoutId),
@@ -153,6 +156,12 @@ router.delete('/:workoutId', authenticate, async (req: AuthRequest, res: Respons
 
     if (!workoutToDelete) {
       res.status(404).send({ message: 'Workout not found or you do not have permission to delete it.' });
+      return;
+    }
+
+    if (workoutToDelete?.userId !== userId) {
+      res.status(403).send({ message: 'You do not have permission to delete this workout.' });
+      return;
     }
 
     await workoutsCollection.deleteOne({ _id: new ObjectId(workoutId) });
@@ -166,20 +175,32 @@ router.delete('/:workoutId', authenticate, async (req: AuthRequest, res: Respons
 router.put('/:workoutId', authenticate, async (req: AuthRequest, res: Response) => {
   const { workoutId } = req.params;
   const workoutData = req.body;
-  const requestingUserId = req.userId;
-
-  // Remove the _id field from the workoutData
+  const { userId } = req;
   delete workoutData._id;
 
   try {
+    // First, find the workout to check ownership
+    const workout = await workoutsCollection.findOne({ _id: new ObjectId(workoutId) });
+    if (!workout) {
+      res.status(404).send({ message: 'Workout not found' });
+      return;
+    }
+
+    // Check if the authenticated user is the owner of the workout
+    if (workout.userId.toString() !== userId) {
+      res.status(403).send({ message: 'Not authorized to update this workout' });
+      return;
+    }
+
+    // If the check passes, proceed to update the workout
     const updatedWorkout = await workoutsCollection.findOneAndUpdate(
-      { _id: new ObjectId(workoutId), userId: requestingUserId },
+      { _id: new ObjectId(workoutId) },
       { $set: workoutData },
       { returnDocument: 'after' },
     );
 
     if (!updatedWorkout.value) {
-      res.status(404).send({ message: 'Workout not found or not owned by user.' });
+      res.status(404).send({ message: 'Unable to update workout.' });
       return;
     }
 

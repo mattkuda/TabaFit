@@ -169,8 +169,9 @@ router.get('/post/:postId', async (req: Request, res: Response) => {
 
 router.post('/share', authenticate, async (req: AuthRequest, res: Response) => {
   const {
-    userId, workout, title, description,
+    workout, title, description,
   } = req.body;
+  const { userId } = req;
 
   try {
     const newPost = {
@@ -195,9 +196,15 @@ router.post('/share', authenticate, async (req: AuthRequest, res: Response) => {
 });
 
 // COMMENT ROUTES
-router.post('/:postId/comments', authenticate, async (req, res) => {
+router.post('/:postId/comments', authenticate, async (req: AuthRequest, res) => {
   const { postId } = req.params;
-  const { userId, body } = req.body;
+  const { body } = req.body;
+  const { userId } = req;
+
+  if (!userId) {
+    res.status(400).send({ message: 'User ID is required' });
+    return;
+  }
 
   try {
     const comment = {

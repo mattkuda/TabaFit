@@ -83,8 +83,9 @@ router.get('/', authenticate, async (req: AuthRequest, res: Response) => {
 
 // Create a notification
 router.post('/', authenticate, async (req: AuthRequest, res: Response) => {
-  const { type, targetId, initiatorUserId } = req.body;
+  const { type, targetId } = req.body;
   const recipientUserId = req.userId;
+  const { userId: initiatorUserId } = req;
 
   const newNotification = {
     type,
