@@ -11,6 +11,7 @@ import { defaultShuffleTabataWorkout } from '../ShuffleScreen/util';
 import { BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
 import { TabataWorkout } from '../../types/workouts';
 import { RefreshableScrollView } from '../RefreshableScrollView';
+import { HorizontalWorkoutCards } from '../HorizontalWorkoutCards';
 
 type CheckboxItemProps = {
     label: string;
@@ -36,7 +37,10 @@ type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, '
 
 export const WorkoutsScreen = (): JSX.Element => {
     const navigation = useNavigation<WorkoutsScreenNavigationProp>();
-    const { data: mySavedWorkouts, refetch } = useQueryMySavedWorkouts({ limit: 2, offset: 0 });
+    const {
+        data: mySavedWorkouts, refetch,
+        isLoading: isMySavedWorkoutsLoading,
+    } = useQueryMySavedWorkouts({ limit: 5, offset: 0 });
     const [shuffledWorkout, setShuffledWorkout] = useState<TabataWorkout>(defaultShuffleTabataWorkout);
 
     const handlePressQuickShuffle = (): void => {
@@ -178,14 +182,11 @@ export const WorkoutsScreen = (): JSX.Element => {
                     <Heading size="md">My Workouts</Heading>
                     <Button onPress={handlePressViewMyWorkouts}>View all</Button>
                 </HStack>
-                <HStack space={2}>
-                    {mySavedWorkouts?.map((savedWorkout) => (
-                        <Pressable onPress={(): void => handlePressViewWorkout(savedWorkout)}>
-                            <Box><Text>{savedWorkout.name}</Text></Box>
-                        </Pressable>
-                    ))}
-                </HStack>
-
+                <HorizontalWorkoutCards
+                    isLoading={isMySavedWorkoutsLoading}
+                    workouts={mySavedWorkouts}
+                    onPressWorkout={handlePressViewWorkout}
+                />
                 {/* Abcountable Workouts */}
                 <HStack alignItems="center" justifyContent="space-between">
                     <Heading size="md">Abcountable Workouts</Heading>
