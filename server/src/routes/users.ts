@@ -123,8 +123,7 @@ function extractFileName(url: string): string | null {
 }
 
 router.post('/upload/:userId', upload.single('file'), async (req: AuthRequest, res: Response) => {
-  const { file } = req;
-  const { userId } = req.params;
+  const { file, userId } = req;
 
   if (req.userId !== userId) {
     res.status(403).send({ message: 'Forbidden: You are not authorized to make this request.' });
