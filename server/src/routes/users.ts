@@ -211,7 +211,7 @@ router.get('/search/:query', async (req: AuthRequest, res: Response) => {
 
 router.put('/:userId', authenticate, async (req: AuthRequest, res: Response) => {
   try {
-    const { userId } = req.params;
+    const { userId } = req;
     const updateData: Partial<User> = req.body; // Get the data to update from the request body
 
     // Check if the authenticated user is the same as the user being updated
