@@ -12,6 +12,8 @@ import { BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
 import { TabataWorkout } from '../../types/workouts';
 import { RefreshableScrollView } from '../RefreshableScrollView';
 import { HorizontalWorkoutCards } from '../HorizontalWorkoutCards';
+import { useQueryWorkouts } from '../../hooks/useQueryWorkouts';
+import { featuredWorkouts } from '../../util/featuredWorkouts';
 
 type CheckboxItemProps = {
     label: string;
@@ -38,9 +40,15 @@ type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, '
 export const WorkoutsScreen = (): JSX.Element => {
     const navigation = useNavigation<WorkoutsScreenNavigationProp>();
     const {
-        data: mySavedWorkouts, refetch,
+        data: mySavedWorkouts, refetch: refetchMySavedWorkouts,
         isLoading: isMySavedWorkoutsLoading,
     } = useQueryMySavedWorkouts({ limit: 5, offset: 0 });
+
+    const {
+        data: newWorkouts, refetch: refetchNewWorkouts,
+        isLoading: isNewWorkoutsLoading,
+    } = useQueryWorkouts({ limit: 5, offset: 0 });
+
     const [shuffledWorkout, setShuffledWorkout] = useState<TabataWorkout>(defaultShuffleTabataWorkout);
 
     const handlePressQuickShuffle = (): void => {
@@ -74,7 +82,8 @@ export const WorkoutsScreen = (): JSX.Element => {
     };
 
     const refetchData = async (): Promise<void> => {
-        refetch();
+        refetchMySavedWorkouts();
+        refetchNewWorkouts();
     };
 
     return (
@@ -168,15 +177,11 @@ export const WorkoutsScreen = (): JSX.Element => {
                     <Heading size="md">Discover Workouts</Heading>
                     <Button onPress={handlePressDiscoverWorkouts}>Browse all</Button>
                 </HStack>
-                <HStack space={2}>
-                    <Pressable onPress={(): void => console.log('Navigate to Discoverable workout 1')}>
-                        <Box><Text>Discoverable workout 1</Text></Box>
-                    </Pressable>
-                    <Pressable onPress={(): void => console.log('Navigate to Discoverable workout 2')}>
-                        <Box><Text>Discoverable workout 2</Text></Box>
-                    </Pressable>
-                </HStack>
-
+                <HorizontalWorkoutCards
+                    isLoading={isNewWorkoutsLoading}
+                    workouts={newWorkouts}
+                    onPressWorkout={handlePressViewWorkout}
+                />
                 {/* My Workouts */}
                 <HStack alignItems="center" justifyContent="space-between">
                     <Heading size="md">My Workouts</Heading>
@@ -187,19 +192,17 @@ export const WorkoutsScreen = (): JSX.Element => {
                     workouts={mySavedWorkouts}
                     onPressWorkout={handlePressViewWorkout}
                 />
+
                 {/* Abcountable Workouts */}
                 <HStack alignItems="center" justifyContent="space-between">
                     <Heading size="md">Abcountable Workouts</Heading>
                     <Button onPress={handlePressDiscoverWorkouts}>Browse all</Button>
                 </HStack>
-                <HStack space={2}>
-                    <Pressable onPress={(): void => console.log('Navigate to Abcountable workout 1')}>
-                        <Box><Text>Abcountable workout 1</Text></Box>
-                    </Pressable>
-                    <Pressable onPress={(): void => console.log('Navigate to Abcountable workout 2')}>
-                        <Box><Text>Abcountable workout 2</Text></Box>
-                    </Pressable>
-                </HStack>
+                <HorizontalWorkoutCards
+                    isLoading={false}
+                    workouts={featuredWorkouts}
+                    onPressWorkout={handlePressViewWorkout}
+                />
             </VStack>
         </RefreshableScrollView>
     );

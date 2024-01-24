@@ -3,14 +3,15 @@ import {
 } from 'react-query';
 import axios from 'axios';
 import { TabataWorkoutWithUserInfo } from '../types/workouts';
+import { PagingParams } from '../types/common';
 
 const apiUrl = 'http://localhost:3000';
-const limit = 10;
+const defaultLimit = 10;
 
-const fetchWorkouts = async ({ pageParam = 0 }): Promise<TabataWorkoutWithUserInfo[]> => {
+const fetchWorkouts = async ({ offset = 0, limit }: PagingParams): Promise<TabataWorkoutWithUserInfo[]> => {
     try {
         const response = await axios.get<TabataWorkoutWithUserInfo[]>(`${apiUrl}/workouts`, {
-            params: { offset: pageParam, limit },
+            params: { offset, limit: limit || defaultLimit },
         });
 
         return response.data;
@@ -23,18 +24,19 @@ const fetchWorkouts = async ({ pageParam = 0 }): Promise<TabataWorkoutWithUserIn
 };
 // TODO: Transform into querying featured workouts perhaps
 
-export const useQueryWorkouts = (): UseQueryResult<TabataWorkoutWithUserInfo[], Error> => useQuery('workouts', fetchWorkouts);
+export const useQueryWorkouts = (pagingParams?: PagingParams): UseQueryResult<TabataWorkoutWithUserInfo[], Error> => useQuery([
+    'orkouts', pagingParams], () => fetchWorkouts(pagingParams));
 
 export const useInfiniteQueryWorkouts = (): UseInfiniteQueryResult<TabataWorkoutWithUserInfo[], Error> => useInfiniteQuery(
     'workouts',
-    ({ pageParam = 0 }) => fetchWorkouts({ pageParam }),
+    ({ pageParam = { offset: 0, limit: 0 } }) => fetchWorkouts(pageParam),
     {
         getNextPageParam: (lastPage, allPages) => {
-            if (lastPage.length < limit) {
+            if (lastPage.length < defaultLimit) {
                 return undefined; // No more pages
             }
             // Calculate the next page's offset
-            return allPages.length * limit;
+            return allPages.length * defaultLimit;
         },
     },
 );
