@@ -85,6 +85,7 @@ router.get('/', async (req: Request, res: Response) => {
     res.status(500).send({ message: 'Failed to fetch workouts' });
   }
 });
+
 router.get('/workout/:workoutId', async (req: Request, res: Response) => {
   try {
     const { workoutId } = req.params;
