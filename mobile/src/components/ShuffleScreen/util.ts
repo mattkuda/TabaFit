@@ -62,7 +62,7 @@ export const shuffleExercises = (
             circuit.push(getRandomExercise(shuffledTypes[i % shuffledTypes.length]));
         }
 
-        return [...circuit, ...circuit]; // Each exercise is done twice
+        return circuit;
     };
 
     const createTabataCircuits = (types: TabataExerciseType[]): TabataCircuit[] => {

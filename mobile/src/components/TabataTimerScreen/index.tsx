@@ -110,11 +110,12 @@ export const TabataTimerScreen = (): JSX.Element => {
                             nextExercise = null;
                             break;
                         case Intervals.Rest:
-                            if (exercisesDone < exercisesPerTabata - 1) {
+                            if (exercisesDone < 8 - 1) {
                                 nextInterval = Intervals.Exercise;
                                 nextSeconds = exerciseDuration;
                                 nextExercisesDone = exercisesDone + 1;
-                                nextExercise = currentTabata[nextExercisesDone];
+                                nextExercise = currentTabata[nextExercisesDone > 3
+                                    ? nextExercisesDone - 4 : nextExercisesDone];
                             } else {
                                 if (circuitsDone < numberOfTabatas - 1) {
                                     // Only go to Intermission if there are more circuits to go
