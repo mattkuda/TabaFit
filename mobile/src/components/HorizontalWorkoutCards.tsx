@@ -1,28 +1,42 @@
 import React from 'react';
 import { ScrollView, TouchableOpacity, Text } from 'react-native';
-import { Box, Skeleton } from 'native-base';
+import { Avatar, Box, Skeleton } from 'native-base';
 import { TabataWorkoutWithUserInfo } from '../types/workouts';
+import { useAuth } from '../context/AuthContext';
 
 interface SlideWorkoutCardProps {
     workout: TabataWorkoutWithUserInfo;
     onPress: () => void;
 }
 
-const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress }): JSX.Element => (
-    <TouchableOpacity style={{ width: 150, marginHorizontal: 8 }} onPress={onPress}>
-        <Box bg="lightBlue.100" height={150} justifyContent="space-between" p="4" rounded="md">
-            <Text
-                ellipsizeMode="tail"
-                numberOfLines={2}
-                style={{ fontWeight: 'bold', marginBottom: 4 }}
+const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress }): JSX.Element => {
+    const { authState: { userId } } = useAuth();
 
-            >
-                {workout.name}
-            </Text>
-            <Text>{`${workout.numberOfTabatas} Tabatas`}</Text>
-        </Box>
-    </TouchableOpacity>
-);
+    return (
+        <TouchableOpacity style={{ width: 150, marginHorizontal: 8 }} onPress={onPress}>
+            <Box bg="lightBlue.100" height={150} justifyContent="space-between" p="4" rounded="md">
+                <Text
+                    ellipsizeMode="tail"
+                    numberOfLines={1}
+                    style={{ fontWeight: 'bold', marginBottom: 4 }}
+                >
+                    {workout.name}
+                </Text>
+                <Text>{`${workout.numberOfTabatas} Tabatas`}</Text>
+                <Box alignItems="center" flexDirection="row" justifyContent="flex-end">
+                    {userId !== workout?.userId && (
+                        <>
+                            <Avatar size="sm" source={{ uri: workout?.user?.profilePictureUrl }} />
+                            <Text style={{ marginLeft: 8 }}>
+                                {`${workout?.user?.firstName} ${workout?.user?.lastName}`}
+                            </Text>
+                        </>
+                    )}
+                </Box>
+            </Box>
+        </TouchableOpacity>
+    );
+};
 
 interface HorizontalWorkoutCardsProps {
     workouts: TabataWorkoutWithUserInfo[];
