@@ -83,10 +83,7 @@ export const ProfilePage = (): JSX.Element => {
             )}
             <HStack alignItems="center" px={4} space={4} width="100%">
                 {isCurrentUserProfile ? (
-                    <>
-                        <Button onPress={navigateToEditProfile}>Edit Profile</Button>
-                        <Button onPress={handleLogout}>Logout</Button>
-                    </>
+                    <Button onPress={navigateToEditProfile}>Edit Profile</Button>
                 ) : (
                     <>
                         <FollowButton profileUserId={userId} />

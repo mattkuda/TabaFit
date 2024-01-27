@@ -9,6 +9,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 // eslint-disable-next-line import/no-unresolved
 import { ProfileStackParamList } from 'src/navigation/navigationTypes';
 import { useMutateProfilePicture, useMutateUpdateProfile } from '../../mutations/profileMutations';
+import { useAuth } from '../../context/AuthContext';
 
 type EditProfileRouteProp = RouteProp<ProfileStackParamList, 'EditProfile'>;
 type EditProfileNavigationProp = StackNavigationProp<ProfileStackParamList, 'EditProfile'>;
@@ -27,6 +28,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
     const [profilePictureUrl, setProfilePictureUrl] = useState(user.profilePictureUrl);
     const updateProfileMutation = useMutateUpdateProfile();
     const updateProfilePictureMutation = useMutateProfilePicture();
+    const { onLogout } = useAuth();
 
     const handleUpdate = (): void => {
         updateProfileMutation.mutate({
@@ -76,6 +78,14 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
         }
     };
 
+    const handleLogout = async (): Promise<void> => {
+        try {
+            await onLogout();
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    };
+
     return (
         <View style={{ padding: 20 }}>
             <TouchableOpacity onPress={handleProfilePictureUpdate}>
@@ -109,6 +119,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                 onChangeText={setLastName}
             />
             <Button title="Update Profile" onPress={handleUpdate} />
+            <Button title="Logout" onPress={handleLogout} />
             <Button title="Go Back" onPress={(): void => navigation.goBack()} />
         </View>
     );
