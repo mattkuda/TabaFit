@@ -1,9 +1,9 @@
 import {
     lowerBodyExercises, upperBodyExercises, absExercises, cardioExercises,
-} from '../../util/constants';
+} from '../util/constants';
 import {
     TabataCircuit, TabataEquipmentType, TabataExercise, TabataExerciseType, TabataWorkout,
-} from '../../types/workouts';
+} from '../types/workouts';
 
 export const shuffleExercises = (
     numberOfTabatas: number,

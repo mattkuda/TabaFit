@@ -9,7 +9,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useRecoilValue } from 'recoil';
 import React from 'react';
-import { ShuffleStackNavigator } from '../navigation/ShuffleStackNavigator';
 import { HomeStackNavigator } from '../navigation/HomeStackNavigator';
 import { ProfileStackNavigator } from '../navigation/ProfileStackNavigator';
 import { useAuth } from '../context/AuthContext';
@@ -17,7 +16,6 @@ import { TabNavigatorParamList } from '../types/navigationTypes';
 import { showFooterState } from '../atoms/showFooterAtom';
 import { AuthPage } from './AuthPage';
 import { Searchbutton } from './SearchButtons';
-import { OldWorkoutsStackNavigator } from '../navigation/OldWorkoutsStackNavigator';
 import { WorkoutsStackNavigator } from '../navigation/WorkoutsStackNavigator';
 import { useUserInfo } from '../hooks/useUserInfo';
 
@@ -93,24 +91,8 @@ export const Routes = (): JSX.Element => {
                         }}
                     />
                     <Tab.Screen
-                        component={OldWorkoutsStackNavigator}
-                        name="View Workouts"
-                        options={{
-                            tabBarIcon: TimerIcon,
-                            tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
-                        }}
-                    />
-                    <Tab.Screen
                         component={WorkoutsStackNavigator}
-                        name="NEW Workouts"
-                        options={{
-                            tabBarIcon: TimerIcon,
-                            tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
-                        }}
-                    />
-                    <Tab.Screen
-                        component={ShuffleStackNavigator}
-                        name="Shuffle"
+                        name="Workouts"
                         options={{
                             tabBarIcon: TimerIcon,
                             tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,

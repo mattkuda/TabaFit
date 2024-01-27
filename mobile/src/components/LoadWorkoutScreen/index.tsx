@@ -11,6 +11,7 @@ import { useInfiniteQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWork
 import { useMutateDeleteWorkout } from '../../mutations/useMutateSaveWorkout';
 import { WorkoutCard } from '../common/WorkoutCard';
 import { InfiniteScrollList } from '../common/InfiniteScrollList';
+import { BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
 
 type LoadWorkoutScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'LoadWorkoutScreen'>;
 
@@ -59,7 +60,9 @@ export const LoadWorkoutScreen: FC = () => {
         <VStack flex={1} space={4} width="100%">
             <Heading>My Saved Workouts:</Heading>
             <Button
-                onPress={(): void => navigation.navigate('BuildWorkoutScreen')}
+                onPress={(): void => navigation.navigate('BuildWorkoutScreen', {
+                    isSavedWorkout: true,
+                } as BuildWorkoutScreenProps)}
             >
                 Create New Workout
             </Button>

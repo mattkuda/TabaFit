@@ -28,6 +28,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
             {
                 customWorkout: workout,
                 isShuffle: false,
+                isSavedWorkout: isInMyWorkouts,
             } as BuildWorkoutScreenProps,
         );
     };

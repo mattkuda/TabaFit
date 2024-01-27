@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-    VStack, IconButton, Icon, HStack, Text, Pressable, Input, Toast, Center, Spinner,
+    VStack, IconButton, Icon, HStack, Text, Pressable, Input, Toast,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
@@ -10,10 +10,9 @@ import { useQueryClient } from 'react-query';
 import { TabataExercise, TabataWorkout } from '../../types/workouts';
 import { WorkoutsStackParamList } from '../../navigation/navigationTypes';
 import { useMutateSaveWorkout, useMutateUpdateWorkout } from '../../mutations/useMutateSaveWorkout';
-import { buildNewTabataInitialState, emptyTabata, shuffleExercises } from '../ShuffleScreen/util';
+import { buildNewTabataInitialState, emptyTabata, shuffleExercises } from '../shuffleUtil';
 import { useAuth } from '../../context/AuthContext';
 import { BuildWorkoutScreenNavigationProp } from '../../types/navigationTypes';
-import { useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
 
 export type TabataCircuit = (TabataExercise | null)[];
 
@@ -81,26 +80,18 @@ const TabataItem = ({
 type BuildWorkoutScreenRouteProp = RouteProp<WorkoutsStackParamList, 'BuildWorkoutScreen'>;
 
 export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = (): JSX.Element => {
-    const [isEdit, setIsEdit] = useState<boolean>(false);
     const navigation = useNavigation<BuildWorkoutScreenNavigationProp>();
     const route = useRoute<BuildWorkoutScreenRouteProp>();
+    const { authState: { userId } } = useAuth();
     const customWorkout = route?.params?.customWorkout;
+    const isSavedWorkoutByUser = route?.params?.customWorkout && route?.params?.customWorkout.userId === userId;
     const isShuffle = route?.params?.isShuffle || false;
     const [workout, setWorkout] = useState<TabataWorkout>(customWorkout || buildNewTabataInitialState);
     const saveWorkoutMutation = useMutateSaveWorkout();
     const { authState } = useAuth();
     const [workoutName, setWorkoutName] = useState(customWorkout?.name || '');
     const queryClient = useQueryClient();
-    const { data: mySavedWorkouts, isLoading: isSavedWorkoutsLoading } = useQueryMySavedWorkouts();
-
-    useEffect(() => {
-        // Determine if the current workout is among the saved workouts
-        if (customWorkout && customWorkout._id) {
-            const isSaved = mySavedWorkouts?.some((savedWorkout) => savedWorkout._id === customWorkout._id);
-
-            setIsEdit(isSaved);
-        }
-    }, [customWorkout, mySavedWorkouts]);
+    const updateWorkoutMutation = useMutateUpdateWorkout();
 
     const addTabata = (): void => {
         setWorkout((currentWorkout) => ({
@@ -139,14 +130,6 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     const startWorkout = (): void => {
         navigation.navigate('TabataTimerScreen', { workout });
     };
-
-    useEffect(() => {
-        if (customWorkout && customWorkout._id) {
-            setIsEdit(true);
-        }
-    }, [customWorkout]);
-
-    const updateWorkoutMutation = useMutateUpdateWorkout();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const validateWorkout = (): boolean => {
@@ -192,7 +175,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             navigation.goBack();
         };
 
-        if (isEdit) {
+        if (isSavedWorkoutByUser) {
             updateWorkoutMutation.mutate({
                 workoutId: workout._id.toString(),
                 workout: workoutData,
@@ -206,7 +189,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 onSuccess: onSuccessCallback,
             });
         }
-    }, [validateWorkout, workout, workoutName, authState.userId, isEdit, queryClient,
+    }, [validateWorkout, workout, workoutName, authState.userId, isSavedWorkoutByUser, queryClient,
         navigation, updateWorkoutMutation, saveWorkoutMutation]);
 
     useEffect(() => {
@@ -222,7 +205,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 // eslint-disable-next-line react/no-unstable-nested-components
                 headerRight: (): JSX.Element => (
                     <Button
-                        title={isEdit ? 'Update' : 'Save'}
+                        title={isSavedWorkoutByUser ? 'Update' : 'Save'}
                         onPress={handleSaveOrUpdateWorkout}
                     />
                 ),
@@ -289,10 +272,6 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    if (isSavedWorkoutsLoading) {
-        return <Center flex={1}><Spinner /></Center>;
-    }
 
     return (
         <VStack space={4}>

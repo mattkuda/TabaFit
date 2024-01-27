@@ -7,7 +7,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
-import { defaultShuffleTabataWorkout } from '../ShuffleScreen/util';
+import { defaultShuffleTabataWorkout } from '../shuffleUtil';
 import { BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
 import { TabataWorkout } from '../../types/workouts';
 import { RefreshableScrollView } from '../RefreshableScrollView';
@@ -53,15 +53,29 @@ export const WorkoutsScreen = (): JSX.Element => {
 
     const handlePressQuickShuffle = (): void => {
         // First go to customizable settings screen (to-build)
-        navigation.navigate('BuildWorkoutScreen', { customWorkout: shuffledWorkout, isShuffle: true } as BuildWorkoutScreenProps);
+        navigation.navigate('BuildWorkoutScreen', {
+            customWorkout: shuffledWorkout,
+            isShuffle: true,
+            isSavedWorkout: false,
+        } as BuildWorkoutScreenProps);
     };
 
     const handlePressBuildWorkout = (): void => {
-        navigation.navigate('BuildWorkoutScreen', { isShuffle: false });
+        navigation.navigate('BuildWorkoutScreen', {
+            isShuffle: false,
+            isSavedWorkout: false,
+        } as BuildWorkoutScreenProps);
     };
 
     const handlePressViewWorkout = (workout: TabataWorkout): void => {
         navigation.navigate('ViewWorkoutScreen', { workoutId: workout._id.toString() });
+    };
+
+    const handlePressViewMyWorkout = (workout: TabataWorkout): void => {
+        navigation.navigate('ViewWorkoutScreen', {
+            workoutId: workout._id.toString(),
+            isInMyWorkouts: true,
+        });
     };
 
     const handlePressViewMyWorkouts = (): void => {
@@ -190,7 +204,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                 <HorizontalWorkoutCards
                     isLoading={isMySavedWorkoutsLoading}
                     workouts={mySavedWorkouts}
-                    onPressWorkout={handlePressViewWorkout}
+                    onPressWorkout={handlePressViewMyWorkout}
                 />
 
                 {/* Abcountable Workouts */}
