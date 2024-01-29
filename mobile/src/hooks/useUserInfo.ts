@@ -1,10 +1,10 @@
 import { useQuery, UseQueryResult } from 'react-query';
 import axios from 'axios';
-import { User } from '../types/users';
+import { UserFullInfoModel } from '../types/users';
 
 const apiUrl = 'http://localhost:3000';
 
-const fetchUserInfo = async (userId: string): Promise<User> => {
+const fetchUserInfo = async (userId: string): Promise<UserFullInfoModel> => {
     try {
         const response = await axios.get(`${apiUrl}/users/${userId}`);
 
@@ -17,4 +17,4 @@ const fetchUserInfo = async (userId: string): Promise<User> => {
     }
 };
 
-export const useUserInfo = (userId: string): UseQueryResult<User, Error> => useQuery(['userInfo', userId], () => fetchUserInfo(userId));
+export const useUserInfo = (userId: string): UseQueryResult<UserFullInfoModel, Error> => useQuery(['userInfo', userId], () => fetchUserInfo(userId));

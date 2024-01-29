@@ -11,3 +11,8 @@ export interface User {
     createdAt: string;
     updatedAt: string;
 }
+
+export interface UserFullInfoModel extends User {
+    followersCount: number;
+    followingCount: number;
+}

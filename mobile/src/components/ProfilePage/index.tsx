@@ -49,6 +49,10 @@ export const ProfilePage = (): JSX.Element => {
         }
     };
 
+    const handlePressFollowers = (): void => {
+        navigation.navigate('ConnectionsScreen', { userId });
+    };
+
     const handleLogout = async (): Promise<void> => {
         try {
             await onLogout();
@@ -77,6 +81,9 @@ export const ProfilePage = (): JSX.Element => {
                             Member since
                             {' '}
                             {format(new Date(userInfo.data.createdAt), 'PPP')}
+                        </Text>
+                        <Text fontSize="sm" onPress={handlePressFollowers}>
+                            {`${userInfo.data.followersCount} Followers • ${userInfo.data.followingCount} Following`}
                         </Text>
                     </VStack>
                 </HStack>

@@ -25,6 +25,25 @@ let followsCollection: Collection;
   }
 })();
 
+// TODO Finish this:
+const addUserInfoToFollows = async (follows: any[]) => Promise.all(
+  follows.map(async (follow) => {
+    // Assuming you want to enrich the follower's user info
+    const userId = follow.followerId || follow.followeeId;
+    const user = await client.db('AbcountableDB').collection<User>('users').findOne({ _id: userId });
+
+    return {
+      ...follow,
+      userInfo: {
+        username: user?.username,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        profilePictureUrl: user?.profilePictureUrl,
+      },
+    };
+  }),
+);
+
 // Endpoint to follow a user
 router.post('/follow', authenticate, async (req: Request, res: Response) => {
   const { followerId, followeeId } = req.body;
@@ -82,15 +101,30 @@ router.delete('/unfollow', authenticate, async (req: Request, res: Response) => 
   }
 });
 
-// Endpoint to get a list of followers for a user, with optional filtering by followerId
+// Endpoint to get a list of followers for a user, with pagination
 router.get('/:userId/followers', async (req: Request, res: Response) => {
-  const userId = new mongoose.Types.ObjectId(req.body.userId);
-  const followerId = req.query.followerId
-    ? new mongoose.Types.ObjectId(req.query.followerId as string) : undefined;
+  console.log('GET /:userId/followers');
+  const userId = new mongoose.Types.ObjectId(req.params.userId);
+  const offset = parseInt(req.query.offset as string, 10) || 0;
+  const limit = parseInt(req.query.limit as string, 10) || 10;
+
+  console.log('userId', userId);
+  console.log('offset', offset);
+  console.log('limit', limit);
 
   try {
-    const query = { followeeId: userId, followerId };
-    const followers = await followsCollection.find(query).toArray();
+    const query = {
+      followeeId: userId,
+      ...(req.query.followerId
+         && { followerId: new mongoose.Types.ObjectId(req.query.followerId as string) }),
+    };
+    const followers = await followsCollection.find(query)
+      .skip(offset)
+      .limit(limit)
+      .toArray();
+
+    console.log('followers', followers);
+
     res.status(200).send(followers);
   } catch (err) {
     console.error('Failed to fetch followers', err);
@@ -98,18 +132,24 @@ router.get('/:userId/followers', async (req: Request, res: Response) => {
   }
 });
 
-// Endpoint to get a list of users a user is following, with optional filtering by followeeId
+// Endpoint to get a list of users a user is following, with pagination
 router.get('/:userId/following', async (req: Request, res: Response) => {
-  const userId = new mongoose.Types.ObjectId(req.params.userId as string);
-  const followeeId = req.query.followeeId
-    ? new mongoose.Types.ObjectId(req.query.followeeId as string)
-    : null;
+  const userId = new mongoose.Types.ObjectId(req.params.userId);
+  const offset = parseInt(req.query.offset as string, 10) || 0;
+  const limit = parseInt(req.query.limit as string, 10) || 10;
 
   try {
-    // Construct the query object based on whether followeeId is provided
-    const query = { followerId: userId, followeeId: followeeId || undefined };
+    const query = {
+      followerId: userId,
+      ...(req.query.followeeId
+        && { followeeId: new mongoose.Types.ObjectId(req.query.followeeId as string) }),
+    };
 
-    const following = await followsCollection.find(query).toArray();
+    const following = await followsCollection.find(query)
+      .skip(offset)
+      .limit(limit)
+      .toArray();
+
     res.status(200).send(following);
   } catch (err) {
     console.error('Failed to fetch following', err);

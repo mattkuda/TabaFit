@@ -12,6 +12,7 @@ import { ViewWorkoutScreen } from '../components/ViewWorkoutScreen';
 import { BuildWorkoutScreen } from '../components/BuildWorkoutScreen';
 import { TabataTimerScreen } from '../components/TabataTimerScreen';
 import { ShareWorkoutScreen } from '../components/ShareWorkoutScreen';
+import { ConnectionsScreen } from '../ConnectionsScreen';
 
 const Stack = createStackNavigator<HomeStackParamList>();
 
@@ -43,5 +44,6 @@ export const HomeStackNavigator = (): JSX.Element => (
         <Stack.Screen component={BuildWorkoutScreen} name="BuildWorkoutScreen" />
         <Stack.Screen component={TabataTimerScreen} name="TabataTimerScreen" />
         <Stack.Screen component={ShareWorkoutScreen} name="ShareWorkoutScreen" />
+        <Stack.Screen component={ConnectionsScreen} name="ConnectionsScreen" />
     </Stack.Navigator>
 );

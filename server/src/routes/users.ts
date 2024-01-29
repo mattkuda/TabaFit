@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 import { MongoClient, Collection, ObjectId } from 'mongodb';
 import multer from 'multer';
 // eslint-disable-next-line import/no-relative-packages
-import { User } from '../../../mobile/src/types/users';
+import { User, UserFullInfoModel } from '../../../mobile/src/types/users';
 import authenticate, { AuthRequest } from '../middleware/authenticate';
 import { bucket } from '../config/firebaseConfig';
 
@@ -22,12 +22,14 @@ if (!connectionString) {
 const client = new MongoClient(connectionString);
 
 let usersCollection: Collection<User>;
+let followsCollection: Collection;
 
 (async () => {
   try {
     await client.connect();
     console.log('Connected to MongoDB');
     usersCollection = client.db('AbcountableDB').collection<User>('users');
+    followsCollection = client.db('AbcountableDB').collection('follows');
   } catch (err) {
     console.error('Failed to connect to MongoDB', err);
     process.exit(1);
@@ -43,18 +45,32 @@ router.get('/:userId', async (req: AuthRequest, res: Response) => {
   }
 
   try {
-    const user = await usersCollection.findOne(
-      { _id: new mongoose.Types.ObjectId(req?.params?.userId) },
-    );
+    const userIdObj = new mongoose.Types.ObjectId(req.params.userId);
+
+    // Find the user
+    const user = await usersCollection.findOne({ _id: userIdObj });
 
     if (!user) {
       res.status(404).send({ message: 'User not found' });
       return;
     }
 
+    // Aggregate followers and following counts
+    const followersCount = await followsCollection.countDocuments({ followeeId: userIdObj });
+    const followingCount = await followsCollection.countDocuments({ followerId: userIdObj });
+
+    // Construct the UserFullInfoModel
+    const userFullInfo: UserFullInfoModel = {
+      ...user,
+      followersCount,
+      followingCount,
+    };
+
+    // Exclude sensitive fields
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...safeUser } = user;
-    res.status(200).send(safeUser);
+    const { password, ...safeUserFullInfo } = userFullInfo;
+
+    res.status(200).send(safeUserFullInfo);
   } catch (err) {
     console.error('Failed to fetch user', err);
     res.status(500).send({ message: 'Failed to fetch user' });

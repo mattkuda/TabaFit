@@ -17,6 +17,7 @@ export type HomeStackParamList = {
     }
     TabataTimerScreen: {workout: TabataWorkout, isInMyWorkouts?: boolean};
     ShareWorkoutScreen: {workout: TabataWorkout, completedAt: Date};
+    ConnectionsScreen: {userId: string}
 };
 
 export type SearchScreenNavigationProp = StackNavigationProp<HomeStackParamList, 'Search'>;
@@ -27,6 +28,7 @@ export type NotificationsScreenNavigationProp = StackNavigationProp<HomeStackPar
 export type ProfileStackParamList = {
     Profile: { userId?: string };
     EditProfile: { user: User };
+    ConnectionsScreen: {userId: string}
 };
 
 export type ProfileScreenRouteProp = RouteProp<ProfileStackParamList, 'Profile'>;

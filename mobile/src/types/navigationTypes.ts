@@ -20,6 +20,7 @@ export interface TabNavigatorParamList extends ParamListBase {
     ViewWorkoutScreen: { workoutId?: string, workout?: TabataWorkout, isInMyWorkouts?: boolean};
     LoadWorkoutScreen;
     PostScreen: {postId: string}
+    ConnectionsScreen: {userId: string}
 }
 
 export type HomeScreenRouteProp = RouteProp<TabNavigatorParamList, 'HomePage'>;
@@ -52,3 +53,5 @@ export type BuildWorkoutScreenNavigationProp = StackNavigationProp<TabNavigatorP
     params: {isShuffle?: boolean, customWorkout?: TabataWorkout, isSaved?: boolean};
 };
 // I think I can delete the above params
+
+export type ConnectionsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'ConnectionsScreen'>;
