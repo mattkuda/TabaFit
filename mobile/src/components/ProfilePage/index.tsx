@@ -12,6 +12,7 @@ import { useAuth } from '../../context/AuthContext';
 import { FollowButton } from './FollowButton';
 import { PostCard } from '../common/PostCard';
 import { InfiniteScrollList } from '../common/InfiniteScrollList';
+import { formatName } from '../../util/util';
 
 export const ProfilePage = (): JSX.Element => {
     const { onLogout } = useAuth();
@@ -76,7 +77,7 @@ export const ProfilePage = (): JSX.Element => {
                         source={{ uri: userInfo.data.profilePictureUrl }}
                     />
                     <VStack>
-                        <Text bold fontSize="lg">{`${userInfo.data.firstName} ${userInfo.data.lastName} @${userInfo.data.username}`}</Text>
+                        <Text bold fontSize="lg">{formatName(userInfo.data.firstName, userInfo.data.lastName)}</Text>
                         <Text fontSize="sm">
                             Member since
                             {' '}

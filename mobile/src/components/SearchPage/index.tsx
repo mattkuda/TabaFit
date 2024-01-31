@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { ProfilePageScreenNavigationProp } from '../../types/navigationTypes';
 import { useSearchUsers } from '../../hooks/useSearchUsers'; // Make sure to create this hook
 import { User } from '../../types/users';
+import { formatName } from '../../util/util';
 
 export const SearchPage = (): JSX.Element => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -37,14 +38,7 @@ export const SearchPage = (): JSX.Element => {
                     keyExtractor={(item: User): string => item._id.toString()}
                     renderItem={({ item }): JSX.Element => (
                         <Pressable onPress={(): void => handlePressUser(item._id.toString())}>
-                            <Text>
-                                {item?.firstName}
-                                {' '}
-                                {item?.lastName}
-                                {' '}
-                                @
-                                {item.username}
-                            </Text>
+                            <Text>{formatName(item.firstName, item.lastName)}</Text>
                         </Pressable>
                     )}
                 />

@@ -14,6 +14,7 @@ import { PostScreenRouteProp } from '../../navigation/navigationTypes';
 import { useQueryPost } from '../../hooks/useQueryPost'; // Import the usePost hook
 import { useMutateLike, useMutateUnlike } from '../../mutations/useMutateLike';
 import { PostScreenNavigationProp } from '../../types/navigationTypes';
+import { formatName } from '../../util/util';
 
 export const PostScreen = (): JSX.Element => {
     const route = useRoute<PostScreenRouteProp>();
@@ -103,7 +104,7 @@ export const PostScreen = (): JSX.Element => {
                     <Avatar size="48px" source={{ uri: post.user.profilePictureUrl }} />
                     <VStack flex={1}>
                         <Text fontSize="md" onPress={userFound && handlePressUser}>
-                            {userFound ? `${post.user.firstName} ${post.user.lastName} @${post.user.username}` : 'Unknown User'}
+                            {userFound ? `${formatName(post.user.firstName, post.user.lastName)} @${post.user.username}` : 'Unknown User'}
                         </Text>
                         <Text color="coolGray.600" fontSize="xs">
                             {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}

@@ -4,6 +4,7 @@ import {
 } from 'native-base';
 import { TouchableOpacity } from 'react-native';
 import { User } from '../types/users';
+import { formatName } from '../util/util';
 
 type NotificationCardProps = {
     user: User;
@@ -16,9 +17,7 @@ export const ConnectionCard: React.FC<NotificationCardProps> = ({ user }) => (
                 <Avatar size="48px" source={{ uri: user.profilePictureUrl }} />
                 <VStack>
                     <Text bold fontSize="sm">
-                        {user.firstName}
-                        {' '}
-                        {user.lastName}
+                        {formatName(user.firstName, user.lastName)}
                     </Text>
                     <Text color="coolGray.600" fontSize="xs">
                         {user.username}

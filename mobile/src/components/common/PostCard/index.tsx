@@ -10,6 +10,7 @@ import { useAuth } from '../../../context/AuthContext';
 import { HomeScreenNavigationProp } from '../../../types/navigationTypes';
 import { PostModel } from '../../../types/posts';
 import { useMutateLike, useMutateUnlike } from '../../../mutations/useMutateLike';
+import { formatName } from '../../../util/util';
 
 type PostCardProps = {
     post: PostModel;
@@ -72,7 +73,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                     <Avatar size="48px" source={{ uri: post.user.profilePictureUrl }} />
                     <VStack flex={1}>
                         <Text fontSize="sm" onPress={userFound && handlePressUser}>
-                            {userFound ? `${post.user.firstName} ${post.user.lastName} @${post.user.username}` : 'Unknown User'}
+                            {userFound ? `${formatName(post.user.firstName, post.user.lastName)} @${post.user.username}` : 'Unknown User'}
                         </Text>
                         <Text color="coolGray.600" fontSize="xs">
                             {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
