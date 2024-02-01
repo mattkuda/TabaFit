@@ -9,13 +9,11 @@ const apiUrl = 'http://localhost:3000';
 const defaultLimit = 10;
 
 const fetchFollowers = async ({ offset = 0, limit }: PagingParams, userId, followerId): Promise<User[]> => {
-    console.log('userId', userId);
     const response = await axios.get(`${apiUrl}/follows/${userId}/followers`, {
         params: { followerId: followerId || undefined, offset, limit: limit || defaultLimit },
 
     });
 
-    console.log('response.data', response.data);
     return response.data;
 };
 
@@ -25,12 +23,10 @@ export const useInfiniteQueryFollowers = (userId, followerId?): UseInfiniteQuery
 });
 
 const fetchFollowing = async ({ offset = 0, limit }: PagingParams, userId, followeeId): Promise<User[]> => {
-    console.log('userId', userId);
     const response = await axios.get(`${apiUrl}/follows/${userId}/following`, {
         params: { followeeId: followeeId || undefined, offset, limit: limit || defaultLimit },
     });
 
-    console.log('response.data', response.data);
     return response.data;
 };
 
