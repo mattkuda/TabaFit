@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { MongoClient, Collection, ObjectId } from 'mongodb';
 // eslint-disable-next-line import/no-relative-packages
-import { PostSchema } from '../../../mobile/src/types/posts';
+import { PostComment, PostSchema } from '../../../mobile/src/types/posts';
 // eslint-disable-next-line import/no-relative-packages
 import { User } from '../../../mobile/src/types/users';
 import authenticate, { AuthRequest } from '../middleware/authenticate';
@@ -47,6 +47,21 @@ const addUserInfoToPosts = async (posts: PostSchema[]) => Promise.all(posts.map(
     },
   };
 }));
+
+const addUserInfoToComments = async (comments: PostComment[]) => Promise.all(
+  comments.map(async (comment) => {
+    const user = await client.db('AbcountableDB').collection<User>('users').findOne({ _id: new ObjectId(comment.userId) });
+    return {
+      ...comment,
+      user: {
+        username: user?.username,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        profilePictureUrl: user?.profilePictureUrl,
+      },
+    };
+  }),
+);
 
 router.get('/global', async (req: Request, res: Response) => {
   try {
@@ -160,7 +175,12 @@ router.get('/post/:postId', async (req: Request, res: Response) => {
     }
 
     const transformedPosts = await addUserInfoToPosts([post] as PostSchema[]);
-    res.send(transformedPosts.length ? transformedPosts[0] : null);
+
+    const enrichedComments = await addUserInfoToComments(transformedPosts[0].comments);
+
+    const result = { ...transformedPosts[0], comments: enrichedComments };
+
+    res.send(transformedPosts.length ? result : null);
   } catch (err) {
     console.error('Failed to fetch post', err);
     res.status(500).send({ message: 'Failed to fetch post' });

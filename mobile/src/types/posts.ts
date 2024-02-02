@@ -27,6 +27,14 @@ export interface UserPostInfo {
     profilePictureUrl?: string;
 }
 
+export interface PostCommentModel {
+    _id?: mongoose.Types.ObjectId | string;
+    userId: string;
+    body: string;
+    createdAt: Date;
+    user: UserPostInfo
+}
+
 export interface PostModel {
     _id: mongoose.Types.ObjectId | string;
     userId: mongoose.Types.ObjectId | string;
@@ -37,5 +45,5 @@ export interface PostModel {
     title: string;
     description: string;
     likes: mongoose.Types.ObjectId[];
-    comments: PostComment[];
+    comments: PostCommentModel[];
 }
