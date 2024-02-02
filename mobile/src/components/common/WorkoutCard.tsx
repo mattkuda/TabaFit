@@ -9,6 +9,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { TouchableOpacity } from 'react-native';
 import { TabataWorkoutWithUserInfo } from '../../types/workouts';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
+import { formatTabatasCount } from '../../util/util';
 
 interface WorkoutCardProps {
     workout: TabataWorkoutWithUserInfo;
@@ -39,7 +40,7 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                 <Box bg="lightBlue.100" p="12" rounded="xl">
                     <VStack alignItems="center" space={3}>
                         <Heading>{workout.name}</Heading>
-                        <Text>{`Number of tabatas: ${workout.tabatas.length}`}</Text>
+                        <Text>{formatTabatasCount(workout.tabatas.length)}</Text>
                         <Text>{`Created by ${workout.user.username}`}</Text>
                         <Text>{`Created on ${formattedDate}`}</Text>
                         <HStack space={3}>

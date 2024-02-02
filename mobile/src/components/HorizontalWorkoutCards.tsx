@@ -3,6 +3,7 @@ import { ScrollView, TouchableOpacity, Text } from 'react-native';
 import { Avatar, Box, Skeleton } from 'native-base';
 import { TabataWorkoutWithUserInfo } from '../types/workouts';
 import { useAuth } from '../context/AuthContext';
+import { formatTabatasCount } from '../util/util';
 
 interface SlideWorkoutCardProps {
     workout: TabataWorkoutWithUserInfo;
@@ -22,7 +23,7 @@ const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress })
                 >
                     {workout.name}
                 </Text>
-                <Text>{`${workout.numberOfTabatas} Tabatas`}</Text>
+                <Text>{formatTabatasCount(workout.numberOfTabatas)}</Text>
                 <Box alignItems="center" flexDirection="row" justifyContent="flex-end">
                     {userId !== workout?.userId && (
                         <>

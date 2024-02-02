@@ -10,3 +10,10 @@ export const formatName = (firstName: string, lastName: string): string => {
     }
     return '';
 };
+
+export const formatTabatasCount = (numberOfTabtats: number): string => {
+    if (numberOfTabtats === 1) {
+        return '1 Tabata';
+    }
+    return `${numberOfTabtats} Tabatas`;
+};

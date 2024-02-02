@@ -14,6 +14,7 @@ import { RefreshableScrollView } from '../RefreshableScrollView';
 import { HorizontalWorkoutCards } from '../HorizontalWorkoutCards';
 import { useQueryWorkouts } from '../../hooks/useQueryWorkouts';
 import { featuredWorkouts } from '../../util/featuredWorkouts';
+import { formatTabatasCount } from '../../util/util';
 
 type CheckboxItemProps = {
     label: string;
@@ -117,7 +118,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                                 numberOfTabatas: prev.numberOfTabatas - 1,
                             }))}
                         />
-                        <Text color="white" mx={2}>{`${shuffledWorkout.numberOfTabatas} Tabatas`}</Text>
+                        <Text color="white" mx={2}>{formatTabatasCount(shuffledWorkout.numberOfTabatas)}</Text>
                         <IconButton
                             icon={<Icon as={Ionicons} color="white" name="add" />}
                             onPress={(): void => setShuffledWorkout((prev) => ({
