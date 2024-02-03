@@ -14,7 +14,8 @@ import { PostScreenRouteProp } from '../../navigation/navigationTypes';
 import { useQueryPost } from '../../hooks/useQueryPost'; // Import the usePost hook
 import { useMutateLike, useMutateUnlike } from '../../mutations/useMutateLike';
 import { PostScreenNavigationProp } from '../../types/navigationTypes';
-import { formatName } from '../../util/util';
+import { formatName, formatTabatasCount } from '../../util/util';
+import { CommentCard } from './CommentCard';
 
 export const PostScreen = (): JSX.Element => {
     const route = useRoute<PostScreenRouteProp>();
@@ -114,11 +115,7 @@ export const PostScreen = (): JSX.Element => {
                 <Text mt={2} onPress={handleWorkoutNamePress}>
                     {post.workout.name}
                     {' '}
-                    (
-                    {post.workout.numberOfTabatas}
-                    {' '}
-                    tabatas
-                    )
+                    {formatTabatasCount(post.workout.numberOfTabatas)}
                 </Text>
                 <Text mt={2}>{post.description}</Text>
                 <HStack justifyContent="space-between" mt={2} space={4}>
@@ -163,14 +160,11 @@ export const PostScreen = (): JSX.Element => {
             />
             <Button title="Add Comment" onPress={handleAddComment} />
             {post.comments.map((comment) => (
-                <HStack alignItems="center" justifyContent="space-between" key={comment._id?.toString()}>
-                    <Text>{comment.body}</Text>
-                    <Text>{comment._id?.toString()}</Text>
-                    <IconButton
-                        icon={<Icon as={Ionicons} name="trash-bin" />}
-                        onPress={(): void => handleDeleteComment(comment._id?.toString())}
-                    />
-                </HStack>
+                <CommentCard
+                    comment={comment}
+                    key={comment._id?.toString()}
+                    onDeleteComment={handleDeleteComment}
+                />
             ))}
         </ScrollView>
     );
