@@ -6,12 +6,16 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { useSetRecoilState } from 'recoil';
+import { Audio } from 'expo-av';
 import { TabataTimerScreenRouteProp } from '../../navigation/navigationTypes';
 import { TabataExercise } from '../../types/workouts';
 import { Intervals } from '../../util/constants';
 import { TimerScreenNavigationProp } from '../../types/navigationTypes';
 import { showFooterState } from '../../atoms/showFooterAtom';
 import { calculateTotalWorkoutTime, formatTime } from './util';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const beepPath = require('../../../assets/sounds/beep.wav');
 
 export const TabataTimerScreen = (): JSX.Element => {
     const route = useRoute<TabataTimerScreenRouteProp>();
@@ -35,6 +39,21 @@ export const TabataTimerScreen = (): JSX.Element => {
     const currentTabata = tabatas[circuitsDone];
     const [showAlert, setShowAlert] = useState(false);
     const setShowFooter = useSetRecoilState(showFooterState);
+    const [sound, setSound] = useState<Audio.Sound>();
+
+    async function playSound(requirePath): Promise<void> {
+        const { sound: newSound } = await Audio.Sound.createAsync(requirePath);
+
+        setSound(newSound);
+
+        await newSound.playAsync();
+    }
+
+    useEffect(() => (sound
+        ? (): void => {
+            sound.unloadAsync();
+        }
+        : undefined), [sound]);
 
     useFocusEffect(
         useCallback(() => {
@@ -146,6 +165,14 @@ export const TabataTimerScreen = (): JSX.Element => {
                     }
                 }
 
+                if (nextSeconds === exerciseDuration || nextSeconds === restDuration
+                    || nextSeconds === warmupDuration || nextSeconds === intermisionDuration
+                    || nextSeconds === cooldownDuration) {
+                    console.log('Playing beep sound');
+                    // eslint-disable-next-line
+                    playSound(beepPath);
+                }
+
                 setCurrentInterval(nextInterval);
                 setSeconds(nextSeconds);
                 setCurrentExercise(nextExercise);
@@ -191,8 +218,6 @@ export const TabataTimerScreen = (): JSX.Element => {
                 }}
             />
             <Text>{`Total remaining time: ${formatTime(remainingTime)}`}</Text>
-            {/* <Text>{`${JSON.stringify(route.params.workout)}`}</Text> */}
-
             <Text
                 // eslint-disable-next-line no-nested-ternary
                 color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown
