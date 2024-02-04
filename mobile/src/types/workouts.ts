@@ -15,6 +15,16 @@ export interface TabataExercise {
 
 export type TabataCircuit = TabataExercise[]
 
+export interface WorkoutEquipmentSettings {
+    useKettlebell: boolean,
+    useBoxPlatform: boolean,
+    useYogaBall: boolean,
+    useWorkoutBand: boolean,
+    useDumbells: boolean,
+    useHangingBar: boolean,
+    useNone: boolean,
+}
+
 export interface WorkoutIncludeSettings {
     includeUpper: boolean,
     includeLower: boolean,
@@ -28,7 +38,7 @@ export interface TabataWorkout {
     description: string;
     createdAt: string;
     updatedAt: string;
-    equipment: TabataEquipmentType[];
+    equipment: WorkoutEquipmentSettings;
     userId: string;
     warmupDuration: number;
     tabatas: TabataCircuit[];

@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-    VStack, IconButton, Icon, HStack, Text, Pressable, Input, Toast,
+    VStack, IconButton, Icon, HStack, Text, Pressable, Input, Toast, Modal, Button, Checkbox, Divider, FormControl,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { Button } from 'react-native';
 import { useQueryClient } from 'react-query';
 import { TabataExercise, TabataWorkout } from '../../types/workouts';
 import { WorkoutsStackParamList } from '../../navigation/navigationTypes';
@@ -92,6 +91,8 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     const [workoutName, setWorkoutName] = useState(customWorkout?.name || '');
     const queryClient = useQueryClient();
     const updateWorkoutMutation = useMutateUpdateWorkout();
+    const [modalWorkout, setModalWorkout] = useState<TabataWorkout>(workout);
+    const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
 
     const addTabata = (): void => {
         setWorkout((currentWorkout) => ({
@@ -197,7 +198,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             navigation.setOptions({
                 // eslint-disable-next-line react/no-unstable-nested-components
                 headerRight: (): JSX.Element => (
-                    <Button title="Start" onPress={startWorkout} />
+                    <Button onPress={startWorkout}>Start</Button>
                 ),
             });
         } else {
@@ -205,9 +206,10 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 // eslint-disable-next-line react/no-unstable-nested-components
                 headerRight: (): JSX.Element => (
                     <Button
-                        title={isSavedWorkoutByUser ? 'Update' : 'Save'}
                         onPress={handleSaveOrUpdateWorkout}
-                    />
+                    >
+                        {isSavedWorkoutByUser ? 'Update' : 'Save'}
+                    </Button>
                 ),
             });
         }
@@ -273,13 +275,31 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const handleModalDone = (): void => {
+        setShowSettingsModal(false);
+        setWorkout(modalWorkout);
+        triggerShuffle();
+    };
+
+    const handleModalCancel = (): void => {
+        setShowSettingsModal(false);
+        setModalWorkout(workout);
+    };
+
+    const handleWorkoutSettingChange = (name, value): void => {
+        setModalWorkout((prevWorkout) => ({
+            ...prevWorkout,
+            [name]: value,
+        }));
+    };
+
     return (
         <VStack space={4}>
             {isShuffle ? (
-                <IconButton
-                    icon={<Icon as={Ionicons} name="shuffle" />}
-                    onPress={(): void => triggerShuffle()}
-                />
+                <HStack alignItems="center" px={4} space={4} width="100%">
+                    <Button flex={1} leftIcon={<Icon as={Ionicons} name="settings" />} onPress={(): void => setShowSettingsModal(true)}>Settings</Button>
+                    <Button flex={1} leftIcon={<Icon as={Ionicons} name="shuffle" />} onPress={(): void => triggerShuffle()}>Shuffle</Button>
+                </HStack>
             ) : (
                 <Input
                     mb={4}
@@ -301,7 +321,86 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                     />
                 ))}
             </NestableScrollContainer>
-            <Button title="Add Tabata" onPress={addTabata} />
+            <Button onPress={addTabata}>Add Tabata</Button>
+            {/* Settings Modal */}
+            <Modal isOpen={showSettingsModal} size="full" onClose={(): void => setShowSettingsModal(false)}>
+                <Modal.Content>
+                    <Modal.CloseButton />
+                    <Modal.Header>Select Equipment</Modal.Header>
+                    <Modal.Body>
+                        {/* TODO: Do this for all equipment */}
+                        <Checkbox
+                            isChecked={modalWorkout.equipment.useKettlebell}
+                            key="kb-cb"
+                            value="KB"
+                            onChange={(): void => setModalWorkout((prev) => ({
+                                ...prev,
+                                equipment: {
+                                    ...prev.equipment,
+                                    useKettlebell: !prev.equipment.useKettlebell,
+                                },
+                            }))}
+                        >
+                            KB
+                        </Checkbox>
+                        <Divider my="2" />
+                        {/* Input fields for each setting (Example for warmupDuration) */}
+                        <FormControl.Label>Warmup</FormControl.Label>
+                        <Input
+                            keyboardType="numeric"
+                            placeholder="Warmup Duration (seconds)"
+                            value={modalWorkout?.warmupDuration.toString()}
+                            onChangeText={(text): void => handleWorkoutSettingChange('warmupDuration', parseInt(text, 10) || 0)}
+                        />
+                        <FormControl.Label>Exercise Duration</FormControl.Label>
+                        <Input
+                            keyboardType="numeric"
+                            placeholder="Exercise Duration (seconds)"
+                            value={modalWorkout?.exerciseDuration.toString()}
+                            onChangeText={(text): void => handleWorkoutSettingChange('exerciseDuration', parseInt(text, 10) || 0)}
+                        />
+                        <FormControl.Label>Rest Duration</FormControl.Label>
+                        <Input
+                            keyboardType="numeric"
+                            placeholder="Rest Duration (seconds)"
+                            value={modalWorkout?.restDuration.toString()}
+                            onChangeText={(text): void => handleWorkoutSettingChange('restDuration', parseInt(text, 10) || 0)}
+                        />
+                        <FormControl.Label>Number of Tabatas</FormControl.Label>
+                        <Input
+                            keyboardType="numeric"
+                            placeholder="Number of Tabatas"
+                            value={modalWorkout?.numberOfTabatas.toString()}
+                            onChangeText={(text): void => handleWorkoutSettingChange('numberOfTabatas', parseInt(text, 10) || 0)}
+                        />
+                        <FormControl.Label>Exercises Per Tabata</FormControl.Label>
+                        <Input
+                            keyboardType="numeric"
+                            placeholder="Exercises Per Tabata"
+                            value={modalWorkout?.exercisesPerTabata.toString()}
+                            onChangeText={(text): void => handleWorkoutSettingChange('exercisesPerTabata', parseInt(text, 10) || 0)}
+                        />
+                        <FormControl.Label>Intermission Duration</FormControl.Label>
+                        <Input
+                            keyboardType="numeric"
+                            placeholder="Intermission Duration (seconds)"
+                            value={modalWorkout?.intermisionDuration.toString()}
+                            onChangeText={(text): void => handleWorkoutSettingChange('intermisionDuration', parseInt(text, 10) || 0)}
+                        />
+                        <FormControl.Label>Coooldown Duration</FormControl.Label>
+                        <Input
+                            keyboardType="numeric"
+                            placeholder="Cooldown Duration (seconds)"
+                            value={modalWorkout?.cooldownDuration.toString()}
+                            onChangeText={(text): void => handleWorkoutSettingChange('cooldownDuration', parseInt(text, 10) || 0)}
+                        />
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onPress={handleModalDone}>Done</Button>
+                        <Button variant="ghost" onPress={handleModalCancel}>Cancel</Button>
+                    </Modal.Footer>
+                </Modal.Content>
+            </Modal>
         </VStack>
     );
 };

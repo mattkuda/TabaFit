@@ -2,12 +2,12 @@ import {
     lowerBodyExercises, upperBodyExercises, absExercises, cardioExercises,
 } from '../util/constants';
 import {
-    TabataCircuit, TabataEquipmentType, TabataExercise, TabataExerciseType, TabataWorkout,
+    TabataCircuit, TabataExercise, TabataExerciseType, TabataWorkout, WorkoutEquipmentSettings,
 } from '../types/workouts';
 
 export const shuffleExercises = (
     numberOfTabatas: number,
-    selectedEquipment: TabataEquipmentType[],
+    selectedEquipment: WorkoutEquipmentSettings,
     includeUpper: boolean,
     includeLower: boolean,
     includeAbs: boolean,
@@ -27,6 +27,18 @@ export const shuffleExercises = (
         return array;
     };
 
+    const equipmentFilter = (exercise: TabataExercise): boolean => {
+        if (exercise.equipment.includes('None') && selectedEquipment.useNone) {
+            return true;
+        }
+        return exercise.equipment.some((equip) => (equip === 'Kettlebell' && selectedEquipment.useKettlebell)
+            || (equip === 'Box Platform' && selectedEquipment.useBoxPlatform)
+            || (equip === 'Yoga Ball' && selectedEquipment.useYogaBall)
+            || (equip === 'Workout Band' && selectedEquipment.useWorkoutBand)
+            || (equip === 'Dumbells' && selectedEquipment.useDumbells)
+            || (equip === 'Hanging Bar' && selectedEquipment.useHangingBar));
+    };
+
     const getRandomExercise = (type: TabataExerciseType): TabataExercise => {
         let exercises;
 
@@ -43,14 +55,15 @@ export const shuffleExercises = (
             case 'Cardio':
                 exercises = shuffleArray(cardioExercises);
                 break;
-            // Include cases for 'Glutes' and 'Spicy' if you have exercises for them
             default:
                 exercises = [];
         }
 
-        const filteredExercises = exercises.filter((exercise) => exercise.equipment.some((equip) => selectedEquipment.includes(equip) || equip === 'None'));
+        const filteredExercises = exercises.filter(equipmentFilter);
 
-        return filteredExercises.length > 0 ? filteredExercises[0] : exercises[0];
+        return filteredExercises.length > 0
+            ? filteredExercises[0]
+            : null;
     };
 
     const createTabataCircuit = (types: TabataExerciseType[]): TabataCircuit => {
@@ -59,7 +72,10 @@ export const shuffleExercises = (
         const shuffledTypes = shuffleArray(types); // Shuffle to randomize the starting point
 
         for (let i = 0; i < 4; i++) {
-            circuit.push(getRandomExercise(shuffledTypes[i % shuffledTypes.length]));
+            const exercise = getRandomExercise(shuffledTypes[i % shuffledTypes.length]);
+
+            if (exercise) circuit.push(exercise);
+            else circuit.push(null); // Handle case where no exercise matches the criteria
         }
 
         return circuit;
@@ -82,9 +98,7 @@ export const shuffleExercises = (
     if (includeAbs) types.push('Abs');
     if (includeCardio) types.push('Cardio');
 
-    const tabtats: TabataCircuit[] = createTabataCircuits(types);
-
-    return tabtats;
+    return createTabataCircuits(types);
 };
 
 export const defaultTabataWorkout: TabataWorkout = {
@@ -102,7 +116,15 @@ export const defaultTabataWorkout: TabataWorkout = {
     exercisesPerTabata: 8,
     intermisionDuration: 1,
     cooldownDuration: 0,
-    equipment: [],
+    equipment: {
+        useKettlebell: false,
+        useBoxPlatform: false,
+        useYogaBall: false,
+        useWorkoutBand: false,
+        useDumbells: false,
+        useHangingBar: false,
+        useNone: true,
+    },
 };
 
 export const defaultShuffleTabataWorkout: TabataWorkout = {
@@ -120,7 +142,15 @@ export const defaultShuffleTabataWorkout: TabataWorkout = {
     exercisesPerTabata: 8,
     intermisionDuration: 1,
     cooldownDuration: 0,
-    equipment: [],
+    equipment: {
+        useKettlebell: false,
+        useBoxPlatform: false,
+        useYogaBall: false,
+        useWorkoutBand: false,
+        useDumbells: false,
+        useHangingBar: false,
+        useNone: true,
+    },
     includeSettings: {
         includeUpper: true,
         includeAbs: true,
@@ -146,7 +176,15 @@ export const buildNewTabataInitialState: TabataWorkout = {
     exercisesPerTabata: 8,
     intermisionDuration: 1,
     cooldownDuration: 0,
-    equipment: [],
+    equipment: {
+        useKettlebell: false,
+        useBoxPlatform: false,
+        useYogaBall: false,
+        useWorkoutBand: false,
+        useDumbells: false,
+        useHangingBar: false,
+        useNone: true,
+    },
     includeSettings: {
         includeAbs: true,
         includeCardio: true,
