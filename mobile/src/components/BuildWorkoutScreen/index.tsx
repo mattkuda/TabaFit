@@ -293,6 +293,16 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         }));
     };
 
+    const handleWorkoutEquipmentChange = (name, value): void => {
+        setModalWorkout((prev) => ({
+            ...prev,
+            equipment: {
+                ...prev.equipment,
+                [name]: value,
+            },
+        }));
+    };
+
     return (
         <VStack space={4}>
             {isShuffle ? (
@@ -323,28 +333,61 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             </NestableScrollContainer>
             <Button onPress={addTabata}>Add Tabata</Button>
             {/* Settings Modal */}
+            {/* TDOD: Move to its own component */}
             <Modal isOpen={showSettingsModal} size="full" onClose={(): void => setShowSettingsModal(false)}>
                 <Modal.Content>
                     <Modal.CloseButton />
                     <Modal.Header>Select Equipment</Modal.Header>
                     <Modal.Body>
-                        {/* TODO: Do this for all equipment */}
                         <Checkbox
                             isChecked={modalWorkout.equipment.useKettlebell}
-                            key="kb-cb"
-                            value="KB"
-                            onChange={(): void => setModalWorkout((prev) => ({
-                                ...prev,
-                                equipment: {
-                                    ...prev.equipment,
-                                    useKettlebell: !prev.equipment.useKettlebell,
-                                },
-                            }))}
+                            key="Kettlebell-checkbox"
+                            value="Kettlebells"
+                            onChange={(): void => handleWorkoutEquipmentChange('useKettlebell', !modalWorkout.equipment.useKettlebell)}
                         >
-                            KB
+                            Kettlebells
+                        </Checkbox>
+                        <Checkbox
+                            isChecked={modalWorkout.equipment.useDumbells}
+                            key="Dumbells-checkbox"
+                            value="Dumbells"
+                            onChange={(): void => handleWorkoutEquipmentChange('useDumbells', !modalWorkout.equipment.useDumbells)}
+                        >
+                            Dumbells
+                        </Checkbox>
+                        <Checkbox
+                            isChecked={modalWorkout.equipment.useHangingBar}
+                            key="HangingBar-checkbox"
+                            value="HangingBar"
+                            onChange={(): void => handleWorkoutEquipmentChange('useHangingBar', !modalWorkout.equipment.useHangingBar)}
+                        >
+                            Hanging Bar
+                        </Checkbox>
+                        <Checkbox
+                            isChecked={modalWorkout.equipment.useYogaBall}
+                            key="YogaBall-checkbox"
+                            value="YogaBall"
+                            onChange={(): void => handleWorkoutEquipmentChange('useYogaBall', !modalWorkout.equipment.useYogaBall)}
+                        >
+                            Yoga Ball
+                        </Checkbox>
+                        <Checkbox
+                            isChecked={modalWorkout.equipment.useWorkoutBand}
+                            key="WorkoutBand-checkbox"
+                            value="WorkoutBand"
+                            onChange={(): void => handleWorkoutEquipmentChange('useWorkoutBand', !modalWorkout.equipment.useWorkoutBand)}
+                        >
+                            Workout Band
+                        </Checkbox>
+                        <Checkbox
+                            isChecked={modalWorkout.equipment.useBoxPlatform}
+                            key="BoxPlatform-checkbox"
+                            value="BoxPlatform"
+                            onChange={(): void => handleWorkoutEquipmentChange('useBoxPlatform', !modalWorkout.equipment.useBoxPlatform)}
+                        >
+                            Box Platform
                         </Checkbox>
                         <Divider my="2" />
-                        {/* Input fields for each setting (Example for warmupDuration) */}
                         <FormControl.Label>Warmup</FormControl.Label>
                         <Input
                             keyboardType="numeric"
