@@ -7,7 +7,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
-import { defaultShuffleTabataWorkout } from '../shuffleUtil';
+import { soundTestingWorkout } from '../shuffleUtil';
 import { BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
 import { TabataWorkout } from '../../types/workouts';
 import { RefreshableScrollView } from '../RefreshableScrollView';
@@ -30,7 +30,7 @@ export const WorkoutsScreen = (): JSX.Element => {
         isLoading: isNewWorkoutsLoading,
     } = useQueryWorkouts({ limit: 5, offset: 0 });
 
-    const [shuffledWorkout, setShuffledWorkout] = useState<TabataWorkout>(defaultShuffleTabataWorkout);
+    const [shuffledWorkout, setShuffledWorkout] = useState<TabataWorkout>(soundTestingWorkout);
 
     const handlePressQuickShuffle = (): void => {
         // First go to customizable settings screen (to-build)

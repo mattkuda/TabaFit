@@ -9,7 +9,9 @@ import { useQueryClient } from 'react-query';
 import { TabataExercise, TabataWorkout } from '../../types/workouts';
 import { WorkoutsStackParamList } from '../../navigation/navigationTypes';
 import { useMutateSaveWorkout, useMutateUpdateWorkout } from '../../mutations/useMutateSaveWorkout';
-import { buildNewTabataInitialState, emptyTabata, shuffleExercises } from '../shuffleUtil';
+import {
+    emptyTabata, shuffleExercises, soundTestingWorkout,
+} from '../shuffleUtil';
 import { useAuth } from '../../context/AuthContext';
 import { BuildWorkoutScreenNavigationProp } from '../../types/navigationTypes';
 
@@ -85,7 +87,8 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     const customWorkout = route?.params?.customWorkout;
     const isSavedWorkoutByUser = route?.params?.customWorkout && route?.params?.customWorkout.userId === userId;
     const isShuffle = route?.params?.isShuffle || false;
-    const [workout, setWorkout] = useState<TabataWorkout>(customWorkout || buildNewTabataInitialState);
+    // const [workout, setWorkout] = useState<TabataWorkout>(customWorkout || buildNewTabataInitialState);
+    const [workout, setWorkout] = useState<TabataWorkout>(customWorkout || soundTestingWorkout);
     const saveWorkoutMutation = useMutateSaveWorkout();
     const { authState } = useAuth();
     const [workoutName, setWorkoutName] = useState(customWorkout?.name || '');

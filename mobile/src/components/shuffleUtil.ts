@@ -126,6 +126,37 @@ export const defaultTabataWorkout: TabataWorkout = {
         useNone: true,
     },
 };
+export const soundTestingWorkout: TabataWorkout = {
+    _id: `sound-shuffle`,
+    name: `Sound Testing Shuffle`,
+    description: 'A sound test Tabata workout based on user preferences.',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    userId: null,
+    warmupDuration: 5,
+    tabatas: [],
+    restDuration: 5,
+    exerciseDuration: 5,
+    numberOfTabatas: 1,
+    exercisesPerTabata: 8,
+    intermisionDuration: 5,
+    cooldownDuration: 5,
+    equipment: {
+        useKettlebell: false,
+        useBoxPlatform: false,
+        useYogaBall: false,
+        useWorkoutBand: false,
+        useDumbells: false,
+        useHangingBar: false,
+        useNone: true,
+    },
+    includeSettings: {
+        includeUpper: true,
+        includeAbs: true,
+        includeCardio: true,
+        includeLower: true,
+    },
+};
 
 export const defaultShuffleTabataWorkout: TabataWorkout = {
     _id: `workout-shuffle`,

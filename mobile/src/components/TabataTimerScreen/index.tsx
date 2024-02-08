@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import React, { useState, useEffect, useCallback } from 'react';
 import {
     VStack, Text, Button, IconButton, Icon,
@@ -14,8 +15,13 @@ import { TimerScreenNavigationProp } from '../../types/navigationTypes';
 import { showFooterState } from '../../atoms/showFooterAtom';
 import { calculateTotalWorkoutTime, formatTime } from './util';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const beepPath = require('../../../assets/sounds/beep.wav');
+const sounds = {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    beep: require('../../../assets/sounds/beep.wav'),
+    exercise: require('../../../assets/sounds/exercise.wav'),
+    rest: require('../../../assets/sounds/rest.wav'),
+    // ... other specific exercises
+};
 
 export const TabataTimerScreen = (): JSX.Element => {
     const route = useRoute<TabataTimerScreenRouteProp>();
@@ -41,12 +47,15 @@ export const TabataTimerScreen = (): JSX.Element => {
     const setShowFooter = useSetRecoilState(showFooterState);
     const [sound, setSound] = useState<Audio.Sound>();
 
-    async function playSound(requirePath): Promise<void> {
-        const { sound: newSound } = await Audio.Sound.createAsync(requirePath);
+    async function playSound(name: string): Promise<void> {
+        console.log('Playing sound:', name);
+        const soundToPlay = sounds[name] || sounds.exercise;
+        const { sound: newSound } = await Audio.Sound.createAsync(soundToPlay, { shouldPlay: true });
 
         setSound(newSound);
 
         await newSound.playAsync();
+        console.log('Done playing sound:');
     }
 
     useEffect(() => (sound
@@ -165,12 +174,19 @@ export const TabataTimerScreen = (): JSX.Element => {
                     }
                 }
 
-                if (nextSeconds === exerciseDuration || nextSeconds === restDuration
-                    || nextSeconds === warmupDuration || nextSeconds === intermisionDuration
-                    || nextSeconds === cooldownDuration) {
-                    console.log('Playing beep sound');
-                    // eslint-disable-next-line
-                    playSound(beepPath);
+                // Beep countdown
+                if (nextSeconds === 3 || nextSeconds === 2 || nextSeconds === 1) {
+                    playSound('beep');
+                } else if (nextInterval === Intervals.Exercise) {
+                    if (nextSeconds === exerciseDuration) {
+                        const exerciseName = currentTabata[nextExercisesDone]?.name.toLowerCase();
+
+                        playSound(exerciseName);
+                    }
+                } else if (nextInterval === Intervals.Rest) {
+                    if (nextSeconds === exerciseDuration) {
+                        playSound('rest');
+                    }
                 }
 
                 setCurrentInterval(nextInterval);
