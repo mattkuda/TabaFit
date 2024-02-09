@@ -20,6 +20,7 @@ const sounds = {
     exercise: require('../../../assets/sounds/exercise.wav'),
     rest: require('../../../assets/sounds/rest.wav'),
     burpees: require('../../../assets/sounds/burpees.wav'),
+    nextup: require('../../../assets/sounds/nextup.wav'),
     // ... TODO: other specific exercises
     // Use "Nancy" voice from https://www.naturalreaders.com/online/
 };
@@ -184,7 +185,9 @@ export const TabataTimerScreen = (): JSX.Element => {
                     }
                 }
 
-                // Beep countdown
+                console.log('Next interval:', nextInterval);
+
+                // Update this to play sound for the next exercise
                 if (nextSeconds === 3 || nextSeconds === 2 || nextSeconds === 1) {
                     playSound('beep');
                 } else if (nextInterval === Intervals.Exercise) {
@@ -193,8 +196,13 @@ export const TabataTimerScreen = (): JSX.Element => {
 
                         playSound(nextExercise.name);
                     }
+                } else if (nextSeconds === 6 && (currentInterval === Intervals.Rest
+                    || currentInterval === Intervals.Intermission
+                    || currentInterval === Intervals.Warmup)) {
+                    playSound('nextup');
+                    // playSound(nextExercise.name);
                 } else if (nextInterval === Intervals.Rest) {
-                    if (nextSeconds === exerciseDuration) {
+                    if (nextSeconds === restDuration) {
                         playSound('rest');
                     }
                 }
