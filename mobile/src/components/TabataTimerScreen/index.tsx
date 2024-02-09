@@ -16,12 +16,12 @@ import { showFooterState } from '../../atoms/showFooterAtom';
 import { calculateTotalWorkoutTime, formatTime } from './util';
 
 const sounds = {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     beep: require('../../../assets/sounds/beep.wav'),
     exercise: require('../../../assets/sounds/exercise.wav'),
     rest: require('../../../assets/sounds/rest.wav'),
     burpees: require('../../../assets/sounds/burpees.wav'),
-    // ... other specific exercises
+    // ... TODO: other specific exercises
+    // Use "Nancy" voice from https://www.naturalreaders.com/online/
 };
 
 export const TabataTimerScreen = (): JSX.Element => {
@@ -190,9 +190,9 @@ export const TabataTimerScreen = (): JSX.Element => {
                     playSound('beep');
                 } else if (nextInterval === Intervals.Exercise) {
                     if (nextSeconds === exerciseDuration) {
-                        const exerciseName = currentTabata[nextExercisesDone]?.name.toLowerCase();
+                        // const exerciseName = currentTabata[nextExercisesDone]?.name;
 
-                        playSound(exerciseName);
+                        playSound(nextExercise.name);
                     }
                 } else if (nextInterval === Intervals.Rest) {
                     if (nextSeconds === exerciseDuration) {
