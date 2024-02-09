@@ -11,6 +11,7 @@ import { HomeScreenNavigationProp } from '../../../types/navigationTypes';
 import { PostModel } from '../../../types/posts';
 import { useMutateLike, useMutateUnlike } from '../../../mutations/useMutateLike';
 import { formatName } from '../../../util/util';
+import { calculateTotalWorkoutTime, formatTime } from '../../TabataTimerScreen/util';
 
 type PostCardProps = {
     post: PostModel;
@@ -22,9 +23,19 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
     const navigation = useNavigation<HomeScreenNavigationProp>();
     const likeMutation = useMutateLike();
     const unlikeMutation = useMutateUnlike();
-
     const [liked, setLiked] = useState(post.likes.map((id) => id.toString()).includes(userId));
     const [likeCount, setLikeCount] = useState(post.likes.length);
+    const formattedTotalWorkoutTime = formatTime(post.workout
+        ? calculateTotalWorkoutTime(
+            post.workout.warmupDuration,
+            post.workout.exerciseDuration,
+            post.workout.restDuration,
+            post.workout.numberOfTabatas,
+            post.workout.exercisesPerTabata,
+            post.workout.intermisionDuration,
+            post.workout.cooldownDuration,
+        )
+        : 0);
 
     const handleLikePress = (): void => {
         if (liked) {
@@ -91,6 +102,11 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                     {' '}
                     tabatas
                     )
+                </Text>
+                <Text mt={2}>
+                    Total Workout Time:
+                    {' '}
+                    {formattedTotalWorkoutTime}
                 </Text>
                 {post.description?.length > 0 && (
                     <Text mt={2}>

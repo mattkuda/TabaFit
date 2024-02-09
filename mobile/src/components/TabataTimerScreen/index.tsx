@@ -56,7 +56,6 @@ export const TabataTimerScreen = (): JSX.Element => {
         setSound(newSound);
 
         await newSound.playAsync();
-        console.log('Done playing sound:');
     }
 
     useEffect(() => (sound

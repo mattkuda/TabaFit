@@ -16,6 +16,7 @@ import { useMutateLike, useMutateUnlike } from '../../mutations/useMutateLike';
 import { PostScreenNavigationProp } from '../../types/navigationTypes';
 import { formatName, formatTabatasCount } from '../../util/util';
 import { CommentCard } from './CommentCard';
+import { calculateTotalWorkoutTime, formatTime } from '../TabataTimerScreen/util';
 
 export const PostScreen = (): JSX.Element => {
     const route = useRoute<PostScreenRouteProp>();
@@ -31,9 +32,19 @@ export const PostScreen = (): JSX.Element => {
     const likeMutation = useMutateLike();
     const unlikeMutation = useMutateUnlike();
     const navigation = useNavigation<PostScreenNavigationProp>();
-
     const [liked, setLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
+    const formattedTotalWorkoutTime = formatTime(post?.workout
+        ? calculateTotalWorkoutTime(
+            post.workout.warmupDuration,
+            post.workout.exerciseDuration,
+            post.workout.restDuration,
+            post.workout.numberOfTabatas,
+            post.workout.exercisesPerTabata,
+            post.workout.intermisionDuration,
+            post.workout.cooldownDuration,
+        )
+        : 0);
 
     useEffect(() => {
         if (post) {
@@ -116,6 +127,11 @@ export const PostScreen = (): JSX.Element => {
                     {post.workout.name}
                     {' '}
                     {formatTabatasCount(post.workout.numberOfTabatas)}
+                </Text>
+                <Text mt={2}>
+                    Total Workout Time:
+                    {' '}
+                    {formattedTotalWorkoutTime}
                 </Text>
                 <Text mt={2}>{post.description}</Text>
                 <HStack justifyContent="space-between" mt={2} space={4}>
