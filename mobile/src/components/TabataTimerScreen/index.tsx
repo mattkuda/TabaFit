@@ -20,6 +20,7 @@ const sounds = {
     beep: require('../../../assets/sounds/beep.wav'),
     exercise: require('../../../assets/sounds/exercise.wav'),
     rest: require('../../../assets/sounds/rest.wav'),
+    burpees: require('../../../assets/sounds/burpees.wav'),
     // ... other specific exercises
 };
 
@@ -49,7 +50,7 @@ export const TabataTimerScreen = (): JSX.Element => {
 
     async function playSound(name: string): Promise<void> {
         console.log('Playing sound:', name);
-        const soundToPlay = sounds[name] || sounds.exercise;
+        const soundToPlay = sounds[name.toLowerCase()] || sounds.exercise;
         const { sound: newSound } = await Audio.Sound.createAsync(soundToPlay, { shouldPlay: true });
 
         setSound(newSound);
@@ -88,6 +89,16 @@ export const TabataTimerScreen = (): JSX.Element => {
     };
 
     const navigateToSharePostScreen = (): void => {
+        navigation.navigate('ShareWorkoutScreen', {
+            // Pass any data you need for sharing the workout
+            workout: route.params.workout,
+            completedAt: new Date(),
+            isInMyWorkouts,
+        });
+    };
+
+    const mockFinish = (): void => {
+        reset();
         navigation.navigate('ShareWorkoutScreen', {
             // Pass any data you need for sharing the workout
             workout: route.params.workout,
@@ -256,7 +267,7 @@ export const TabataTimerScreen = (): JSX.Element => {
             <Text>{currentExercise ? `Current Exercise: ${currentExercise.name}` : `Current: ${currentInterval.toUpperCase()}`}</Text>
             <Button onPress={toggle}>{isActive ? 'Pause' : 'Start'}</Button>
             <Button onPress={reset}>Reset</Button>
-            <Button onPress={navigateToSharePostScreen}>Mock Finish</Button>
+            <Button onPress={mockFinish}>Mock Finish</Button>
             <Modal isOpen={showAlert} onClose={(): void => setShowAlert(false)}>
                 <Modal.Content maxWidth="400px">
                     <Modal.CloseButton />
