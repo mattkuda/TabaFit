@@ -16,7 +16,7 @@ import { useMutateLike, useMutateUnlike } from '../../mutations/useMutateLike';
 import { PostScreenNavigationProp } from '../../types/navigationTypes';
 import { formatName, formatTabatasCount } from '../../util/util';
 import { CommentCard } from './CommentCard';
-import { calculateTotalWorkoutTime, formatTime } from '../TabataTimerScreen/util';
+import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
 
 export const PostScreen = (): JSX.Element => {
     const route = useRoute<PostScreenRouteProp>();
@@ -34,17 +34,7 @@ export const PostScreen = (): JSX.Element => {
     const navigation = useNavigation<PostScreenNavigationProp>();
     const [liked, setLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
-    const formattedTotalWorkoutTime = formatTime(post?.workout
-        ? calculateTotalWorkoutTime(
-            post.workout.warmupDuration,
-            post.workout.exerciseDuration,
-            post.workout.restDuration,
-            post.workout.numberOfTabatas,
-            post.workout.exercisesPerTabata,
-            post.workout.intermisionDuration,
-            post.workout.cooldownDuration,
-        )
-        : 0);
+    const formattedTotalWorkoutTime = post?.workout ? getFormattedTimeForTabataWorkout(post.workout) : '0';
 
     useEffect(() => {
         if (post) {

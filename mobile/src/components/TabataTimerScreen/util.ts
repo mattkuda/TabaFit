@@ -1,3 +1,5 @@
+import { TabataWorkout } from '../../types/workouts';
+
 // Utility function to calculate total workout time
 export const calculateTotalWorkoutTime = (
     warmupDuration: number,
@@ -31,4 +33,18 @@ export const formatTime = (time: number): string => {
     const secsStr = currSeconds < 10 ? `0${currSeconds}` : currSeconds;
 
     return hours > 0 ? `${hoursStr}:${minsStr}:${secsStr}` : `${minsStr}:${secsStr}`;
+};
+
+export const getFormattedTimeForTabataWorkout = (workout: TabataWorkout): string => {
+    const totalSeconds = calculateTotalWorkoutTime(
+        workout.warmupDuration,
+        workout.exerciseDuration,
+        workout.restDuration,
+        workout.numberOfTabatas,
+        workout.exercisesPerTabata,
+        workout.intermisionDuration,
+        workout.cooldownDuration,
+    );
+
+    return formatTime(totalSeconds);
 };
