@@ -7,13 +7,12 @@ import * as SecureStore from 'expo-secure-store';
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 const tokenKey = process.env.EXPO_PUBLIC_TOKEN_KEY;
 
-// Add a user field to the AuthProps interface
 interface AuthProps {
     children?: React.ReactNode;
     authState?: {
         token: string | null;
         authenticated: boolean | null;
-        userId?: string; // You can replace 'any' with a more specific type for your user data
+        userId?: string;
     };
     onRegister?: (email: string, password: string) => Promise<any>;
     onLogin?: (email: string, password: string) => Promise<any>;
@@ -25,11 +24,10 @@ const AuthContext = createContext<AuthProps>({});
 export const useAuth = (): AuthProps => useContext(AuthContext);
 
 export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
-    // Update the initial state to include a user field
     const [authState, setAuthState] = useState<{
         token: string | null;
         authenticated: boolean | null;
-        userId?: string; // Again, replace 'any' with your user type
+        userId?: string;
     }>({
         token: null,
         authenticated: null,
@@ -56,9 +54,9 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
     const onRegister = async (email: string, password: string): Promise<void> => {
         try {
             const response = await axios.post(`${apiUrl}/signup`, { email, password });
-            const { token } = response.data;
+            const { token, user } = response.data;
 
-            setAuthState({ token, authenticated: true });
+            setAuthState({ token, authenticated: true, userId: user._id });
 
             axios.defaults.headers.common.Authorization = `Bearer ${response.data.token}`;
 
@@ -94,7 +92,7 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
         try {
             await SecureStore.deleteItemAsync(tokenKey);
             axios.defaults.headers.common.Authorization = '';
-            setAuthState({ token: null, authenticated: false });
+            setAuthState({ token: null, authenticated: false, userId: null });
         } catch (error) {
             console.error('Logout error:', error);
             throw error;
