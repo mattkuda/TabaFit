@@ -21,6 +21,7 @@ const sounds = {
     rest: require('../../../assets/sounds/rest.wav'),
     burpees: require('../../../assets/sounds/burpees.wav'),
     nextup: require('../../../assets/sounds/nextup.wav'),
+    minuterest: require('../../../assets/sounds/minuterest.wav'),
     // ... TODO: other specific exercises
     // Use "Nancy" voice from https://www.naturalreaders.com/online/
 };
@@ -196,15 +197,22 @@ export const TabataTimerScreen = (): JSX.Element => {
 
                         playSound(nextExercise.name);
                     }
+                } else if (nextInterval === Intervals.Rest) {
+                    if (nextSeconds === restDuration) {
+                        playSound('rest');
+                    }
                 } else if (nextSeconds === 6 && (currentInterval === Intervals.Rest
                     || currentInterval === Intervals.Intermission
                     || currentInterval === Intervals.Warmup)) {
                     playSound('nextup');
                     // playSound(nextExercise.name);
-                } else if (nextInterval === Intervals.Rest) {
-                    if (nextSeconds === restDuration) {
-                        playSound('rest');
-                    }
+                } else if (nextSeconds === 5 && (currentInterval === Intervals.Rest
+                    || currentInterval === Intervals.Intermission
+                    || currentInterval === Intervals.Warmup)) {
+                    const exerciseName = currentTabata[nextExercisesDone]?.name
+                        || (exercisesDone === exercisesPerTabata ? 'minuterest' : currentTabata[0]?.name);
+
+                    playSound(exerciseName);
                 }
 
                 setCurrentInterval(nextInterval);
@@ -260,6 +268,8 @@ export const TabataTimerScreen = (): JSX.Element => {
             >
                 {formatTime(seconds)}
             </Text>
+            <Text>currentExercise?.name</Text>
+            <Text>{currentExercise?.name}</Text>
             <Text>
                 Exercises:
                 {' '}
