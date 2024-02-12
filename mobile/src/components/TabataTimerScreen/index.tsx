@@ -197,10 +197,8 @@ export const TabataTimerScreen = (): JSX.Element => {
 
                         playSound(nextExercise.name);
                     }
-                } else if (nextInterval === Intervals.Rest) {
-                    if (nextSeconds === restDuration) {
-                        playSound('rest');
-                    }
+                } else if (nextInterval === Intervals.Rest && nextSeconds === restDuration) {
+                    playSound('rest');
                 } else if (nextSeconds === 6 && (currentInterval === Intervals.Rest
                     || currentInterval === Intervals.Intermission
                     || currentInterval === Intervals.Warmup)) {
