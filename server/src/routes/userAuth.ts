@@ -32,7 +32,7 @@ let usersCollection: Collection<IUser>;
 router.post('/signup', async (req: Request, res: Response) => {
   try {
     const {
-      email, password, username, createdAt,
+      email, password, username, createdAt, googleUID,
     } = req.body;
     const existingUser = await usersCollection.findOne({ email });
     if (existingUser) {
@@ -40,6 +40,7 @@ router.post('/signup', async (req: Request, res: Response) => {
     }
     const hashedPassword = await bcrypt.hash(password, 12);
     const result = await usersCollection.insertOne({
+      _id: new mongoose.Types.ObjectId(googleUID),
       email,
       password: hashedPassword,
       username,

@@ -14,7 +14,7 @@ interface AuthProps {
         authenticated: boolean | null;
         userId?: string;
     };
-    onRegister?: (email: string, password: string) => Promise<any>;
+    onRegister?: (email: string, password: string, googleUid?: string) => Promise<any>;
     onLogin?: (email: string, password: string) => Promise<any>;
     onLogout?: () => Promise<any>;
 }
@@ -51,10 +51,12 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
         loadToken();
     }, []);
 
-    const onRegister = async (email: string, password: string): Promise<void> => {
+    const onRegister = async (email: string, password: string, googleUid?: string): Promise<void> => {
         try {
-            const response = await axios.post(`${apiUrl}/signup`, { email, password });
+            const response = await axios.post(`${apiUrl}/signup`, { email, password, googleUid });
             const { token, user } = response.data;
+
+            console.log('setting the google token as: ', token, ' and user as: ', user._id, ' and response: ', response.data);
 
             setAuthState({ token, authenticated: true, userId: user._id });
 
