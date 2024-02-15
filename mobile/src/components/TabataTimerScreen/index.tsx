@@ -179,6 +179,8 @@ export const TabataTimerScreen = (): JSX.Element => {
                         case Intervals.Cooldown:
                             setIsActive(false);
                             clearInterval(interval);
+                            // TODO: ADD SOUND FOR WORKOUT COMPLETE
+                            playSound('workoutcomplete');
                             navigateToSharePostScreen();
                             return;
                         default:
