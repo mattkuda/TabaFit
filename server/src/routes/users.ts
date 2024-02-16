@@ -267,9 +267,11 @@ router.delete('/:userId', authenticate, async (req: AuthRequest, res: Response) 
       return;
     }
 
+    const userIdObj = new mongoose.Types.ObjectId(userId);
+
     // Delete the user from the users collection
     const deleteResult = await usersCollection.deleteOne(
-      { _id: new mongoose.Types.ObjectId(userId) },
+      { _id: userIdObj },
     );
 
     if (deleteResult.deletedCount === 0) {
@@ -277,8 +279,13 @@ router.delete('/:userId', authenticate, async (req: AuthRequest, res: Response) 
       return;
     }
 
-    // TODO: clean up any related data (e.g., posts, comments, follows) associated with the user
-    // This step depends on your application's requirements and data model
+    // Delete all follow relationships where the user is either a follower or a followee
+    await followsCollection.deleteMany({
+      $or: [
+        { followerId: userIdObj },
+        { followeeId: userIdObj },
+      ],
+    });
 
     res.status(200).send({ message: 'Account deleted successfully' });
   } catch (err) {
