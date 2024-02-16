@@ -1,14 +1,16 @@
-import { Avatar } from 'native-base';
+import {
+    Avatar, Modal, VStack, Button,
+} from 'native-base';
 import React, { useState } from 'react';
 import {
-    View, TextInput, Button, TouchableOpacity,
+    TextInput, TouchableOpacity,
 } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { StackNavigationProp } from '@react-navigation/stack';
 // eslint-disable-next-line import/no-unresolved
 import { ProfileStackParamList } from 'src/navigation/navigationTypes';
-import { useMutateProfilePicture, useMutateUpdateProfile } from '../../mutations/profileMutations';
+import { useMutateDeleteAccount, useMutateProfilePicture, useMutateUpdateProfile } from '../../mutations/profileMutations';
 import { useAuth } from '../../context/AuthContext';
 
 type EditProfileRouteProp = RouteProp<ProfileStackParamList, 'EditProfile'>;
@@ -28,6 +30,8 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
     const [profilePictureUrl, setProfilePictureUrl] = useState(user.profilePictureUrl);
     const updateProfileMutation = useMutateUpdateProfile();
     const updateProfilePictureMutation = useMutateProfilePicture();
+    const deleteAccountMutation = useMutateDeleteAccount();
+    const [showModal, setShowModal] = useState(false);
     const { onLogout } = useAuth();
 
     const handleUpdate = (): void => {
@@ -86,8 +90,16 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
         }
     };
 
+    const handleDeleteAccount = async (): Promise<void> => {
+        deleteAccountMutation.mutate({
+            userId: user._id.toString(),
+        }, { onSuccess: () => navigation.goBack() });
+        await onLogout();
+        setShowModal(false);
+    };
+
     return (
-        <View style={{ padding: 20 }}>
+        <VStack style={{ padding: 20 }}>
             <TouchableOpacity onPress={handleProfilePictureUpdate}>
                 <Avatar
                     borderColor="blue.500"
@@ -118,9 +130,29 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                 value={lastName}
                 onChangeText={setLastName}
             />
-            <Button title="Update Profile" onPress={handleUpdate} />
-            <Button title="Logout" onPress={handleLogout} />
-            <Button title="Go Back" onPress={(): void => navigation.goBack()} />
-        </View>
+            <Button onPress={handleUpdate}>Update Profile</Button>
+            <Button onPress={handleLogout}>Logout</Button>
+            <Button onPress={(): void => navigation.goBack()}>Go Back</Button>
+            <Button color="red" onPress={(): void => setShowModal(true)}>Delete Account</Button>
+            <Modal isOpen={showModal}>
+                <Modal.Content>
+                    <Modal.CloseButton />
+                    <Modal.Header>Delete Account</Modal.Header>
+                    <Modal.Body>
+                        Are you sure you want to delete your account?
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button.Group space={2}>
+                            <Button colorScheme="blueGray" variant="ghost" onPress={(): void => setShowModal(false)}>
+                                Cancel
+                            </Button>
+                            <Button colorScheme="danger" onPress={handleDeleteAccount}>
+                                Delete
+                            </Button>
+                        </Button.Group>
+                    </Modal.Footer>
+                </Modal.Content>
+            </Modal>
+        </VStack>
     );
 };

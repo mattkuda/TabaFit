@@ -39,3 +39,21 @@ export const useMutateUpdateProfile = (): UseMutationResult<void, AxiosError, Up
         },
     },
 );
+
+interface DeleteAccountVariables {
+    userId: string;
+}
+
+export const useMutateDeleteAccount = (): UseMutationResult<void, AxiosError, DeleteAccountVariables> => useMutation<void, AxiosError, DeleteAccountVariables>(
+    ({ userId }) => axios.delete(`${apiUrl}/users/${userId}`)
+        .then((response) => response.data), // This assumes your endpoint responds with some data; adjust if it does not
+    {
+        onSuccess: () => {
+            // Here you can add any success logic, e.g., redirecting the user, showing a success message, etc.
+            console.log('Account successfully deleted');
+        },
+        onError: (error) => {
+            console.error('Error deleting account', error.message);
+        },
+    },
+);

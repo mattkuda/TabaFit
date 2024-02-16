@@ -17,7 +17,8 @@ type LoadWorkoutScreenNavigationProp = StackNavigationProp<TabNavigatorParamList
 
 export const LoadWorkoutScreen: FC = () => {
     const navigation = useNavigation<LoadWorkoutScreenNavigationProp>();
-    const [showModal, setShowModal] = useState(false);
+    const [showModal,
+        setShowModal] = useState(false);
     const [selectedWorkout, setSelectedWorkout] = useState<TabataWorkout | null>(null);
     const deleteWorkoutMutation = useMutateDeleteWorkout();
     const {
@@ -41,7 +42,8 @@ export const LoadWorkoutScreen: FC = () => {
                 refetch();
                 queryClient.invalidateQueries('my-saved-workouts');
             },
-        }); setShowModal(false);
+        });
+        setShowModal(false);
     };
 
     const handleDeletePress = (workout: TabataWorkout): void => {
