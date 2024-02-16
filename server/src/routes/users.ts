@@ -256,4 +256,35 @@ router.put('/:userId', authenticate, async (req: AuthRequest, res: Response) => 
   }
 });
 
+// Endpoint to delete a user account
+router.delete('/:userId', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { userId } = req;
+
+    // Check if the authenticated user is the same as the user being deleted
+    if (req.userId !== userId) {
+      res.status(403).send({ message: 'Forbidden: You cannot delete other users\' accounts.' });
+      return;
+    }
+
+    // Delete the user from the users collection
+    const deleteResult = await usersCollection.deleteOne(
+      { _id: new mongoose.Types.ObjectId(userId) },
+    );
+
+    if (deleteResult.deletedCount === 0) {
+      res.status(404).send({ message: 'User not found or already deleted' });
+      return;
+    }
+
+    // TODO: clean up any related data (e.g., posts, comments, follows) associated with the user
+    // This step depends on your application's requirements and data model
+
+    res.status(200).send({ message: 'Account deleted successfully' });
+  } catch (err) {
+    console.error('Failed to delete user account', err);
+    res.status(500).send({ message: 'Failed to delete user account' });
+  }
+});
+
 export default router;
