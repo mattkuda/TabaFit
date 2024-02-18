@@ -32,7 +32,7 @@ let usersCollection: Collection<IUser>;
 router.post('/signup', async (req: Request, res: Response) => {
   try {
     const {
-      email, password, username, createdAt,
+      email, password, username, firstName, lastName, createdAt,
     } = req.body;
     const existingUser = await usersCollection.findOne({ email });
     if (existingUser) {
@@ -43,6 +43,8 @@ router.post('/signup', async (req: Request, res: Response) => {
       email,
       password: hashedPassword,
       username,
+      firstName,
+      lastName,
       createdAt,
     } as IUser);
     const token = createSecretToken(result.insertedId.toString());

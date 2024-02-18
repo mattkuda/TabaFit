@@ -6,6 +6,8 @@ export interface IUser extends Document {
   username: string;
   password: string;
   createdAt: Date;
+  firstName?: string;
+  lastName?: string;
 }
 
 const userSchema: Schema = new Schema({

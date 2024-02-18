@@ -44,7 +44,7 @@ export const SignupScreen = (): JSX.Element => {
 
     const handleSignUp = async (): Promise<void> => {
         try {
-            const data = await onRegister(email, password);
+            const data = await onRegister(email, password, firstName, lastName, username);
 
             if (data.success) {
                 setUser((prevState) => ({
