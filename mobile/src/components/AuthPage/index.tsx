@@ -1,64 +1,42 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-    Button, TextInput, View, Text,
+    Button, View, StyleSheet, Image,
 } from 'react-native';
-import { useSetRecoilState } from 'recoil';
-import { useAuth } from '../../context/AuthContext';
-import { userState } from '../../atoms/userStateAtom';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { AuthStackParamList } from '../../navigation/navigationTypes';
+// @ts-ignore
+import logo from '../../../assets/TabatableBasicLogo.png'; // Adjust the path and filename as necessary
 
-const tokenKey = process.env.EXPO_PUBLIC_TOKEN_KEY;
-const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    },
+    logo: {
+        maxWidth: '100%',
+        height: 100,
+        resizeMode: 'contain',
+        marginHorizontal: 100,
+        marginBottom: 20,
+    },
+    buttonContainer: {
+        width: '80%',
+    },
+});
 
 export const AuthPage = (): JSX.Element => {
-    const [email, setEmail] = useState<string>('test@gmail.com');
-    const [password, setPassword] = useState<string>('test');
-    const [errorMessage, setErrorMessage] = useState<string>('');
-    const setUser = useSetRecoilState(userState);
-    const { onLogin, onRegister } = useAuth();
-
-    const handleSignUp = async (): Promise<void> => {
-        try {
-            const data = await onRegister(email, password);
-
-            if (data.success) {
-                // Navigate to the main app
-            } else {
-                setErrorMessage(data.message);
-            }
-        } catch (error) {
-            setErrorMessage(error.message);
-        }
-    };
-
-    const handleSignIn = async (): Promise<void> => {
-        try {
-            const data = await onLogin(email, password);
-
-            setErrorMessage(JSON.stringify(data));
-
-            if (data.success) {
-                setUser((prevState) => ({
-                    ...prevState,
-                    isAuthenticated: true,
-                    user: data.user, // Assuming 'data.user' contains the user data returned from the server
-                }));
-            } else {
-                // setErrorMessage(data.message);
-            }
-        } catch (error) {
-            setErrorMessage(error.message);
-        }
-    };
+    const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
 
     return (
-        <View>
-            <TextInput placeholder="Email" value={email} onChangeText={(text: string): void => setEmail(text.toLocaleLowerCase())} />
-            <TextInput secureTextEntry placeholder="Password" value={password} onChangeText={(text: string): void => setPassword(text)} />
-            <Button title="Sign Up" onPress={handleSignUp} />
-            <Button title="Sign In" onPress={handleSignIn} />
-            {errorMessage && <Text>{errorMessage}</Text>}
-            <Text>{tokenKey}</Text>
-            <Text>{apiUrl}</Text>
+        <View style={styles.container}>
+            <Image source={logo} style={styles.logo} />
+            <View style={styles.buttonContainer}>
+                <Button title="Sign Up" onPress={(): void => navigation.navigate('SignupScreen')} />
+                <Button title="Login" onPress={(): void => navigation.navigate('LoginScreen')} />
+            </View>
         </View>
     );
 };

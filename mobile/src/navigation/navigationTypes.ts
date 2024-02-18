@@ -87,3 +87,10 @@ export type SelectExerciseScreenRouteProp = StackNavigationProp<WorkoutsStackPar
 export type ShareWorkoutScreenNavigationProp = StackNavigationProp<WorkoutsStackParamList, 'ShareWorkoutScreen'>;
 export type ViewWorkoutScreenRouteProp = RouteProp<WorkoutsStackParamList, 'ViewWorkoutScreen'>;
 export type DiscoverWorkoutsScreenRouteProp = RouteProp<WorkoutsStackParamList, 'DiscoverWorkoutsScreen'>;
+
+// Auth Stack
+export type AuthStackParamList = {
+    AuthPage: undefined;
+    LoginScreen: undefined;
+    SignupScreen: undefined;
+};

@@ -14,10 +14,10 @@ import { ProfileStackNavigator } from '../navigation/ProfileStackNavigator';
 import { useAuth } from '../context/AuthContext';
 import { TabNavigatorParamList } from '../types/navigationTypes';
 import { showFooterState } from '../atoms/showFooterAtom';
-import { AuthPage } from './AuthPage';
 import { Searchbutton } from './SearchButtons';
 import { WorkoutsStackNavigator } from '../navigation/WorkoutsStackNavigator';
 import { useUserInfo } from '../hooks/useUserInfo';
+import { AuthStackNavigator } from '../navigation/AuthStackNavigator';
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
@@ -55,12 +55,14 @@ export const Routes = (): JSX.Element => {
 
     if (!authState.authenticated) {
         return (
-            <SafeAreaView style={{ flex: 1 }}>
-                <AuthPage />
-                <Text>
-                    {authState.authenticated ? 'y' : 'n'}
-                </Text>
-            </SafeAreaView>
+            <NavigationContainer>
+                <SafeAreaView style={{ flex: 1 }}>
+                    <AuthStackNavigator />
+                    <Text>
+                        {authState.authenticated ? 'y' : 'n'}
+                    </Text>
+                </SafeAreaView>
+            </NavigationContainer>
         );
     }
 
