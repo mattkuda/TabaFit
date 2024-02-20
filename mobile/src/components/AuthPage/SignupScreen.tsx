@@ -7,6 +7,7 @@ import { userState } from '../../atoms/userStateAtom';
 import { useAuth } from '../../context/AuthContext';
 // @ts-ignore
 import logo from '../../../assets/TabatableBasicLogo.png'; // Adjust the path and filename as necessary
+import { useQueryUserByUsername } from '../../hooks/useQueryUserByUsername';
 
 const styles = StyleSheet.create({
     container: {
@@ -41,6 +42,8 @@ export const SignupScreen = (): JSX.Element => {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const setUser = useSetRecoilState(userState);
     const { onRegister } = useAuth();
+    const { data: foundUser } = useQueryUserByUsername(username);
+    const userTaken = foundUser && foundUser.username === username;
 
     const handleSignUp = async (): Promise<void> => {
         try {
@@ -68,7 +71,8 @@ export const SignupScreen = (): JSX.Element => {
             <TextInput placeholder="First Name" style={styles.input} value={firstName} onChangeText={setFirstName} />
             <TextInput placeholder="Last Name" style={styles.input} value={lastName} onChangeText={setLastName} />
             <TextInput placeholder="Username" style={styles.input} value={username} onChangeText={setUsername} />
-            <Button title="Sign Up" onPress={handleSignUp} />
+            {userTaken && <Text>Username already taken</Text>}
+            <Button disabled={userTaken} title="Sign Up" onPress={handleSignUp} />
             <Text>{errorMessage}</Text>
         </View>
     );

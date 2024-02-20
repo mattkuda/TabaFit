@@ -97,6 +97,7 @@ router.get('/username/:username', async (req: AuthRequest, res: Response) => {
     res.status(500).send({ message: 'Failed to get user by username' });
   }
 });
+
 // Function to upload file to Firebase Storage
 async function uploadFile(
   fileBuffer: Buffer,
