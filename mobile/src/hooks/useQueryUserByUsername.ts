@@ -6,7 +6,7 @@ const apiUrl = 'http://localhost:3000';
 
 const fetchUserInfoByUsername = async (username: string): Promise<UserFullInfoModel> => {
     try {
-        const response = await axios.get(`${apiUrl}/users/username${username}`);
+        const response = await axios.get(`${apiUrl}/users/username/${username}`);
 
         return response.data;
     } catch (error) {

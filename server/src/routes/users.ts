@@ -79,10 +79,10 @@ router.get('/:userId', async (req: AuthRequest, res: Response) => {
 
 router.get('/username/:username', async (req: AuthRequest, res: Response) => {
   try {
-    const { username } = req.params; // Extract username from params
+    console.log('Fetching user by username');
 
     // Find the user by username
-    const user = await usersCollection.findOne({ username });
+    const user = await usersCollection.findOne({ username: req.params.username.toLowerCase() });
 
     if (!user) {
       res.status(404).send({ message: 'User not found' });

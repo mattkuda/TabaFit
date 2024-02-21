@@ -43,7 +43,6 @@ export const SignupScreen = (): JSX.Element => {
     const setUser = useSetRecoilState(userState);
     const { onRegister } = useAuth();
     const { data: foundUser } = useQueryUserByUsername(username);
-    const userTaken = foundUser && foundUser.username === username;
 
     const handleSignUp = async (): Promise<void> => {
         try {
@@ -70,10 +69,20 @@ export const SignupScreen = (): JSX.Element => {
             <TextInput secureTextEntry placeholder="Password" style={styles.input} value={password} onChangeText={setPassword} />
             <TextInput placeholder="First Name" style={styles.input} value={firstName} onChangeText={setFirstName} />
             <TextInput placeholder="Last Name" style={styles.input} value={lastName} onChangeText={setLastName} />
-            <TextInput placeholder="Username" style={styles.input} value={username} onChangeText={setUsername} />
-            {userTaken && <Text>Username already taken</Text>}
-            <Button disabled={userTaken} title="Sign Up" onPress={handleSignUp} />
+            <TextInput
+                autoCapitalize="none"
+                placeholder="Username"
+                style={styles.input}
+                value={username}
+                onChangeText={setUsername}
+            />
+            {foundUser && <Text>Username already taken</Text>}
+            <Button disabled={!!foundUser} title="Sign Up" onPress={handleSignUp} />
             <Text>{errorMessage}</Text>
+            <Text>
+                FU:
+                {foundUser?.username}
+            </Text>
         </View>
     );
 };
