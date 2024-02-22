@@ -98,6 +98,27 @@ router.get('/username/:username', async (req: AuthRequest, res: Response) => {
   }
 });
 
+router.get('/email/:email', async (req: AuthRequest, res: Response) => {
+  try {
+    console.log('Fetching user by email');
+
+    // Find the user by email
+    const user = await usersCollection.findOne({ email: req.params.email.toLowerCase() });
+
+    if (!user) {
+      res.status(404).send({ message: 'User not found' });
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...safeUser } = user;
+    res.status(200).send(safeUser);
+  } catch (err) {
+    console.error('Failed to get user by email', err);
+    res.status(500).send({ message: 'Failed to get user by email' });
+  }
+});
+
 // Function to upload file to Firebase Storage
 async function uploadFile(
   fileBuffer: Buffer,

@@ -18,7 +18,26 @@ const fetchUserInfoByUsername = async (username: string): Promise<UserFullInfoMo
 };
 
 export const useQueryUserByUsername = (username: string): UseQueryResult<UserFullInfoModel, Error> => useQuery(
-    ['userByUsername', username],
+    ['userByEmail', username],
     () => fetchUserInfoByUsername(username),
     { enabled: !!username },
+);
+
+const fetchUserInfoByEmail = async (email: string): Promise<UserFullInfoModel> => {
+    try {
+        const response = await axios.get(`${apiUrl}/users/email/${email}`);
+
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            throw new Error(error.response?.data.message || 'An error occurred while fetching user info by email');
+        }
+        throw new Error('An error occurred while fetching user info by email');
+    }
+};
+
+export const useQueryUserByEmail = (email: string): UseQueryResult<UserFullInfoModel, Error> => useQuery(
+    ['userByEmail', email],
+    () => fetchUserInfoByEmail(email),
+    { enabled: !!email },
 );

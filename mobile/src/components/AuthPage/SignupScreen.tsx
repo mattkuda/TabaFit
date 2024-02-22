@@ -7,7 +7,7 @@ import { userState } from '../../atoms/userStateAtom';
 import { useAuth } from '../../context/AuthContext';
 // @ts-ignore
 import logo from '../../../assets/TabatableBasicLogo.png'; // Adjust the path and filename as necessary
-import { useQueryUserByUsername } from '../../hooks/useQueryUserByUsername';
+import { useQueryUserByEmail, useQueryUserByUsername } from '../../hooks/useQueryUserByUsername';
 
 const styles = StyleSheet.create({
     container: {
@@ -42,7 +42,8 @@ export const SignupScreen = (): JSX.Element => {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const setUser = useSetRecoilState(userState);
     const { onRegister } = useAuth();
-    const { data: foundUser } = useQueryUserByUsername(username);
+    const { data: foundUserByUseranme } = useQueryUserByUsername(username);
+    const { data: foundUserByEmail } = useQueryUserByEmail(email);
 
     const handleSignUp = async (): Promise<void> => {
         try {
@@ -66,6 +67,7 @@ export const SignupScreen = (): JSX.Element => {
         <View style={styles.container}>
             <Image source={logo} style={styles.logo} />
             <TextInput placeholder="Email" style={styles.input} value={email} onChangeText={setEmail} />
+            {foundUserByEmail && <Text>Email already is use</Text>}
             <TextInput secureTextEntry placeholder="Password" style={styles.input} value={password} onChangeText={setPassword} />
             <TextInput placeholder="First Name" style={styles.input} value={firstName} onChangeText={setFirstName} />
             <TextInput placeholder="Last Name" style={styles.input} value={lastName} onChangeText={setLastName} />
@@ -76,12 +78,16 @@ export const SignupScreen = (): JSX.Element => {
                 value={username}
                 onChangeText={setUsername}
             />
-            {foundUser && <Text>Username already taken</Text>}
-            <Button disabled={!!foundUser} title="Sign Up" onPress={handleSignUp} />
+            {foundUserByUseranme && <Text>Username already taken</Text>}
+            <Button disabled={!!foundUserByUseranme || !!foundUserByEmail} title="Sign Up" onPress={handleSignUp} />
             <Text>{errorMessage}</Text>
             <Text>
-                FU:
-                {foundUser?.username}
+                FUser:
+                {foundUserByUseranme?.username}
+            </Text>
+            <Text>
+                FEmail:
+                {foundUserByEmail?.username}
             </Text>
         </View>
     );
