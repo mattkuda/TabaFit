@@ -68,8 +68,14 @@ export const SignupScreen = (): JSX.Element => {
     return (
         <View style={styles.container}>
             <Image source={logo} style={styles.logo} />
-            <TextInput placeholder="Email" style={styles.input} value={email} onChangeText={setEmail} />
-            {foundUserByEmail && <Text>Email already is use</Text>}
+            <TextInput
+                autoCapitalize="none"
+                placeholder="Email"
+                style={styles.input}
+                value={email}
+                onChangeText={setEmail}
+            />
+            {foundUserByEmail && <Text>Email already in use</Text>}
             <TextInput secureTextEntry placeholder="Password" style={styles.input} value={password} onChangeText={setPassword} />
             <TextInput placeholder="First Name" style={styles.input} value={firstName} onChangeText={setFirstName} />
             <TextInput placeholder="Last Name" style={styles.input} value={lastName} onChangeText={setLastName} />

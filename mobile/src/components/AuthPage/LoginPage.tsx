@@ -62,7 +62,13 @@ export const LoginScreen = (): JSX.Element => {
     return (
         <View style={styles.container}>
             <Image source={logo} style={styles.logo} />
-            <TextInput placeholder="Email" style={styles.input} value={email} onChangeText={setEmail} />
+            <TextInput
+                autoCapitalize="none"
+                placeholder="Email"
+                style={styles.input}
+                value={email}
+                onChangeText={setEmail}
+            />
             <TextInput secureTextEntry placeholder="Password" style={styles.input} value={password} onChangeText={setPassword} />
             <Button title="Login" onPress={handleSignIn} />
             <Text>{errorMessage}</Text>
