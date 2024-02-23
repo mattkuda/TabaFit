@@ -63,6 +63,8 @@ export const SignupScreen = (): JSX.Element => {
         }
     };
 
+    const isFormIncomplete = !email || !password || !firstName || !lastName || !username;
+
     return (
         <View style={styles.container}>
             <Image source={logo} style={styles.logo} />
@@ -79,16 +81,8 @@ export const SignupScreen = (): JSX.Element => {
                 onChangeText={setUsername}
             />
             {foundUserByUseranme && <Text>Username already taken</Text>}
-            <Button disabled={!!foundUserByUseranme || !!foundUserByEmail} title="Sign Up" onPress={handleSignUp} />
+            <Button disabled={isFormIncomplete || !!foundUserByUseranme || !!foundUserByEmail} title="Sign Up" onPress={handleSignUp} />
             <Text>{errorMessage}</Text>
-            <Text>
-                FUser:
-                {foundUserByUseranme?.username}
-            </Text>
-            <Text>
-                FEmail:
-                {foundUserByEmail?.username}
-            </Text>
         </View>
     );
 };

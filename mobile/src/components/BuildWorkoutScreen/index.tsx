@@ -87,7 +87,6 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     const customWorkout = route?.params?.customWorkout;
     const isSavedWorkoutByUser = route?.params?.customWorkout && route?.params?.customWorkout.userId === userId;
     const isShuffle = route?.params?.isShuffle || false;
-    // const [workout, setWorkout] = useState<TabataWorkout>(customWorkout || buildNewTabataInitialState);
     const [workout, setWorkout] = useState<TabataWorkout>(customWorkout || soundTestingWorkout);
     const saveWorkoutMutation = useMutateSaveWorkout();
     const { authState } = useAuth();
