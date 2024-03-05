@@ -59,6 +59,12 @@ export const LoginScreen = (): JSX.Element => {
         }
     };
 
+    const handlePrefill = async (): Promise<void> => {
+        setEmail('test@gmail.com');
+        setPassword('test');
+        await handleSignIn();
+    };
+
     return (
         <View style={styles.container}>
             <Image source={logo} style={styles.logo} />
@@ -71,6 +77,7 @@ export const LoginScreen = (): JSX.Element => {
             />
             <TextInput secureTextEntry placeholder="Password" style={styles.input} value={password} onChangeText={setPassword} />
             <Button title="Login" onPress={handleSignIn} />
+            <Button title="Pre-fill" onPress={handlePrefill} />
             <Text>{errorMessage}</Text>
         </View>
     );
