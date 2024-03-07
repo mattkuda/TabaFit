@@ -18,6 +18,8 @@ import { Searchbutton } from './SearchButtons';
 import { WorkoutsStackNavigator } from '../navigation/WorkoutsStackNavigator';
 import { useUserInfo } from '../hooks/useUserInfo';
 import { AuthStackNavigator } from '../navigation/AuthStackNavigator';
+import { SignUpWizardStackNavigator } from '../navigation/SignUpWizardStackNavigator';
+import { wizardTodoState } from '../atoms/wizardTodoAtom';
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
@@ -52,6 +54,7 @@ const ProfileTabIcon = ({ focused, color, size }): JSX.Element => {
 export const Routes = (): JSX.Element => {
     const showFooter = useRecoilValue(showFooterState);
     const { authState } = useAuth();
+    const wizardTodo = useRecoilValue(wizardTodoState);
 
     if (!authState.authenticated) {
         return (
@@ -61,6 +64,15 @@ export const Routes = (): JSX.Element => {
                     <Text>
                         {authState.authenticated ? 'y' : 'n'}
                     </Text>
+                </SafeAreaView>
+            </NavigationContainer>
+        );
+    } if (authState.authenticated && wizardTodo) {
+        // Show the sign-up wizard if the user is authenticated but hasn't completed the wizard
+        return (
+            <NavigationContainer>
+                <SafeAreaView style={{ flex: 1 }}>
+                    <SignUpWizardStackNavigator />
                 </SafeAreaView>
             </NavigationContainer>
         );

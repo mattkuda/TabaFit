@@ -8,6 +8,7 @@ import { useAuth } from '../../context/AuthContext';
 // @ts-ignore
 import logo from '../../../assets/TabatableBasicLogo.png'; // Adjust the path and filename as necessary
 import { useQueryUserByEmail, useQueryUserByUsername } from '../../hooks/useQueryUserByUsername';
+import { wizardTodoState } from '../../atoms/wizardTodoAtom';
 
 const styles = StyleSheet.create({
     container: {
@@ -44,6 +45,7 @@ export const SignupScreen = (): JSX.Element => {
     const { onRegister } = useAuth();
     const { data: foundUserByUseranme } = useQueryUserByUsername(username);
     const { data: foundUserByEmail } = useQueryUserByEmail(email);
+    const setWizardTodo = useSetRecoilState(wizardTodoState);
 
     const handleSignUp = async (): Promise<void> => {
         try {
@@ -55,6 +57,7 @@ export const SignupScreen = (): JSX.Element => {
                     isAuthenticated: true,
                     user: data.user,
                 }));
+                setWizardTodo(true);
             } else {
                 setErrorMessage(data.message);
             }

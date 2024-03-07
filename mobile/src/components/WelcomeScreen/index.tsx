@@ -1,14 +1,13 @@
 import React from 'react';
 import { Box, Text, Button } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
-import { HomeScreenNavigationProp } from '../../types/navigationTypes';
+import { useSetRecoilState } from 'recoil';
+import { wizardTodoState } from '../../atoms/wizardTodoAtom';
 
 export const WelcomeScreen = (): JSX.Element => {
-    const navigation = useNavigation<HomeScreenNavigationProp>();
-
-    const handleContinue = (): void => {
+    const setWizardTodo = useSetRecoilState(wizardTodoState);
+    const handleContinue = async (): Promise<void> => {
         // Navigate to the Home screen
-        navigation.navigate('HomePage'); // Ensure 'Home' matches the name of your home screen in the navigator
+        setWizardTodo(false);
     };
 
     return (

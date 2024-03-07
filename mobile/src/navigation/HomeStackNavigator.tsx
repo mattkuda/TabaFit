@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { HStack } from 'native-base';
 import { PostScreen } from '../components/PostScreen';
 import { ProfilePage } from '../components/ProfilePage';
 import { HomePage } from '../components/HomePage';
@@ -13,12 +14,21 @@ import { BuildWorkoutScreen } from '../components/BuildWorkoutScreen';
 import { TabataTimerScreen } from '../components/TabataTimerScreen';
 import { ShareWorkoutScreen } from '../components/ShareWorkoutScreen';
 import { ConnectionsScreen } from '../ConnectionsScreen';
+import { DebugModeButton } from '../components/DebugModeButton';
 
 const Stack = createStackNavigator<HomeStackParamList>();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const SearchButtonComponent = (): JSX.Element => <Searchbutton />;
-const NotificationsButtonComponent = (): JSX.Element => <NotificationsButton />;
+// const NotificationsButtonComponent = (): JSX.Element => <NotificationsButton />;
+// const DebugModeButtonComponent = (): JSX.Element => <DebugModeButton />;
+
+const HeaderRightComponent = (): JSX.Element => (
+    <HStack marginRight="2" space={2}>
+        <NotificationsButton />
+        <DebugModeButton />
+    </HStack>
+);
 
 export const HomeStackNavigator = (): JSX.Element => (
     <Stack.Navigator
@@ -29,7 +39,7 @@ export const HomeStackNavigator = (): JSX.Element => (
             name="HomePage"
             options={{
                 headerLeft: SearchButtonComponent,
-                headerRight: NotificationsButtonComponent,
+                headerRight: HeaderRightComponent,
             }}
         />
         <Stack.Screen component={SearchPage} name="Search" />
