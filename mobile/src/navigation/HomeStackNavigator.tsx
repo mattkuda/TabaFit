@@ -20,9 +20,6 @@ const Stack = createStackNavigator<HomeStackParamList>();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const SearchButtonComponent = (): JSX.Element => <Searchbutton />;
-// const NotificationsButtonComponent = (): JSX.Element => <NotificationsButton />;
-// const DebugModeButtonComponent = (): JSX.Element => <DebugModeButton />;
-
 const HeaderRightComponent = (): JSX.Element => (
     <HStack marginRight="2" space={2}>
         <NotificationsButton />
