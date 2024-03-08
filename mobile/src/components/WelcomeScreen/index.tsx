@@ -1,13 +1,13 @@
 import React from 'react';
 import { Box, Text, Button } from 'native-base';
-import { useSetRecoilState } from 'recoil';
-import { wizardTodoState } from '../../atoms/wizardTodoAtom';
+import { useNavigation } from '@react-navigation/native';
+import { WelcomeScreenNavigationProp } from '../../navigation/navigationTypes';
 
 export const WelcomeScreen = (): JSX.Element => {
-    const setWizardTodo = useSetRecoilState(wizardTodoState);
+    const navigation = useNavigation<WelcomeScreenNavigationProp>();
     const handleContinue = async (): Promise<void> => {
         // Navigate to the Home screen
-        setWizardTodo(false);
+        navigation.navigate('SuggestedFollowsScreen');
     };
 
     return (

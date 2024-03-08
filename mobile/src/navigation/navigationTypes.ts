@@ -95,3 +95,10 @@ export type AuthStackParamList = {
     LoginScreen: undefined;
     SignupScreen: undefined;
 };
+
+export type SignUpWizardStackParamList = {
+    WelcomeScreen: undefined;
+    SuggestedFollowsScreen: undefined;
+};
+export type WelcomeScreenNavigationProp = StackNavigationProp<SignUpWizardStackParamList, 'WelcomeScreen'>;
+export type SuggestedFollowsScreenNavigationProp = StackNavigationProp<SignUpWizardStackParamList, 'SuggestedFollowsScreen'>;
