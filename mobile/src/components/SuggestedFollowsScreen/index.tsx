@@ -1,36 +1,51 @@
 import React from 'react';
 import {
-    Box, Button, ScrollView, VStack, Text,
+    Box, Button, ScrollView, VStack, Text, Icon,
 } from 'native-base';
-// import { useNavigation } from '@react-navigation/native';
-// import { ConnectionCard } from '../components/ConnectionCard'; // Adjust import paths as necessary
-// import { users } from '../data/users'; // Assume you have a mock data file or fetch from an API
+import { MaterialIcons } from '@expo/vector-icons'; // Assuming you're using Expo
 import { useSetRecoilState } from 'recoil';
+import { useFollowAll } from '../../mutations/followMutations';
+import { useAuth } from '../../context/AuthContext';
 import { wizardTodoState } from '../../atoms/wizardTodoAtom';
 
 export const SuggestedFollowsScreen = (): JSX.Element => {
-    // const navigation = useNavigation();
     const setWizardTodo = useSetRecoilState(wizardTodoState);
+    const followAllMutation = useFollowAll();
+    const { authState } = useAuth();
+    const userId = authState?.userId;
+
     const handleFollowAll = (): void => {
-        // Implement follow all logic here
-        console.log('Following all suggested users');
-        setWizardTodo(false);
+        if (userId) {
+            followAllMutation.mutate({ followerId: userId });
+        }
     };
 
     return (
         <ScrollView bg="white">
             <VStack mt="5" px="4" space={4}>
-                <Button colorScheme="primary" variant="solid" onPress={handleFollowAll}>
+                <Button
+                    colorScheme="primary"
+                    isLoading={followAllMutation.isLoading}
+                    leftIcon={(
+                        <Icon
+                            as={MaterialIcons}
+                            color={followAllMutation.isSuccess ? 'green.500' : 'white'}
+                            name={followAllMutation.isSuccess ? 'check' : 'add'}
+                            size="sm"
+                        />
+                      )}
+                    variant="solid"
+                    onPress={handleFollowAll}
+                >
                     Follow All
                 </Button>
                 <Box>
                     <Text bold fontSize="xl" mb="4">
                         People You May Know
                     </Text>
-                    {/* {users.map((user) => (
-                        <ConnectionCard key={user._id} user={user} />
-                    ))} */}
+                    {/* ConnectionCard components */}
                 </Box>
+                <Button onPress={(): void => setWizardTodo(false)}>Done</Button>
             </VStack>
         </ScrollView>
     );

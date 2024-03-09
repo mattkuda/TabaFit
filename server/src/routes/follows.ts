@@ -144,4 +144,44 @@ router.get('/:userId/following', async (req: Request, res: Response) => {
   }
 });
 
+// Endpoint to follow multiple users
+router.post('/followAll', authenticate, async (req: Request, res: Response) => {
+  const { followerId } = req.body;
+
+  console.log('followerId', followerId);
+
+  if (!followerId) {
+    res.status(400).send({ message: 'User ID is required' });
+    return;
+  }
+
+  try {
+    const usersToFollow = await usersCollection.find(
+      { _id: { $ne: new ObjectId(followerId) } },
+    ).toArray();
+
+    // Prepare bulk operations for followsCollection
+    const followOps = usersToFollow.map((user) => ({
+      updateOne: {
+        filter: { followerId: new ObjectId(followerId), followeeId: new ObjectId(user._id) },
+        update: {
+          $setOnInsert: {
+            followerId: new ObjectId(followerId),
+            followeeId: new ObjectId(user._id),
+            createdDate: new Date(),
+          },
+        },
+        upsert: true, // Ensures we don't insert duplicates
+      },
+    }));
+
+    await followsCollection.bulkWrite(followOps);
+
+    res.status(200).send({ message: `Successfully followed ${usersToFollow.length} users.` });
+  } catch (err) {
+    console.error('Failed to follow all users', err);
+    res.status(500).send({ message: 'Failed to follow all users' });
+  }
+});
+
 export default router;
