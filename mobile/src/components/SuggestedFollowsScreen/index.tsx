@@ -3,17 +3,19 @@ import {
     Box, Button, ScrollView, VStack, Text, Icon,
 } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons'; // Assuming you're using Expo
-import { useSetRecoilState } from 'recoil';
+import { useNavigation } from '@react-navigation/native';
 import { useFollowAll } from '../../mutations/followMutations';
 import { useAuth } from '../../context/AuthContext';
-import { wizardTodoState } from '../../atoms/wizardTodoAtom';
+import { SuggestedFollowsScreenNavigationProp } from '../../navigation/navigationTypes';
 
 export const SuggestedFollowsScreen = (): JSX.Element => {
-    const setWizardTodo = useSetRecoilState(wizardTodoState);
     const followAllMutation = useFollowAll();
     const { authState } = useAuth();
     const userId = authState?.userId;
-
+    const navigation = useNavigation<SuggestedFollowsScreenNavigationProp>();
+    const handleContinue = async (): Promise<void> => {
+        navigation.navigate('SuggestedWorkoutsScreen');
+    };
     const handleFollowAll = (): void => {
         if (userId) {
             followAllMutation.mutate({ followerId: userId });
@@ -45,7 +47,7 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
                     </Text>
                     {/* ConnectionCard components */}
                 </Box>
-                <Button onPress={(): void => setWizardTodo(false)}>Done</Button>
+                <Button onPress={handleContinue}>Continue</Button>
             </VStack>
         </ScrollView>
     );
