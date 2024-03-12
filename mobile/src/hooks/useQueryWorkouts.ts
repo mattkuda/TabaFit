@@ -25,7 +25,7 @@ const fetchWorkouts = async ({ offset = 0, limit }: PagingParams): Promise<Tabat
 // TODO: Transform into querying featured workouts perhaps
 
 export const useQueryWorkouts = (pagingParams?: PagingParams): UseQueryResult<TabataWorkoutWithUserInfo[], Error> => useQuery([
-    'orkouts', pagingParams], () => fetchWorkouts(pagingParams));
+    'workouts', pagingParams], () => fetchWorkouts(pagingParams));
 
 export const useInfiniteQueryWorkouts = (): UseInfiniteQueryResult<TabataWorkoutWithUserInfo[], Error> => useInfiniteQuery(
     'workouts',
@@ -40,3 +40,22 @@ export const useInfiniteQueryWorkouts = (): UseInfiniteQueryResult<TabataWorkout
         },
     },
 );
+
+const fetchSuggestedWorkouts = async ({ offset = 0, limit }: PagingParams): Promise<TabataWorkoutWithUserInfo[]> => {
+    try {
+        const response = await axios.get<TabataWorkoutWithUserInfo[]>(`${apiUrl}/workouts/suggested`, {
+            params: { offset, limit: limit || defaultLimit },
+        });
+
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            throw new Error(error.response?.data.message || 'An error occurred while fetching suggested workouts');
+        }
+        throw new Error('An error occurred while fetching suggested workouts');
+    }
+};
+// TODO: Transform into querying featured workouts perhaps
+
+export const useQuerySuggestedWorkouts = (pagingParams?: PagingParams): UseQueryResult<TabataWorkoutWithUserInfo[], Error> => useQuery([
+    'suggested-workouts', pagingParams], () => fetchSuggestedWorkouts(pagingParams));
