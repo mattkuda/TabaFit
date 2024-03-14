@@ -235,4 +235,25 @@ router.put('/:workoutId', authenticate, async (req: AuthRequest, res: Response) 
   }
 });
 
+router.post('/saveAllSuggested', authenticate, async (req: AuthRequest, res: Response) => {
+  const { userId } = req;
+
+  try {
+    // Here, map each workoutId to a save operation
+    const saveOperations = SUGGESTED_WORKOUT_IDS.map((id) => ({
+      userId: new ObjectId(userId),
+      workoutId: new ObjectId(id),
+      savedDate: new Date(), // Example field, adjust based on your schema
+    }));
+
+    // Assuming you have a collection for saved workouts
+    await client.db('AbcountableDB').collection('savedWorkouts').insertMany(saveOperations);
+
+    res.status(201).send({ message: 'Workouts saved successfully' });
+  } catch (err) {
+    console.error('Failed to save multiple workouts', err);
+    res.status(500).send({ message: 'Failed to save multiple workouts' });
+  }
+});
+
 export default router;

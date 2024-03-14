@@ -8,11 +8,12 @@ import { useSetRecoilState } from 'recoil';
 import { TouchableOpacity } from 'react-native';
 import { wizardTodoState } from '../../atoms/wizardTodoAtom';
 import { useQuerySuggestedWorkouts } from '../../hooks/useQueryWorkouts';
-import { useMutateSaveWorkout } from '../../mutations/useMutateSaveWorkout';
+import { useMutateSaveAllSuggestedWorkout, useMutateSaveWorkout } from '../../mutations/useMutateSaveWorkout';
 import { useAuth } from '../../context/AuthContext';
 
 const WorkoutCard = ({
     workout,
+    isSavedAll,
 }): JSX.Element => {
     const [isSaved, setIsSaved] = useState(false); // Local state to track save status
     const saveWorkoutMutation = useMutateSaveWorkout();
@@ -48,8 +49,9 @@ const WorkoutCard = ({
                             leftIcon={(
                                 <Icon
                                     as={MaterialIcons}
-                                    color={isSaved ? 'green.500' : 'white'}
-                                    name={isSaved ? 'check' : 'add'}
+                                    color={isSaved || isSavedAll ? 'green.500' : 'white'}
+                                    disabled={isSaved || isSavedAll}
+                                    name={isSaved || isSavedAll ? 'check' : 'add'}
                                     size="sm"
                                 />
                             )}
@@ -67,28 +69,34 @@ const WorkoutCard = ({
 
 export const SuggestedWorkoutsScreen = (): JSX.Element => {
     const setWizardTodo = useSetRecoilState(wizardTodoState);
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const handleSaveAll = (): void => {
-        // if (userId) {
-        //     followAllMutation.mutate({ followerId: userId });
-        // }
-    };
-
+    const [isSavedAll, setSavedAll] = useState(false);
     const { data: workouts } = useQuerySuggestedWorkouts();
+    const saveAllMutation = useMutateSaveAllSuggestedWorkout(); // Using the save all mutation
+    const handleSaveAll = (): void => {
+        saveAllMutation.mutate({}, {
+            onSuccess: () => {
+                setSavedAll(true); // This marks all workouts as saved once the operation succeeds
+            },
+        });
+    };
 
     return (
         <ScrollView bg="white">
             <VStack mt="5" px="4" space={4}>
-                <Text bold fontSize="xl" mb="4">
-                    Suggested Workouts
-                </Text>
+                {/* Other components... */}
                 {workouts?.map((workout) => (
                     <WorkoutCard
+                        isSavedAll={isSavedAll} // Correctly pass isSavedAll to each WorkoutCard
                         key={workout._id.toString()}
                         workout={workout}
                     />
                 ))}
+                <Button
+                    isDisabled={isSavedAll} // Disable the button once all are saved
+                    onPress={handleSaveAll}
+                >
+                    Save all suggested
+                </Button>
                 <Button onPress={(): void => setWizardTodo(false)}>Done</Button>
             </VStack>
         </ScrollView>

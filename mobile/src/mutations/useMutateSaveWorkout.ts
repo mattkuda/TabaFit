@@ -41,3 +41,5 @@ export const useMutateUpdateWorkout = (): UseMutationResult<void, AxiosError, Up
         // You can add onSuccess here to refetch queries or update the UI accordingly
     },
 );
+
+export const useMutateSaveAllSuggestedWorkout = (): UseMutationResult<void, AxiosError> => useMutation<void, AxiosError>(() => axios.post(`${apiUrl}/workouts/saveAllSuggested`), {});
