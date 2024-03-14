@@ -126,6 +126,29 @@ router.get('/my-saved', authenticate, async (req: AuthRequest, res: Response) =>
   }
 });
 
+const SUGGESTED_WORKOUT_IDS = ['6584d7972b6663ce1eb2cce8', '6584d7a12b6663ce1eb2cce9'];
+
+// Endpoint to get suggested workouts
+router.get('/suggested', async (req: Request, res: Response) => {
+  try {
+    // Convert string IDs to ObjectId instances for MongoDB querying
+    const idsToFetch = SUGGESTED_WORKOUT_IDS.map((id: string) => new ObjectId(id));
+
+    // Fetch workouts with the specified IDs
+    const suggestedWorkouts = await workoutsCollection.find({
+      _id: { $in: idsToFetch },
+    }).toArray();
+
+    // Optionally, add user info to these workouts if needed
+    const suggestedWorkoutsWithUserInfo = await addUserInfoToWorkouts(suggestedWorkouts);
+
+    res.send(suggestedWorkoutsWithUserInfo);
+  } catch (err) {
+    console.error('Failed to fetch suggested workouts', err);
+    res.status(500).send({ message: 'Failed to fetch suggested workouts' });
+  }
+});
+
 router.post('/save', async (req: AuthRequest, res: Response) => {
   const { workout } = req.body;
   const { userId } = req;
@@ -209,29 +232,6 @@ router.put('/:workoutId', authenticate, async (req: AuthRequest, res: Response) 
   } catch (err) {
     console.error('Failed to update workout', err);
     res.status(500).send({ message: 'Failed to update workout' });
-  }
-});
-
-const SUGGESTED_WORKOUT_IDS = ['6584d7972b6663ce1eb2cce8', '6584d7a12b6663ce1eb2cce9'];
-
-// Endpoint to get suggested workouts
-router.get('/suggested', async (req: Request, res: Response) => {
-  try {
-    // Convert string IDs to ObjectId instances for MongoDB querying
-    const idsToFetch = SUGGESTED_WORKOUT_IDS.map((id: string) => new ObjectId(id));
-
-    // Fetch workouts with the specified IDs
-    const suggestedWorkouts = await workoutsCollection.find({
-      _id: { $in: idsToFetch },
-    }).toArray();
-
-    // Optionally, add user info to these workouts if needed
-    const suggestedWorkoutsWithUserInfo = await addUserInfoToWorkouts(suggestedWorkouts);
-
-    res.send(suggestedWorkoutsWithUserInfo);
-  } catch (err) {
-    console.error('Failed to fetch suggested workouts', err);
-    res.status(500).send({ message: 'Failed to fetch suggested workouts' });
   }
 });
 

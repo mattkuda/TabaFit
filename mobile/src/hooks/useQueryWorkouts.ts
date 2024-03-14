@@ -41,10 +41,9 @@ export const useInfiniteQueryWorkouts = (): UseInfiniteQueryResult<TabataWorkout
     },
 );
 
-const fetchSuggestedWorkouts = async ({ offset = 0, limit }: PagingParams): Promise<TabataWorkoutWithUserInfo[]> => {
+const fetchSuggestedWorkouts = async (): Promise<TabataWorkoutWithUserInfo[]> => {
     try {
         const response = await axios.get<TabataWorkoutWithUserInfo[]>(`${apiUrl}/workouts/suggested`, {
-            params: { offset, limit: limit || defaultLimit },
         });
 
         return response.data;
@@ -58,4 +57,4 @@ const fetchSuggestedWorkouts = async ({ offset = 0, limit }: PagingParams): Prom
 // TODO: Transform into querying featured workouts perhaps
 
 export const useQuerySuggestedWorkouts = (pagingParams?: PagingParams): UseQueryResult<TabataWorkoutWithUserInfo[], Error> => useQuery([
-    'suggested-workouts', pagingParams], () => fetchSuggestedWorkouts(pagingParams));
+    'suggested-workouts', pagingParams], () => fetchSuggestedWorkouts());
