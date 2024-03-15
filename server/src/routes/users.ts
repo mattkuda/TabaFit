@@ -119,6 +119,19 @@ router.get('/email/:email', async (req: AuthRequest, res: Response) => {
   }
 });
 
+const SUGGESTED_USER_IDS = ['64f4ccf351498c529ff6d7b0'];
+
+router.get('/suggestedUsers', async (req: AuthRequest, res: Response) => {
+  try {
+    const idsToFetch = SUGGESTED_USER_IDS.map((id) => new mongoose.Types.ObjectId(id));
+    const suggestedUsers = await usersCollection.find({ _id: { $in: idsToFetch } }).toArray();
+    res.status(200).send(suggestedUsers);
+  } catch (err) {
+    console.error('Failed to fetch suggested users', err);
+    res.status(500).send({ message: 'Failed to fetch suggested users' });
+  }
+});
+
 // Function to upload file to Firebase Storage
 async function uploadFile(
   fileBuffer: Buffer,

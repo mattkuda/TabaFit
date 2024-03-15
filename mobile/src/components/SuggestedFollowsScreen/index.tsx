@@ -25,6 +25,12 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
     return (
         <ScrollView bg="white">
             <VStack mt="5" px="4" space={4}>
+                <Box>
+                    <Text bold fontSize="xl" mb="4">
+                        People You May Know
+                    </Text>
+                    {/* ConnectionCard components */}
+                </Box>
                 <Button
                     colorScheme="primary"
                     isLoading={followAllMutation.isLoading}
@@ -41,12 +47,6 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
                 >
                     Follow All
                 </Button>
-                <Box>
-                    <Text bold fontSize="xl" mb="4">
-                        People You May Know
-                    </Text>
-                    {/* ConnectionCard components */}
-                </Box>
                 <Button onPress={handleContinue}>Continue</Button>
             </VStack>
         </ScrollView>
