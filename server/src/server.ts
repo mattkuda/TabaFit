@@ -24,7 +24,7 @@ if (!connectionString) {
   throw new Error('MONGODB_URI environment variable is not set.');
 }
 
-// Connect to MongoDB
+// Connect to MongoDBÍS
 const client = new MongoClient(connectionString);
 
 (async () => {

@@ -18,7 +18,6 @@ let usersCollection: Collection;
 (async () => {
   try {
     await client.connect();
-    console.log('Connected to MongoDB');
     followsCollection = client.db('AbcountableDB').collection('follows');
     usersCollection = client.db('AbcountableDB').collection('users');
   } catch (err) {

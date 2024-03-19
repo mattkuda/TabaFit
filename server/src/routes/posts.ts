@@ -24,7 +24,6 @@ let followsCollection: Collection;
 (async () => {
   try {
     await client.connect();
-    console.log('Connected to MongoDB');
     postsCollection = client.db('AbcountableDB').collection<PostSchema>('posts');
     followsCollection = client.db('AbcountableDB').collection('follows');
     notificationsCollection = client.db('AbcountableDB').collection('notifications');

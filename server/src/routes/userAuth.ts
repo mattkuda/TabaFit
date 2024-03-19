@@ -21,7 +21,6 @@ let usersCollection: Collection<IUser>;
 (async () => {
   try {
     await client.connect();
-    console.log('Connected to MongoDB');
     usersCollection = client.db('AbcountableDB').collection<IUser>('users');
   } catch (err) {
     console.error('Failed to connect to MongoDB', err);

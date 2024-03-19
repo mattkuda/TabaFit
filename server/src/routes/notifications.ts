@@ -21,7 +21,6 @@ let notificationsCollection: Collection<NotificationSchema>;
 (async () => {
   try {
     await client.connect();
-    console.log('Connected to MongoDB');
     notificationsCollection = client.db('AbcountableDB').collection<NotificationSchema>('notifications');
   } catch (err) {
     console.error('Failed to connect to MongoDB', err);

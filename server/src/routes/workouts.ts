@@ -21,7 +21,6 @@ let workoutsCollection: Collection<TabataWorkout>;
 (async () => {
   try {
     await client.connect();
-    console.log('Connected to MongoDB');
     workoutsCollection = client.db('AbcountableDB').collection<TabataWorkout>('workouts');
   } catch (err) {
     console.error('Failed to connect to MongoDB', err);
