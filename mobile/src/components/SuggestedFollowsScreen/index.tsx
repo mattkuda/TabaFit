@@ -12,9 +12,10 @@ import { useQuerySuggestedUsers } from '../../hooks/useQueryUserByUsername';
 
 type ConnectionCardProps = {
     user: User;
+    isAllFollowed: boolean;
 };
 
-export const ConnectionCard: React.FC<ConnectionCardProps> = ({ user }) => {
+export const ConnectionCard: React.FC<ConnectionCardProps> = ({ user, isAllFollowed }) => {
     const [isFollowed, setIsFollowed] = useState(false);
 
     const { authState: { userId } } = useAuth();
@@ -42,13 +43,13 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({ user }) => {
                     </Text>
                 </VStack>
                 <Button
-                    colorScheme={isFollowed ? 'success' : 'primary'}
-                    isDisabled={isFollowed}
-                    leftIcon={<Icon as={MaterialIcons} color={isFollowed ? 'green.500' : 'white'} name={isFollowed ? 'check' : 'add'} size="sm" />}
+                    colorScheme={isFollowed || isAllFollowed ? 'success' : 'primary'}
+                    isDisabled={isFollowed || isAllFollowed}
+                    leftIcon={<Icon as={MaterialIcons} color={isFollowed ? 'green.500' : 'white'} name={isFollowed || isAllFollowed ? 'check' : 'add'} size="sm" />}
                     variant="solid"
                     onPress={handleFollow}
                 >
-                    {isFollowed ? 'Followed' : 'Follow'}
+                    {isFollowed || isAllFollowed ? 'Followed' : 'Follow'}
                 </Button>
             </HStack>
         </Box>
@@ -59,6 +60,7 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
     const followAllMutation = useFollowAll();
     const { authState } = useAuth();
     const { data: users } = useQuerySuggestedUsers();
+    const [isAllFollowed, setIsAllFollowed] = useState(false);
 
     const userId = authState?.userId;
     const navigation = useNavigation<SuggestedFollowsScreenNavigationProp>();
@@ -67,7 +69,12 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
     };
     const handleFollowAll = (): void => {
         if (userId) {
-            followAllMutation.mutate({ followerId: userId });
+            followAllMutation.mutate(
+                { followerId: userId },
+                {
+                    onSuccess: () => setIsAllFollowed(true),
+                },
+            );
         }
     };
 
@@ -79,7 +86,7 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
                         People You May Know
                     </Text>
                     {users?.map((user) => (
-                        <ConnectionCard user={user} />
+                        <ConnectionCard isAllFollowed={isAllFollowed} user={user} />
                     ))}
                 </Box>
                 <Button

@@ -35,6 +35,20 @@ let followsCollection: Collection;
   }
 })();
 
+const SUGGESTED_USER_IDS = ['64f4ccf351498c529ff6d7b0'];
+
+router.get('/suggested', async (req: AuthRequest, res: Response) => {
+  try {
+    const idsToFetch = SUGGESTED_USER_IDS.map((id) => new mongoose.Types.ObjectId(id));
+    const suggestedUsers = await usersCollection.find({ _id: { $in: idsToFetch } }).toArray();
+
+    res.status(200).send(suggestedUsers);
+  } catch (err) {
+    console.error('Failed to fetch suggested users', err);
+    res.status(500).send({ message: 'Failed to fetch suggested users' });
+  }
+});
+
 router.get('/:userId', async (req: AuthRequest, res: Response) => {
   const requestedUserId = req.params.userId;
 
@@ -115,19 +129,6 @@ router.get('/email/:email', async (req: AuthRequest, res: Response) => {
   } catch (err) {
     console.error('Failed to get user by email', err);
     res.status(500).send({ message: 'Failed to get user by email' });
-  }
-});
-
-const SUGGESTED_USER_IDS = ['64f4ccf351498c529ff6d7b0'];
-
-router.get('/suggestedUsers', async (req: AuthRequest, res: Response) => {
-  try {
-    const idsToFetch = SUGGESTED_USER_IDS.map((id) => new mongoose.Types.ObjectId(id));
-    const suggestedUsers = await usersCollection.find({ _id: { $in: idsToFetch } }).toArray();
-    res.status(200).send(suggestedUsers);
-  } catch (err) {
-    console.error('Failed to fetch suggested users', err);
-    res.status(500).send({ message: 'Failed to fetch suggested users' });
   }
 });
 

@@ -43,7 +43,7 @@ export const useQueryUserByEmail = (email: string): UseQueryResult<UserFullInfoM
 );
 
 const fetchSuggestedUsers = async (): Promise<UserFullInfoModel[]> => {
-    const response = await axios.get<UserFullInfoModel[]>(`${apiUrl}/users/suggestedUsers`);
+    const response = await axios.get<UserFullInfoModel[]>(`${apiUrl}/users/suggested`);
 
     return response.data;
 };
