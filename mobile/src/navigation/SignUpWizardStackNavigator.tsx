@@ -17,7 +17,7 @@ const SkipButton = (): JSX.Element => {
 
     return (
         <Button
-            colorScheme="muted" // Use the 'muted' color scheme or any other to get a light gray color, adjust based on your theme
+            colorScheme="muted"
             variant="ghost"
             onPress={handleSaveOrUpdateWorkout}
         >
