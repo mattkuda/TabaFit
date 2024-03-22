@@ -13,9 +13,13 @@ import { useQuerySuggestedUsers } from '../../hooks/useQueryUserByUsername';
 type ConnectionCardProps = {
     user: User;
     isAllFollowed: boolean;
+    key: string;
+    onFollowed: () => void;
 };
 
-export const ConnectionCard: React.FC<ConnectionCardProps> = ({ user, isAllFollowed }) => {
+export const ConnectionCard: React.FC<ConnectionCardProps> = ({
+    onFollowed, key, user, isAllFollowed,
+}) => {
     const [isFollowed, setIsFollowed] = useState(false);
 
     const { authState: { userId } } = useAuth();
@@ -26,12 +30,13 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({ user, isAllFollo
         followMutation.mutate({ followerId: user._id.toString(), followeeId: userId }, {
             onSuccess: () => {
                 setIsFollowed(true);
+                onFollowed(); // Call onFollowed when the follow action is successful
             },
         });
     };
 
     return (
-        <Box backgroundColor="white" borderColor="coolGray.200" borderRadius="md" borderWidth="1" mt="2" p="4">
+        <Box backgroundColor="white" borderColor="coolGray.200" borderRadius="md" borderWidth="1" key={key} mt="2" p="4">
             <HStack alignItems="center" space={3}>
                 <Avatar size="48px" source={{ uri: user.profilePictureUrl }} />
                 <VStack flex={1}>
@@ -61,6 +66,8 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
     const { authState } = useAuth();
     const { data: users } = useQuerySuggestedUsers();
     const [isAllFollowed, setIsAllFollowed] = useState(false);
+    // State to track if any follow action has been taken
+    const [isAnyFollowed, setIsAnyFollowed] = useState(false);
 
     const userId = authState?.userId;
     const navigation = useNavigation<SuggestedFollowsScreenNavigationProp>();
@@ -72,41 +79,51 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
             followAllMutation.mutate(
                 { followerId: userId },
                 {
-                    onSuccess: () => setIsAllFollowed(true),
+                    onSuccess: () => {
+                        setIsAllFollowed(true);
+                        setIsAnyFollowed(true); // Set isAnyFollowed to true as the user has taken a follow action
+                    },
                 },
             );
         }
     };
 
     return (
-        <ScrollView bg="white">
-            <VStack mt="5" px="4" space={4}>
-                <Box>
-                    <Text bold fontSize="xl" mb="4">
-                        People You May Know
-                    </Text>
-                    {users?.map((user) => (
-                        <ConnectionCard isAllFollowed={isAllFollowed} user={user} />
-                    ))}
-                </Box>
-                <Button
-                    colorScheme="primary"
-                    isLoading={followAllMutation.isLoading}
-                    leftIcon={(
-                        <Icon
-                            as={MaterialIcons}
-                            color={followAllMutation.isSuccess ? 'green.500' : 'white'}
-                            name={followAllMutation.isSuccess ? 'check' : 'add'}
-                            size="sm"
-                        />
-                      )}
-                    variant="solid"
-                    onPress={handleFollowAll}
-                >
-                    Follow All
-                </Button>
-                <Button onPress={handleContinue}>Continue</Button>
-            </VStack>
-        </ScrollView>
+        <VStack bg="white" flex={1}>
+            <ScrollView flex={1}>
+                <VStack mt="5" px="4" space={4}>
+                    <Box>
+                        <Text bold fontSize="xl" mb="4">
+                            People You May Know
+                        </Text>
+                        {users?.map((user) => (
+                            <ConnectionCard
+                                isAllFollowed={isAllFollowed}
+                                key={user._id.toString()} // Ensure key is provided for list items
+                                user={user}
+                                onFollowed={(): void => setIsAnyFollowed(true)}
+                            />
+                        ))}
+                    </Box>
+                    <Button
+                        colorScheme="primary"
+                        isLoading={followAllMutation.isLoading}
+                        leftIcon={<Icon as={MaterialIcons} color={followAllMutation.isSuccess ? 'green.500' : 'white'} name={followAllMutation.isSuccess ? 'check' : 'add'} size="sm" />}
+                        mb={4} // Add some bottom margin
+                        variant="solid"
+                        onPress={handleFollowAll}
+                    >
+                        Follow All
+                    </Button>
+                </VStack>
+            </ScrollView>
+            <Button
+                isDisabled={!isAnyFollowed} // Disable until any follow action is taken
+                mt="auto" // Automatically margin top to push it to the bottom
+                onPress={handleContinue}
+            >
+                Continue
+            </Button>
+        </VStack>
     );
 };
