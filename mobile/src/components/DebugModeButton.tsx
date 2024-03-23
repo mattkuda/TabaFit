@@ -3,7 +3,7 @@ import {
     Box, Menu, Icon, IconButton,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { wizardTodoState } from '../atoms/wizardTodoAtom';
 
 const MoreOptionsTrigger = (triggerProps: any): JSX.Element => (
@@ -18,7 +18,8 @@ const MoreOptionsTrigger = (triggerProps: any): JSX.Element => (
 
 export const DebugModeButton = (): JSX.Element => {
     const [showMenu, setShowMenu] = useState(false);
-    const setWizardTodo = useSetRecoilState(wizardTodoState);
+    // const setWizardTodo = useSetRecoilState(wizardTodoState);
+    const [wizardTodo, setWizardTodo] = useRecoilState(wizardTodoState);
 
     const toggleWizardTodo = (): void => {
         setWizardTodo((prev) => !prev);
@@ -33,7 +34,9 @@ export const DebugModeButton = (): JSX.Element => {
                 onClose={(): void => setShowMenu(false)}
                 onOpen={(): void => setShowMenu(true)}
             >
-                <Menu.Item onPress={toggleWizardTodo}>Toggle wizardTodo</Menu.Item>
+                <Menu.Item onPress={toggleWizardTodo}>
+                    {`Toggle wizardTodo (${wizardTodo ? 'T' : 'F'})`}
+                </Menu.Item>
             </Menu>
         </Box>
     );

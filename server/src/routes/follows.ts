@@ -159,7 +159,6 @@ router.post('/followAll', authenticate, async (req: Request, res: Response) => {
       { _id: { $ne: new ObjectId(followerId) } },
     ).toArray();
 
-    // Prepare bulk operations for followsCollection
     const followOps = usersToFollow.map((user) => ({
       updateOne: {
         filter: { followerId: new ObjectId(followerId), followeeId: new ObjectId(user._id) },

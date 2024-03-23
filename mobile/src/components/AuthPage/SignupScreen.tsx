@@ -8,7 +8,6 @@ import { useAuth } from '../../context/AuthContext';
 // @ts-ignore
 import logo from '../../../assets/TabatableBasicLogo.png'; // Adjust the path and filename as necessary
 import { useQueryUserByEmail, useQueryUserByUsername } from '../../hooks/useQueryUserByUsername';
-import { wizardTodoState } from '../../atoms/wizardTodoAtom';
 
 const styles = StyleSheet.create({
     container: {
@@ -45,7 +44,6 @@ export const SignupScreen = (): JSX.Element => {
     const { onRegister } = useAuth();
     const { data: foundUserByUseranme } = useQueryUserByUsername(username);
     const { data: foundUserByEmail } = useQueryUserByEmail(email);
-    const setWizardTodo = useSetRecoilState(wizardTodoState);
 
     const handleSignUp = async (): Promise<void> => {
         try {
@@ -57,13 +55,22 @@ export const SignupScreen = (): JSX.Element => {
                     isAuthenticated: true,
                     user: data.user,
                 }));
-                setWizardTodo(true);
             } else {
                 setErrorMessage(data.message);
             }
         } catch (error) {
             setErrorMessage(error.message);
         }
+    };
+
+    const handlePrefill = async (): Promise<void> => {
+        const randomNumber = Math.floor(Math.random() * 10000) + 1;
+
+        setEmail(`test${randomNumber}@gmail.com`);
+        setUsername(`test${randomNumber}`);
+        setFirstName(`test${randomNumber}`);
+        setLastName(`test${randomNumber}`);
+        setPassword('test');
     };
 
     const isFormIncomplete = !email || !password || !firstName || !lastName || !username;
@@ -90,8 +97,9 @@ export const SignupScreen = (): JSX.Element => {
                 onChangeText={setUsername}
             />
             {foundUserByUseranme && <Text>Username already taken</Text>}
-            <Button disabled={isFormIncomplete || !!foundUserByUseranme || !!foundUserByEmail} title="Sign Up" onPress={handleSignUp} />
+            <Button title="Pre-fill" onPress={handlePrefill} />
             <Text>{errorMessage}</Text>
+            <Button disabled={isFormIncomplete || !!foundUserByUseranme || !!foundUserByEmail} title="Sign Up" onPress={handleSignUp} />
         </View>
     );
 };

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
     Box, Button, ScrollView, VStack, Text, Icon, Avatar, HStack,
 } from 'native-base';
-import { MaterialIcons } from '@expo/vector-icons'; // Assuming you're using Expo
+import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useFollowAll, useFollowUser } from '../../mutations/followMutations';
 import { useAuth } from '../../context/AuthContext';
@@ -30,7 +30,7 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
         followMutation.mutate({ followerId: user._id.toString(), followeeId: userId }, {
             onSuccess: () => {
                 setIsFollowed(true);
-                onFollowed(); // Call onFollowed when the follow action is successful
+                onFollowed();
             },
         });
     };
@@ -66,7 +66,6 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
     const { authState } = useAuth();
     const { data: users } = useQuerySuggestedUsers();
     const [isAllFollowed, setIsAllFollowed] = useState(false);
-    // State to track if any follow action has been taken
     const [isAnyFollowed, setIsAnyFollowed] = useState(false);
 
     const userId = authState?.userId;
@@ -81,7 +80,7 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
                 {
                     onSuccess: () => {
                         setIsAllFollowed(true);
-                        setIsAnyFollowed(true); // Set isAnyFollowed to true as the user has taken a follow action
+                        setIsAnyFollowed(true);
                     },
                 },
             );
@@ -99,7 +98,7 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
                         {users?.map((user) => (
                             <ConnectionCard
                                 isAllFollowed={isAllFollowed}
-                                key={user._id.toString()} // Ensure key is provided for list items
+                                key={user._id.toString()}
                                 user={user}
                                 onFollowed={(): void => setIsAnyFollowed(true)}
                             />
@@ -109,7 +108,7 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
                         colorScheme="primary"
                         isLoading={followAllMutation.isLoading}
                         leftIcon={<Icon as={MaterialIcons} color={followAllMutation.isSuccess ? 'green.500' : 'white'} name={followAllMutation.isSuccess ? 'check' : 'add'} size="sm" />}
-                        mb={4} // Add some bottom margin
+                        mb={4}
                         variant="solid"
                         onPress={handleFollowAll}
                     >
@@ -118,8 +117,8 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
                 </VStack>
             </ScrollView>
             <Button
-                isDisabled={!isAnyFollowed} // Disable until any follow action is taken
-                mt="auto" // Automatically margin top to push it to the bottom
+                isDisabled={!isAnyFollowed}
+                mt="auto"
                 onPress={handleContinue}
             >
                 Continue

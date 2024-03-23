@@ -1,8 +1,9 @@
+/* eslint-disable max-len */
 /* eslint-disable global-require */
 import React, { useState, useEffect, useCallback } from 'react';
 import {
     VStack, Text, Button, IconButton, Icon,
-    Modal, Box, Heading, Divider,
+    Modal, Box, Heading, Divider, View, Flex, HStack,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
@@ -246,7 +247,7 @@ export const TabataTimerScreen = (): JSX.Element => {
 
     return (
         <VStack alignItems="center" space={4}>
-            <IconButton
+            {/* <IconButton
                 icon={<Icon as={Ionicons} name="arrow-back" />}
                 left={0}
                 position="absolute"
@@ -258,33 +259,100 @@ export const TabataTimerScreen = (): JSX.Element => {
                     });
                     navigation.navigate('ShuffleScreen');
                 }}
-            />
-            <Text>{`Total remaining time: ${formatTime(remainingTime)}`}</Text>
-            <Text
-                // eslint-disable-next-line no-nested-ternary
-                color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown
-                    ? 'orange.500' : 'yellow.500'}
-                fontSize="6xl"
-            >
-                {formatTime(seconds)}
-            </Text>
-            <Text>currentExercise?.name</Text>
-            <Text>{currentExercise?.name}</Text>
-            <Text>
-                Exercises:
-                {' '}
-                {currentInterval === Intervals.Intermission || currentInterval === Intervals.Warmup ? `0/${exercisesPerTabata}` : `${exercisesDone + 1}/${exercisesPerTabata}`}
-            </Text>
-            <Text>
-                Tabatas:
-                {' '}
-                {currentInterval === Intervals.Intermission && `0/${numberOfTabatas}`}
-                {currentInterval === Intervals.Exercise || currentInterval === Intervals.Rest || currentInterval === Intervals.Cooldown ? `${circuitsDone + 1}/${numberOfTabatas}` : `${circuitsDone}/${numberOfTabatas}`}
-            </Text>
-            <Text>{currentExercise ? `Current Exercise: ${currentExercise.name}` : `Current: ${currentInterval.toUpperCase()}`}</Text>
-            <Button onPress={toggle}>{isActive ? 'Pause' : 'Start'}</Button>
-            <Button onPress={reset}>Reset</Button>
-            <Button onPress={mockFinish}>Mock Finish</Button>
+            /> */}
+            <Flex align="center" direction="row" justify="space-between" mb="4" pl={4} pr={4} w="100%">
+                <VStack alignItems="center" space={2}>
+                    <Text color="coolGray.600" fontSize="sm">Sets</Text>
+                    <Text fontSize="xl">
+                        {currentInterval === Intervals.Intermission || currentInterval === Intervals.Warmup
+                            ? `0/${exercisesPerTabata}`
+                            : `${exercisesDone + 1}/${exercisesPerTabata}`}
+                    </Text>
+                </VStack>
+                <VStack alignItems="center" space={2}>
+                    <Text color="coolGray.600" fontSize="sm">Cycles</Text>
+                    <Text fontSize="xl">
+                        {currentInterval === Intervals.Intermission && `0/${numberOfTabatas}`}
+                        {currentInterval === Intervals.Exercise || currentInterval === Intervals.Rest || currentInterval === Intervals.Cooldown
+                            ? `${circuitsDone + 1}/${numberOfTabatas}`
+                            : `${circuitsDone}/${numberOfTabatas}`}
+                    </Text>
+                </VStack>
+                <VStack alignItems="center" space={2}>
+                    <Text color="coolGray.600" fontSize="sm">Total Time</Text>
+                    <Text fontSize="xl">{formatTime(remainingTime)}</Text>
+                </VStack>
+            </Flex>
+            <View style={{ width: '100%', alignItems: 'center' }}>
+                <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
+                    <Text
+                        // eslint-disable-next-line no-nested-ternary
+                        color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
+                        style={{
+                            fontSize: 130, textAlign: 'center', height: 200, lineHeight: 125,
+                        }}
+                    >
+                        {formatTime(seconds)}
+                    </Text>
+                </View>
+            </View>
+            <View style={{ width: '100%', alignItems: 'center' }}>
+                <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
+                    <Text
+                        // eslint-disable-next-line no-nested-ternary
+                        color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
+                        style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}
+                    >
+                        {currentExercise ? currentExercise.name.toUpperCase() : currentInterval.toUpperCase()}
+                    </Text>
+                </View>
+            </View>
+
+            <HStack alignItems="center" justifyContent="space-between" px="4" width="100%">
+                <IconButton
+                    borderColor="coolGray.300"
+                    borderRadius="full"
+                    borderWidth="2"
+                    icon={<Icon as={Ionicons} name={isActive ? 'pause' : 'play'} size="lg" />}
+                    onPress={toggle}
+                />
+                <HStack alignItems="center" space={2}>
+                    {!isActive && (
+                        <>
+                            <IconButton
+                                borderColor="coolGray.300"
+                                borderRadius="full"
+                                borderWidth="2"
+                                icon={<Icon as={Ionicons} name="play-skip-back" size="lg" />}
+                                onPress={reset}
+                            />
+                            <IconButton
+                                borderColor="coolGray.300"
+                                borderRadius="full"
+                                borderWidth="2"
+                                icon={<Icon as={Ionicons} name="play-skip-forward" size="lg" />}
+                            />
+                        </>
+                    )}
+                    {isActive && (
+                    <IconButton
+                        borderColor="coolGray.300"
+                        borderRadius="full"
+                        borderWidth="2"
+                        icon={<Icon as={Ionicons} name="flag" size="lg" />}
+                        onPress={mockFinish}
+                    />
+                    )}
+                </HStack>
+                <IconButton
+                    borderColor="coolGray.300"
+                    borderRadius="full"
+                    borderWidth="2"
+                    icon={<Icon as={Ionicons} name="refresh" size="lg" />}
+                    onPress={reset}
+                />
+            </HStack>
+
             <Modal isOpen={showAlert} onClose={(): void => setShowAlert(false)}>
                 <Modal.Content maxWidth="400px">
                     <Modal.CloseButton />

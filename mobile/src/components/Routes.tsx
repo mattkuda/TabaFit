@@ -14,7 +14,6 @@ import { ProfileStackNavigator } from '../navigation/ProfileStackNavigator';
 import { useAuth } from '../context/AuthContext';
 import { TabNavigatorParamList } from '../types/navigationTypes';
 import { showFooterState } from '../atoms/showFooterAtom';
-import { Searchbutton } from './SearchButtons';
 import { WorkoutsStackNavigator } from '../navigation/WorkoutsStackNavigator';
 import { useUserInfo } from '../hooks/useUserInfo';
 import { AuthStackNavigator } from '../navigation/AuthStackNavigator';
@@ -26,21 +25,18 @@ const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 const HomeIcon = ({ color, size }): JSX.Element => <Ionicons color={color} name="home-outline" size={size} />;
 const TimerIcon = ({ color, size }): JSX.Element => <Ionicons color={color} name="timer-outline" size={size} />;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const SearchButtonComponent = (): JSX.Element => <Searchbutton />;
-
 const ProfileTabIcon = ({ focused, color, size }): JSX.Element => {
     const { authState } = useAuth();
     const { data } = useUserInfo(authState.userId);
-    const profilePictureUrl = data?.profilePictureUrl; // Ensure you have the profile picture URL here
-
+    const profilePictureUrl = data?.profilePictureUrl;
     // If there's a profile picture URL, show it, otherwise show a default icon
+
     if (profilePictureUrl) {
         return (
             <Avatar
                 borderColor={focused ? 'primary.500' : 'gray.300'} // Highlight the border if the tab is focused
                 borderWidth={2}
-                size="sm" // You can adjust the size to fit the tab bar's design
+                size="sm"
                 source={{
                     uri: profilePictureUrl,
                 }}
@@ -67,8 +63,9 @@ export const Routes = (): JSX.Element => {
                 </SafeAreaView>
             </NavigationContainer>
         );
-    } if (authState.authenticated && wizardTodo) {
-        // Show the sign-up wizard if the user is authenticated but hasn't completed the wizard
+    }
+
+    if (authState.authenticated && wizardTodo) {
         return (
             <NavigationContainer>
                 <SafeAreaView style={{ flex: 1 }}>
