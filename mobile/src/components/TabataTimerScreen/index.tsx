@@ -262,7 +262,7 @@ export const TabataTimerScreen = (): JSX.Element => {
             /> */}
             <Flex align="center" direction="row" justify="space-between" mb="4" pl={4} pr={4} w="100%">
                 <VStack alignItems="center" space={2}>
-                    <Text color="coolGray.600" fontSize="sm">Sets</Text>
+                    <Text color="coolGray.600" fontSize="sm">Exercises</Text>
                     <Text fontSize="xl">
                         {currentInterval === Intervals.Intermission || currentInterval === Intervals.Warmup
                             ? `0/${exercisesPerTabata}`
@@ -270,7 +270,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                     </Text>
                 </VStack>
                 <VStack alignItems="center" space={2}>
-                    <Text color="coolGray.600" fontSize="sm">Cycles</Text>
+                    <Text color="coolGray.600" fontSize="sm">Tabatas</Text>
                     <Text fontSize="xl">
                         {currentInterval === Intervals.Intermission && `0/${numberOfTabatas}`}
                         {currentInterval === Intervals.Exercise || currentInterval === Intervals.Rest || currentInterval === Intervals.Cooldown
@@ -307,7 +307,6 @@ export const TabataTimerScreen = (): JSX.Element => {
                     </Text>
                 </View>
             </View>
-
             <HStack alignItems="center" justifyContent="space-between" px="4" width="100%">
                 <IconButton
                     borderColor="coolGray.300"
@@ -335,13 +334,13 @@ export const TabataTimerScreen = (): JSX.Element => {
                         </>
                     )}
                     {isActive && (
-                    <IconButton
-                        borderColor="coolGray.300"
-                        borderRadius="full"
-                        borderWidth="2"
-                        icon={<Icon as={Ionicons} name="flag" size="lg" />}
-                        onPress={mockFinish}
-                    />
+                        <IconButton
+                            borderColor="coolGray.300"
+                            borderRadius="full"
+                            borderWidth="2"
+                            icon={<Icon as={Ionicons} name="flag" size="lg" />}
+                            onPress={mockFinish}
+                        />
                     )}
                 </HStack>
                 <IconButton
@@ -352,7 +351,6 @@ export const TabataTimerScreen = (): JSX.Element => {
                     onPress={reset}
                 />
             </HStack>
-
             <Modal isOpen={showAlert} onClose={(): void => setShowAlert(false)}>
                 <Modal.Content maxWidth="400px">
                     <Modal.CloseButton />
