@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
     VStack, Text, Button, IconButton, Icon,
-    Modal, Box, Heading, Divider, View, Flex, HStack,
+    Modal, Box, Heading, Divider, Flex, HStack,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
@@ -246,7 +246,7 @@ export const TabataTimerScreen = (): JSX.Element => {
     };
 
     return (
-        <VStack alignItems="center" space={4}>
+        <Flex flex={1}>
             {/* <IconButton
                 icon={<Icon as={Ionicons} name="arrow-back" />}
                 left={0}
@@ -260,6 +260,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                     navigation.navigate('ShuffleScreen');
                 }}
             /> */}
+            {/* Alighn this to the top of the screen */}
             <Flex align="center" direction="row" justify="space-between" mb="4" pl={4} pr={4} w="100%">
                 <VStack alignItems="center" space={2}>
                     <Text color="coolGray.600" fontSize="sm">Exercises</Text>
@@ -283,57 +284,55 @@ export const TabataTimerScreen = (): JSX.Element => {
                     <Text fontSize="xl">{formatTime(remainingTime)}</Text>
                 </VStack>
             </Flex>
-            <View style={{ width: '100%', alignItems: 'center' }}>
-                <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                    <Text
+            <Flex alignItems="center" flex={1} justifyContent="flex-end">
+                <Text
                         // eslint-disable-next-line no-nested-ternary
-                        color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
-                        style={{
-                            fontSize: 130, textAlign: 'center', height: 200, lineHeight: 125,
-                        }}
-                    >
-                        {formatTime(seconds)}
-                    </Text>
-                </View>
-            </View>
-            <View style={{ width: '100%', alignItems: 'center' }}>
-                <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                    <Text
+                    color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
+                    style={{
+                        fontSize: 130, textAlign: 'center', height: 100, lineHeight: 125,
+                    }}
+                >
+                    {formatTime(seconds)}
+                </Text>
+            </Flex>
+            <Flex alignItems="center" flex={1} justify="flex-start">
+                <Text
                         // eslint-disable-next-line no-nested-ternary
-                        color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
-                        style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}
-                    >
-                        {currentExercise ? currentExercise.name.toUpperCase() : currentInterval.toUpperCase()}
-                    </Text>
-                </View>
-            </View>
-            <HStack alignItems="center" justifyContent="space-between" px="4" width="100%">
-                <IconButton
-                    borderColor="coolGray.300"
-                    borderRadius="full"
-                    borderWidth="2"
-                    icon={<Icon as={Ionicons} name={isActive ? 'pause' : 'play'} size="lg" />}
-                    onPress={toggle}
-                />
-                <HStack alignItems="center" space={2}>
-                    {!isActive && (
-                        <>
-                            <IconButton
-                                borderColor="coolGray.300"
-                                borderRadius="full"
-                                borderWidth="2"
-                                icon={<Icon as={Ionicons} name="play-skip-back" size="lg" />}
-                                onPress={reset}
-                            />
-                            <IconButton
-                                borderColor="coolGray.300"
-                                borderRadius="full"
-                                borderWidth="2"
-                                icon={<Icon as={Ionicons} name="play-skip-forward" size="lg" />}
-                            />
-                        </>
-                    )}
-                    {isActive && (
+                    color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
+                    style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}
+                >
+                    {currentExercise ? currentExercise.name.toUpperCase() : currentInterval.toUpperCase()}
+                </Text>
+            </Flex>
+            {/* Aligh this to the bottom of the screen */}
+            <Box bg="light.200" p="4" width="100%">
+                <Flex alignItems="center" direction="row" justify="space-between">
+                    <IconButton
+                        borderColor="coolGray.300"
+                        borderRadius="full"
+                        borderWidth="2"
+                        icon={<Icon as={Ionicons} name={isActive ? 'pause' : 'play'} size="lg" />}
+                        onPress={toggle}
+                    />
+                    <HStack alignItems="center" space={2}>
+                        {!isActive && (
+                            <>
+                                <IconButton
+                                    borderColor="coolGray.300"
+                                    borderRadius="full"
+                                    borderWidth="2"
+                                    icon={<Icon as={Ionicons} name="play-skip-back" size="lg" />}
+                                    onPress={reset}
+                                />
+                                <IconButton
+                                    borderColor="coolGray.300"
+                                    borderRadius="full"
+                                    borderWidth="2"
+                                    icon={<Icon as={Ionicons} name="play-skip-forward" size="lg" />}
+                                />
+                            </>
+                        )}
+                        {isActive && (
                         <IconButton
                             borderColor="coolGray.300"
                             borderRadius="full"
@@ -341,16 +340,17 @@ export const TabataTimerScreen = (): JSX.Element => {
                             icon={<Icon as={Ionicons} name="flag" size="lg" />}
                             onPress={mockFinish}
                         />
-                    )}
-                </HStack>
-                <IconButton
-                    borderColor="coolGray.300"
-                    borderRadius="full"
-                    borderWidth="2"
-                    icon={<Icon as={Ionicons} name="refresh" size="lg" />}
-                    onPress={reset}
-                />
-            </HStack>
+                        )}
+                    </HStack>
+                    <IconButton
+                        borderColor="coolGray.300"
+                        borderRadius="full"
+                        borderWidth="2"
+                        icon={<Icon as={Ionicons} name="refresh" size="lg" />}
+                        onPress={reset}
+                    />
+                </Flex>
+            </Box>
             <Modal isOpen={showAlert} onClose={(): void => setShowAlert(false)}>
                 <Modal.Content maxWidth="400px">
                     <Modal.CloseButton />
@@ -371,6 +371,6 @@ export const TabataTimerScreen = (): JSX.Element => {
                     </Modal.Body>
                 </Modal.Content>
             </Modal>
-        </VStack>
+        </Flex>
     );
 };
