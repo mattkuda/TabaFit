@@ -24,7 +24,7 @@ const FollowingTab = (): JSX.Element => {
     };
 
     return (
-        <Box flex={1} justifyContent="center">
+        <Box backgroundColor="gray.100" flex={1} justifyContent="center">
             <InfiniteScrollList
                 data={flatMap}
                 estimatedItemSize={285}

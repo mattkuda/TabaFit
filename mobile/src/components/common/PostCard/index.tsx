@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    HStack, VStack, Text, Avatar, Icon, IconButton,
+    HStack, VStack, Text, Avatar, Icon, IconButton, Box,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
@@ -67,8 +67,22 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
     const userFound = post?.user?.username;
 
     return (
-        <TouchableOpacity style={{ width: '100%' }} onPress={handlePress}>
-            <VStack borderColor="coolGray.200" borderRadius="md" borderWidth={1} mt={4} p={4} space={2} width="100%">
+        <TouchableOpacity
+            style={{
+                width: '100%', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5,
+            }}
+            onPress={handlePress}
+        >
+            <VStack
+                backgroundColor="background"
+                borderColor="coolGray.200"
+                borderRadius="md"
+                borderWidth={1}
+                mt={4}
+                p={4}
+                space={2}
+                width="100%"
+            >
                 <HStack justifyContent="space-between" space={2}>
                     <Avatar size="48px" source={{ uri: post.user.profilePictureUrl }} />
                     <VStack flex={1}>
@@ -83,25 +97,55 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 <Text bold fontSize="md" mt={2}>
                     {post.title}
                 </Text>
-                <Text mt={2} onPress={handleWorkoutNamePress}>
-                    {post.workout.name}
-                    {' '}
-                    (
-                    {post.workout.numberOfTabatas}
-                    {' '}
-                    tabatas
-                    )
-                </Text>
-                <Text mt={2}>
-                    Total Workout Time:
-                    {' '}
-                    {formattedTotalWorkoutTime}
-                </Text>
                 {post.description?.length > 0 && (
                     <Text mt={2}>
                         {post.description}
                     </Text>
                 )}
+                <TouchableOpacity onPress={handleWorkoutNamePress}>
+                    <Box
+                        backgroundColor="background2"
+                        borderRadius="md"
+                        mt={2}
+                        p={2}
+                    >
+                        <HStack
+                            backgroundColor="background2"
+                            justifyContent="space-between"
+                            pl={2}
+                            space={4}
+                        >
+                            <HStack
+                                alignItems="center"
+                                backgroundColor="background2"
+                                space={2}
+                            >
+                                <Icon as={Ionicons} name="barbell-outline" size="sm" />
+                                <Text bold fontSize="md" onPress={handleWorkoutNamePress}>
+                                    {post.workout.name}
+                                </Text>
+                            </HStack>
+                        </HStack>
+                        <HStack justifyContent="space-between" mt={2}>
+                            <VStack alignItems="center" flex={1} space={0}>
+                                <Icon as={Ionicons} name="body-outline" size="sm" />
+                                <Text fontSize="sm">
+                                    {post.workout.numberOfTabatas}
+                                    {' '}
+                                    Tabatas
+                                </Text>
+                            </VStack>
+                            <VStack alignItems="center" flex={1} space={0}>
+                                <Icon as={Ionicons} name="time-outline" size="sm" />
+                                <Text fontSize="sm">{formattedTotalWorkoutTime}</Text>
+                            </VStack>
+                            <VStack alignItems="center" flex={1} space={0}>
+                                <Icon as={Ionicons} name="flame-outline" size="sm" />
+                                <Text fontSize="sm">123 Cals</Text>
+                            </VStack>
+                        </HStack>
+                    </Box>
+                </TouchableOpacity>
                 <HStack justifyContent="space-between" mt={2} space={4}>
                     <IconButton
                         borderRadius="full"

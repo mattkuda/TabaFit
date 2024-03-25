@@ -29,7 +29,7 @@ export const InfiniteScrollList = <T, >({
             estimatedItemSize={estimatedItemSize}
             keyExtractor={keyExtractor}
             refreshing={isFetchingNextPage}
-            renderItem={({ item }): JSX.Element => renderItem(item)} // Added return type
+            renderItem={({ item }): JSX.Element => renderItem(item)}
             onEndReached={hasNextPage ? fetchData : undefined}
             onEndReachedThreshold={0.2}
             onRefresh={onRefresh}
