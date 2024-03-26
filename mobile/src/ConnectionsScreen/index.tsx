@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from 'native-base';
+import { Box, useTheme } from 'native-base';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { ConnectionCard } from './ConnectionCard';
 import { useInfiniteQueryFollowers, useInfiniteQueryFollowing } from '../hooks/useQueryFollowing';
@@ -73,11 +73,23 @@ const FollowersTab = (): JSX.Element => {
     );
 };
 
-export const ConnectionsScreen = (): JSX.Element => (
-    <Box flex={1} justifyContent="center">
-        <Tab.Navigator>
-            <Tab.Screen component={FollowingTab} name="Following" />
-            <Tab.Screen component={FollowersTab} name="Followers" />
-        </Tab.Navigator>
-    </Box>
-);
+export const ConnectionsScreen = (): JSX.Element => {
+    const { colors } = useTheme();
+
+    return (
+        <Box flex={1} justifyContent="center">
+            <Tab.Navigator
+                screenOptions={{
+                    tabBarStyle: { backgroundColor: colors.gray[900] },
+                    tabBarActiveTintColor: '#F3754B',
+                    tabBarInactiveTintColor: '#F3754B',
+                    tabBarPressColor: '#F3754B',
+                    tabBarIndicatorStyle: { backgroundColor: '#F3754B' },
+                }}
+            >
+                <Tab.Screen component={FollowingTab} name="Following" />
+                <Tab.Screen component={FollowersTab} name="Followers" />
+            </Tab.Navigator>
+        </Box>
+    );
+};

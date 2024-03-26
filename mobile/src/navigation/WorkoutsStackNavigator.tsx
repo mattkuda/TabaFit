@@ -15,6 +15,12 @@ const Stack = createStackNavigator<WorkoutsStackParamList>();
 export const WorkoutsStackNavigator = (): JSX.Element => (
     <Stack.Navigator
         initialRouteName="WorkoutsScreen"
+        screenOptions={{
+            headerStyle: {
+                backgroundColor: 'black',
+            },
+            headerTintColor: 'white',
+        }}
         // screenOptions={{ headerShown: false }}
     >
         <Stack.Screen component={WorkoutsScreen} name="WorkoutsScreen" />

@@ -10,6 +10,9 @@ const Stack = createStackNavigator<AuthStackParamList>();
 export const AuthStackNavigator = (): JSX.Element => (
     <Stack.Navigator
         initialRouteName="AuthPage"
+        screenOptions={{
+            headerShown: false,
+        }}
     >
         <Stack.Screen component={AuthPage} name="AuthPage" />
         <Stack.Screen component={LoginScreen} name="LoginScreen" />

@@ -74,8 +74,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
             onPress={handlePress}
         >
             <VStack
-                backgroundColor="background"
-                borderColor="coolGray.200"
+                backgroundColor="gray9"
+                borderColor="gray7"
                 borderRadius="md"
                 borderWidth={1}
                 mt={4}
@@ -89,7 +89,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                         <Text fontSize="sm" onPress={userFound && handlePressUser}>
                             {userFound ? `${formatName(post.user.firstName, post.user.lastName)} @${post.user.username}` : 'Unknown User'}
                         </Text>
-                        <Text color="coolGray.600" fontSize="xs">
+                        <Text color="white" fontSize="xs">
                             {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
                         </Text>
                     </VStack>
@@ -104,20 +104,20 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 )}
                 <TouchableOpacity onPress={handleWorkoutNamePress}>
                     <Box
-                        backgroundColor="background2"
+                        backgroundColor="gray7"
                         borderRadius="md"
                         mt={2}
                         p={2}
                     >
                         <HStack
-                            backgroundColor="background2"
+                            backgroundColor="gray7"
                             justifyContent="space-between"
                             pl={2}
                             space={4}
                         >
                             <HStack
                                 alignItems="center"
-                                backgroundColor="background2"
+                                backgroundColor="gray7"
                                 space={2}
                             >
                                 <Icon as={Ionicons} name="barbell-outline" size="sm" />
@@ -152,7 +152,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                         icon={(
                             <Icon
                                 as={Ionicons}
-                                color={liked ? 'red.500' : 'coolGray.500'}
+                                color={liked ? 'red.500' : 'white'}
                                 name={liked ? 'heart' : 'heart-outline'}
                                 size="sm"
                             />
@@ -161,20 +161,18 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                     />
                     <IconButton
                         borderRadius="full"
-                        icon={<Icon as={Ionicons} name="chatbubble-outline" size="sm" />}
+                        icon={<Icon as={Ionicons} color="white" name="chatbubble-outline" size="sm" />}
                         onPress={handleCommentPress}
                     />
                 </HStack>
-                <HStack color="coolGray.500" fontSize="xs" justifyContent="space-between" mt={2}>
+                <HStack color="white" fontSize="xs" justifyContent="space-between" mt={2}>
                     <Text>
                         {likeCount}
-                        {' '}
-                        Likes
+                        {likeCount === 1 ? ' Like' : ' Likes'}
                     </Text>
                     <Text>
                         {post.comments.length}
-                        {' '}
-                        Comments
+                        {post.comments.length === 1 ? ' Comment' : ' Comments'}
                     </Text>
                 </HStack>
             </VStack>

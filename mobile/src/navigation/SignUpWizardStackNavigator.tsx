@@ -28,7 +28,14 @@ const SkipButton = (): JSX.Element => {
 };
 
 export const SignUpWizardStackNavigator = (): JSX.Element => (
-    <SignUpWizardStack.Navigator>
+    <SignUpWizardStack.Navigator
+        screenOptions={{
+            headerStyle: {
+                backgroundColor: 'black',
+            },
+            headerTintColor: 'white',
+        }}
+    >
         <SignUpWizardStack.Screen
             component={WelcomeScreen}
             name="WelcomeScreen"

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from 'native-base';
+import { Box, useTheme } from 'native-base';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useInfiniteQueryPostsFollowing, FetchPostsResponse } from '../../hooks/useQueryPostsFollowing';
 import { PostCard } from '../common/PostCard';
@@ -16,7 +16,6 @@ const FollowingTab = (): JSX.Element => {
         isFetchingNextPage,
         refetch,
     } = useInfiniteQueryPostsFollowing();
-
     const flatMap = postData?.pages.flatMap((page: FetchPostsResponse) => page);
 
     const onRefresh = async (): Promise<void> => {
@@ -24,7 +23,7 @@ const FollowingTab = (): JSX.Element => {
     };
 
     return (
-        <Box backgroundColor="gray.100" flex={1} justifyContent="center">
+        <Box backgroundColor="black" flex={1} justifyContent="center">
             <InfiniteScrollList
                 data={flatMap}
                 estimatedItemSize={285}
@@ -55,7 +54,7 @@ const GlobalTab = (): JSX.Element => {
     const flatMap2 = postData?.pages.flatMap((page: FetchPostsResponse) => page);
 
     return (
-        <Box flex={1} justifyContent="center">
+        <Box backgroundColor="black" flex={1} justifyContent="center">
             <InfiniteScrollList
                 data={flatMap2}
                 estimatedItemSize={285}
@@ -70,11 +69,24 @@ const GlobalTab = (): JSX.Element => {
     );
 };
 
-export const HomePage = (): JSX.Element => (
-    <Box flex={1} justifyContent="center">
-        <Tab.Navigator>
-            <Tab.Screen component={FollowingTab} name="Following" />
-            <Tab.Screen component={GlobalTab} name="Global" />
-        </Tab.Navigator>
-    </Box>
-);
+export const HomePage = (): JSX.Element => {
+    const { colors } = useTheme();
+
+    return (
+        <Box flex={1} justifyContent="center">
+            <Tab.Navigator
+                initialRouteName="Following"
+                screenOptions={{
+                    tabBarStyle: { backgroundColor: colors.gray[900] },
+                    tabBarActiveTintColor: '#F3754B',
+                    tabBarInactiveTintColor: '#F3754B',
+                    tabBarPressColor: '#F3754B',
+                    tabBarIndicatorStyle: { backgroundColor: '#F3754B' },
+                }}
+            >
+                <Tab.Screen component={FollowingTab} name="Following" />
+                <Tab.Screen component={GlobalTab} name="Global" />
+            </Tab.Navigator>
+        </Box>
+    );
+};

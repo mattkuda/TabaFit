@@ -3,7 +3,7 @@ import {
     Text,
     ViewStyle,
 } from 'react-native';
-import { Avatar } from 'native-base';
+import { Avatar, useTheme } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -51,6 +51,7 @@ export const Routes = (): JSX.Element => {
     const showFooter = useRecoilValue(showFooterState);
     const { authState } = useAuth();
     const wizardTodo = useRecoilValue(wizardTodoState);
+    const { colors } = useTheme();
 
     if (!authState.authenticated) {
         return (
@@ -78,6 +79,7 @@ export const Routes = (): JSX.Element => {
     const tabBarStyle: ViewStyle = {
         // paddingBottom: 0,
         // height: 49,
+        backgroundColor: colors.gray[900], // Set the background color to gray[900]
     };
     const tabBarStyleNoFooter: ViewStyle = {
         ...tabBarStyle,
@@ -91,6 +93,12 @@ export const Routes = (): JSX.Element => {
                     initialRouteName="Home"
                     screenOptions={{
                         headerShown: false,
+                        tabBarStyle: { backgroundColor: colors.gray[900] },
+                        tabBarActiveTintColor: '#F3754B',
+                        tabBarInactiveTintColor: '#F3754B',
+
+                        // tabBarPressColor: '#F3754B',
+                        // tabBarIndicatorStyle: { backgroundColor: '#F3754B' },
                     }}
                 >
                     <Tab.Screen

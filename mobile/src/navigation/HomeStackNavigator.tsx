@@ -30,6 +30,13 @@ const HeaderRightComponent = (): JSX.Element => (
 export const HomeStackNavigator = (): JSX.Element => (
     <Stack.Navigator
         initialRouteName="HomePage"
+        screenOptions={{
+            headerTitle: 'Tabatable',
+            headerStyle: {
+                backgroundColor: 'black',
+            },
+            headerTintColor: 'white',
+        }}
     >
         <Stack.Screen
             component={HomePage}
