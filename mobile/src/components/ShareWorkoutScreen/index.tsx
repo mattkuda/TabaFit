@@ -118,10 +118,10 @@ export const ShareWorkoutScreen = (): JSX.Element => {
                         <Button
                             disabled={isWorkoutSaved}
                             leftIcon={
-                            isWorkoutSaved
-                                ? <Icon as={<Ionicons name="checkmark" />} color="green.500" size="sm" />
-                                : <Icon as={<Ionicons name="save-outline" />} size="sm" />
-                        }
+                                isWorkoutSaved
+                                    ? <Icon as={<Ionicons name="checkmark" />} color="green.500" size="sm" />
+                                    : <Icon as={<Ionicons name="save-outline" />} size="sm" />
+                            }
                             onPress={handleSaveWorkout}
                         >
                             {isWorkoutSaved ? 'Workout Saved' : 'Save Workout'}

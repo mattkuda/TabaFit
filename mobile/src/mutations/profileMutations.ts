@@ -24,10 +24,14 @@ export const useMutateProfilePicture = (): UseMutationResult<UploadResponse, Axi
 interface UpdateProfileVariables {
     userId: string;
     userData: {
-        username: string;
-        email: string;
         firstName: string;
         lastName: string;
+        bio?: string;
+        city?: string;
+        state?: string;
+        gender?: string;
+        birthday?: string;
+        weight?: number;
     };
 }
 

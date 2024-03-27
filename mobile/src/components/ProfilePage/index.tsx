@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
 import {
-    VStack, Text, Button, Avatar, HStack,
+    VStack, Text, Button, Avatar, HStack, Icon,
 } from 'native-base';
 import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
 import { format } from 'date-fns';
+import { Ionicons } from '@expo/vector-icons';
 import { useInfiniteQueryUserPosts } from '../../hooks/useQueryUserPosts';
 import { ProfileScreenRouteProp } from '../../navigation/navigationTypes';
 import { useUserInfo } from '../../hooks/useUserInfo';
@@ -67,16 +68,16 @@ export const ProfilePage = (): JSX.Element => {
     };
 
     return (
-        <VStack flex={1} space={4} width="100%">
+        <VStack backgroundColor="gray9" flex={1} space={4} width="100%">
             {userInfo.data && (
-                <HStack alignItems="center" px={4} space={4} width="100%">
+                <HStack alignItems="center" backgroundColor="gray9" px={4} space={4} width="100%">
                     <Avatar
-                        borderColor="blue.500"
+                        borderColor="flame"
                         borderWidth={2}
                         size="xl"
                         source={{ uri: userInfo.data.profilePictureUrl }}
                     />
-                    <VStack>
+                    <VStack backgroundColor="gray9">
                         <Text bold fontSize="lg">{formatName(userInfo.data.firstName, userInfo.data.lastName)}</Text>
                         <Text fontSize="sm">
                             Member since
@@ -91,14 +92,31 @@ export const ProfilePage = (): JSX.Element => {
             )}
             <HStack alignItems="center" px={4} space={4} width="100%">
                 {isCurrentUserProfile ? (
-                    <Button onPress={navigateToEditProfile}>Edit Profile</Button>
+                    <Button
+                        color="flame"
+                        leftIcon={
+                            <Icon as={<Ionicons name="pencil" />} color="flame" size="sm" />
+                        }
+                        size="sm"
+                        variant="outline"
+                        onPress={navigateToEditProfile}
+                    >
+                        Edit
+                    </Button>
                 ) : (
                     <>
                         <FollowButton profileUserId={userId} />
                         <Text>other</Text>
                     </>
                 )}
-                <Button onPress={handleLogout}>E-Logout</Button>
+                <Button
+                    color="flame"
+                    size="sm"
+                    variant="outline"
+                    onPress={handleLogout}
+                >
+                    E-Logout
+                </Button>
             </HStack>
             <InfiniteScrollList
                 data={flatMap}

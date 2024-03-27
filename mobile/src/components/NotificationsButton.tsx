@@ -16,12 +16,17 @@ export const NotificationsButton = (): JSX.Element => {
     return (
         <Box>
             <IconButton
+                _icon={{
+                    color: 'flame',
+                    size: 'md',
+                }}
                 borderRadius="full"
+                color="flame"
                 icon={<Icon as={Ionicons} name="notifications-outline" />}
                 onPress={(): void => navigation.navigate('NotificationsScreen')}
             />
             {unreadNotificationsCount > 0 && (
-                <Badge // Position the badge over the icon
+                <Badge
                     _text={{
                         fontSize: 'xs',
                     }}

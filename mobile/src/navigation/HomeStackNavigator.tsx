@@ -31,7 +31,7 @@ export const HomeStackNavigator = (): JSX.Element => (
     <Stack.Navigator
         initialRouteName="HomePage"
         screenOptions={{
-            headerTitle: 'Tabatable',
+            headerTitle: 'Taboot',
             headerStyle: {
                 backgroundColor: 'black',
             },

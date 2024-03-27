@@ -1,9 +1,9 @@
 import {
-    Avatar, Modal, VStack, Button,
+    Avatar, Modal, VStack, Button, HStack, Input, Select, Text,
 } from 'native-base';
 import React, { useState } from 'react';
 import {
-    TextInput, TouchableOpacity,
+    TouchableOpacity,
 } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
@@ -23,10 +23,14 @@ interface EditProfileProps {
 
 export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation }) => {
     const { user } = route.params;
-    const [username, setUsername] = useState(user.username);
-    const [email, setEmail] = useState(user.email);
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
+    const [bio, setBio] = useState(user.bio);
+    const [city, setCity] = useState(user.city);
+    const [state, setState] = useState(user.state);
+    const [birthday, setBirthday] = useState(user.birthday);
+    const [gender, setGender] = useState(user.gender);
+    const [weight, setWeight] = useState(user.weight.toString());
     const [profilePictureUrl, setProfilePictureUrl] = useState(user.profilePictureUrl);
     const updateProfileMutation = useMutateUpdateProfile();
     const updateProfilePictureMutation = useMutateProfilePicture();
@@ -38,7 +42,14 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
         updateProfileMutation.mutate({
             userId: user._id.toString(),
             userData: {
-                username, email, firstName, lastName,
+                firstName,
+                lastName,
+                bio,
+                city,
+                state,
+                birthday,
+                gender,
+                weight: parseInt(weight, 10),
             },
         }, { onSuccess: () => navigation.goBack() });
     };
@@ -100,35 +111,74 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
 
     return (
         <VStack style={{ padding: 20 }}>
-            <TouchableOpacity onPress={handleProfilePictureUpdate}>
-                <Avatar
-                    borderColor="blue.500"
-                    borderWidth={2}
-                    size="xl"
-                    source={{
-                        uri: profilePictureUrl, // make sure you have the correct uri
-                    }}
-                />
-            </TouchableOpacity>
-            <TextInput
-                placeholder="Username"
-                value={username}
-                onChangeText={setUsername}
+            <HStack>
+                <TouchableOpacity onPress={handleProfilePictureUpdate}>
+                    <Avatar
+                        borderColor="blue.500"
+                        borderWidth={2}
+                        size="xl"
+                        source={{
+                            uri: profilePictureUrl, // make sure you have the correct uri
+                        }}
+                    />
+                </TouchableOpacity>
+                <VStack
+                    w="100%"
+                >
+                    <Input
+                        placeholder="First Name"
+                        value={firstName}
+                        w="100%"
+                        onChangeText={setFirstName}
+                    />
+                    <Input
+                        placeholder="Last Name"
+                        value={lastName}
+                        onChangeText={setLastName}
+                    />
+                </VStack>
+            </HStack>
+            <Input
+                placeholder="Bio"
+                value={bio}
+                w="100%"
+                onChangeText={setBio}
             />
-            <TextInput
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
+            <Input
+                placeholder="City"
+                value={city}
+                w="100%"
+                onChangeText={setCity}
             />
-            <TextInput
-                placeholder="First Name"
-                value={firstName}
-                onChangeText={setFirstName}
+            <Input
+                placeholder="State"
+                value={state}
+                w="100%"
+                onChangeText={setState}
             />
-            <TextInput
-                placeholder="Last Name"
-                value={lastName}
-                onChangeText={setLastName}
+            <Text>Athlete Information</Text>
+            <Input
+                placeholder="Birthday"
+                value={birthday}
+                w="100%"
+                onChangeText={setBirthday}
+            />
+            <Select
+                placeholder="Gender"
+                selectedValue={gender}
+                onValueChange={setGender}
+            >
+                <Select.Item label="Male" value="male" />
+                <Select.Item label="Female" value="female" />
+                <Select.Item label="Prefer not to say" value="not-specified" />
+            </Select>
+
+            <Input
+                keyboardType="numeric"
+                placeholder="Weight"
+                value={weight.toString()}
+                w="100%"
+                onChangeText={setWeight}
             />
             <Button onPress={handleUpdate}>Update Profile</Button>
             <Button onPress={handleLogout}>Logout</Button>

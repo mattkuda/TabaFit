@@ -29,12 +29,11 @@ const ProfileTabIcon = ({ focused, color, size }): JSX.Element => {
     const { authState } = useAuth();
     const { data } = useUserInfo(authState.userId);
     const profilePictureUrl = data?.profilePictureUrl;
-    // If there's a profile picture URL, show it, otherwise show a default icon
 
     if (profilePictureUrl) {
         return (
             <Avatar
-                borderColor={focused ? 'primary.500' : 'gray.300'} // Highlight the border if the tab is focused
+                borderColor={focused ? 'flame' : 'white'}
                 borderWidth={2}
                 size="sm"
                 source={{
@@ -95,7 +94,7 @@ export const Routes = (): JSX.Element => {
                         headerShown: false,
                         tabBarStyle: { backgroundColor: colors.gray[900] },
                         tabBarActiveTintColor: '#F3754B',
-                        tabBarInactiveTintColor: '#F3754B',
+                        tabBarInactiveTintColor: 'white',
 
                         // tabBarPressColor: '#F3754B',
                         // tabBarIndicatorStyle: { backgroundColor: '#F3754B' },

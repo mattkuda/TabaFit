@@ -10,7 +10,12 @@ const MoreOptionsTrigger = (triggerProps: any): JSX.Element => (
     <Box>
         <IconButton
             {...triggerProps}
+            _icon={{
+                color: 'flame',
+                size: 'md',
+            }}
             borderRadius="full"
+            color="flame"
             icon={<Icon as={Ionicons} name="settings-outline" />}
         />
     </Box>

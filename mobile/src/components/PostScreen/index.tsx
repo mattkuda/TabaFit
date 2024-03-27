@@ -103,7 +103,7 @@ export const PostScreen = (): JSX.Element => {
         <ScrollView>
             <VStack borderColor="coolGray.200" borderRadius="md" borderWidth={1} mt={4} p={4} space={2}>
                 <HStack justifyContent="space-between" space={2}>
-                    <Avatar size="48px" source={{ uri: post.user.profilePictureUrl }} />
+                    <Avatar borderColor="flame" size="48px" source={{ uri: post.user.profilePictureUrl }} />
                     <VStack flex={1}>
                         <Text fontSize="md" onPress={userFound && handlePressUser}>
                             {userFound ? `${formatName(post.user.firstName, post.user.lastName)} @${post.user.username}` : 'Unknown User'}
