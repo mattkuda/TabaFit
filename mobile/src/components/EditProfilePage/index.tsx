@@ -23,15 +23,15 @@ interface EditProfileProps {
 
 export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation }) => {
     const { user } = route.params;
-    const [firstName, setFirstName] = useState(user.firstName);
-    const [lastName, setLastName] = useState(user.lastName);
-    const [bio, setBio] = useState(user.bio);
-    const [city, setCity] = useState(user.city);
-    const [state, setState] = useState(user.state);
-    const [birthday, setBirthday] = useState(user.birthday);
-    const [gender, setGender] = useState(user.gender);
-    const [weight, setWeight] = useState(user.weight.toString());
-    const [profilePictureUrl, setProfilePictureUrl] = useState(user.profilePictureUrl);
+    const [firstName, setFirstName] = useState(user?.firstName);
+    const [lastName, setLastName] = useState(user?.lastName);
+    const [bio, setBio] = useState(user?.bio);
+    const [city, setCity] = useState(user?.city);
+    const [state, setState] = useState(user?.state);
+    const [birthday, setBirthday] = useState(user?.birthday);
+    const [gender, setGender] = useState(user?.gender);
+    const [weight, setWeight] = useState(user?.weight);
+    const [profilePictureUrl, setProfilePictureUrl] = useState(user?.profilePictureUrl);
     const updateProfileMutation = useMutateUpdateProfile();
     const updateProfilePictureMutation = useMutateProfilePicture();
     const deleteAccountMutation = useMutateDeleteAccount();
@@ -49,7 +49,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                 state,
                 birthday,
                 gender,
-                weight: parseInt(weight, 10),
+                weight,
             },
         }, { onSuccess: () => navigation.goBack() });
     };
@@ -99,6 +99,26 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
         } catch (error) {
             console.error('Error logging out:', error);
         }
+    };
+
+    const handleBirthdayChange = (text: string): void => {
+        const newText = text.replace(/[^0-9]/g, ''); // Removes any character that is not a number
+
+        // Format as MM/DD/YYYY
+        let formattedText = '';
+
+        if (newText.length <= 2) {
+            // Month part
+            formattedText = newText;
+        } else if (newText.length <= 4) {
+            // Day part
+            formattedText = `${newText.slice(0, 2)}/${newText.slice(2)}`;
+        } else if (newText.length <= 8) {
+            // Year part
+            formattedText = `${newText.slice(0, 2)}/${newText.slice(2, 4)}/${newText.slice(4, 8)}`;
+        }
+
+        setBirthday(formattedText);
     };
 
     const handleDeleteAccount = async (): Promise<void> => {
@@ -158,10 +178,11 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
             />
             <Text>Athlete Information</Text>
             <Input
-                placeholder="Birthday"
+                keyboardType="numeric"
+                placeholder="Birthday (MM/DD/YYYY)"
                 value={birthday}
                 w="100%"
-                onChangeText={setBirthday}
+                onChangeText={handleBirthdayChange}
             />
             <Select
                 placeholder="Gender"
@@ -172,13 +193,12 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                 <Select.Item label="Female" value="female" />
                 <Select.Item label="Prefer not to say" value="not-specified" />
             </Select>
-
             <Input
                 keyboardType="numeric"
                 placeholder="Weight"
-                value={weight.toString()}
+                value={weight ? weight.toString() : ''}
                 w="100%"
-                onChangeText={setWeight}
+                onChangeText={(text): void => setWeight(parseInt(text, 10))} // conver to number
             />
             <Button onPress={handleUpdate}>Update Profile</Button>
             <Button onPress={handleLogout}>Logout</Button>
