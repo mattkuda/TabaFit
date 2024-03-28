@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
-    VStack, Text, Button, Avatar, HStack, Icon,
+    VStack, Text, Button, Avatar, HStack, Icon, IconButton,
 } from 'native-base';
 import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
 import { format } from 'date-fns';
@@ -66,6 +66,28 @@ export const ProfilePage = (): JSX.Element => {
     const onRefresh = async (): Promise<void> => {
         await refetch();
     };
+
+    useEffect(() => {
+        if (isCurrentUserProfile) {
+            navigation.setOptions({
+                // eslint-disable-next-line react/no-unstable-nested-components
+                headerRight: (): JSX.Element => (
+                    <IconButton
+                        _icon={{
+                            color: 'flame',
+                            size: 'md',
+                        }}
+                        borderRadius="full"
+                        color="flame"
+                        icon={<Icon as={Ionicons} name="settings-outline" />}
+                        onPress={(): void => navigation.navigate('SettingsScreen')}
+
+                    />
+                ),
+            });
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [navigation, isCurrentUserProfile]);
 
     return (
         <VStack backgroundColor="gray9" flex={1} space={4} width="100%">

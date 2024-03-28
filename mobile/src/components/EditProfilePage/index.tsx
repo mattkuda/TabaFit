@@ -183,6 +183,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                 onChangeText={handleBirthdayChange}
             />
             <Select
+                // @ts-ignore: Left element does exist on select
                 leftElement={<Text pl={2}>Gender</Text>}
                 selectedValue={gender}
                 onValueChange={setGender}

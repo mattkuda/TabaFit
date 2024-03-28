@@ -54,47 +54,60 @@ export const theme = extendTheme({
                 color: 'flame',
             },
             variants: {
-                // Customizing the "solid" variant, which is used when the `variant` prop isn't specified
                 // eslint-disable-next-line consistent-return
                 solid: ({ colorScheme }): any => {
                     if (colorScheme === 'primary') {
                         return {
-                            bg: 'flame', // Use your custom "flame" color for the background
+                            bg: 'flame',
                             _text: {
-                                color: 'white', // Ensuring text color is white for better contrast
+                                color: 'white',
                             },
-                            // Add more styling as needed
+
                         };
                     } if (colorScheme === 'secondary') {
                         return {
-                            bg: 'white', // Secondary buttons have a white background
+                            bg: 'white',
                             _text: {
-                                color: 'flame', // Text color is "flame" for secondary buttons
+                                color: 'flame',
                             },
                         };
                     }
                 },
-                // Customizing the "solid" variant, which is used when the `variant` prop isn't specified
                 // eslint-disable-next-line consistent-return
                 outline: ({ colorScheme }): any => {
                     if (colorScheme === 'primary') {
                         return {
-                            borderColor: 'flame', // Use your custom "flame" color for the background
+                            borderColor: 'flame',
                             _text: {
-                                color: 'flame', // Ensuring text color is white for better contrast
+                                color: 'flame',
                             },
-                            // Add more styling as needed
+
                         };
                     } if (colorScheme === 'secondary') {
                         return {
-                            borderColor: 'flame', // Use your custom "flame" color for the background
+                            borderColor: 'white',
                             _text: {
-                                color: 'flame', // Text color is "flame" for secondary buttons
+                                color: 'white',
                             },
                         };
                     }
                 },
-                // You can also customize other variants as needed
+                // eslint-disable-next-line consistent-return
+                ghost: ({ colorScheme }): any => {
+                    if (colorScheme === 'primary') {
+                        return {
+                            _text: {
+                                color: 'flame',
+                            },
+                        };
+                    } if (colorScheme === 'secondary') {
+                        return {
+                            _text: {
+                                color: 'white',
+                            },
+                        };
+                    }
+                },
             },
         },
         Icon: {
