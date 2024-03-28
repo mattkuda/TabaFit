@@ -42,6 +42,13 @@ export const theme = extendTheme({
                 color: 'white',
             },
         },
+        Input: {
+            defaultProps: {
+                color: 'white',
+                backgroundColor: 'gray9',
+                borderColor: 'gray7',
+            },
+        },
         Button: {
             defaultProps: {
                 color: 'flame',

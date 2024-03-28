@@ -130,11 +130,11 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
     };
 
     return (
-        <VStack style={{ padding: 20 }}>
+        <VStack bgColor="gray9" style={{ padding: 20, gap: 8 }}>
             <HStack>
                 <TouchableOpacity onPress={handleProfilePictureUpdate}>
                     <Avatar
-                        borderColor="blue.500"
+                        borderColor="flame"
                         borderWidth={2}
                         size="xl"
                         source={{
@@ -142,13 +142,10 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                         }}
                     />
                 </TouchableOpacity>
-                <VStack
-                    w="100%"
-                >
+                <VStack style={{ paddingLeft: 16, gap: 4, flex: 1 }}>
                     <Input
                         placeholder="First Name"
                         value={firstName}
-                        w="100%"
                         onChangeText={setFirstName}
                     />
                     <Input
@@ -179,13 +176,14 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
             <Text>Athlete Information</Text>
             <Input
                 keyboardType="numeric"
-                placeholder="Birthday (MM/DD/YYYY)"
+                leftElement={<Text pl={2}>Birthday</Text>}
+                placeholder="(MM/DD/YYYY)"
                 value={birthday}
                 w="100%"
                 onChangeText={handleBirthdayChange}
             />
             <Select
-                placeholder="Gender"
+                leftElement={<Text pl={2}>Gender</Text>}
                 selectedValue={gender}
                 onValueChange={setGender}
             >
@@ -195,7 +193,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
             </Select>
             <Input
                 keyboardType="numeric"
-                placeholder="Weight"
+                leftElement={<Text pl={2}>Weight (lbs)</Text>}
                 value={weight ? weight.toString() : ''}
                 w="100%"
                 onChangeText={(text): void => setWeight(parseInt(text, 10))} // conver to number
@@ -203,7 +201,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
             <Button onPress={handleUpdate}>Update Profile</Button>
             <Button onPress={handleLogout}>Logout</Button>
             <Button onPress={(): void => navigation.goBack()}>Go Back</Button>
-            <Button color="red" onPress={(): void => setShowModal(true)}>Delete Account</Button>
+            <Button onPress={(): void => setShowModal(true)}>Delete Account</Button>
             <Modal isOpen={showModal}>
                 <Modal.Content>
                     <Modal.CloseButton />
