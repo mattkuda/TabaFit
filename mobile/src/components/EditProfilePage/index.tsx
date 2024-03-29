@@ -138,7 +138,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                         borderWidth={2}
                         size="xl"
                         source={{
-                            uri: profilePictureUrl, // make sure you have the correct uri
+                            uri: profilePictureUrl,
                         }}
                     />
                 </TouchableOpacity>

@@ -41,14 +41,15 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
     useEffect(() => {
         const loadToken = async (): Promise<void> => {
             const token = await SecureStore.getItemAsync(tokenKey);
+            const userId = await SecureStore.getItemAsync('userId');
 
             if (token) {
                 axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-                setAuthState((prev) => ({
+                setAuthState({
                     token,
                     authenticated: true,
-                    userId: prev.userId,
-                }));
+                    userId,
+                });
             }
         };
 
@@ -94,7 +95,7 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
 
             axios.defaults.headers.common.Authorization = `Bearer ${token}`;
             await SecureStore.setItemAsync(tokenKey, token);
-            // You might also want to store the user ID and username in secure storage
+            await SecureStore.setItemAsync('userId', user._id);
         } catch (error) {
             console.error('Login error:', error);
             throw error;

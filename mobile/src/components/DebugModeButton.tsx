@@ -5,6 +5,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useRecoilState } from 'recoil';
 import { wizardTodoState } from '../atoms/wizardTodoAtom';
+import { useAuth } from '../context/AuthContext';
 
 const MoreOptionsTrigger = (triggerProps: any): JSX.Element => (
     <Box>
@@ -25,6 +26,7 @@ export const DebugModeButton = (): JSX.Element => {
     const [showMenu, setShowMenu] = useState(false);
     // const setWizardTodo = useSetRecoilState(wizardTodoState);
     const [wizardTodo, setWizardTodo] = useRecoilState(wizardTodoState);
+    const authState = useAuth();
 
     const toggleWizardTodo = (): void => {
         setWizardTodo((prev) => !prev);
@@ -41,6 +43,9 @@ export const DebugModeButton = (): JSX.Element => {
             >
                 <Menu.Item onPress={toggleWizardTodo}>
                     {`Toggle wizardTodo (${wizardTodo ? 'T' : 'F'})`}
+                </Menu.Item>
+                <Menu.Item>
+                    {`AuthState: ${JSON.stringify(authState)} )`}
                 </Menu.Item>
             </Menu>
         </Box>
