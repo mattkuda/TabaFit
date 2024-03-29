@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     VStack, Text, Button, Avatar, HStack, Icon, IconButton,
 } from 'native-base';
 import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
 import { format } from 'date-fns';
 import { Ionicons } from '@expo/vector-icons';
+import { FlatList, RefreshControl } from 'react-native';
 import { useInfiniteQueryUserPosts } from '../../hooks/useQueryUserPosts';
 import { ProfileScreenRouteProp } from '../../navigation/navigationTypes';
 import { useUserInfo } from '../../hooks/useUserInfo';
@@ -12,7 +13,6 @@ import { EditProfileScreenNavigationProp } from '../../types/navigationTypes';
 import { useAuth } from '../../context/AuthContext';
 import { FollowButton } from './FollowButton';
 import { PostCard } from '../common/PostCard';
-import { InfiniteScrollList } from '../common/InfiniteScrollList';
 import { formatName } from '../../util/util';
 
 export const ProfilePage = (): JSX.Element => {
@@ -28,15 +28,20 @@ export const ProfilePage = (): JSX.Element => {
         data,
         hasNextPage,
         fetchNextPage,
-        isFetchingNextPage,
         refetch,
     } = useInfiniteQueryUserPosts(userId);
+    const [refreshing, setRefreshing] = useState(false);
 
     const flatMap = data?.pages.flatMap((page) => page);
 
+    const handleRefresh = async (): Promise<void> => {
+        setRefreshing(true);
+        await refetch();
+        setRefreshing(false);
+    };
+
     useFocusEffect(
         useCallback(() => {
-            // Refetch the user data when the screen comes into focus
             userInfo.refetch();
 
             return () => {
@@ -63,10 +68,6 @@ export const ProfilePage = (): JSX.Element => {
         }
     };
 
-    const onRefresh = async (): Promise<void> => {
-        await refetch();
-    };
-
     useEffect(() => {
         if (isCurrentUserProfile) {
             navigation.setOptions({
@@ -89,36 +90,34 @@ export const ProfilePage = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigation, isCurrentUserProfile]);
 
-    return (
-        <VStack backgroundColor="gray9" flex={1} space={4} width="100%">
+    const renderProfileHeader = (): JSX.Element => (
+        <>
             {userInfo.data && (
-                <HStack alignItems="center" backgroundColor="gray9" px={4} space={4} width="100%">
-                    <Avatar
-                        borderColor="flame"
-                        borderWidth={2}
-                        size="xl"
-                        source={{ uri: userInfo.data.profilePictureUrl }}
-                    />
-                    <VStack backgroundColor="gray9">
-                        <Text bold fontSize="lg">{formatName(userInfo.data.firstName, userInfo.data.lastName)}</Text>
-                        <Text fontSize="sm">
-                            Member since
-                            {' '}
-                            {format(new Date(userInfo.data.createdAt), 'PPP')}
-                        </Text>
-                        <Text fontSize="sm" onPress={handlePressFollowers}>
-                            {`${userInfo.data.followersCount} Followers • ${userInfo.data.followingCount} Following`}
-                        </Text>
-                    </VStack>
-                </HStack>
+            <HStack alignItems="center" backgroundColor="gray9" px={4} space={4} width="100%">
+                <Avatar
+                    borderColor="flame"
+                    borderWidth={2}
+                    size="xl"
+                    source={{ uri: userInfo.data.profilePictureUrl }}
+                />
+                <VStack backgroundColor="gray9">
+                    <Text bold fontSize="lg">{formatName(userInfo.data.firstName, userInfo.data.lastName)}</Text>
+                    <Text fontSize="sm">
+                        Member since
+                        {' '}
+                        {format(new Date(userInfo.data.createdAt), 'PPP')}
+                    </Text>
+                    <Text fontSize="sm" onPress={handlePressFollowers}>
+                        {`${userInfo.data.followersCount} Followers • ${userInfo.data.followingCount} Following`}
+                    </Text>
+                </VStack>
+            </HStack>
             )}
             <HStack alignItems="center" px={4} space={4} width="100%">
                 {isCurrentUserProfile ? (
                     <Button
                         color="flame"
-                        leftIcon={
-                            <Icon as={<Ionicons name="pencil" />} color="flame" size="sm" />
-                        }
+                        leftIcon={<Icon as={<Ionicons name="pencil" />} color="flame" size="sm" />}
                         size="sm"
                         variant="outline"
                         onPress={navigateToEditProfile}
@@ -140,15 +139,31 @@ export const ProfilePage = (): JSX.Element => {
                     E-Logout
                 </Button>
             </HStack>
-            <InfiniteScrollList
+        </>
+    );
+
+    return (
+        <VStack backgroundColor="gray9" flex={1} space={4} width="100%">
+
+            <FlatList
                 data={flatMap}
-                estimatedItemSize={285}
-                fetchData={fetchNextPage}
-                hasNextPage={hasNextPage}
-                isFetchingNextPage={isFetchingNextPage}
                 keyExtractor={(_, index): string => `post-${index}`}
-                renderItem={(item): JSX.Element => <PostCard post={item} />}
-                onRefresh={onRefresh}
+                ListHeaderComponent={renderProfileHeader}
+                refreshControl={(
+                    <RefreshControl
+                        colors={['#9Bd35A', '#689F38']}
+                        refreshing={refreshing}
+                        tintColor="#689F38"
+                        onRefresh={handleRefresh}
+                    />
+                  )}
+                renderItem={({ item }): JSX.Element => <PostCard post={item} />}
+                onEndReached={(): void => {
+                    if (hasNextPage) {
+                        fetchNextPage();
+                    }
+                }}
+                onEndReachedThreshold={0.1}
             />
         </VStack>
     );
