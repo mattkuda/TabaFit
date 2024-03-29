@@ -12,7 +12,7 @@ type InfiniteScrollListProps<T> = {
     onRefresh: () => Promise<void>;
     estimatedItemSize: number;
 };
-
+// TODO: Update to the functionality of that in ProfilePage
 export const InfiniteScrollList = <T, >({
     data,
     fetchData,
