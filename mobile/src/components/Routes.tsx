@@ -118,7 +118,7 @@ export const Routes = (): JSX.Element => {
                     />
                     <Tab.Screen
                         component={ProfileStackNavigator}
-                        name="Profile"
+                        name="ProfileStack"
                         options={{
                             tabBarIcon: ProfileTabIcon,
                             tabBarStyle,
