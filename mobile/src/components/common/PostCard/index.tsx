@@ -17,7 +17,12 @@ type PostCardProps = {
     post: PostModel;
 };
 
-export const PostCard: React.FC<PostCardProps> = ({ post }) => {
+const arePropsEqual = (
+    prevProps: PostCardProps,
+    nextProps: PostCardProps,
+): boolean => prevProps.post._id === nextProps.post._id;
+
+export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
     const { authState } = useAuth();
     const userId = authState?.userId;
     const navigation = useNavigation<HomeScreenNavigationProp>();
@@ -178,4 +183,4 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
             </VStack>
         </TouchableOpacity>
     );
-};
+}, arePropsEqual);
