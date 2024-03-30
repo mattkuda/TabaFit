@@ -5,6 +5,7 @@ import { EditProfilePage } from '../components/EditProfilePage';
 import { ProfileStackParamList } from './navigationTypes';
 import { ConnectionsScreen } from '../ConnectionsScreen';
 import { SettingsScreen } from '../components/SettingsScreen';
+import { PostScreen } from '../components/PostScreen';
 
 const Stack = createStackNavigator<ProfileStackParamList>();
 
@@ -23,5 +24,6 @@ export const ProfileStackNavigator = (): JSX.Element => (
         <Stack.Screen component={EditProfilePage} name="EditProfile" />
         <Stack.Screen component={SettingsScreen} name="SettingsScreen" />
         <Stack.Screen component={ConnectionsScreen} name="ConnectionsScreen" />
+        <Stack.Screen component={PostScreen} name="PostScreen" />
     </Stack.Navigator>
 );

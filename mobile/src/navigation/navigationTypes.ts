@@ -31,6 +31,7 @@ export type ProfileStackParamList = {
     EditProfile: { user: User };
     ConnectionsScreen: {userId: string}
     SettingsScreen: undefined;
+    PostScreen: {postId: string};
 };
 
 export type ProfileScreenRouteProp = RouteProp<ProfileStackParamList, 'Profile'>;
