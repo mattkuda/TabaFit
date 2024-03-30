@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {
-    ScrollView, Button, TextInput,
+    ScrollView,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
-    VStack, HStack, Avatar, Text, Icon, IconButton,
+    VStack, HStack, Avatar, Text, Icon, IconButton, Input,
 } from 'native-base';
 import { formatDistanceToNow } from 'date-fns';
-import { Ionicons } from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '../../context/AuthContext';
 import { useMutateAddComment, useMutateDeleteComment } from '../../mutations/commentMutations';
 import { PostScreenRouteProp } from '../../navigation/navigationTypes';
@@ -100,8 +100,8 @@ export const PostScreen = (): JSX.Element => {
     const userFound = post?.user?.username;
 
     return (
-        <ScrollView>
-            <VStack borderColor="coolGray.200" borderRadius="md" borderWidth={1} mt={4} p={4} space={2}>
+        <VStack backgroundColor="gray9" borderColor="coolGray.200" flex={1} p={4} space={2}>
+            <ScrollView>
                 <HStack justifyContent="space-between" space={2}>
                     <Avatar borderColor="flame" size="48px" source={{ uri: post.user.profilePictureUrl }} />
                     <VStack flex={1}>
@@ -129,9 +129,9 @@ export const PostScreen = (): JSX.Element => {
                         borderRadius="full"
                         icon={(
                             <Icon
-                                as={Ionicons}
+                                as={AntDesign}
                                 color={liked ? 'red.500' : 'coolGray.500'}
-                                name={liked ? 'heart' : 'heart-outline'}
+                                name={liked ? 'like1' : 'like2'}
                                 size="sm"
                             />
                         )}
@@ -139,7 +139,13 @@ export const PostScreen = (): JSX.Element => {
                     />
                     <IconButton
                         borderRadius="full"
-                        icon={<Icon as={Ionicons} name="chatbubble-outline" size="sm" />}
+                        icon={(
+                            <Icon
+                                as={MaterialCommunityIcons}
+                                name="comment-text"
+                                size="sm"
+                            />
+                        )}
                         onPress={handleCommentPress}
                     />
                 </HStack>
@@ -155,23 +161,32 @@ export const PostScreen = (): JSX.Element => {
                         Comments
                     </Text>
                 </HStack>
-            </VStack>
-            <TextInput
-                placeholder="Write a comment..."
-                style={{
-                    borderWidth: 1, borderColor: 'grey', padding: 10, margin: 10,
-                }}
-                value={commentBody}
-                onChangeText={setCommentBody}
-            />
-            <Button title="Add Comment" onPress={handleAddComment} />
-            {post.comments.map((comment) => (
-                <CommentCard
-                    comment={comment}
-                    key={comment._id?.toString()}
-                    onDeleteComment={handleDeleteComment}
+                <Input
+                    borderColor="gray5"
+                    InputRightElement={(
+                        <Text
+                            color="flame"
+                            fontSize="sm"
+                            fontWeight="bold"
+                            mr={2}
+                            onPress={handleAddComment}
+                        >
+                            Send
+                        </Text>
+                    )}
+                    placeholder="Write a comment..."
+                    value={commentBody}
+                    onChangeText={setCommentBody}
                 />
-            ))}
-        </ScrollView>
+                {post.comments.map((comment) => (
+                    <CommentCard
+                        comment={comment}
+                        key={comment._id?.toString()}
+                        onDeleteComment={handleDeleteComment}
+                    />
+                ))}
+            </ScrollView>
+        </VStack>
+
     );
 };
