@@ -93,7 +93,7 @@ export const ProfilePage = (): JSX.Element => {
     const renderProfileHeader = (): JSX.Element => (
         <>
             {userInfo.data && (
-                <HStack alignItems="center" backgroundColor="gray9" px={4} space={4} width="100%">
+                <HStack alignItems="center" backgroundColor="gray9" p={4} px={4} space={4} width="100%">
                     <Avatar
                         borderColor="flame"
                         borderWidth={2}
