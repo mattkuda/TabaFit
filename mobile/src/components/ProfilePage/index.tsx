@@ -93,25 +93,25 @@ export const ProfilePage = (): JSX.Element => {
     const renderProfileHeader = (): JSX.Element => (
         <>
             {userInfo.data && (
-            <HStack alignItems="center" backgroundColor="gray9" px={4} space={4} width="100%">
-                <Avatar
-                    borderColor="flame"
-                    borderWidth={2}
-                    size="xl"
-                    source={{ uri: userInfo.data.profilePictureUrl }}
-                />
-                <VStack backgroundColor="gray9">
-                    <Text bold fontSize="lg">{formatName(userInfo.data.firstName, userInfo.data.lastName)}</Text>
-                    <Text fontSize="sm">
-                        Member since
-                        {' '}
-                        {format(new Date(userInfo.data.createdAt), 'PPP')}
-                    </Text>
-                    <Text fontSize="sm" onPress={handlePressFollowers}>
-                        {`${userInfo.data.followersCount} Followers • ${userInfo.data.followingCount} Following`}
-                    </Text>
-                </VStack>
-            </HStack>
+                <HStack alignItems="center" backgroundColor="gray9" px={4} space={4} width="100%">
+                    <Avatar
+                        borderColor="flame"
+                        borderWidth={2}
+                        size="xl"
+                        source={{ uri: userInfo.data.profilePictureUrl }}
+                    />
+                    <VStack backgroundColor="gray9">
+                        <Text bold fontSize="lg">{formatName(userInfo.data.firstName, userInfo.data.lastName)}</Text>
+                        <Text fontSize="sm">
+                            Member since
+                            {' '}
+                            {format(new Date(userInfo.data.createdAt), 'PPP')}
+                        </Text>
+                        <Text fontSize="sm" onPress={handlePressFollowers}>
+                            {`${userInfo.data.followersCount} Followers • ${userInfo.data.followingCount} Following`}
+                        </Text>
+                    </VStack>
+                </HStack>
             )}
             <HStack alignItems="center" px={4} space={4} width="100%">
                 {isCurrentUserProfile ? (
@@ -144,16 +144,15 @@ export const ProfilePage = (): JSX.Element => {
 
     return (
         <VStack backgroundColor="gray9" flex={1} space={4} width="100%">
-
             <FlatList
                 data={flatMap}
                 keyExtractor={(_, index): string => `post-${index}`}
                 ListHeaderComponent={renderProfileHeader}
                 refreshControl={(
                     <RefreshControl
-                        colors={['#9Bd35A', '#689F38']}
+                        colors={['#FFFFFF', '#FFFFFF']}
                         refreshing={refreshing}
-                        tintColor="#689F38"
+                        tintColor="#FFFFFF"
                         onRefresh={handleRefresh}
                     />
                   )}
