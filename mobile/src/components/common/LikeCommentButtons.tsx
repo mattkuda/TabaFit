@@ -90,28 +90,40 @@ export const LikeCommentButtons = ({ post }: LikeCommentButtonsProps): JSX.Eleme
     };
 
     const handleCommentPress = (): void => {
-        console.log('TODO: Highlight input when button pressed');
+        // TODO: Highlight input when button pressed');
+    };
+
+    const likeText = (): string => {
+        if (likeCount === 0) return '0 likes';
+
+        if (liked) {
+            if (likeCount === 1) {
+                return 'You liked this post';
+            } if (likeCount === 2) {
+                return 'You and 1 other liked this post';
+            }
+            return `You and ${likeCount - 1} others liked this post`;
+        }
+
+        if (likeCount === 1) return '1 like';
+        return `${likeCount} likes`;
     };
 
     return (
         <VStack backgroundColor="gray9" borderColor="coolGray.200" flex={1}>
             <HStack color="coolGray.500" fontSize="xs" justifyContent="space-between" mt={2}>
                 <Text>
-                    {likeCount}
-                    {' '}
-                    Likes
+                    {likeText()}
                 </Text>
                 <Text>
-                    {post.comments.length}
-                    {' '}
-                    Comments
+                    {post.comments.length === 1 ? '1 Comment' : `${post.comments.length} Comments`}
                 </Text>
             </HStack>
             <Divider backgroundColor="gray6" mt={2} />
             <HStack justifyContent="space-between" space={4}>
                 <Button
                     colorScheme={liked ? 'red' : 'secondary'}
-                    flex={1} // Set flex property to 1
+                    flex={1}
                     size="md"
                     startIcon={(
                         <Animated.View
@@ -158,8 +170,6 @@ export const LikeCommentButtons = ({ post }: LikeCommentButtonsProps): JSX.Eleme
                     Comment
                 </Button>
             </HStack>
-            <Divider backgroundColor="gray6" />
         </VStack>
-
     );
 };

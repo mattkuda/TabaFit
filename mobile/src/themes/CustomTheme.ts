@@ -19,18 +19,18 @@ export const theme = extendTheme({
         white: baseTheme.colors.white,
 
     },
-    fontConfig: {
-        YourCustomFontName: {
-            400: {
-                normal: customFontFamily,
-                italic: customFontFamily,
-            },
-            500: {
-                normal: customFontFamily,
-                italic: customFontFamily,
-            },
-        },
-    },
+    // fontConfig: {
+    //     YourCustomFontName: {
+    //         400: {
+    //             normal: customFontFamily,
+    //             italic: customFontFamily,
+    //         },
+    //         500: {
+    //             normal: customFontFamily,
+    //             italic: customFontFamily,
+    //         },
+    //     },
+    // },
     fonts: {
         heading: customFontFamily,
         body: customFontFamily,

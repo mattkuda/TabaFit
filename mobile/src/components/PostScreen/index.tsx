@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
-    VStack, HStack, Avatar, Text, Input,
+    VStack, HStack, Avatar, Text, Input, Divider,
 } from 'native-base';
 import { formatDistanceToNow } from 'date-fns';
 import { useAuth } from '../../context/AuthContext';
@@ -12,10 +12,10 @@ import { useMutateAddComment, useMutateDeleteComment } from '../../mutations/com
 import { PostScreenRouteProp } from '../../navigation/navigationTypes';
 import { useQueryPost } from '../../hooks/useQueryPost';
 import { PostScreenNavigationProp } from '../../types/navigationTypes';
-import { formatName, formatTabatasCount } from '../../util/util';
+import { formatName } from '../../util/util';
 import { CommentCard } from './CommentCard';
-import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
 import { LikeCommentButtons } from '../common/LikeCommentButtons';
+import { WorkoutPostDisplay } from '../common/WorkoutPostDisplay';
 
 export const PostScreen = (): JSX.Element => {
     const route = useRoute<PostScreenRouteProp>();
@@ -29,7 +29,6 @@ export const PostScreen = (): JSX.Element => {
     const { authState } = useAuth();
     const userId = authState?.userId;
     const navigation = useNavigation<PostScreenNavigationProp>();
-    const formattedTotalWorkoutTime = post?.workout ? getFormattedTimeForTabataWorkout(post.workout) : '0';
     const commentInputRef = useRef<HTMLInputElement>(null);
 
     const handleAddComment = (): void => {
@@ -49,12 +48,6 @@ export const PostScreen = (): JSX.Element => {
         });
     };
 
-    const handleWorkoutNamePress = (): void => {
-        if (post?.workout && post.workout._id) {
-            navigation.navigate('ViewWorkoutScreen', { workout: post.workout });
-        }
-    };
-
     const handlePressUser = (): void => {
         navigation.navigate('Profile', { userId: post.userId });
     };
@@ -69,26 +62,31 @@ export const PostScreen = (): JSX.Element => {
                 <HStack justifyContent="space-between" space={2}>
                     <Avatar borderColor="flame" size="48px" source={{ uri: post.user.profilePictureUrl }} />
                     <VStack flex={1}>
-                        <Text fontSize="md" onPress={userFound && handlePressUser}>
-                            {userFound ? `${formatName(post.user.firstName, post.user.lastName)} @${post.user.username}` : 'Unknown User'}
-                        </Text>
-                        <Text color="coolGray.600" fontSize="xs">
+                        <HStack>
+                            <Text bold fontSize="md" onPress={handlePressUser}>
+                                {userFound ? `${formatName(post.user.firstName, post.user.lastName)}` : 'Unknown User'}
+                            </Text>
+                            <Text color="coolGray.300" fontSize="md">
+                                {userFound ? ` @${post.user.username}` : ''}
+                            </Text>
+                        </HStack>
+
+                        <Text color="coolGray.300" fontSize="xs">
                             {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
                         </Text>
                     </VStack>
                 </HStack>
-                <Text mt={2} onPress={handleWorkoutNamePress}>
-                    {post.workout.name}
-                    {' '}
-                    {formatTabatasCount(post.workout.numberOfTabatas)}
+                <Text bold fontSize="md" mt={2}>
+                    {post.title}
                 </Text>
-                <Text mt={2}>
-                    Total Workout Time:
-                    {' '}
-                    {formattedTotalWorkoutTime}
-                </Text>
-                <Text mt={2}>{post.description}</Text>
+                {post.description?.length > 0 && (
+                    <Text mt={2}>
+                        {post.description}
+                    </Text>
+                )}
+                <WorkoutPostDisplay workout={post.workout} />
                 <LikeCommentButtons post={post} />
+                <Divider backgroundColor="gray6" />
                 <Input
                     borderColor="gray5"
                     InputRightElement={(
@@ -102,6 +100,7 @@ export const PostScreen = (): JSX.Element => {
                             Send
                         </Text>
                     )}
+                    mt={2}
                     placeholder="Write a comment..."
                     ref={commentInputRef}
                     type="text"

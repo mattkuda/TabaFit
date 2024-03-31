@@ -61,11 +61,7 @@ export const ProfilePage = (): JSX.Element => {
     };
 
     const handleLogout = async (): Promise<void> => {
-        try {
-            await onLogout();
-        } catch (error) {
-            console.error('Error logging out:', error);
-        }
+        await onLogout();
     };
 
     useEffect(() => {
