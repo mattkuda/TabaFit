@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-    HStack, VStack, Text, Avatar, Icon, IconButton, Box,
+    HStack, VStack, Text, Avatar, Icon, Box,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native';
-import { useAuth } from '../../../context/AuthContext';
 import { HomeScreenNavigationProp } from '../../../types/navigationTypes';
 import { PostModel } from '../../../types/posts';
-import { useMutateLike, useMutateUnlike } from '../../../mutations/useMutateLike';
 import { formatName } from '../../../util/util';
 import { getFormattedTimeForTabataWorkout } from '../../TabataTimerScreen/util';
+import { LikeCommentButtons } from '../LikeCommentButtons';
 
 type PostCardProps = {
     post: PostModel;
@@ -23,32 +22,8 @@ const arePropsEqual = (
 ): boolean => prevProps.post._id === nextProps.post._id;
 
 export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
-    const { authState } = useAuth();
-    const userId = authState?.userId;
     const navigation = useNavigation<HomeScreenNavigationProp>();
-    const likeMutation = useMutateLike();
-    const unlikeMutation = useMutateUnlike();
-    const [liked, setLiked] = useState(post.likes.map((id) => id.toString()).includes(userId));
-    const [likeCount, setLikeCount] = useState(post.likes.length);
     const formattedTotalWorkoutTime = getFormattedTimeForTabataWorkout(post.workout);
-
-    const handleLikePress = (): void => {
-        if (liked) {
-            unlikeMutation.mutate({ postId: post._id.toString(), userId }, {
-                onSuccess: () => {
-                    setLiked(false);
-                    setLikeCount((prev) => prev - 1);
-                },
-            });
-        } else {
-            likeMutation.mutate({ postId: post._id.toString(), userId }, {
-                onSuccess: () => {
-                    setLiked(true);
-                    setLikeCount((prev) => prev + 1);
-                },
-            });
-        }
-    };
 
     const handlePress = (): void => {
         navigation.navigate('PostScreen', { postId: post._id.toString() });
@@ -58,10 +33,7 @@ export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
         navigation.navigate('Profile', { userId: post.userId });
     };
 
-    const handleCommentPress = (): void => {
-        // TODO: Auto focus input when naving with prop?
-        handlePress();
-    };
+    // TODO: Auto focus input when naving via comment click?
 
     const handleWorkoutNamePress = (): void => {
         if (post.workout && post.workout._id) {
@@ -151,35 +123,7 @@ export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
                         </HStack>
                     </Box>
                 </TouchableOpacity>
-                <HStack justifyContent="space-between" mt={2} space={4}>
-                    <IconButton
-                        borderRadius="full"
-                        icon={(
-                            <Icon
-                                as={Ionicons}
-                                color={liked ? 'red.500' : 'white'}
-                                name={liked ? 'heart' : 'heart-outline'}
-                                size="sm"
-                            />
-                        )}
-                        onPress={handleLikePress}
-                    />
-                    <IconButton
-                        borderRadius="full"
-                        icon={<Icon as={Ionicons} color="white" name="chatbubble-outline" size="sm" />}
-                        onPress={handleCommentPress}
-                    />
-                </HStack>
-                <HStack color="white" fontSize="xs" justifyContent="space-between" mt={2}>
-                    <Text>
-                        {likeCount}
-                        {likeCount === 1 ? ' Like' : ' Likes'}
-                    </Text>
-                    <Text>
-                        {post.comments.length}
-                        {post.comments.length === 1 ? ' Comment' : ' Comments'}
-                    </Text>
-                </HStack>
+                <LikeCommentButtons post={post} />
             </VStack>
         </TouchableOpacity>
     );

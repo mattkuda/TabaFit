@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
     ScrollView,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
-    VStack, HStack, Avatar, Text, Icon, IconButton, Input,
+    VStack, HStack, Avatar, Text, Input,
 } from 'native-base';
 import { formatDistanceToNow } from 'date-fns';
-import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '../../context/AuthContext';
 import { useMutateAddComment, useMutateDeleteComment } from '../../mutations/commentMutations';
 import { PostScreenRouteProp } from '../../navigation/navigationTypes';
-import { useQueryPost } from '../../hooks/useQueryPost'; // Import the usePost hook
-import { useMutateLike, useMutateUnlike } from '../../mutations/useMutateLike';
+import { useQueryPost } from '../../hooks/useQueryPost';
 import { PostScreenNavigationProp } from '../../types/navigationTypes';
 import { formatName, formatTabatasCount } from '../../util/util';
 import { CommentCard } from './CommentCard';
 import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
+import { LikeCommentButtons } from '../common/LikeCommentButtons';
 
 export const PostScreen = (): JSX.Element => {
     const route = useRoute<PostScreenRouteProp>();
@@ -29,44 +28,9 @@ export const PostScreen = (): JSX.Element => {
     const [commentBody, setCommentBody] = useState('');
     const { authState } = useAuth();
     const userId = authState?.userId;
-    const likeMutation = useMutateLike();
-    const unlikeMutation = useMutateUnlike();
     const navigation = useNavigation<PostScreenNavigationProp>();
-    const [liked, setLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(0);
     const formattedTotalWorkoutTime = post?.workout ? getFormattedTimeForTabataWorkout(post.workout) : '0';
-
-    useEffect(() => {
-        if (post) {
-            setLiked(post.likes.map((id) => id.toString()).includes(userId));
-            setLikeCount(post.likes.length);
-        }
-    }, [post, userId]);
-
-    const handleLikePress = (): void => {
-        setLiked(!liked);
-        setLikeCount(liked ? likeCount - 1 : likeCount + 1);
-
-        if (liked) {
-            unlikeMutation.mutate({ postId: post._id.toString(), userId }, {
-                onError: () => {
-                    setLiked(true);
-                    setLikeCount(likeCount);
-                },
-            });
-        } else {
-            likeMutation.mutate({ postId: post._id.toString(), userId }, {
-                onError: () => {
-                    setLiked(false);
-                    setLikeCount(likeCount);
-                },
-            });
-        }
-    };
-
-    const handleCommentPress = (): void => {
-        console.log('TODO: Highlight input when button pressed');
-    };
+    const commentInputRef = useRef<HTMLInputElement>(null);
 
     const handleAddComment = (): void => {
         addCommentMutation.mutate({ postId, userId, body: commentBody }, {
@@ -124,43 +88,7 @@ export const PostScreen = (): JSX.Element => {
                     {formattedTotalWorkoutTime}
                 </Text>
                 <Text mt={2}>{post.description}</Text>
-                <HStack justifyContent="space-between" mt={2} space={4}>
-                    <IconButton
-                        borderRadius="full"
-                        icon={(
-                            <Icon
-                                as={AntDesign}
-                                color={liked ? 'red.500' : 'coolGray.500'}
-                                name={liked ? 'like1' : 'like2'}
-                                size="sm"
-                            />
-                        )}
-                        onPress={handleLikePress}
-                    />
-                    <IconButton
-                        borderRadius="full"
-                        icon={(
-                            <Icon
-                                as={MaterialCommunityIcons}
-                                name="comment-text"
-                                size="sm"
-                            />
-                        )}
-                        onPress={handleCommentPress}
-                    />
-                </HStack>
-                <HStack color="coolGray.500" fontSize="xs" justifyContent="space-between" mt={2}>
-                    <Text>
-                        {likeCount}
-                        {' '}
-                        Likes
-                    </Text>
-                    <Text>
-                        {post.comments.length}
-                        {' '}
-                        Comments
-                    </Text>
-                </HStack>
+                <LikeCommentButtons post={post} />
                 <Input
                     borderColor="gray5"
                     InputRightElement={(
@@ -175,8 +103,11 @@ export const PostScreen = (): JSX.Element => {
                         </Text>
                     )}
                     placeholder="Write a comment..."
+                    ref={commentInputRef}
+                    type="text"
                     value={commentBody}
                     onChangeText={setCommentBody}
+
                 />
                 {post.comments.map((comment) => (
                     <CommentCard
