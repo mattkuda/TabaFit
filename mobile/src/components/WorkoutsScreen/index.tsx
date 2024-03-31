@@ -5,6 +5,7 @@ import {
 } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
+import { Touchable, TouchableOpacity } from 'react-native';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
 import { soundTestingWorkout } from '../shuffleUtil';
@@ -14,7 +15,6 @@ import { RefreshableScrollView } from '../RefreshableScrollView';
 import { HorizontalWorkoutCards } from '../HorizontalWorkoutCards';
 import { useQueryWorkouts } from '../../hooks/useQueryWorkouts';
 import { featuredWorkouts } from '../../util/featuredWorkouts';
-import { formatTabatasCount } from '../../util/util';
 
 type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'WorkoutsScreen'>;
 
@@ -74,33 +74,39 @@ export const WorkoutsScreen = (): JSX.Element => {
 
     return (
         <RefreshableScrollView onRefresh={refetchData}>
-            <VStack mt={4} px={5} space={4}>
-                <Box
-                    bg="orange.500" // Set the background to orange
-                    p="12"
-                    rounded="xl"
-                >
-                    <Heading color="warmGray.50" size="md" textAlign="center">Generate Workout</Heading>
-                    <HStack alignItems="center" justifyContent="center" mt={4}>
-                        <IconButton
-                            icon={<Icon as={Ionicons} color="white" name="remove" />}
-                            onPress={(): void => setShuffledWorkout((prev) => ({
-                                ...prev,
-                                numberOfTabatas: prev.numberOfTabatas - 1,
-                            }))}
-                        />
-                        <Text color="white" mx={2}>{formatTabatasCount(shuffledWorkout.numberOfTabatas)}</Text>
-                        <IconButton
-                            icon={<Icon as={Ionicons} color="white" name="add" />}
-                            onPress={(): void => setShuffledWorkout((prev) => ({
-                                ...prev,
-                                numberOfTabatas: prev.numberOfTabatas + 1,
-                            }))}
-                        />
-                    </HStack>
-                    <Button mt={4} onPress={handlePressQuickShuffle}>Create</Button>
-                </Box>
-
+            <VStack backgroundColor="gray9" flex={1} p={4} space={2}>
+                <TouchableOpacity onPress={handlePressQuickShuffle}>
+                    {/* Build Workout Row */}
+                    <Box
+                        alignItems="center"
+                        bg={{
+                            linearGradient: {
+                                colors: ['orange.400', 'orange.600'],
+                                start: [0, 1],
+                                end: [1, 0],
+                            },
+                        }}
+                        flexDirection="row"
+                        justifyContent="space-between"
+                        p="4"
+                        rounded="xl"
+                    >
+                        <HStack flex={1}>
+                            <VStack alignItems="flex-start">
+                                <HStack alignItems="center">
+                                    <Icon as={Ionicons} color="white" mr={2} name="shuffle" size="xl" />
+                                    <Heading color="warmGray.50" p={0} size="lg" textAlign="left">
+                                        Quick Shuffle
+                                    </Heading>
+                                </HStack>
+                                <Text color="warmGray.50" mt={2} textAlign="left">
+                                    Quickly generate a workout with custom settings
+                                </Text>
+                            </VStack>
+                        </HStack>
+                        <Icon as={Ionicons} color="white" mx="2" name="chevron-forward" size="xl" />
+                    </Box>
+                </TouchableOpacity>
                 {/* Build Workout Row */}
                 <Pressable onPress={handlePressBuildWorkout}>
                     <Box>
