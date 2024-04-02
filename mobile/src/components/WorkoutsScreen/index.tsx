@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import {
-    VStack, Heading, Button, Pressable, Text, Box, HStack, Icon, IconButton,
+    VStack, Heading, Button, Text, Box, HStack, Icon,
 } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
-import { Touchable, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
 import { soundTestingWorkout } from '../shuffleUtil';
@@ -108,16 +108,41 @@ export const WorkoutsScreen = (): JSX.Element => {
                     </Box>
                 </TouchableOpacity>
                 {/* Build Workout Row */}
-                <Pressable onPress={handlePressBuildWorkout}>
-                    <Box>
-                        <Text>Build a Workout</Text>
+                <TouchableOpacity onPress={handlePressBuildWorkout}>
+                    <Box
+                        alignItems="center"
+                        bg={{
+                            linearGradient: {
+                                colors: ['blue.400', 'blue.600'],
+                                start: [0, 1],
+                                end: [1, 0],
+                            },
+                        }}
+                        flexDirection="row"
+                        justifyContent="space-between"
+                        p="4"
+                        rounded="xl"
+                    >
+                        <HStack flex={1}>
+                            <VStack alignItems="flex-start">
+                                <HStack alignItems="center">
+                                    <Icon as={Ionicons} color="white" mr={2} name="barbell-outline" size="xl" />
+                                    <Heading color="warmGray.50" p={0} size="lg" textAlign="left">
+                                        Build Workout
+                                    </Heading>
+                                </HStack>
+                                <Text color="warmGray.50" mt={2} textAlign="left">
+                                    Create a custom workout with your own settings. Complete now or save for later.
+                                </Text>
+                            </VStack>
+                        </HStack>
+                        <Icon as={Ionicons} color="white" mx="2" name="chevron-forward" size="xl" />
                     </Box>
-                </Pressable>
-
+                </TouchableOpacity>
                 {/* Discover Workouts */}
                 <HStack alignItems="center" justifyContent="space-between">
                     <Heading size="md">Discover Workouts</Heading>
-                    <Button onPress={handlePressDiscoverWorkouts}>Browse all</Button>
+                    <Button colorScheme="secondary" variant="ghost" onPress={handlePressDiscoverWorkouts}>View all</Button>
                 </HStack>
                 <HorizontalWorkoutCards
                     isLoading={isNewWorkoutsLoading}
@@ -127,7 +152,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                 {/* My Workouts */}
                 <HStack alignItems="center" justifyContent="space-between">
                     <Heading size="md">My Workouts</Heading>
-                    <Button onPress={handlePressViewMyWorkouts}>View all</Button>
+                    <Button colorScheme="secondary" variant="ghost" onPress={handlePressViewMyWorkouts}>View all </Button>
                 </HStack>
                 <HorizontalWorkoutCards
                     isLoading={isMySavedWorkoutsLoading}
@@ -138,7 +163,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                 {/* Abcountable Workouts */}
                 <HStack alignItems="center" justifyContent="space-between">
                     <Heading size="md">Abcountable Workouts</Heading>
-                    <Button onPress={handlePressDiscoverWorkouts}>Browse all</Button>
+                    <Button colorScheme="secondary" variant="ghost" onPress={handlePressDiscoverWorkouts}>View all</Button>
                 </HStack>
                 <HorizontalWorkoutCards
                     isLoading={false}

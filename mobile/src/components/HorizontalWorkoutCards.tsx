@@ -14,8 +14,20 @@ const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress })
     const { authState: { userId } } = useAuth();
 
     return (
-        <TouchableOpacity style={{ width: 150, marginHorizontal: 8 }} onPress={onPress}>
-            <Box bg="lightBlue.100" height={150} justifyContent="space-between" p="4" rounded="md">
+        <TouchableOpacity style={{ width: 200, marginHorizontal: 8 }} onPress={onPress}>
+            <Box
+                bg={{
+                    linearGradient: {
+                        colors: ['gray6', 'flame'],
+                        start: [0, 1],
+                        end: [1, 0],
+                    },
+                }}
+                height={150}
+                justifyContent="space-between"
+                p="4"
+                rounded="md"
+            >
                 <Text
                     ellipsizeMode="tail"
                     numberOfLines={1}
