@@ -34,7 +34,7 @@ const ProfileTabIcon = ({ focused, color, size }): JSX.Element => {
         return (
             <Avatar
                 borderColor={focused ? 'flame' : 'white'}
-                borderWidth={2}
+                borderWidth={1}
                 size="sm"
                 source={{
                     uri: profilePictureUrl,
@@ -118,7 +118,7 @@ export const Routes = (): JSX.Element => {
                     />
                     <Tab.Screen
                         component={ProfileStackNavigator}
-                        name="ProfileStack"
+                        name="Profile"
                         options={{
                             tabBarIcon: ProfileTabIcon,
                             tabBarStyle,
