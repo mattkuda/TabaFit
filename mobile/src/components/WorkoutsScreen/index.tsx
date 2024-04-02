@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import {
     VStack, Heading, Button, Text, Box, HStack, Icon,
@@ -30,7 +30,7 @@ export const WorkoutsScreen = (): JSX.Element => {
         isLoading: isNewWorkoutsLoading,
     } = useQueryWorkouts({ limit: 5, offset: 0 });
 
-    const [shuffledWorkout, setShuffledWorkout] = useState<TabataWorkout>(soundTestingWorkout);
+    const shuffledWorkout = soundTestingWorkout;
 
     const handlePressQuickShuffle = (): void => {
         // First go to customizable settings screen (to-build)
@@ -73,104 +73,107 @@ export const WorkoutsScreen = (): JSX.Element => {
     };
 
     return (
-        <RefreshableScrollView onRefresh={refetchData}>
-            <VStack backgroundColor="gray9" flex={1} p={4} space={2}>
-                <TouchableOpacity onPress={handlePressQuickShuffle}>
+        <VStack backgroundColor="gray9" flex={1}>
+            <RefreshableScrollView onRefresh={refetchData}>
+                <VStack backgroundColor="gray9" flex={1} p={4} space={2}>
+                    <TouchableOpacity onPress={handlePressQuickShuffle}>
+                        {/* Build Workout Row */}
+                        <Box
+                            alignItems="center"
+                            bg={{
+                                linearGradient: {
+                                    colors: ['orange.400', 'orange.600'],
+                                    start: [0, 1],
+                                    end: [1, 0],
+                                },
+                            }}
+                            flexDirection="row"
+                            justifyContent="space-between"
+                            mb="2"
+                            p="4"
+                            rounded="xl"
+                        >
+                            <HStack flex={1}>
+                                <VStack alignItems="flex-start">
+                                    <HStack alignItems="center">
+                                        <Icon as={Ionicons} color="white" mr={2} name="shuffle" size="xl" />
+                                        <Heading color="warmGray.50" p={0} size="lg" textAlign="left">
+                                            Quick Shuffle
+                                        </Heading>
+                                    </HStack>
+                                    <Text color="warmGray.50" mt={2} textAlign="left">
+                                        Quickly generate a workout with custom settings
+                                    </Text>
+                                </VStack>
+                            </HStack>
+                            <Icon as={Ionicons} color="white" mx="2" name="chevron-forward" size="xl" />
+                        </Box>
+                    </TouchableOpacity>
                     {/* Build Workout Row */}
-                    <Box
-                        alignItems="center"
-                        bg={{
-                            linearGradient: {
-                                colors: ['orange.400', 'orange.600'],
-                                start: [0, 1],
-                                end: [1, 0],
-                            },
-                        }}
-                        flexDirection="row"
-                        justifyContent="space-between"
-                        p="4"
-                        rounded="xl"
-                    >
-                        <HStack flex={1}>
-                            <VStack alignItems="flex-start">
-                                <HStack alignItems="center">
-                                    <Icon as={Ionicons} color="white" mr={2} name="shuffle" size="xl" />
-                                    <Heading color="warmGray.50" p={0} size="lg" textAlign="left">
-                                        Quick Shuffle
-                                    </Heading>
-                                </HStack>
-                                <Text color="warmGray.50" mt={2} textAlign="left">
-                                    Quickly generate a workout with custom settings
-                                </Text>
-                            </VStack>
-                        </HStack>
-                        <Icon as={Ionicons} color="white" mx="2" name="chevron-forward" size="xl" />
-                    </Box>
-                </TouchableOpacity>
-                {/* Build Workout Row */}
-                <TouchableOpacity onPress={handlePressBuildWorkout}>
-                    <Box
-                        alignItems="center"
-                        bg={{
-                            linearGradient: {
-                                colors: ['blue.400', 'blue.600'],
-                                start: [0, 1],
-                                end: [1, 0],
-                            },
-                        }}
-                        flexDirection="row"
-                        justifyContent="space-between"
-                        p="4"
-                        rounded="xl"
-                    >
-                        <HStack flex={1}>
-                            <VStack alignItems="flex-start">
-                                <HStack alignItems="center">
-                                    <Icon as={Ionicons} color="white" mr={2} name="barbell-outline" size="xl" />
-                                    <Heading color="warmGray.50" p={0} size="lg" textAlign="left">
-                                        Build Workout
-                                    </Heading>
-                                </HStack>
-                                <Text color="warmGray.50" mt={2} textAlign="left">
-                                    Create a custom workout with your own settings. Complete now or save for later.
-                                </Text>
-                            </VStack>
-                        </HStack>
-                        <Icon as={Ionicons} color="white" mx="2" name="chevron-forward" size="xl" />
-                    </Box>
-                </TouchableOpacity>
-                {/* Discover Workouts */}
-                <HStack alignItems="center" justifyContent="space-between">
-                    <Heading size="md">Discover Workouts</Heading>
-                    <Button colorScheme="secondary" variant="ghost" onPress={handlePressDiscoverWorkouts}>View all</Button>
-                </HStack>
-                <HorizontalWorkoutCards
-                    isLoading={isNewWorkoutsLoading}
-                    workouts={newWorkouts}
-                    onPressWorkout={handlePressViewWorkout}
-                />
-                {/* My Workouts */}
-                <HStack alignItems="center" justifyContent="space-between">
-                    <Heading size="md">My Workouts</Heading>
-                    <Button colorScheme="secondary" variant="ghost" onPress={handlePressViewMyWorkouts}>View all </Button>
-                </HStack>
-                <HorizontalWorkoutCards
-                    isLoading={isMySavedWorkoutsLoading}
-                    workouts={mySavedWorkouts}
-                    onPressWorkout={handlePressViewMyWorkout}
-                />
+                    <TouchableOpacity onPress={handlePressBuildWorkout}>
+                        <Box
+                            alignItems="center"
+                            bg={{
+                                linearGradient: {
+                                    colors: ['blue.400', 'blue.600'],
+                                    start: [0, 1],
+                                    end: [1, 0],
+                                },
+                            }}
+                            flexDirection="row"
+                            justifyContent="space-between"
+                            p="4"
+                            rounded="xl"
+                        >
+                            <HStack flex={1}>
+                                <VStack alignItems="flex-start">
+                                    <HStack alignItems="center">
+                                        <Icon as={Ionicons} color="white" mr={2} name="barbell-outline" size="xl" />
+                                        <Heading color="warmGray.50" p={0} size="lg" textAlign="left">
+                                            Build Workout
+                                        </Heading>
+                                    </HStack>
+                                    <Text color="warmGray.50" mt={2} textAlign="left">
+                                        Create a custom workout with your own settings. Complete now or save for later.
+                                    </Text>
+                                </VStack>
+                            </HStack>
+                            <Icon as={Ionicons} color="white" mx="2" name="chevron-forward" size="xl" />
+                        </Box>
+                    </TouchableOpacity>
+                    {/* Discover Workouts */}
+                    <HStack alignItems="center" justifyContent="space-between">
+                        <Heading size="md">Discover Workouts</Heading>
+                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressDiscoverWorkouts}>View all</Button>
+                    </HStack>
+                    <HorizontalWorkoutCards
+                        isLoading={isNewWorkoutsLoading}
+                        workouts={newWorkouts}
+                        onPressWorkout={handlePressViewWorkout}
+                    />
+                    {/* My Workouts */}
+                    <HStack alignItems="center" justifyContent="space-between">
+                        <Heading size="md">My Workouts</Heading>
+                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressViewMyWorkouts}>View all </Button>
+                    </HStack>
+                    <HorizontalWorkoutCards
+                        isLoading={isMySavedWorkoutsLoading}
+                        workouts={mySavedWorkouts}
+                        onPressWorkout={handlePressViewMyWorkout}
+                    />
 
-                {/* Abcountable Workouts */}
-                <HStack alignItems="center" justifyContent="space-between">
-                    <Heading size="md">Abcountable Workouts</Heading>
-                    <Button colorScheme="secondary" variant="ghost" onPress={handlePressDiscoverWorkouts}>View all</Button>
-                </HStack>
-                <HorizontalWorkoutCards
-                    isLoading={false}
-                    workouts={featuredWorkouts}
-                    onPressWorkout={handlePressViewWorkout}
-                />
-            </VStack>
-        </RefreshableScrollView>
+                    {/* Abcountable Workouts */}
+                    <HStack alignItems="center" justifyContent="space-between">
+                        <Heading size="md">Abcountable Workouts</Heading>
+                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressDiscoverWorkouts}>View all</Button>
+                    </HStack>
+                    <HorizontalWorkoutCards
+                        isLoading={false}
+                        workouts={featuredWorkouts}
+                        onPressWorkout={handlePressViewWorkout}
+                    />
+                </VStack>
+            </RefreshableScrollView>
+        </VStack>
     );
 };

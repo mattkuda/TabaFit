@@ -5,10 +5,19 @@ const customFontFamily = '';
 export const theme = extendTheme({
     colors: {
         primary: baseTheme.colors.blue,
-        // Q: how to add light and dark variants of flame
         flame: '#F3754B',
         flamelight: '#fac8b7',
-        blue: '#2665fa',
+        blue: {
+            100: '#E6F0FF',
+            200: '#CCE1FF',
+            300: '#99C2FF',
+            400: '#66A3FF',
+            500: '#3385FF',
+            600: '#0066FF',
+            700: '#0052CC',
+            800: '#003D99',
+            900: '#002966',
+        },
         gray10: baseTheme.colors.gray[1000],
         gray9: baseTheme.colors.gray[900],
         gray8: baseTheme.colors.gray[800],

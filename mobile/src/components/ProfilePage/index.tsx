@@ -77,8 +77,7 @@ export const ProfilePage = (): JSX.Element => {
                         borderRadius="full"
                         color="flame"
                         icon={<Icon as={Ionicons} name="settings-outline" />}
-                        onPress={(): void => navigation.navigate('SettingsScreen')}
-
+                        onPress={(): void => navigation.navigate('SettingsScreen', { user: userInfo.data })}
                     />
                 ),
             });

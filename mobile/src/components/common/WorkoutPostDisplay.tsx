@@ -63,9 +63,7 @@ export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
                     <VStack alignItems="center" flex={1} space={0}>
                         <Icon as={Ionicons} name="body-outline" size="md" />
                         <Text fontSize="sm">
-                            {workout.numberOfTabatas}
-                            {' '}
-                            Tabatas
+                            {`${workout.numberOfTabatas} ${workout.numberOfTabatas === 1 ? 'Tabata' : 'Tabatas'}`}
                         </Text>
                     </VStack>
                     <VStack alignItems="center" flex={1} space={0}>

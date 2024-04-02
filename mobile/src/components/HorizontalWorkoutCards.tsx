@@ -1,55 +1,66 @@
 import React from 'react';
-import { ScrollView, TouchableOpacity, Text } from 'react-native';
-import { Avatar, Box, Skeleton } from 'native-base';
+import { ScrollView, TouchableOpacity } from 'react-native';
+import {
+    Avatar, Box, HStack, Icon, Skeleton, Text, VStack,
+} from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
 import { TabataWorkoutWithUserInfo } from '../types/workouts';
-import { useAuth } from '../context/AuthContext';
-import { formatTabatasCount } from '../util/util';
+import { getFormattedTimeForTabataWorkout } from './TabataTimerScreen/util';
 
 interface SlideWorkoutCardProps {
     workout: TabataWorkoutWithUserInfo;
     onPress: () => void;
 }
 
-const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress }): JSX.Element => {
-    const { authState: { userId } } = useAuth();
-
-    return (
-        <TouchableOpacity style={{ width: 200, marginHorizontal: 8 }} onPress={onPress}>
-            <Box
-                bg={{
-                    linearGradient: {
-                        colors: ['gray6', 'flame'],
-                        start: [0, 1],
-                        end: [1, 0],
-                    },
+const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress }): JSX.Element => (
+    <TouchableOpacity style={{ width: 200, marginHorizontal: 8 }} onPress={onPress}>
+        <Box
+            bg={{
+                linearGradient: {
+                    colors: ['blue.600', 'orange.600'],
+                    start: [0, 1],
+                    end: [1, 0],
+                },
+            }}
+            height={150}
+            justifyContent="space-between"
+            p="4"
+            rounded="md"
+        >
+            <Text
+                ellipsizeMode="tail"
+                fontSize="md"
+                numberOfLines={2}
+                style={{
+                    fontWeight: 'bold',
+                    marginBottom: 4,
+                    lineHeight: 16,
+                    height: 32,
                 }}
-                height={150}
-                justifyContent="space-between"
-                p="4"
-                rounded="md"
             >
-                <Text
-                    ellipsizeMode="tail"
-                    numberOfLines={1}
-                    style={{ fontWeight: 'bold', marginBottom: 4 }}
-                >
-                    {workout.name}
+                {workout.name}
+            </Text>
+            <HStack flex={1} justifyContent="space-between" mt={2}>
+                <VStack alignItems="center" flex={1} space={0}>
+                    <Icon as={Ionicons} name="body-outline" size="md" />
+                    <Text fontSize="sm">
+                        {`${workout.numberOfTabatas} ${workout.numberOfTabatas === 1 ? 'Tabata' : 'Tabatas'}`}
+                    </Text>
+                </VStack>
+                <VStack alignItems="center" flex={1} space={0}>
+                    <Icon as={Ionicons} name="time-outline" size="md" />
+                    <Text fontSize="sm">{getFormattedTimeForTabataWorkout(workout)}</Text>
+                </VStack>
+            </HStack>
+            <Box alignItems="center" flexDirection="row" justifyContent="flex-end">
+                <Avatar size="xs" source={{ uri: workout?.user?.profilePictureUrl }} />
+                <Text style={{ marginLeft: 8 }}>
+                    {`${workout?.user?.firstName} ${workout?.user?.lastName}`}
                 </Text>
-                <Text>{formatTabatasCount(workout.numberOfTabatas)}</Text>
-                <Box alignItems="center" flexDirection="row" justifyContent="flex-end">
-                    {userId !== workout?.userId && (
-                        <>
-                            <Avatar size="sm" source={{ uri: workout?.user?.profilePictureUrl }} />
-                            <Text style={{ marginLeft: 8 }}>
-                                {`${workout?.user?.firstName} ${workout?.user?.lastName}`}
-                            </Text>
-                        </>
-                    )}
-                </Box>
             </Box>
-        </TouchableOpacity>
-    );
-};
+        </Box>
+    </TouchableOpacity>
+);
 
 interface HorizontalWorkoutCardsProps {
     workouts: TabataWorkoutWithUserInfo[];

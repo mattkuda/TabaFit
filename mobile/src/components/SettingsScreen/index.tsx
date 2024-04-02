@@ -5,16 +5,21 @@ import React, { useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 // eslint-disable-next-line import/no-unresolved
 import { ProfileStackParamList } from 'src/navigation/navigationTypes';
+import { RouteProp } from '@react-navigation/native';
 import { useMutateDeleteAccount } from '../../mutations/profileMutations';
 import { useAuth } from '../../context/AuthContext';
 
 type SettingsScreenNavigationProp = StackNavigationProp<ProfileStackParamList, 'SettingsScreen'>;
+type SettingsScreenRouteProp = RouteProp<ProfileStackParamList, 'SettingsScreen'>;
 
 interface SettingsScreenProps {
     navigation: SettingsScreenNavigationProp;
+    route: SettingsScreenRouteProp;
+
 }
 
-export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
+export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigation }) => {
+    const { user } = route.params;
     const deleteAccountMutation = useMutateDeleteAccount();
     const [showModal, setShowModal] = useState(false);
     const { onLogout, authState: { userId } } = useAuth();
@@ -35,8 +40,13 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
         setShowModal(false);
     };
 
+    const handleEditProfile = (): void => {
+        navigation.navigate('EditProfile', { user });
+    };
+
     return (
         <VStack bgColor="gray9" height="100%" justifyContent="flex-end" style={{ padding: 20, gap: 8 }}>
+            <Button color="flame" variant="ghost" onPress={handleEditProfile}>Edit Profile</Button>
             <Button color="flame" variant="ghost" onPress={handleLogout}>Logout</Button>
             <Button colorScheme="danger" variant="ghost" onPress={(): void => setShowModal(true)}>Delete Account</Button>
             <Modal isOpen={showModal}>

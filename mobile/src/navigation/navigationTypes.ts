@@ -30,7 +30,7 @@ export type ProfileStackParamList = {
     Profile: { userId?: string };
     EditProfile: { user: User };
     ConnectionsScreen: {userId: string}
-    SettingsScreen: undefined;
+    SettingsScreen: { user: User };
     PostScreen: {postId: string};
 };
 

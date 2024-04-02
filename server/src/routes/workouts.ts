@@ -74,6 +74,7 @@ router.get('/', async (req: Request, res: Response) => {
     const offset = parseInt(req.query.offset as string, 10);
     const limit = parseInt(req.query.limit as string, 10);
     const workouts = await workoutsCollection.find({})
+      .sort({ _id: -1 })
       .skip(offset)
       .limit(limit)
       .toArray();
@@ -113,6 +114,7 @@ router.get('/my-saved', authenticate, async (req: AuthRequest, res: Response) =>
     const savedWorkouts = await workoutsCollection.find({
       userId: requestingUserId,
     })
+      .sort({ _id: -1 })
       .skip(offset)
       .limit(limit)
       .toArray();
@@ -148,9 +150,12 @@ router.get('/suggested', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/save', async (req: AuthRequest, res: Response) => {
+router.post('/save', authenticate, async (req: AuthRequest, res: Response) => {
   const { workout } = req.body;
   const { userId } = req;
+
+  console.log('workout:', workout);
+  console.log('userId:', userId);
 
   delete workout._id;
   workout.userId = userId;
