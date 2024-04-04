@@ -80,8 +80,8 @@ export const HorizontalWorkoutCards: React.FC<HorizontalWorkoutCardsProps> = ({
                 contentContainerStyle={{ paddingLeft: 0, paddingRight: 8 }}
                 showsHorizontalScrollIndicator={false}
             >
-                <Skeleton endColor="coolGray.400" h="150" rounded="md" startColor="coolGray.200" w="150" />
-                <Skeleton endColor="coolGray.400" h="150" ml="8" rounded="md" startColor="coolGray.200" w="150" />
+                <Skeleton endColor="coolGray.400" h="150" rounded="md" startColor="coolGray.200" w="200" />
+                <Skeleton endColor="coolGray.400" h="150" ml="8" rounded="md" startColor="coolGray.200" w="200" />
             </ScrollView>
         );
     }
