@@ -24,8 +24,8 @@ export const DiscoverWorkoutsScreen: FC = () => {
     const flatMapWorkouts = workoutsData?.pages.flatMap((page) => page) || [];
 
     return (
-        <VStack flex={1} space={4}>
-            <Heading px="4">Discover Workouts:</Heading>
+        <VStack backgroundColor="gray9" flex={1} p={2} space={2}>
+            <Heading px="4">Discover Workouts</Heading>
             <InfiniteScrollList
                 data={flatMapWorkouts}
                 estimatedItemSize={100} // Adjust based on the average size of your WorkoutCard
