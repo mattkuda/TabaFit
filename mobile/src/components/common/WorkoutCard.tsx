@@ -42,7 +42,7 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
 
     return (
 
-        <TouchableOpacity style={{ width: '100%' }} onPress={handleClickCard}>
+        <TouchableOpacity style={{ width: '100%', marginBottom: 16 }} onPress={handleClickCard}>
             <Box
                 bg={{
                     linearGradient: {
@@ -79,7 +79,7 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                         <Menu.Item>Nunito Sans</Menu.Item>
                         <Menu.Item>Roboto</Menu.Item>
                         <Menu.Item>Poppins</Menu.Item>
-                        <Menu.Item>SF Pro</Menu.Item>
+                        <Menu.Item>SF Pasdfro</Menu.Item>
                         <Menu.Item>Helvetica</Menu.Item>
                         <Menu.Item isDisabled>Sofia</Menu.Item>
                         <Menu.Item>Cookie</Menu.Item>
