@@ -18,7 +18,7 @@ import { WorkoutsStackNavigator } from '../navigation/WorkoutsStackNavigator';
 import { useUserInfo } from '../hooks/useUserInfo';
 import { AuthStackNavigator } from '../navigation/AuthStackNavigator';
 import { SignUpWizardStackNavigator } from '../navigation/SignUpWizardStackNavigator';
-import { wizardTodoState } from '../atoms/wizardTodoAtom';
+import { wizardActiveState } from '../atoms/wizardActiveAtom';
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
@@ -49,7 +49,7 @@ const ProfileTabIcon = ({ focused, color, size }): JSX.Element => {
 export const Routes = (): JSX.Element => {
     const showFooter = useRecoilValue(showFooterState);
     const { authState } = useAuth();
-    const wizardTodo = useRecoilValue(wizardTodoState);
+    const wizardActive = useRecoilValue(wizardActiveState);
     const { colors } = useTheme();
 
     if (!authState.authenticated) {
@@ -65,7 +65,7 @@ export const Routes = (): JSX.Element => {
         );
     }
 
-    if (authState.authenticated && wizardTodo) {
+    if (authState.authenticated && wizardActive) {
         return (
             <NavigationContainer>
                 <SafeAreaView style={{ flex: 1 }}>

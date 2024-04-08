@@ -4,15 +4,15 @@ import { useSetRecoilState } from 'recoil';
 import { WelcomeScreen } from '../components/WelcomeScreen';
 import { SuggestedFollowsScreen } from '../components/SuggestedFollowsScreen';
 import { SuggestedWorkoutsScreen } from '../components/SuggestedWorkoutsScreen';
-import { wizardTodoState } from '../atoms/wizardTodoAtom';
+import { wizardActiveState } from '../atoms/wizardActiveAtom';
 
 const SignUpWizardStack = createStackNavigator();
 
 const SkipButton = (): JSX.Element => {
-    const setWizardTodo = useSetRecoilState(wizardTodoState);
+    const setwizardActive = useSetRecoilState(wizardActiveState);
 
     const handleSaveOrUpdateWorkout = (): void => {
-        setWizardTodo(false);
+        setwizardActive(false);
     };
 
     return (

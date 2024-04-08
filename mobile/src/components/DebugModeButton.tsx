@@ -4,7 +4,7 @@ import {
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useRecoilState } from 'recoil';
-import { wizardTodoState } from '../atoms/wizardTodoAtom';
+import { wizardActiveState } from '../atoms/wizardActiveAtom';
 import { useAuth } from '../context/AuthContext';
 
 const MoreOptionsTrigger = (triggerProps: any): JSX.Element => (
@@ -24,12 +24,12 @@ const MoreOptionsTrigger = (triggerProps: any): JSX.Element => (
 
 export const DebugModeButton = (): JSX.Element => {
     const [showMenu, setShowMenu] = useState(false);
-    // const setWizardTodo = useSetRecoilState(wizardTodoState);
-    const [wizardTodo, setWizardTodo] = useRecoilState(wizardTodoState);
+    // const setwizardActive = useSetRecoilState(wizardActiveState);
+    const [wizardActive, setwizardActive] = useRecoilState(wizardActiveState);
     const authState = useAuth();
 
-    const toggleWizardTodo = (): void => {
-        setWizardTodo((prev) => !prev);
+    const togglewizardActive = (): void => {
+        setwizardActive((prev) => !prev);
     };
 
     return (
@@ -41,8 +41,8 @@ export const DebugModeButton = (): JSX.Element => {
                 onClose={(): void => setShowMenu(false)}
                 onOpen={(): void => setShowMenu(true)}
             >
-                <Menu.Item onPress={toggleWizardTodo}>
-                    {`Toggle wizardTodo (${wizardTodo ? 'T' : 'F'})`}
+                <Menu.Item onPress={togglewizardActive}>
+                    {`Toggle wizardActive (${wizardActive ? 'T' : 'F'})`}
                 </Menu.Item>
                 <Menu.Item>
                     {`AuthState: ${JSON.stringify(authState)} )`}

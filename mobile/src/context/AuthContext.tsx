@@ -4,7 +4,7 @@ import React, {
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { useSetRecoilState } from 'recoil';
-import { wizardTodoState } from '../atoms/wizardTodoAtom';
+import { wizardActiveState } from '../atoms/wizardActiveAtom';
 
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 const tokenKey = process.env.EXPO_PUBLIC_TOKEN_KEY;
@@ -36,7 +36,7 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
         authenticated: null,
         userId: null,
     });
-    const setWizardTodo = useSetRecoilState(wizardTodoState);
+    const setwizardActive = useSetRecoilState(wizardActiveState);
 
     useEffect(() => {
         const loadToken = async (): Promise<void> => {
@@ -69,7 +69,7 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
             });
             const { token, user } = response.data;
 
-            setWizardTodo(true);
+            setwizardActive(true);
             setAuthState({ token, authenticated: true, userId: user._id });
 
             axios.defaults.headers.common.Authorization = `Bearer ${response.data.token}`;

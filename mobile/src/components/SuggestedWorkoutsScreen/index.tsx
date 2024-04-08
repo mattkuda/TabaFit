@@ -6,7 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons'; // Assuming you're using Exp
 import { useSetRecoilState } from 'recoil';
 // import { useSaveAll } from '../../mutations/followMutations';
 import { TouchableOpacity } from 'react-native';
-import { wizardTodoState } from '../../atoms/wizardTodoAtom';
+import { wizardActiveState } from '../../atoms/wizardActiveAtom';
 import { useQuerySuggestedWorkouts } from '../../hooks/useQueryWorkouts';
 import { useMutateSaveAllSuggestedWorkout, useMutateSaveWorkout } from '../../mutations/useMutateSaveWorkout';
 import { useAuth } from '../../context/AuthContext';
@@ -68,7 +68,7 @@ const WorkoutCard = ({
 };
 
 export const SuggestedWorkoutsScreen = (): JSX.Element => {
-    const setWizardTodo = useSetRecoilState(wizardTodoState);
+    const setwizardActive = useSetRecoilState(wizardActiveState);
     const [isSavedAll, setSavedAll] = useState(false);
     const { data: workouts } = useQuerySuggestedWorkouts();
     const saveAllMutation = useMutateSaveAllSuggestedWorkout(); // Using the save all mutation
@@ -97,7 +97,7 @@ export const SuggestedWorkoutsScreen = (): JSX.Element => {
                 >
                     Save all suggested
                 </Button>
-                <Button onPress={(): void => setWizardTodo(false)}>Done</Button>
+                <Button onPress={(): void => setwizardActive(false)}>Done</Button>
             </VStack>
         </ScrollView>
     );
