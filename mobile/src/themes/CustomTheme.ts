@@ -1,6 +1,6 @@
 import { extendTheme, theme as baseTheme } from 'native-base';
 
-const customFontFamily = '';
+// const customFontFamily = '';
 
 export const theme = extendTheme({
     colors: {
@@ -43,11 +43,11 @@ export const theme = extendTheme({
     //         },
     //     },
     // },
-    fonts: {
-        heading: customFontFamily,
-        body: customFontFamily,
-        mono: customFontFamily,
-    },
+    // fonts: {
+    //     heading: customFontFamily,
+    //     body: customFontFamily,
+    //     mono: customFontFamily,
+    // },
     components: {
         Text: {
             defaultProps: {

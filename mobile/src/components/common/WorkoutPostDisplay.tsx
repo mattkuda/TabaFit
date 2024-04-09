@@ -56,7 +56,7 @@ export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
                         </Text>
                     </HStack>
                 </HStack>
-                <Text fontSize="sm" pl={8} style={{ fontStyle: 'italic' }}>
+                <Text italic fontSize="sm" pl={8}>
                     {formatBodyParts(workout.includeSettings)}
                 </Text>
                 <HStack justifyContent="space-between" mt={2}>

@@ -74,7 +74,7 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                         </Text>
                         <Menu
                             shadow={2}
-                        // eslint-disable-next-line react/no-unstable-nested-components
+                            // eslint-disable-next-line react/no-unstable-nested-components
                             trigger={(triggerProps): JSX.Element => <MenuTrigger triggerProps={triggerProps} />}
                             w="190"
                         >
