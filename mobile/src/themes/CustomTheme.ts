@@ -106,6 +106,9 @@ export const theme = extendTheme({
                             _text: {
                                 color: 'white',
                             },
+                            _icon: {
+                                color: 'white',
+                            },
                         };
                     }
                 },

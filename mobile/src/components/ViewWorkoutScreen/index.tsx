@@ -6,6 +6,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { Animated } from 'react-native';
 import { TabataCircuit, TabataWorkout } from '../../types/workouts';
 import { ViewWorkoutScreenRouteProp, BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
@@ -45,42 +46,87 @@ export const ViewWorkoutScreen = (): JSX.Element => {
         return <Center flex={1}><Text>Error loading workout or workout not found</Text></Center>; // Show error message
     }
 
+    const scaleAnimation = new Animated.Value(1);
+
+    Animated.loop(
+        Animated.sequence([
+            Animated.timing(scaleAnimation, {
+                toValue: 1.2,
+                duration: 500,
+                useNativeDriver: true,
+            }),
+            Animated.timing(scaleAnimation, {
+                toValue: 1,
+                duration: 500,
+                useNativeDriver: true,
+            }),
+        ]),
+    ).start();
+
     return (
-        <ScrollView>
-            <VStack px={5} py={4} space={4}>
-                <Text bold fontSize="xl">{workout.name}</Text>
-                <Button
-                    rightIcon={<Icon as={Ionicons} name="pencil" size="sm" />}
-                    size="sm"
-                    variant="outline"
-                    onPress={handleEditWorkout}
+        <VStack
+            backgroundColor="gray9"
+            flex={1}
+            space={4}
+            width="100%"
+        >
+            <ScrollView>
+                <VStack
+                    backgroundColor="gray9"
+                    borderColor="gray7"
+                    p={4}
+                    space={4}
+                    width="100%"
                 >
-                    {isInMyWorkouts ? 'Edit' : 'Save'}
-                </Button>
-                <Text fontSize="md">
-                    Created on:
-                    {' '}
-                    {workout.createdAt}
-                </Text>
-                <Text fontSize="md">
-                    Number of Tabatas:
-                    {' '}
-                    {workout.numberOfTabatas}
-                </Text>
-                {workout.tabatas.map((circuit: TabataCircuit, index: number) => (
-                    <VStack borderColor="coolGray.200" borderRadius="md" borderWidth={1} key={index} mt={2} p={4} space={2}>
-                        <Text bold fontSize="md">
-                            Tabata
-                            {' '}
-                            {index + 1}
-                        </Text>
-                        {circuit.map((exercise, exIndex) => (
-                            <Text key={exIndex}>{exercise.name}</Text>
-                        ))}
-                    </VStack>
-                ))}
-            </VStack>
-            <Button mt={4} onPress={handleStartWorkout}>Start</Button>
-        </ScrollView>
+                    <Text bold fontSize="xl">{workout.name}</Text>
+                    <Button
+                        rightIcon={<Icon as={Ionicons} name="pencil" size="sm" />}
+                        size="sm"
+                        variant="outline"
+                        onPress={handleEditWorkout}
+                    >
+                        {isInMyWorkouts ? 'Edit' : 'Save'}
+                    </Button>
+                    <Text fontSize="md">
+                        Created on:
+                        {' '}
+                        {workout.createdAt}
+                    </Text>
+                    <Text fontSize="md">
+                        Number of Tabatas:
+                        {' '}
+                        {workout.numberOfTabatas}
+                    </Text>
+                    {workout.tabatas.map((circuit: TabataCircuit, index: number) => (
+                        <VStack borderColor="coolGray.200" borderRadius="md" borderWidth={1} key={index} mt={2} p={4} space={2}>
+                            <Text bold fontSize="md">
+                                Tabata
+                                {' '}
+                                {index + 1}
+                            </Text>
+                            {circuit.map((exercise, exIndex) => (
+                                <Text key={exIndex}>{exercise.name}</Text>
+                            ))}
+                        </VStack>
+                    ))}
+                </VStack>
+            </ScrollView>
+            <Button
+                bottom={0}
+                endIcon={(
+                    <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>
+                        <Icon as={Ionicons} name="flash" />
+                    </Animated.View>
+
+                )}
+                flex={1}
+                mt={4}
+                position="absolute"
+                width="100%"
+                onPress={handleStartWorkout}
+            >
+                Start
+            </Button>
+        </VStack>
     );
 };

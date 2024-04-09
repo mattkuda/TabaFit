@@ -42,55 +42,62 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
 
     return (
 
-        <TouchableOpacity style={{ width: '100%', marginBottom: 16 }} onPress={handleClickCard}>
-            <Box
-                bg={{
-                    linearGradient: {
-                        colors: ['blue.600', 'orange.600'],
-                        start: [0, 1],
-                        end: [1, 0],
-                    },
-                }}
-                gap={2}
-                justifyContent="space-between"
-                p="4"
-                rounded="md"
+        <TouchableOpacity
+            style={{
+                width: '100%', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5,
+            }}
+            onPress={handleClickCard}
+        >
+            <VStack
+                backgroundColor="gray9"
+                borderColor="gray7"
+                borderRadius="md"
+                borderWidth={1}
+                mt={4}
+                p={4}
+                space={4}
+                width="100%"
             >
-                <HStack justifyContent="space-between">
-                    <Text
-                        ellipsizeMode="tail"
-                        fontSize="md"
-                        numberOfLines={2}
-                        style={{
-                            fontWeight: 'bold',
-                            lineHeight: 16,
-                            height: 32,
-                        }}
-                    >
-                        {workout.name}
-                    </Text>
-                    <Menu
-                        shadow={2}
+                <VStack space={0}>
+                    <HStack justifyContent="space-between">
+                        <Text
+                            ellipsizeMode="tail"
+                            fontSize="md"
+                            numberOfLines={2}
+                            style={{
+                                fontWeight: 'bold',
+                                lineHeight: 16,
+                                height: 32,
+                            }}
+                        >
+                            {workout.name}
+                        </Text>
+                        <Menu
+                            shadow={2}
                         // eslint-disable-next-line react/no-unstable-nested-components
-                        trigger={(triggerProps): JSX.Element => <MenuTrigger triggerProps={triggerProps} />}
-                        w="190"
-                    >
-                        <Menu.Item>Arial</Menu.Item>
-                        <Menu.Item>Nunito Sans</Menu.Item>
-                        <Menu.Item>Roboto</Menu.Item>
-                        <Menu.Item>Poppins</Menu.Item>
-                        <Menu.Item>SF Pasdfro</Menu.Item>
-                        <Menu.Item>Helvetica</Menu.Item>
-                        <Menu.Item isDisabled>Sofia</Menu.Item>
-                        <Menu.Item>Cookie</Menu.Item>
-                    </Menu>
-                </HStack>
-                <Box alignItems="center" flexDirection="row" justifyContent="flex-start">
-                    <Avatar size="xs" source={{ uri: workout?.user?.profilePictureUrl }} />
-                    <Text style={{ marginLeft: 8 }}>
-                        {`${workout?.user?.firstName} ${workout?.user?.lastName}`}
-                    </Text>
-                </Box>
+                            trigger={(triggerProps): JSX.Element => <MenuTrigger triggerProps={triggerProps} />}
+                            w="190"
+                        >
+                            <Menu.Item>Arial</Menu.Item>
+                            <Menu.Item>Nunito Sans</Menu.Item>
+                            <Menu.Item>Roboto</Menu.Item>
+                            <Menu.Item>Poppins</Menu.Item>
+                            <Menu.Item>SF Pasdfro</Menu.Item>
+                            <Menu.Item>Helvetica</Menu.Item>
+                            <Menu.Item isDisabled>Sofia</Menu.Item>
+                            <Menu.Item>Cookie</Menu.Item>
+                        </Menu>
+                    </HStack>
+                    <Box alignItems="center" flexDirection="row" justifyContent="space-between">
+                        <Box alignItems="center" flexDirection="row">
+                            <Avatar size="xs" source={{ uri: workout?.user?.profilePictureUrl }} />
+                            <Text style={{ marginLeft: 8 }}>
+                                {`${workout?.user?.firstName} ${workout?.user?.lastName}`}
+                            </Text>
+                        </Box>
+                        {formattedDate}
+                    </Box>
+                </VStack>
                 <HStack justifyContent="space-between" mt={2}>
                     <VStack alignItems="center" flex={1} space={0}>
                         <Icon as={Ionicons} name="body-outline" size="md" />
@@ -105,8 +112,23 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                 </HStack>
                 <HStack justifyContent="space-between" space={4}>
                     <Button
+                        colorScheme="secondary"
                         endIcon={(
-                            <Icon as={Ionicons} name="play" size="md" />
+                            <Icon
+                                as={Ionicons}
+                                name="information"
+                            />
+                        )}
+                        flex={1}
+                        size="md"
+                        variant="outline"
+                        onPress={handleClickCard}
+                    >
+                        View
+                    </Button>
+                    <Button
+                        endIcon={(
+                            <Icon as={Ionicons} name="flash" />
                             )}
                         flex={1}
                         size="md"
@@ -114,20 +136,9 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                     >
                         Quick Start
                     </Button>
-                    <Button
-                        colorScheme="secondary"
-                        endIcon={(
-                            <Icon as={Ionicons} name="chevron-forward" size="md" />
-                        )}
-                        flex={1}
-                        size="md"
-                        variant="outline"
-                        onPress={handleClickCard}
-                    >
-                        Details
-                    </Button>
+
                 </HStack>
-            </Box>
+            </VStack>
         </TouchableOpacity>
     );
 };
