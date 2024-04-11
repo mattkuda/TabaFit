@@ -1,10 +1,11 @@
 import React, { FC, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import {
-    VStack, Heading, Button, Modal,
+    VStack, Heading, Button, Modal, Icon,
 } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useQueryClient } from 'react-query';
+import { Ionicons } from '@expo/vector-icons';
 import { TabataWorkout } from '../../types/workouts';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useInfiniteQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
@@ -59,9 +60,13 @@ export const LoadWorkoutScreen: FC = () => {
     // ... other parts of the component ...
 
     return (
-        <VStack flex={1} space={4} width="100%">
+        <VStack backgroundColor="gray9" flex={1} p={2} space={2}>
             <Heading>My Saved Workouts:</Heading>
             <Button
+                alignSelf="flex-end"
+                endIcon={(
+                    <Icon as={Ionicons} name="add" />
+                )}
                 onPress={(): void => navigation.navigate('BuildWorkoutScreen', {
                     isSavedWorkout: true,
                 } as BuildWorkoutScreenProps)}
