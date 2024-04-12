@@ -94,7 +94,7 @@ export const LikeCommentButtons = ({ post }: LikeCommentButtonsProps): JSX.Eleme
     };
 
     const likeText = (): string => {
-        if (likeCount === 0) return '0 likes';
+        if (likeCount === 0) return 'Be the first to like this!';
 
         if (liked) {
             if (likeCount === 1) {
