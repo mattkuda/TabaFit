@@ -70,7 +70,7 @@ export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
                     </Text>
                 )}
                 <WorkoutPostDisplay workout={post.workout} />
-                <LikeCommentButtons post={post} />
+                <LikeCommentButtons handleCommentPress={handlePress} post={post} />
             </VStack>
         </TouchableOpacity>
     );

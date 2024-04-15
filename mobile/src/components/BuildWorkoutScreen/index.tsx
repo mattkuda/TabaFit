@@ -10,7 +10,8 @@ import { TabataExercise, TabataWorkout } from '../../types/workouts';
 import { WorkoutsStackParamList } from '../../navigation/navigationTypes';
 import { useMutateSaveWorkout, useMutateUpdateWorkout } from '../../mutations/useMutateSaveWorkout';
 import {
-    emptyTabata, shuffleExercises, soundTestingWorkout,
+    buildNewTabataInitialState,
+    emptyTabata, shuffleExercises,
 } from '../shuffleUtil';
 import { useAuth } from '../../context/AuthContext';
 import { BuildWorkoutScreenNavigationProp } from '../../types/navigationTypes';
@@ -36,10 +37,10 @@ const TabataItem = ({
     removeTabata,
     updateExercisesOrder,
 }: TabataItemProps): JSX.Element => (
-    <VStack borderColor="coolGray.300" borderRadius="md" borderWidth={1} mb={4} mt={4} space={4}>
+    <VStack bg="gray8" borderColor="flame" borderRadius="md" borderWidth={1} mb={4} mt={4} space={4}>
         <HStack alignItems="center" justifyContent="space-between">
             <IconButton
-                icon={<Icon as={Ionicons} name="arrow-up" size="6" />}
+                icon={<Icon as={Ionicons} color="white" name="arrow-up" size="6" />}
                 onPress={(): void => moveTabataUp(circuitIndex)}
             />
             <Text bold fontSize="lg">
@@ -48,7 +49,7 @@ const TabataItem = ({
                 {circuitIndex + 1}
             </Text>
             <IconButton
-                icon={<Icon as={Ionicons} name="arrow-down" size="6" />}
+                icon={<Icon as={Ionicons} color="white" name="arrow-down" size="6" />}
                 onPress={(): void => moveTabataDown(circuitIndex)}
             />
             <IconButton
@@ -66,9 +67,9 @@ const TabataItem = ({
                     <ScaleDecorator>
                         <HStack alignItems="center" justifyContent="space-between">
                             <Pressable flex={1} onPress={(): void => changeExercise(circuitIndex, index)}>
-                                <Text style={item ? {} : { fontStyle: 'italic' }}>{item?.name || `Select exercise ${index}`}</Text>
+                                <Text fontSize="md" pl={4} style={item ? {} : { fontStyle: 'italic' }}>{item?.name || `Select exercise ${index}`}</Text>
                             </Pressable>
-                            <IconButton icon={<Icon as={Ionicons} name="menu" />} onLongPress={drag} />
+                            <IconButton icon={<Icon as={Ionicons} color="white" name="menu" />} onLongPress={drag} />
                         </HStack>
                     </ScaleDecorator>
                 );
@@ -87,7 +88,8 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     const customWorkout = route?.params?.customWorkout;
     const isSavedWorkoutByUser = route?.params?.customWorkout && route?.params?.customWorkout.userId === userId;
     const isShuffle = route?.params?.isShuffle || false;
-    const [workout, setWorkout] = useState<TabataWorkout>(customWorkout || soundTestingWorkout);
+    // const [workout, setWorkout] = useState<TabataWorkout>(customWorkout || soundTestingWorkout);
+    const [workout, setWorkout] = useState<TabataWorkout>(customWorkout || buildNewTabataInitialState);
     const saveWorkoutMutation = useMutateSaveWorkout();
     const { authState } = useAuth();
     const [workoutName, setWorkoutName] = useState(customWorkout?.name || '');
@@ -208,6 +210,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 // eslint-disable-next-line react/no-unstable-nested-components
                 headerRight: (): JSX.Element => (
                     <Button
+                        variant="ghost"
                         onPress={handleSaveOrUpdateWorkout}
                     >
                         {isSavedWorkoutByUser ? 'Update' : 'Save'}
@@ -306,7 +309,12 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     };
 
     return (
-        <VStack space={4}>
+        <VStack
+            backgroundColor="gray9"
+            flex={1}
+            space={0}
+            width="100%"
+        >
             {isShuffle ? (
                 <HStack alignItems="center" px={4} space={4} width="100%">
                     <Button flex={1} leftIcon={<Icon as={Ionicons} name="settings" />} onPress={(): void => setShowSettingsModal(true)}>Settings</Button>
@@ -314,13 +322,14 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 </HStack>
             ) : (
                 <Input
-                    mb={4}
+                    fontSize="lg"
+                    m="4"
                     placeholder="Enter Workout Name"
                     value={workoutName}
                     onChangeText={handleChange}
                 />
             )}
-            <NestableScrollContainer>
+            <NestableScrollContainer style={{ margin: 2 }}>
                 {workout.tabatas.map((tabataCircuit, index) => (
                     <TabataItem
                         changeExercise={handleSelectExercise}
@@ -333,7 +342,19 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                     />
                 ))}
             </NestableScrollContainer>
-            <Button onPress={addTabata}>Add Tabata</Button>
+            <Button
+                borderRadius="full"
+                bottom={4}
+                endIcon={(
+                    <Icon as={Ionicons} name="add" />
+                )}
+                position="absolute"
+                right={2}
+                onPress={addTabata}
+
+            >
+                Add Tabata
+            </Button>
             {/* Settings Modal */}
             {/* TDOD: Move to its own component */}
             <Modal isOpen={showSettingsModal} size="full" onClose={(): void => setShowSettingsModal(false)}>

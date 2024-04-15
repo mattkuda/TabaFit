@@ -17,11 +17,13 @@ const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress })
         <Box
             bg={{
                 linearGradient: {
-                    colors: ['blue.600', 'orange.600'],
+                    colors: ['gray4', 'gray6'],
                     start: [0, 1],
                     end: [1, 0],
                 },
             }}
+            borderColor="flame"
+            borderWidth={1}
             height={150}
             justifyContent="space-between"
             p="4"

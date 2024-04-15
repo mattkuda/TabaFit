@@ -13,9 +13,10 @@ import { PostModel } from '../../types/posts';
 
 type LikeCommentButtonsProps = {
     post: PostModel;
+    handleCommentPress?: () => void;
 };
 
-export const LikeCommentButtons = ({ post }: LikeCommentButtonsProps): JSX.Element => {
+export const LikeCommentButtons = ({ post, handleCommentPress }: LikeCommentButtonsProps): JSX.Element => {
     const { authState } = useAuth();
     const userId = authState?.userId;
     const likeMutation = useMutateLike();
@@ -89,8 +90,9 @@ export const LikeCommentButtons = ({ post }: LikeCommentButtonsProps): JSX.Eleme
         }
     };
 
-    const handleCommentPress = (): void => {
+    const handleCommentPressOnPostCard = (): void => {
         // TODO: Highlight input when button pressed');
+        handleCommentPress();
     };
 
     const likeText = (): string => {
@@ -165,7 +167,7 @@ export const LikeCommentButtons = ({ post }: LikeCommentButtonsProps): JSX.Eleme
                         />
                         )}
                     variant="ghost"
-                    onPress={handleCommentPress}
+                    onPress={handleCommentPressOnPostCard}
                 >
                     Comment
                 </Button>
