@@ -154,9 +154,6 @@ router.post('/save', authenticate, async (req: AuthRequest, res: Response) => {
   const { workout } = req.body;
   const { userId } = req;
 
-  console.log('workout:', workout);
-  console.log('userId:', userId);
-
   delete workout._id;
   workout.userId = userId;
 

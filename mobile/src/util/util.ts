@@ -36,3 +36,12 @@ export const formatBodyParts = (includeSettings: WorkoutIncludeSettings): string
     }
     return bodyParts.join(', ');
 };
+
+export const exerciseIconDictionary = {
+    'Lower Body': '🦵',
+    'Upper Body': '💪',
+    Abs: '6️⃣',
+    Cardio: '🏃',
+    Glutes: '🍑',
+    Spicy: '🔥',
+};

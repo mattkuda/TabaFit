@@ -36,10 +36,8 @@ export const LoadWorkoutScreen: FC = () => {
     };
 
     const handleDelete = (workout: TabataWorkout): void => {
-        console.log(`Deleting workout with ID: ${workout._id}`);
         deleteWorkoutMutation.mutate({ workoutId: workout._id.toString() }, {
             onSuccess: () => {
-                console.log('Workout deleted successfully');
                 refetch();
                 queryClient.invalidateQueries('my-saved-workouts');
             },

@@ -6,7 +6,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQueryClient } from 'react-query';
-import { TabataExercise, TabataWorkout } from '../../types/workouts';
 import { WorkoutsStackParamList } from '../../navigation/navigationTypes';
 import { useMutateSaveWorkout, useMutateUpdateWorkout } from '../../mutations/useMutateSaveWorkout';
 import {
@@ -15,6 +14,9 @@ import {
 } from '../shuffleUtil';
 import { useAuth } from '../../context/AuthContext';
 import { BuildWorkoutScreenNavigationProp } from '../../types/navigationTypes';
+import {
+    TabataExercise, TabataWorkout,
+} from '../../types/workouts';
 
 export type TabataCircuit = (TabataExercise | null)[];
 
@@ -67,7 +69,9 @@ const TabataItem = ({
                     <ScaleDecorator>
                         <HStack alignItems="center" justifyContent="space-between">
                             <Pressable flex={1} onPress={(): void => changeExercise(circuitIndex, index)}>
-                                <Text fontSize="md" pl={4} style={item ? {} : { fontStyle: 'italic' }}>{item?.name || `Select exercise ${index}`}</Text>
+                                <HStack>
+                                    <Text fontSize="md" pl={4} style={item ? {} : { fontStyle: 'italic' }}>{item?.name || `Select exercise #${index + 1}`}</Text>
+                                </HStack>
                             </Pressable>
                             <IconButton icon={<Icon as={Ionicons} color="white" name="menu" />} onLongPress={drag} />
                         </HStack>

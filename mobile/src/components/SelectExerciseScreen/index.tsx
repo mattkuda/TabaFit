@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    VStack, FlatList, Pressable, Text, Input, Icon,
+    VStack, FlatList, Pressable, Text, Input, Icon, HStack,
 } from 'native-base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -13,6 +13,7 @@ import {
 } from '../../util/constants';
 import { OldWorkoutsStackParamList } from '../../navigation/navigationTypes';
 import { TabataExercise } from '../../types/workouts';
+import { exerciseIconDictionary } from '../../util/util';
 
 type SelectExerciseScreenNavigationProp = StackNavigationProp<OldWorkoutsStackParamList, 'SelectExerciseScreen'>;
 type OldSelectExerciseScreenRouteProp = RouteProp<OldWorkoutsStackParamList, 'SelectExerciseScreen'>;
@@ -40,7 +41,7 @@ export const SelectExerciseScreen = (): JSX.Element => {
             width="100%"
         >
             <Input
-                fontSize="lg"
+                fontSize="md"
                 InputLeftElement={<Icon as={Ionicons} ml={4} name="search-outline" size="sm" />}
                 m="4"
                 placeholder="Search for an exercise"
@@ -48,13 +49,16 @@ export const SelectExerciseScreen = (): JSX.Element => {
                 onChangeText={setSearch}
 
             />
-            {/* TODO Style this: */}
             <FlatList
-                data={exercises.filter((e) => e.name.startsWith(search))}
+                data={exercises.filter((e) => e.name.toLowerCase().includes(search.toLowerCase()))}
                 keyExtractor={(item): string => item._id}
+                ListEmptyComponent={<Text alignSelf="center" fontSize="md">No exercises found</Text>}
                 renderItem={({ item }): JSX.Element => (
-                    <Pressable borderBottomWidth={1} borderColor="gray7" borderTopWidth={1} onPress={(): void => handleSelectExercise(item)}>
-                        <Text>{item.name}</Text>
+                    <Pressable borderColor="gray7" p="2" onPress={(): void => handleSelectExercise(item)}>
+                        <HStack>
+                            <Text fontSize="md" pr="2">{exerciseIconDictionary[item?.types[0]]}</Text>
+                            <Text fontSize="md">{item.name}</Text>
+                        </HStack>
                     </Pressable>
                 )}
             />

@@ -147,8 +147,6 @@ router.get('/:userId/following', async (req: Request, res: Response) => {
 router.post('/followAll', authenticate, async (req: Request, res: Response) => {
   const { followerId } = req.body;
 
-  console.log('followerId', followerId);
-
   if (!followerId) {
     res.status(400).send({ message: 'User ID is required' });
     return;
