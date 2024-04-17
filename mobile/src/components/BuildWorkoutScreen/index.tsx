@@ -17,6 +17,7 @@ import { BuildWorkoutScreenNavigationProp } from '../../types/navigationTypes';
 import {
     TabataExercise, TabataWorkout,
 } from '../../types/workouts';
+import { exerciseIconDictionary } from '../../util/util';
 
 export type TabataCircuit = (TabataExercise | null)[];
 
@@ -68,9 +69,10 @@ const TabataItem = ({
                 return (
                     <ScaleDecorator>
                         <HStack alignItems="center" justifyContent="space-between">
-                            <Pressable flex={1} onPress={(): void => changeExercise(circuitIndex, index)}>
-                                <HStack>
-                                    <Text fontSize="md" pl={4} style={item ? {} : { fontStyle: 'italic' }}>{item?.name || `Select exercise #${index + 1}`}</Text>
+                            <Pressable flex={1} p={2} onPress={(): void => changeExercise(circuitIndex, index)}>
+                                <HStack pl={4}>
+                                    {item?.name && <Text fontSize="md" pr="2">{exerciseIconDictionary[item?.types[0]]}</Text>}
+                                    <Text fontSize="md" style={item ? {} : { fontStyle: 'italic' }}>{item?.name || `Select exercise #${index + 1}`}</Text>
                                 </HStack>
                             </Pressable>
                             <IconButton icon={<Icon as={Ionicons} color="white" name="menu" />} onLongPress={drag} />
