@@ -1,11 +1,13 @@
-// screens/SearchPage.tsx
 import React, { useState } from 'react';
 import {
-    Box, Input, FlatList, Text,
+    Input, FlatList, Text,
     Pressable,
+    VStack,
+    Icon,
 } from 'native-base';
 import { Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 import { ProfilePageScreenNavigationProp } from '../../types/navigationTypes';
 import { useSearchUsers } from '../../hooks/useSearchUsers'; // Make sure to create this hook
 import { User } from '../../types/users';
@@ -22,13 +24,22 @@ export const SearchPage = (): JSX.Element => {
     };
 
     return (
-        <Box flex={1} p="5">
+        <VStack
+            backgroundColor="gray9"
+            flex={1}
+            space={0}
+            width="100%"
+        >
             <Button title="Go Back" onPress={(): void => navigation.goBack()} />
+
             <Input
-                autoCapitalize="none"
-                placeholder="Search for users..."
+                fontSize="md"
+                InputLeftElement={<Icon as={Ionicons} ml={4} name="search-outline" size="sm" />}
+                m="4"
+                placeholder="Search for an exercise"
                 value={searchQuery}
                 onChangeText={setSearchQuery}
+
             />
             {isLoading ? (
                 <Text>Loading...</Text>
@@ -43,7 +54,7 @@ export const SearchPage = (): JSX.Element => {
                     )}
                 />
             )}
-        </Box>
+        </VStack>
 
     );
 };
