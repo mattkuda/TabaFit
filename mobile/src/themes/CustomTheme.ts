@@ -49,6 +49,15 @@ export const theme = extendTheme({
     //     mono: customFontFamily,
     // },
     components: {
+        Modal: {
+            Body: {
+                defaultProps: {
+                    color: 'gray9',
+                    backgroundColor: 'gray9',
+                    borderColor: 'gray7',
+                },
+            },
+        },
         Text: {
             defaultProps: {
                 color: 'white',
@@ -60,6 +69,13 @@ export const theme = extendTheme({
             },
         },
         Input: {
+            defaultProps: {
+                color: 'white',
+                backgroundColor: 'gray9',
+                borderColor: 'gray7',
+            },
+        },
+        TextArea: {
             defaultProps: {
                 color: 'white',
                 backgroundColor: 'gray9',

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, TextInput } from 'react-native';
 import {
-    VStack, Text, Button, Icon,
+    VStack, Text, Button, Icon, Input, TextArea,
 } from 'native-base';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -80,55 +79,39 @@ export const ShareWorkoutScreen = (): JSX.Element => {
     }, []);
 
     return (
-        <ScrollView>
-            <VStack p={4} space={4}>
-                <Text bold fontSize="xl">Share Workout</Text>
-                <Text bold fontSize="xl">
-                    UserId:
-                    {' '}
-                    {userId}
-                </Text>
+        <VStack backgroundColor="gray9" flex={1} p={4} space={4}>
+            <Text bold fontSize="xl">Share Workout</Text>
+            <Input
+                fontSize="lg"
+                placeholder="Enter Post Name"
+                value={workoutTitle}
+                onChangeText={setWorkoutTitle}
+            />
+            <TextArea
+                autoCompleteType={undefined}
+                h={20}
+                placeholder="Workout Description"
+                value={workoutDescription}
+                onChangeText={setWorkoutDescription}
+            />
 
-                <TextInput
-                    placeholder="Workout Name"
-                    style={{
-                        borderWidth: 1, borderColor: 'grey', padding: 10, margin: 10,
-                    }}
-                    value={workoutTitle}
-                    onChangeText={setWorkoutTitle}
-                />
-                <TextInput
-                    multiline
-                    placeholder="Workout Description"
-                    style={{
-                        borderWidth: 1,
-                        borderColor: 'grey',
-                        padding: 10,
-                        margin: 10,
-                        height: 100,
-                        textAlignVertical: 'top',
-                    }}
-                    value={workoutDescription}
-                    onChangeText={setWorkoutDescription}
-                />
-                <Button onPress={handleShareWorkout}>Share Workout</Button>
-                {isInMyWorkouts
-                    ? <Text>Workout Saved</Text>
-                    : (
-                        <Button
-                            disabled={isWorkoutSaved}
-                            leftIcon={
+            <Button onPress={handleShareWorkout}>Share Workout</Button>
+            {isInMyWorkouts
+                ? <Text>Workout Saved</Text>
+                : (
+                    <Button
+                        disabled={isWorkoutSaved}
+                        leftIcon={
                                 isWorkoutSaved
                                     ? <Icon as={<Ionicons name="checkmark" />} color="green.500" size="sm" />
                                     : <Icon as={<Ionicons name="save-outline" />} size="sm" />
                             }
-                            onPress={handleSaveWorkout}
-                        >
-                            {isWorkoutSaved ? 'Workout Saved' : 'Save Workout'}
-                        </Button>
-                    )}
-                <Button color="red" onPress={handleReturnHome}>Return home</Button>
-            </VStack>
-        </ScrollView>
+                        onPress={handleSaveWorkout}
+                    >
+                        {isWorkoutSaved ? 'Workout Saved' : 'Save Workout'}
+                    </Button>
+                )}
+            <Button color="red" onPress={handleReturnHome}>Return home</Button>
+        </VStack>
     );
 };

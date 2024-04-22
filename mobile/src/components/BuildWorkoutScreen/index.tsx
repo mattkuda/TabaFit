@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-    VStack, IconButton, Icon, HStack, Text, Pressable, Input, Toast, Modal, Button, Checkbox, Divider, FormControl,
+    VStack, IconButton, Icon, HStack, Text, Pressable, Input, Toast, Modal, Button, Checkbox, Divider, FormControl, Box,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
@@ -204,14 +204,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         navigation, updateWorkoutMutation, saveWorkoutMutation]);
 
     useEffect(() => {
-        if (isShuffle) {
-            navigation.setOptions({
-                // eslint-disable-next-line react/no-unstable-nested-components
-                headerRight: (): JSX.Element => (
-                    <Button onPress={startWorkout}>Start</Button>
-                ),
-            });
-        } else {
+        if (!isShuffle) {
             navigation.setOptions({
                 // eslint-disable-next-line react/no-unstable-nested-components
                 headerRight: (): JSX.Element => (
@@ -255,13 +248,11 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     const handleChange = (text: string): void => setWorkoutName(text);
 
     const triggerShuffle = (): void => {
-        // Assuming 'workout' is the current state of the workout being built
-        // and it contains the settings for the shuffle
         if (workout.includeSettings) {
             const {
                 includeUpper, includeLower, includeAbs, includeCardio,
             } = workout.includeSettings;
-            const selectedEquipment = workout.equipment; // Assuming this is where the selected equipment is stored
+            const selectedEquipment = workout.equipment;
 
             const shuffledTabatas = shuffleExercises(
                 workout.numberOfTabatas,
@@ -322,9 +313,9 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             width="100%"
         >
             {isShuffle ? (
-                <HStack alignItems="center" px={4} space={4} width="100%">
-                    <Button flex={1} leftIcon={<Icon as={Ionicons} name="settings" />} onPress={(): void => setShowSettingsModal(true)}>Settings</Button>
+                <HStack alignItems="center" pt={4} px={4} space={4} width="100%">
                     <Button flex={1} leftIcon={<Icon as={Ionicons} name="shuffle" />} onPress={(): void => triggerShuffle()}>Shuffle</Button>
+                    <Button flex={1} leftIcon={<Icon as={Ionicons} color="flame" name="settings" />} variant="outline" onPress={(): void => setShowSettingsModal(true)}>Settings</Button>
                 </HStack>
             ) : (
                 <Input
@@ -361,13 +352,33 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             >
                 Add Tabata
             </Button>
+            <Box flex={1} px={4}>
+                <Button
+                    borderRadius="full"
+                    bottom={0}
+                    endIcon={(
+                        <Icon as={Ionicons} name="flash" />
+                    )}
+                    flex={1}
+                    m={4}
+                    position="absolute"
+                    width="100%"
+                    onPress={startWorkout}
+                >
+                    Start
+                </Button>
+            </Box>
             {/* Settings Modal */}
             {/* TDOD: Move to its own component */}
             <Modal isOpen={showSettingsModal} size="full" onClose={(): void => setShowSettingsModal(false)}>
                 <Modal.Content>
                     <Modal.CloseButton />
-                    <Modal.Header>Select Equipment</Modal.Header>
-                    <Modal.Body>
+                    <Modal.Header backgroundColor="gray9">
+                        <Text bold fontSize="lg">
+                            Settings
+                        </Text>
+                    </Modal.Header>
+                    <Modal.Body backgroundColor="gray9">
                         <Checkbox
                             isChecked={modalWorkout.equipment.useKettlebell}
                             key="Kettlebell-checkbox"

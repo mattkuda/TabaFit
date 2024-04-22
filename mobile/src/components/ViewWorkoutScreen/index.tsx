@@ -181,7 +181,6 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                         <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>
                             <Icon as={Ionicons} name="flash" />
                         </Animated.View>
-
                     )}
                     flex={1}
                     m={4}

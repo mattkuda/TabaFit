@@ -148,7 +148,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                     </HStack>
                     <HorizontalWorkoutCards
                         isLoading={isNewWorkoutsLoading}
-                        workouts={newWorkouts}
+                        workouts={newWorkouts ?? []}
                         onPressWorkout={handlePressViewWorkout}
                     />
                     {/* My Workouts */}
@@ -158,7 +158,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                     </HStack>
                     <HorizontalWorkoutCards
                         isLoading={isMySavedWorkoutsLoading}
-                        workouts={mySavedWorkouts}
+                        workouts={mySavedWorkouts ?? []}
                         onPressWorkout={handlePressViewMyWorkout}
                     />
 
@@ -169,7 +169,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                     </HStack>
                     <HorizontalWorkoutCards
                         isLoading={false}
-                        workouts={featuredWorkouts}
+                        workouts={featuredWorkouts ?? []}
                         onPressWorkout={handlePressViewWorkout}
                     />
                 </VStack>

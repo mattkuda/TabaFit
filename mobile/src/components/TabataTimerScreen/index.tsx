@@ -246,7 +246,7 @@ export const TabataTimerScreen = (): JSX.Element => {
     };
 
     return (
-        <Flex flex={1}>
+        <Flex backgroundColor="gray9" flex={1}>
             {/* <IconButton
                 icon={<Icon as={Ionicons} name="arrow-back" />}
                 left={0}
@@ -261,9 +261,9 @@ export const TabataTimerScreen = (): JSX.Element => {
                 }}
             /> */}
             {/* Alighn this to the top of the screen */}
-            <Flex align="center" direction="row" justify="space-between" mb="4" pl={4} pr={4} w="100%">
+            <Flex align="center" backgroundColor="gray9" direction="row" justify="space-between" mb="4" pl={4} pr={4} w="100%">
                 <VStack alignItems="center" space={2}>
-                    <Text color="coolGray.600" fontSize="sm">Exercises</Text>
+                    <Text color="gray3" fontSize="lg">Exercises</Text>
                     <Text fontSize="xl">
                         {currentInterval === Intervals.Intermission || currentInterval === Intervals.Warmup
                             ? `0/${exercisesPerTabata}`
@@ -271,7 +271,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                     </Text>
                 </VStack>
                 <VStack alignItems="center" space={2}>
-                    <Text color="coolGray.600" fontSize="sm">Tabatas</Text>
+                    <Text color="gray3" fontSize="lg">Tabatas</Text>
                     <Text fontSize="xl">
                         {currentInterval === Intervals.Intermission && `0/${numberOfTabatas}`}
                         {currentInterval === Intervals.Exercise || currentInterval === Intervals.Rest || currentInterval === Intervals.Cooldown
@@ -280,11 +280,11 @@ export const TabataTimerScreen = (): JSX.Element => {
                     </Text>
                 </VStack>
                 <VStack alignItems="center" space={2}>
-                    <Text color="coolGray.600" fontSize="sm">Total Time</Text>
+                    <Text color="gray3" fontSize="lg">Total Time</Text>
                     <Text fontSize="xl">{formatTime(remainingTime)}</Text>
                 </VStack>
             </Flex>
-            <Flex alignItems="center" flex={1} justifyContent="flex-end">
+            <Flex alignItems="center" backgroundColor="gray9" flex={1} justifyContent="flex-end">
                 <Text
                         // eslint-disable-next-line no-nested-ternary
                     color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
@@ -295,7 +295,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                     {formatTime(seconds)}
                 </Text>
             </Flex>
-            <Flex alignItems="center" flex={1} justify="flex-start">
+            <Flex alignItems="center" backgroundColor="gray9" flex={1} justify="flex-start">
                 <Text
                         // eslint-disable-next-line no-nested-ternary
                     color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
@@ -305,13 +305,13 @@ export const TabataTimerScreen = (): JSX.Element => {
                 </Text>
             </Flex>
             {/* Aligh this to the bottom of the screen */}
-            <Box bg="light.200" p="4" width="100%">
+            <Box bg="gray8" p="4" width="100%">
                 <Flex alignItems="center" direction="row" justify="space-between">
                     <IconButton
                         borderColor="coolGray.300"
                         borderRadius="full"
-                        borderWidth="2"
-                        icon={<Icon as={Ionicons} name={isActive ? 'pause' : 'play'} size="lg" />}
+                        borderWidth="1"
+                        icon={<Icon as={Ionicons} color="white" name={isActive ? 'pause' : 'play'} size="lg" />}
                         onPress={toggle}
                     />
                     <HStack alignItems="center" space={2}>
@@ -320,15 +320,15 @@ export const TabataTimerScreen = (): JSX.Element => {
                                 <IconButton
                                     borderColor="coolGray.300"
                                     borderRadius="full"
-                                    borderWidth="2"
-                                    icon={<Icon as={Ionicons} name="play-skip-back" size="lg" />}
+                                    borderWidth="1"
+                                    icon={<Icon as={Ionicons} color="white" name="play-skip-back" size="lg" />}
                                     onPress={reset}
                                 />
                                 <IconButton
                                     borderColor="coolGray.300"
                                     borderRadius="full"
-                                    borderWidth="2"
-                                    icon={<Icon as={Ionicons} name="play-skip-forward" size="lg" />}
+                                    borderWidth="1"
+                                    icon={<Icon as={Ionicons} color="white" name="play-skip-forward" size="lg" />}
                                 />
                             </>
                         )}
@@ -336,8 +336,8 @@ export const TabataTimerScreen = (): JSX.Element => {
                         <IconButton
                             borderColor="coolGray.300"
                             borderRadius="full"
-                            borderWidth="2"
-                            icon={<Icon as={Ionicons} name="flag" size="lg" />}
+                            borderWidth="1"
+                            icon={<Icon as={Ionicons} color="white" name="flag" size="lg" />}
                             onPress={mockFinish}
                         />
                         )}
@@ -345,8 +345,8 @@ export const TabataTimerScreen = (): JSX.Element => {
                     <IconButton
                         borderColor="coolGray.300"
                         borderRadius="full"
-                        borderWidth="2"
-                        icon={<Icon as={Ionicons} name="refresh" size="lg" />}
+                        borderWidth="1"
+                        icon={<Icon as={Ionicons} color="white" name="refresh" size="lg" />}
                         onPress={reset}
                     />
                 </Flex>
