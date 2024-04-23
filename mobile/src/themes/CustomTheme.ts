@@ -136,10 +136,18 @@ export const theme = extendTheme({
                                 color: 'flame',
                             },
                         };
-                    } if (colorScheme === 'secondary') {
+                    }
+                    if (colorScheme === 'secondary') {
                         return {
                             _text: {
                                 color: 'white',
+                            },
+                        };
+                    }
+                    if (colorScheme === 'dull') {
+                        return {
+                            _text: {
+                                color: 'gray7',
                             },
                         };
                     }

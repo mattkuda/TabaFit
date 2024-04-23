@@ -40,6 +40,7 @@ export const ShareWorkoutScreen = (): JSX.Element => {
         }
     };
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleReturnHome = (): void => {
         navigation.reset({
             index: 0,
@@ -48,6 +49,7 @@ export const ShareWorkoutScreen = (): JSX.Element => {
         navigation.navigate('HomePage');
     };
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleShareWorkout = (): void => {
         shareWorkoutMutation.mutate({
             userId,
@@ -78,9 +80,40 @@ export const ShareWorkoutScreen = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        navigation.setOptions({
+            // eslint-disable-next-line react/no-unstable-nested-components
+            headerRight: (): JSX.Element => (
+                <Button
+                    size="lg"
+                    variant="ghost"
+                    onPress={handleShareWorkout}
+                >
+                    Share
+                </Button>
+            ),
+        });
+    }, [handleShareWorkout, navigation]);
+
+    useEffect(() => {
+        navigation.setOptions({
+            // eslint-disable-next-line react/no-unstable-nested-components
+            headerLeft: (): JSX.Element => (
+                <Button
+                    colorScheme="dull"
+                    size="lg"
+                    variant="ghost"
+                    onPress={handleReturnHome}
+                >
+                    Exit
+                </Button>
+            ),
+        });
+    }, [handleReturnHome, navigation]);
+
     return (
         <VStack backgroundColor="gray9" flex={1} p={4} space={4}>
-            <Text bold fontSize="xl">Share Workout</Text>
+            <Text bold alignSelf="center" fontSize="xl">Share Your Workout 💪</Text>
             <Input
                 fontSize="lg"
                 placeholder="Enter Post Name"
@@ -89,13 +122,12 @@ export const ShareWorkoutScreen = (): JSX.Element => {
             />
             <TextArea
                 autoCompleteType={undefined}
+                fontSize="sm"
                 h={20}
-                placeholder="Workout Description"
+                placeholder="Describe your workout"
                 value={workoutDescription}
                 onChangeText={setWorkoutDescription}
             />
-
-            <Button onPress={handleShareWorkout}>Share Workout</Button>
             {isInMyWorkouts
                 ? <Text>Workout Saved</Text>
                 : (
@@ -106,12 +138,12 @@ export const ShareWorkoutScreen = (): JSX.Element => {
                                     ? <Icon as={<Ionicons name="checkmark" />} color="green.500" size="sm" />
                                     : <Icon as={<Ionicons name="save-outline" />} size="sm" />
                             }
+                        variant="outline"
                         onPress={handleSaveWorkout}
                     >
                         {isWorkoutSaved ? 'Workout Saved' : 'Save Workout'}
                     </Button>
                 )}
-            <Button color="red" onPress={handleReturnHome}>Return home</Button>
         </VStack>
     );
 };
