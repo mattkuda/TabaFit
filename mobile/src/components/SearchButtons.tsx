@@ -14,10 +14,9 @@ export const Searchbutton = (): JSX.Element => {
         <IconButton
             _icon={{
                 color: 'flame',
-                size: 'md',
             }}
             borderRadius="full"
-            icon={<Icon as={Ionicons} name="search-outline" size="sm" />}
+            icon={<Icon as={Ionicons} name="search" size="md" />}
             onPress={(): void => navigation.navigate('Search')}
         />
     );

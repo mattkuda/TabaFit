@@ -17,7 +17,7 @@ const MoreOptionsTrigger = (triggerProps: any): JSX.Element => (
             }}
             borderRadius="full"
             color="flame"
-            icon={<Icon as={Ionicons} name="settings-outline" />}
+            icon={<Icon as={Ionicons} name="settings" size="md" />}
         />
     </Box>
 );
