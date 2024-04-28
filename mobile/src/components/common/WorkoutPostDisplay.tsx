@@ -30,7 +30,7 @@ export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
             <Box
                 bg={{
                     linearGradient: {
-                        colors: ['gray4', 'gray6'],
+                        colors: ['gray6', 'gray7'],
                         start: [0, 1],
                         end: [1, 0],
                     },

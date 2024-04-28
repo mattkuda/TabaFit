@@ -31,12 +31,11 @@ export const SearchPage = (): JSX.Element => {
             width="100%"
         >
             <Button title="Go Back" onPress={(): void => navigation.goBack()} />
-
             <Input
                 fontSize="md"
                 InputLeftElement={<Icon as={Ionicons} ml={4} name="search-outline" size="sm" />}
                 m="4"
-                placeholder="Search for an exercise"
+                placeholder="Search for users"
                 value={searchQuery}
                 onChangeText={setSearchQuery}
 

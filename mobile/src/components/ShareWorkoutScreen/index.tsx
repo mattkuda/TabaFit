@@ -115,15 +115,15 @@ export const ShareWorkoutScreen = (): JSX.Element => {
         <VStack backgroundColor="gray9" flex={1} p={4} space={4}>
             <Text bold alignSelf="center" fontSize="xl">Share Your Workout 💪</Text>
             <Input
-                fontSize="lg"
+                fontSize="md"
                 placeholder="Enter Post Name"
                 value={workoutTitle}
                 onChangeText={setWorkoutTitle}
             />
             <TextArea
                 autoCompleteType={undefined}
-                fontSize="sm"
-                h={20}
+                fontSize="md"
+                h={40}
                 placeholder="Describe your workout"
                 value={workoutDescription}
                 onChangeText={setWorkoutDescription}
@@ -132,16 +132,16 @@ export const ShareWorkoutScreen = (): JSX.Element => {
                 ? <Text>Workout Saved</Text>
                 : (
                     <Button
-                        disabled={isWorkoutSaved}
+                        disabled={isInMyWorkouts || isWorkoutSaved}
                         leftIcon={
-                                isWorkoutSaved
-                                    ? <Icon as={<Ionicons name="checkmark" />} color="green.500" size="sm" />
-                                    : <Icon as={<Ionicons name="save-outline" />} size="sm" />
+                            isInMyWorkouts || isWorkoutSaved
+                                ? <Icon as={<Ionicons name="checkmark" />} color="green.500" size="sm" />
+                                : <Icon as={<Ionicons color="green.500" name="save-outline" />} size="sm" />
                             }
                         variant="outline"
                         onPress={handleSaveWorkout}
                     >
-                        {isWorkoutSaved ? 'Workout Saved' : 'Save Workout'}
+                        {isInMyWorkouts || isWorkoutSaved ? 'Workout Saved' : 'Save Workout'}
                     </Button>
                 )}
         </VStack>
