@@ -50,19 +50,19 @@ export const ProfilePage = (): JSX.Element => {
         }, [userInfo]),
     );
 
-    const navigateToEditProfile = (): void => {
+    const navigateToEditProfile = useCallback((): void => {
         if (userInfo.isSuccess && userInfo) {
             navigation.navigate('EditProfile', { user: userInfo.data });
         }
-    };
+    }, [userInfo, navigation]);
 
-    const handlePressFollowers = (): void => {
+    const handlePressFollowers = useCallback((): void => {
         navigation.navigate('ConnectionsScreen', { userId });
-    };
+    }, [navigation, userId]);
 
-    const handleLogout = async (): Promise<void> => {
+    const handleLogout = useCallback(async (): Promise<void> => {
         await onLogout();
-    };
+    }, [onLogout]);
 
     useEffect(() => {
         if (isCurrentUserProfile) {
@@ -85,9 +85,12 @@ export const ProfilePage = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigation, isCurrentUserProfile]);
 
-    const renderProfileHeader = (): JSX.Element => (
-        <>
-            {userInfo.data && (
+    const renderProfileHeader = React.useMemo(() => {
+        console.log('render');
+
+        return (
+            <>
+                {userInfo.data && (
                 <HStack alignItems="center" backgroundColor="gray9" p={4} px={4} space={4} width="100%">
                     <Avatar
                         borderColor="flame"
@@ -107,35 +110,37 @@ export const ProfilePage = (): JSX.Element => {
                         </Text>
                     </VStack>
                 </HStack>
-            )}
-            <HStack alignItems="center" px={4} space={4} width="100%">
-                {isCurrentUserProfile ? (
+                )}
+                <HStack alignItems="center" px={4} space={4} width="100%">
+                    {isCurrentUserProfile ? (
+                        <Button
+                            color="flame"
+                            leftIcon={<Icon as={<Ionicons name="pencil" />} color="flame" size="sm" />}
+                            size="sm"
+                            variant="outline"
+                            onPress={navigateToEditProfile}
+                        >
+                            Edit
+                        </Button>
+                    ) : (
+                        <>
+                            <FollowButton profileUserId={userId} />
+                            <Text>other</Text>
+                        </>
+                    )}
                     <Button
                         color="flame"
-                        leftIcon={<Icon as={<Ionicons name="pencil" />} color="flame" size="sm" />}
                         size="sm"
                         variant="outline"
-                        onPress={navigateToEditProfile}
+                        onPress={handleLogout}
                     >
-                        Edit
+                        E-Logout
                     </Button>
-                ) : (
-                    <>
-                        <FollowButton profileUserId={userId} />
-                        <Text>other</Text>
-                    </>
-                )}
-                <Button
-                    color="flame"
-                    size="sm"
-                    variant="outline"
-                    onPress={handleLogout}
-                >
-                    E-Logout
-                </Button>
-            </HStack>
-        </>
-    );
+                </HStack>
+            </>
+        );
+    }, [userInfo.data, handlePressFollowers, isCurrentUserProfile,
+        navigateToEditProfile, userId, handleLogout]); // Include all dependencies used inside the render function
 
     return (
         <VStack backgroundColor="gray9" flex={1} space={4} width="100%">
