@@ -21,7 +21,7 @@ export const ConnectionCard: React.FC<NotificationCardProps> = ({ user }) => {
 
     return (
         <TouchableOpacity onPress={handlePressUser}>
-            <Box backgroundColor="white" borderColor="coolGray.200" borderRadius="md" borderWidth="1" mt="2" p="4">
+            <Box backgroundColor="gray9" borderColor="coolGray.200" borderRadius="md" mt="2" p="4">
                 <HStack alignItems="center" space={3}>
                     <Avatar size="48px" source={{ uri: user.profilePictureUrl }} />
                     <VStack>
@@ -29,7 +29,7 @@ export const ConnectionCard: React.FC<NotificationCardProps> = ({ user }) => {
                             {formatName(user.firstName, user.lastName)}
                         </Text>
                         <Text color="coolGray.600" fontSize="xs">
-                            {user.username}
+                            {`@#${user.username}`}
                         </Text>
                     </VStack>
                 </HStack>
