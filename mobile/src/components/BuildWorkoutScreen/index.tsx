@@ -484,7 +484,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                             onChangeText={(text): void => handleWorkoutSettingChange('cooldownDuration', parseInt(text, 10) || 0)}
                         />
                     </Modal.Body>
-                    <Modal.Footer>
+                    <Modal.Footer backgroundColor="gray9">
                         <Button onPress={handleModalDone}>Done</Button>
                         <Button variant="ghost" onPress={handleModalCancel}>Cancel</Button>
                     </Modal.Footer>
