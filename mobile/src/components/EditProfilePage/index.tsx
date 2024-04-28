@@ -1,7 +1,7 @@
 import {
     Avatar, Modal, VStack, Button, HStack, Input, Select, Text,
 } from 'native-base';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     TouchableOpacity,
 } from 'react-native';
@@ -38,7 +38,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
     const [showModal, setShowModal] = useState(false);
     const { onLogout } = useAuth();
 
-    const handleUpdate = (): void => {
+    const handleUpdate = useCallback((): void => {
         updateProfileMutation.mutate({
             userId: user._id.toString(),
             userData: {
@@ -52,7 +52,8 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                 weight,
             },
         }, { onSuccess: () => navigation.goBack() });
-    };
+    }, [bio, birthday, city, firstName, gender, lastName, navigation,
+        state, updateProfileMutation, user._id, weight]);
 
     const handleProfilePictureUpdate = async (): Promise<void> => {
         const result = await ImagePicker.launchImageLibraryAsync({
@@ -93,14 +94,6 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
         }
     };
 
-    const handleLogout = async (): Promise<void> => {
-        try {
-            await onLogout();
-        } catch (error) {
-            console.error('Error logging out:', error);
-        }
-    };
-
     const handleBirthdayChange = (text: string): void => {
         const newText = text.replace(/[^0-9]/g, ''); // Removes any character that is not a number
 
@@ -129,8 +122,23 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
         setShowModal(false);
     };
 
+    useEffect(() => {
+        navigation.setOptions({
+            // eslint-disable-next-line react/no-unstable-nested-components
+            headerRight: (): JSX.Element => (
+                <Button
+                    size="lg"
+                    variant="ghost"
+                    onPress={handleUpdate}
+                >
+                    Save
+                </Button>
+            ),
+        });
+    }, [handleUpdate, navigation]);
+
     return (
-        <VStack bgColor="gray9" style={{ padding: 20, gap: 8 }}>
+        <VStack bgColor="gray9" flex={1} style={{ padding: 20, gap: 8 }}>
             <HStack>
                 <TouchableOpacity onPress={handleProfilePictureUpdate}>
                     <Avatar
@@ -199,10 +207,10 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                 w="100%"
                 onChangeText={(text): void => setWeight(parseInt(text, 10))} // conver to number
             />
-            <Button onPress={handleUpdate}>Update Profile</Button>
+            {/* <Button onPress={handleUpdate}>Update Profile</Button>
             <Button onPress={handleLogout}>Logout</Button>
             <Button onPress={(): void => navigation.goBack()}>Go Back</Button>
-            <Button onPress={(): void => setShowModal(true)}>Delete Account</Button>
+            <Button onPress={(): void => setShowModal(true)}>Delete Account</Button> */}
             <Modal isOpen={showModal}>
                 <Modal.Content>
                     <Modal.CloseButton />
