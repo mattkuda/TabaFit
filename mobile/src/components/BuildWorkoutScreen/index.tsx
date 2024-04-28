@@ -371,7 +371,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             {/* Settings Modal */}
             {/* TDOD: Move to its own component */}
             <Modal isOpen={showSettingsModal} size="full" onClose={(): void => setShowSettingsModal(false)}>
-                <Modal.Content>
+                <Modal.Content backgroundColor="gray9">
                     <Modal.CloseButton />
                     <Modal.Header backgroundColor="gray9">
                         <Text bold fontSize="lg">
@@ -379,60 +379,92 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                         </Text>
                     </Modal.Header>
                     <Modal.Body backgroundColor="gray9">
-                        <Checkbox
-                            isChecked={modalWorkout.equipment.useKettlebell}
-                            key="Kettlebell-checkbox"
-                            mb="2"
-                            value="Kettlebells"
-                            onChange={(): void => handleWorkoutEquipmentChange('useKettlebell', !modalWorkout.equipment.useKettlebell)}
-                        >
-                            <Text pl="2">Kettlebells</Text>
-                        </Checkbox>
-                        <Checkbox
-                            isChecked={modalWorkout.equipment.useDumbells}
-                            key="Dumbells-checkbox"
-                            mb="2"
-                            value="Dumbells"
-                            onChange={(): void => handleWorkoutEquipmentChange('useDumbells', !modalWorkout.equipment.useDumbells)}
-                        >
-                            <Text pl="2">Dumbells</Text>
-                        </Checkbox>
-                        <Checkbox
-                            isChecked={modalWorkout.equipment.useHangingBar}
-                            key="HangingBar-checkbox"
-                            mb="2"
-                            value="HangingBar"
-                            onChange={(): void => handleWorkoutEquipmentChange('useHangingBar', !modalWorkout.equipment.useHangingBar)}
-                        >
-                            <Text pl="2">Hanging Bar</Text>
-                        </Checkbox>
-                        <Checkbox
-                            isChecked={modalWorkout.equipment.useYogaBall}
-                            key="YogaBall-checkbox"
-                            mb="2"
-                            value="YogaBall"
-                            onChange={(): void => handleWorkoutEquipmentChange('useYogaBall', !modalWorkout.equipment.useYogaBall)}
-                        >
-                            <Text pl="2">Yoga Ball</Text>
-                        </Checkbox>
-                        <Checkbox
-                            isChecked={modalWorkout.equipment.useWorkoutBand}
-                            key="WorkoutBand-checkbox"
-                            mb="2"
-                            value="WorkoutBand"
-                            onChange={(): void => handleWorkoutEquipmentChange('useWorkoutBand', !modalWorkout.equipment.useWorkoutBand)}
-                        >
-                            <Text pl="2">Workout Band</Text>
-                        </Checkbox>
-                        <Checkbox
-                            isChecked={modalWorkout.equipment.useBoxPlatform}
-                            key="BoxPlatform-checkbox"
-                            mb="2"
-                            value="BoxPlatform"
-                            onChange={(): void => handleWorkoutEquipmentChange('useBoxPlatform', !modalWorkout.equipment.useBoxPlatform)}
-                        >
-                            <Text pl="2">Box Platform</Text>
-                        </Checkbox>
+                        <VStack space={2}>
+                            <HStack width="100%">
+                                <HStack flex={1}>
+                                    <Checkbox
+                                        bgColor={modalWorkout.equipment.useKettlebell ? 'flame' : 'gray9'}
+                                        isChecked={modalWorkout.equipment.useKettlebell}
+                                        key="Kettlebell-checkbox"
+                                        mb="2"
+                                        size="lg"
+                                        value="Kettlebells"
+                                        onChange={(): void => handleWorkoutEquipmentChange('useKettlebell', !modalWorkout.equipment.useKettlebell)}
+                                    >
+                                        <Text pl="2">Kettlebells</Text>
+                                    </Checkbox>
+                                </HStack>
+                                <HStack flex={1}>
+                                    <Checkbox
+                                        bgColor={modalWorkout.equipment.useDumbells ? 'flame' : 'gray9'}
+                                        isChecked={modalWorkout.equipment.useDumbells}
+                                        key="Dumbells-checkbox"
+                                        mb="2"
+                                        size="lg"
+                                        value="Dumbells"
+                                        onChange={(): void => handleWorkoutEquipmentChange('useDumbells', !modalWorkout.equipment.useDumbells)}
+                                    >
+                                        <Text pl="2">Dumbells</Text>
+                                    </Checkbox>
+                                </HStack>
+                            </HStack>
+                            <HStack width="100%">
+                                <HStack flex={1}>
+                                    <Checkbox
+                                        bgColor={modalWorkout.equipment.useHangingBar ? 'flame' : 'gray9'}
+                                        isChecked={modalWorkout.equipment.useHangingBar}
+                                        key="HangingBar-checkbox"
+                                        mb="2"
+                                        size="lg"
+                                        value="HangingBar"
+                                        onChange={(): void => handleWorkoutEquipmentChange('useHangingBar', !modalWorkout.equipment.useHangingBar)}
+                                    >
+                                        <Text pl="2">Hanging Bar</Text>
+                                    </Checkbox>
+                                </HStack>
+                                <HStack flex={1}>
+                                    <Checkbox
+                                        bgColor={modalWorkout.equipment.useYogaBall ? 'flame' : 'gray9'}
+                                        isChecked={modalWorkout.equipment.useYogaBall}
+                                        key="YogaBall-checkbox"
+                                        mb="2"
+                                        size="lg"
+                                        value="YogaBall"
+                                        onChange={(): void => handleWorkoutEquipmentChange('useYogaBall', !modalWorkout.equipment.useYogaBall)}
+                                    >
+                                        <Text pl="2">Yoga Ball</Text>
+                                    </Checkbox>
+                                </HStack>
+                            </HStack>
+                            <HStack width="100%">
+                                <HStack flex={1}>
+                                    <Checkbox
+                                        bgColor={modalWorkout.equipment.useWorkoutBand ? 'flame' : 'gray9'}
+                                        isChecked={modalWorkout.equipment.useWorkoutBand}
+                                        key="WorkoutBand-checkbox"
+                                        mb="2"
+                                        size="lg"
+                                        value="WorkoutBand"
+                                        onChange={(): void => handleWorkoutEquipmentChange('useWorkoutBand', !modalWorkout.equipment.useWorkoutBand)}
+                                    >
+                                        <Text pl="2">Workout Band</Text>
+                                    </Checkbox>
+                                </HStack>
+                                <HStack flex={1}>
+                                    <Checkbox
+                                        bgColor={modalWorkout.equipment.useBoxPlatform ? 'flame' : 'gray9'}
+                                        isChecked={modalWorkout.equipment.useBoxPlatform}
+                                        key="BoxPlatform-checkbox"
+                                        mb="2"
+                                        size="lg"
+                                        value="BoxPlatform"
+                                        onChange={(): void => handleWorkoutEquipmentChange('useBoxPlatform', !modalWorkout.equipment.useBoxPlatform)}
+                                    >
+                                        <Text pl="2">Box Platform</Text>
+                                    </Checkbox>
+                                </HStack>
+                            </HStack>
+                        </VStack>
                         <Divider my="2" />
                         <FormControl.Label>Warmup</FormControl.Label>
                         <Input
