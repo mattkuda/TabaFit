@@ -153,7 +153,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                     />
                     {/* My Workouts */}
                     <HStack alignItems="center" justifyContent="space-between">
-                        <Heading size="md">My Workouts</Heading>
+                        <Heading size="md">My Saved Workouts</Heading>
                         <Button colorScheme="secondary" variant="ghost" onPress={handlePressViewMyWorkouts}>View all </Button>
                     </HStack>
                     <HorizontalWorkoutCards

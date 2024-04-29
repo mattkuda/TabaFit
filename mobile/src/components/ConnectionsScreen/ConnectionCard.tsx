@@ -4,9 +4,9 @@ import {
 } from 'native-base';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { User } from '../types/users';
-import { formatName } from '../util/util';
-import { ProfilePageScreenNavigationProp } from '../types/navigationTypes';
+import { User } from '../../types/users';
+import { formatName } from '../../util/util';
+import { ProfilePageScreenNavigationProp } from '../../types/navigationTypes';
 
 type NotificationCardProps = {
     user: User;

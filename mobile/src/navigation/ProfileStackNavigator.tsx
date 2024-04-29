@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { ProfilePage } from '../components/ProfilePage';
 import { EditProfilePage } from '../components/EditProfilePage';
 import { ProfileStackParamList } from './navigationTypes';
-import { ConnectionsScreen } from '../ConnectionsScreen';
+import { ConnectionsScreen } from '../components/ConnectionsScreen';
 import { SettingsScreen } from '../components/SettingsScreen';
 import { PostScreen } from '../components/PostScreen';
 

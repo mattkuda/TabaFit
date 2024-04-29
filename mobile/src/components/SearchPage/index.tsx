@@ -5,7 +5,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useSearchUsers } from '../../hooks/useSearchUsers'; // Make sure to create this hook
 import { User } from '../../types/users';
-import { ConnectionCard } from '../../ConnectionsScreen/ConnectionCard';
+import { ConnectionCard } from '../ConnectionsScreen/ConnectionCard';
 
 export const SearchPage = (): JSX.Element => {
     const [searchQuery, setSearchQuery] = useState('');

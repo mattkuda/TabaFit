@@ -39,12 +39,14 @@ export const NotificationsScreen = (): JSX.Element => {
     if (isError || !notifications) return <Center>Error loading notifications</Center>;
 
     return (
-        <RefreshableScrollView onRefresh={onRefresh}>
-            <VStack space={4}>
-                {notifications.map((notification) => (
-                    <NotificationCard key={notification._id.toString()} notification={notification} />
-                ))}
-            </VStack>
-        </RefreshableScrollView>
+        <VStack backgroundColor="gray9" flex={1}>
+            <RefreshableScrollView onRefresh={onRefresh}>
+                <VStack flex={1} p={2} space={2}>
+                    {notifications.map((notification) => (
+                        <NotificationCard key={notification._id.toString()} notification={notification} />
+                    ))}
+                </VStack>
+            </RefreshableScrollView>
+        </VStack>
     );
 };

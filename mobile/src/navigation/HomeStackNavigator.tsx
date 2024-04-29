@@ -13,7 +13,7 @@ import { ViewWorkoutScreen } from '../components/ViewWorkoutScreen';
 import { BuildWorkoutScreen } from '../components/BuildWorkoutScreen';
 import { TabataTimerScreen } from '../components/TabataTimerScreen';
 import { ShareWorkoutScreen } from '../components/ShareWorkoutScreen';
-import { ConnectionsScreen } from '../ConnectionsScreen';
+import { ConnectionsScreen } from '../components/ConnectionsScreen';
 import { DebugModeButton } from '../components/DebugModeButton';
 
 const Stack = createStackNavigator<HomeStackParamList>();

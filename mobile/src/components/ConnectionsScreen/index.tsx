@@ -2,10 +2,10 @@ import React from 'react';
 import { Box, useTheme } from 'native-base';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { ConnectionCard } from './ConnectionCard';
-import { useInfiniteQueryFollowers, useInfiniteQueryFollowing } from '../hooks/useQueryFollowing';
-import { useAuth } from '../context/AuthContext';
-import { InfiniteScrollList } from '../components/common/InfiniteScrollList';
-import { User } from '../types/users';
+import { useInfiniteQueryFollowers, useInfiniteQueryFollowing } from '../../hooks/useQueryFollowing';
+import { useAuth } from '../../context/AuthContext';
+import { InfiniteScrollList } from '../common/InfiniteScrollList';
+import { User } from '../../types/users';
 
 const Tab = createMaterialTopTabNavigator();
 

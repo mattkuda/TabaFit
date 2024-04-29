@@ -11,15 +11,15 @@ type NotificationCardProps = {
 };
 
 export const NotificationCard: React.FC<NotificationCardProps> = ({ notification }) => {
-    const backgroundColor = notification.read ? 'white' : 'coolGray.100';
+    const backgroundColor = notification.read ? 'gray8' : 'gray7';
 
     return (
         <TouchableOpacity>
-            <Box backgroundColor={backgroundColor} borderColor="coolGray.200" borderRadius="md" borderWidth="1" mt="2" p="4">
+            <Box backgroundColor={backgroundColor} borderRadius="md" borderWidth="1" mt="2" p="4">
                 <HStack alignItems="center" space={3}>
                     <Avatar size="48px" source={{ uri: notification.initiatorUserInfo.profilePictureUrl }} />
-                    <VStack>
-                        <Text bold fontSize="sm">{notification.summaryText}</Text>
+                    <VStack flex={1}>
+                        <Text bold ellipsizeMode="tail" fontSize="sm" numberOfLines={2}>{notification.summaryText}</Text>
                         <Text color="coolGray.600" fontSize="xs">
                             {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
                         </Text>
