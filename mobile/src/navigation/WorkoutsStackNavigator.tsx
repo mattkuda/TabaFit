@@ -9,6 +9,7 @@ import { ShareWorkoutScreen } from '../components/ShareWorkoutScreen';
 import { ViewWorkoutScreen } from '../components/ViewWorkoutScreen';
 import { LoadWorkoutScreen } from '../components/LoadWorkoutScreen';
 import { DiscoverWorkoutsScreen } from '../components/DiscoverWorkoutsScreen';
+import { PremadeWorkoutsScreen } from '../components/PremadeWorkoutsScreen';
 
 const Stack = createStackNavigator<WorkoutsStackParamList>();
 
@@ -31,5 +32,6 @@ export const WorkoutsStackNavigator = (): JSX.Element => (
         <Stack.Screen component={ViewWorkoutScreen} name="ViewWorkoutScreen" />
         <Stack.Screen component={LoadWorkoutScreen} name="LoadWorkoutScreen" />
         <Stack.Screen component={DiscoverWorkoutsScreen} name="DiscoverWorkoutsScreen" />
+        <Stack.Screen component={PremadeWorkoutsScreen} name="PremadeWorkoutsScreen" />
     </Stack.Navigator>
 );

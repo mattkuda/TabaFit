@@ -126,6 +126,7 @@ export const defaultTabataWorkout: TabataWorkout = {
         useNone: true,
     },
 };
+
 export const soundTestingWorkout: TabataWorkout = {
     _id: `sound-shuffle`,
     name: `Sound Testing Shuffle`,

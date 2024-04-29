@@ -64,7 +64,7 @@ export const WorkoutsScreen = (): JSX.Element => {
     };
 
     const handlePressDiscoverWorkouts = (): void => {
-        navigation.navigate('DiscoverWorkoutsScreen');
+        navigation.navigate('PremadeWorkoutsScreen');
     };
 
     const refetchData = async (): Promise<void> => {
