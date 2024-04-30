@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import {
-    Box, Button, ScrollView, VStack, Text, Icon, Avatar, HStack,
+    Box, Button, ScrollView, VStack, Text, Icon, Avatar, HStack, Center,
 } from 'native-base';
-import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useFollowAll, useFollowUser } from '../../mutations/followMutations';
 import { useAuth } from '../../context/AuthContext';
@@ -36,7 +36,7 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
     };
 
     return (
-        <Box backgroundColor="white" borderColor="coolGray.200" borderRadius="md" borderWidth="1" key={key} mt="2" p="4">
+        <Box backgroundColor="gray9" borderColor="gray8" borderRadius="md" borderWidth="1" key={key} mt="2" p="4">
             <HStack alignItems="center" space={3}>
                 <Avatar size="48px" source={{ uri: user.profilePictureUrl }} />
                 <VStack flex={1}>
@@ -44,14 +44,14 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
                         {`${user.firstName} ${user.lastName}`}
                     </Text>
                     <Text color="coolGray.600" fontSize="xs">
-                        {user.username}
+                        {`@${user.username}`}
                     </Text>
                 </VStack>
                 <Button
                     colorScheme={isFollowed || isAllFollowed ? 'success' : 'primary'}
                     isDisabled={isFollowed || isAllFollowed}
-                    leftIcon={<Icon as={MaterialIcons} color={isFollowed ? 'green.500' : 'white'} name={isFollowed || isAllFollowed ? 'check' : 'add'} size="sm" />}
-                    variant="solid"
+                    leftIcon={<Icon as={MaterialIcons} color={isFollowed ? 'green.500' : 'flame'} name={isFollowed || isAllFollowed ? 'check' : 'add'} size="sm" />}
+                    variant="ghost"
                     onPress={handleFollow}
                 >
                     {isFollowed || isAllFollowed ? 'Followed' : 'Follow'}
@@ -88,41 +88,69 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
     };
 
     return (
-        <VStack bg="white" flex={1}>
+        <VStack
+            backgroundColor="gray9"
+            flex={1}
+            width="100%"
+        >
             <ScrollView flex={1}>
-                <VStack mt="5" px="4" space={4}>
-                    <Box>
-                        <Text bold fontSize="xl" mb="4">
-                            People You May Know
-                        </Text>
-                        {users?.map((user) => (
-                            <ConnectionCard
-                                isAllFollowed={isAllFollowed}
-                                key={user._id.toString()}
-                                user={user}
-                                onFollowed={(): void => setIsAnyFollowed(true)}
-                            />
-                        ))}
-                    </Box>
-                    <Button
-                        colorScheme="primary"
-                        isLoading={followAllMutation.isLoading}
-                        leftIcon={<Icon as={MaterialIcons} color={followAllMutation.isSuccess ? 'green.500' : 'white'} name={followAllMutation.isSuccess ? 'check' : 'add'} size="sm" />}
-                        mb={4}
-                        variant="solid"
-                        onPress={handleFollowAll}
+                <VStack
+                    justifyContent="center"
+                    mt="5"
+                    px="4"
+                    space={8}
+                >
+                    <VStack
+                        flex={1}
+                        justifyContent="center"
+                        space={2}
                     >
-                        Follow All
-                    </Button>
+                        <Text fontSize="2xl" fontWeight="bold" mt="10" textAlign="center">
+                            {`First, let's get you connected!`}
+                        </Text>
+                        <Text fontSize="lg" mt="5" textAlign="center">
+                            Follow some suggested users, or follow all Tabaat users!
+                        </Text>
+                    </VStack>
+                    <Center>
+                        <Button
+                            borderRadius="full"
+                            colorScheme="primary"
+                            isLoading={followAllMutation.isLoading}
+                            leftIcon={<Icon as={MaterialIcons} color={followAllMutation.isSuccess ? 'green.500' : 'white'} name={followAllMutation.isSuccess ? 'check' : 'add'} size="sm" />}
+                            variant="solid"
+                            width={180}
+                            onPress={handleFollowAll}
+                        >
+                            Follow All
+                        </Button>
+                    </Center>
+                    {users?.map((user) => (
+                        <ConnectionCard
+                            isAllFollowed={isAllFollowed}
+                            key={user._id.toString()}
+                            user={user}
+                            onFollowed={(): void => setIsAnyFollowed(true)}
+                        />
+                    ))}
                 </VStack>
             </ScrollView>
-            <Button
-                isDisabled={!isAnyFollowed}
-                mt="auto"
-                onPress={handleContinue}
-            >
-                Continue
-            </Button>
+            <Box bg="gray9" height={110} p="4" width="100%">
+                <Button
+                    borderRadius="full"
+                    bottom={8}
+                    endIcon={(
+                        <Icon as={Ionicons} name="chevron-forward" />
+                    )}
+                    flex={1}
+                    m={4}
+                    position="absolute"
+                    width="100%"
+                    onPress={handleContinue}
+                >
+                    Continue
+                </Button>
+            </Box>
         </VStack>
     );
 };

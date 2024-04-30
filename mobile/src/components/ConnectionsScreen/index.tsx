@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, useTheme } from 'native-base';
+import { Box, VStack, useTheme } from 'native-base';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { ConnectionCard } from './ConnectionCard';
 import { useInfiniteQueryFollowers, useInfiniteQueryFollowing } from '../../hooks/useQueryFollowing';
@@ -26,7 +26,12 @@ const FollowingTab = (): JSX.Element => {
     };
 
     return (
-        <Box flex={1} justifyContent="center">
+        <VStack
+            backgroundColor="gray9"
+            flex={1}
+            space={0}
+            width="100%"
+        >
             <InfiniteScrollList
                 data={flatMap}
                 estimatedItemSize={285}
@@ -37,7 +42,7 @@ const FollowingTab = (): JSX.Element => {
                 renderItem={(item): JSX.Element => <ConnectionCard user={item} />}
                 onRefresh={onRefresh}
             />
-        </Box>
+        </VStack>
     );
 };
 
@@ -58,7 +63,12 @@ const FollowersTab = (): JSX.Element => {
     const flatMap2 = data?.pages.flatMap((page: User[]) => page);
 
     return (
-        <Box flex={1} justifyContent="center">
+        <VStack
+            backgroundColor="gray9"
+            flex={1}
+            space={0}
+            width="100%"
+        >
             <InfiniteScrollList
                 data={flatMap2}
                 estimatedItemSize={285}
@@ -69,7 +79,7 @@ const FollowersTab = (): JSX.Element => {
                 renderItem={(item): JSX.Element => <ConnectionCard user={item} />}
                 onRefresh={onRefresh}
             />
-        </Box>
+        </VStack>
     );
 };
 

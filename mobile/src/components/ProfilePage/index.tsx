@@ -85,12 +85,9 @@ export const ProfilePage = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigation, isCurrentUserProfile]);
 
-    const renderProfileHeader = React.useMemo(() => {
-        console.log('render');
-
-        return (
-            <>
-                {userInfo.data && (
+    const renderProfileHeader = React.useMemo(() => (
+        <>
+            {userInfo.data && (
                 <HStack alignItems="center" backgroundColor="gray9" p={4} px={4} space={4} width="100%">
                     <Avatar
                         borderColor="flame"
@@ -110,36 +107,35 @@ export const ProfilePage = (): JSX.Element => {
                         </Text>
                     </VStack>
                 </HStack>
-                )}
-                <HStack alignItems="center" px={4} space={4} width="100%">
-                    {isCurrentUserProfile ? (
-                        <Button
-                            color="flame"
-                            leftIcon={<Icon as={<Ionicons name="pencil" />} color="flame" size="sm" />}
-                            size="sm"
-                            variant="outline"
-                            onPress={navigateToEditProfile}
-                        >
-                            Edit
-                        </Button>
-                    ) : (
-                        <>
-                            <FollowButton profileUserId={userId} />
-                            <Text>other</Text>
-                        </>
-                    )}
+            )}
+            <HStack alignItems="center" px={4} space={4} width="100%">
+                {isCurrentUserProfile ? (
                     <Button
                         color="flame"
+                        leftIcon={<Icon as={<Ionicons name="pencil" />} color="flame" size="sm" />}
                         size="sm"
                         variant="outline"
-                        onPress={handleLogout}
+                        onPress={navigateToEditProfile}
                     >
-                        E-Logout
+                        Edit
                     </Button>
-                </HStack>
-            </>
-        );
-    }, [userInfo.data, handlePressFollowers, isCurrentUserProfile,
+                ) : (
+                    <>
+                        <FollowButton profileUserId={userId} />
+                        <Text>other</Text>
+                    </>
+                )}
+                <Button
+                    color="flame"
+                    size="sm"
+                    variant="outline"
+                    onPress={handleLogout}
+                >
+                    E-Logout
+                </Button>
+            </HStack>
+        </>
+    ), [userInfo.data, handlePressFollowers, isCurrentUserProfile,
         navigateToEditProfile, userId, handleLogout]); // Include all dependencies used inside the render function
 
     return (

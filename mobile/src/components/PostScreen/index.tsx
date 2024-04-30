@@ -63,7 +63,7 @@ export const PostScreen = (): JSX.Element => {
                     <Avatar borderColor="flame" size="48px" source={{ uri: post.user.profilePictureUrl }} />
                     <VStack flex={1}>
                         <HStack>
-                            <Text bold fontSize="md" onPress={handlePressUser}>
+                            <Text bold fontSize="md" onPress={userFound && handlePressUser}>
                                 {userFound ? `${formatName(post.user.firstName, post.user.lastName)}` : 'Unknown User'}
                             </Text>
                             <Text color="coolGray.300" fontSize="md">

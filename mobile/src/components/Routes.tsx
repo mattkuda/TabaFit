@@ -68,9 +68,7 @@ export const Routes = (): JSX.Element => {
     if (authState.authenticated && wizardActive) {
         return (
             <NavigationContainer>
-                <SafeAreaView style={{ flex: 1 }}>
-                    <SignUpWizardStackNavigator />
-                </SafeAreaView>
+                <SignUpWizardStackNavigator />
             </NavigationContainer>
         );
     }
@@ -87,45 +85,43 @@ export const Routes = (): JSX.Element => {
 
     return (
         <NavigationContainer>
-            <SafeAreaView style={{ flex: 1 }}>
-                <Tab.Navigator
-                    initialRouteName="Home"
-                    screenOptions={{
-                        headerShown: false,
-                        tabBarStyle: { backgroundColor: colors.gray[900] },
-                        tabBarActiveTintColor: '#F3754B',
-                        tabBarInactiveTintColor: 'white',
+            <Tab.Navigator
+                initialRouteName="Home"
+                screenOptions={{
+                    headerShown: false,
+                    tabBarStyle: { backgroundColor: colors.gray[900] },
+                    tabBarActiveTintColor: '#F3754B',
+                    tabBarInactiveTintColor: 'white',
 
-                        // tabBarPressColor: '#F3754B',
-                        // tabBarIndicatorStyle: { backgroundColor: '#F3754B' },
+                    // tabBarPressColor: '#F3754B',
+                    // tabBarIndicatorStyle: { backgroundColor: '#F3754B' },
+                }}
+            >
+                <Tab.Screen
+                    component={HomeStackNavigator}
+                    name="Home"
+                    options={{
+                        tabBarIcon: HomeIcon,
+                        tabBarStyle,
                     }}
-                >
-                    <Tab.Screen
-                        component={HomeStackNavigator}
-                        name="Home"
-                        options={{
-                            tabBarIcon: HomeIcon,
-                            tabBarStyle,
-                        }}
-                    />
-                    <Tab.Screen
-                        component={WorkoutsStackNavigator}
-                        name="Workouts"
-                        options={{
-                            tabBarIcon: TimerIcon,
-                            tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
-                        }}
-                    />
-                    <Tab.Screen
-                        component={ProfileStackNavigator}
-                        name="Profile"
-                        options={{
-                            tabBarIcon: ProfileTabIcon,
-                            tabBarStyle,
-                        }}
-                    />
-                </Tab.Navigator>
-            </SafeAreaView>
+                />
+                <Tab.Screen
+                    component={WorkoutsStackNavigator}
+                    name="Workouts"
+                    options={{
+                        tabBarIcon: TimerIcon,
+                        tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
+                    }}
+                />
+                <Tab.Screen
+                    component={ProfileStackNavigator}
+                    name="Profile"
+                    options={{
+                        tabBarIcon: ProfileTabIcon,
+                        tabBarStyle,
+                    }}
+                />
+            </Tab.Navigator>
         </NavigationContainer>
     );
 };
