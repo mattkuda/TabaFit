@@ -17,7 +17,7 @@ const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress })
         <Box
             bg={{
                 linearGradient: {
-                    colors: ['gray4', 'gray6'],
+                    colors: ['gray6', 'gray7'],
                     start: [0, 1],
                     end: [1, 0],
                 },

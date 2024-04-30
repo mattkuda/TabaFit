@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-    VStack, IconButton, Icon, HStack, Text, Pressable, Input, Toast, Modal, Button, Checkbox, Divider, FormControl, Box,
+    VStack, IconButton, Icon, HStack, Text, Pressable, Input,
+    Toast, Modal, Button, Checkbox, Divider, FormControl, Box,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
@@ -313,9 +314,25 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             width="100%"
         >
             {isShuffle ? (
-                <HStack alignItems="center" pt={4} px={4} space={4} width="100%">
-                    <Button flex={1} leftIcon={<Icon as={Ionicons} name="shuffle" />} onPress={(): void => triggerShuffle()}>Shuffle</Button>
-                    <Button flex={1} leftIcon={<Icon as={Ionicons} color="flame" name="settings" />} variant="outline" onPress={(): void => setShowSettingsModal(true)}>Settings</Button>
+                <HStack alignItems="center" justifyContent="space-between" pt={4} px={4} space={4} width="100%">
+                    <Box width="42" />
+                    <Button
+                        borderRadius="full"
+                        justifyContent="center"
+                        leftIcon={<Icon as={Ionicons} color="flame" name="shuffle" />}
+                        variant="outline"
+                        width="180"
+                        onPress={(): void => triggerShuffle()}
+                    >
+                        Re-Shuffle
+                    </Button>
+                    <IconButton
+                        borderColor="flame"
+                        borderRadius="full"
+                        borderWidth="1"
+                        icon={<Icon as={Ionicons} color="flame" name="settings" />}
+                        onPress={(): void => setShowSettingsModal(true)}
+                    />
                 </HStack>
             ) : (
                 <Input
