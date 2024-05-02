@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import {
-    Button, TextInput, View, StyleSheet, Image, Text,
+    TextInput, StyleSheet, Image, TouchableOpacity,
 } from 'react-native';
 import { useSetRecoilState } from 'recoil';
+import {
+    Button, VStack, Text, IconButton,
+} from 'native-base';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { Ionicons } from '@expo/vector-icons';
 import { userState } from '../../atoms/userStateAtom';
 import { useAuth } from '../../context/AuthContext';
 // @ts-ignore
 import logo from '../../../assets/TabatableBasicLogo.png'; // Adjust the path and filename as necessary
-import { useQueryUserByEmail, useQueryUserByUsername } from '../../hooks/useQueryUserByUsername';
+import { AuthStackParamList } from '../../navigation/navigationTypes';
 
 const styles = StyleSheet.create({
     container: {
@@ -17,7 +23,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     logo: {
-        maxWidth: '100%',
+        maxWidth: '80%',
         height: 100,
         resizeMode: 'contain',
         marginHorizontal: 100,
@@ -42,8 +48,7 @@ export const SignupScreen = (): JSX.Element => {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const setUser = useSetRecoilState(userState);
     const { onRegister } = useAuth();
-    const { data: foundUserByUseranme } = useQueryUserByUsername(username);
-    const { data: foundUserByEmail } = useQueryUserByEmail(email);
+    const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
 
     const handleSignUp = async (): Promise<void> => {
         try {
@@ -76,7 +81,22 @@ export const SignupScreen = (): JSX.Element => {
     const isFormIncomplete = !email || !password || !firstName || !lastName || !username;
 
     return (
-        <View style={styles.container}>
+        <VStack
+            alignItems="center"
+            backgroundColor="gray9"
+            flex={1}
+            justifyContent="center"
+            space={4}
+            width="100%"
+        >
+            <IconButton
+                icon={<Ionicons color="white" name="arrow-back" size={24} />}
+                left={4}
+                position="absolute"
+                top={4}
+                zIndex={1}
+                onPress={(): void => navigation.goBack()}
+            />
             <Image source={logo} style={styles.logo} />
             <TextInput
                 autoCapitalize="none"
@@ -85,7 +105,6 @@ export const SignupScreen = (): JSX.Element => {
                 value={email}
                 onChangeText={setEmail}
             />
-            {foundUserByEmail && <Text>Email already in use</Text>}
             <TextInput secureTextEntry placeholder="Password" style={styles.input} value={password} onChangeText={setPassword} />
             <TextInput placeholder="First Name" style={styles.input} value={firstName} onChangeText={setFirstName} />
             <TextInput placeholder="Last Name" style={styles.input} value={lastName} onChangeText={setLastName} />
@@ -96,10 +115,28 @@ export const SignupScreen = (): JSX.Element => {
                 value={username}
                 onChangeText={setUsername}
             />
-            {foundUserByUseranme && <Text>Username already taken</Text>}
-            <Button title="Pre-fill" onPress={handlePrefill} />
+            <Button
+                borderRadius="full"
+                disabled={isFormIncomplete}
+                width="80%"
+                onPress={handleSignUp}
+            >
+                Sign Up
+            </Button>
+            <Button
+                borderRadius="full"
+                width="80%"
+                onPress={handlePrefill}
+            >
+                Pre-fill
+            </Button>
+            <TouchableOpacity onPress={(): void => navigation.navigate('LoginScreen')}>
+                <Text color="white">
+                    Already have an account?
+                    <Text textDecorationLine="underline">Log in</Text>
+                </Text>
+            </TouchableOpacity>
             <Text>{errorMessage}</Text>
-            <Button disabled={isFormIncomplete || !!foundUserByUseranme || !!foundUserByEmail} title="Sign Up" onPress={handleSignUp} />
-        </View>
+        </VStack>
     );
 };

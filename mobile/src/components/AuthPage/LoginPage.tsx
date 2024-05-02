@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import {
-    Button, TextInput, View, StyleSheet, Image, Text,
+    TextInput, StyleSheet, Image, TouchableOpacity,
 } from 'react-native';
 import { useSetRecoilState } from 'recoil';
+import { Button, VStack, Text } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { userState } from '../../atoms/userStateAtom';
 import { useAuth } from '../../context/AuthContext';
 // @ts-ignore
 import logo from '../../../assets/TabatableBasicLogo.png'; // Adjust the path and filename as necessary
+import { AuthStackParamList } from '../../navigation/navigationTypes';
 
 const styles = StyleSheet.create({
     container: {
@@ -16,7 +20,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     logo: {
-        maxWidth: '100%',
+        maxWidth: '80%',
         height: 100,
         resizeMode: 'contain',
         marginHorizontal: 100,
@@ -38,7 +42,7 @@ export const LoginScreen = (): JSX.Element => {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const setUser = useSetRecoilState(userState);
     const { onLogin } = useAuth();
-
+    const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
     const handleSignIn = async (): Promise<void> => {
         try {
             const data = await onLogin(email, password);
@@ -66,7 +70,14 @@ export const LoginScreen = (): JSX.Element => {
     };
 
     return (
-        <View style={styles.container}>
+        <VStack
+            alignItems="center"
+            backgroundColor="gray9"
+            flex={1}
+            justifyContent="center"
+            space={4}
+            width="100%"
+        >
             <Image source={logo} style={styles.logo} />
             <TextInput
                 autoCapitalize="none"
@@ -76,9 +87,35 @@ export const LoginScreen = (): JSX.Element => {
                 onChangeText={setEmail}
             />
             <TextInput secureTextEntry placeholder="Password" style={styles.input} value={password} onChangeText={setPassword} />
-            <Button title="Login" onPress={handleSignIn} />
-            <Button title="Pre-fill" onPress={handlePrefill} />
+            <Button
+                borderRadius="full"
+                width="80%"
+                onPress={handleSignIn}
+            >
+                Login
+            </Button>
+            <Button
+                borderRadius="full"
+                width="80%"
+                onPress={handlePrefill}
+            >
+                Pre-fill
+            </Button>
+            <Button
+                borderRadius="full"
+                colorScheme="secondary"
+                width="80%"
+                onPress={(): void => navigation.navigate('SignupScreen')}
+            >
+                Create a new account
+            </Button>
+            <TouchableOpacity onPress={(): void => navigation.navigate('SignupScreen')}>
+                <Text color="white">
+                    Not a member?
+                    <Text textDecorationLine="underline">Sign up</Text>
+                </Text>
+            </TouchableOpacity>
             <Text>{errorMessage}</Text>
-        </View>
+        </VStack>
     );
 };

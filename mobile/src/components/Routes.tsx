@@ -1,6 +1,4 @@
 import {
-    SafeAreaView,
-    Text,
     ViewStyle,
 } from 'react-native';
 import { Avatar, useTheme } from 'native-base';
@@ -55,12 +53,7 @@ export const Routes = (): JSX.Element => {
     if (!authState.authenticated) {
         return (
             <NavigationContainer>
-                <SafeAreaView style={{ flex: 1 }}>
-                    <AuthStackNavigator />
-                    <Text>
-                        {authState.authenticated ? 'y' : 'n'}
-                    </Text>
-                </SafeAreaView>
+                <AuthStackNavigator />
             </NavigationContainer>
         );
     }
