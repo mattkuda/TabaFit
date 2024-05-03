@@ -1,49 +1,53 @@
 import React from 'react';
 import {
-    View, StyleSheet, Image,
+    Image,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { VStack, Button } from 'native-base';
+import {
+    VStack, Button, Box, Text,
+} from 'native-base';
 import { AuthStackParamList } from '../../navigation/navigationTypes';
 // @ts-ignore
 import logo from '../../../assets/TabatableBasicLogo.png'; // Adjust the path and filename as necessary
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-    },
-    logo: {
-        maxWidth: '100%',
-        height: 100,
-        resizeMode: 'contain',
-        marginHorizontal: 100,
-        marginBottom: 20,
-    },
-    buttonContainer: {
-        width: '80%',
-    },
-});
 
 export const AuthPage = (): JSX.Element => {
     const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
 
     return (
         <VStack
-            alignItems="center"
             backgroundColor="gray9"
             flex={1}
-            justifyContent="center"
+            height="100%"
+            space={2}
             width="100%"
         >
-            <Image source={logo} style={styles.logo} />
-            <View style={styles.buttonContainer}>
+            <VStack flex={1} justifyContent="center" p={4}>
+
+                <Image
+                    source={logo}
+                    style={{
+                        width: 200, // Adjust width as needed
+                        height: 40, // Adjust height as needed
+                        marginBottom: 20,
+                        alignSelf: 'flex-start', // Align image to the left
+                    }}
+                />
+                <Text color="flame" fontSize="2xl">
+                    Taboot
+                </Text>
+                <Text fontSize="4xl" fontWeight="bold">
+                    Your Tabata  Workout Community
+                </Text>
+                <Text fontSize="xl">
+                    Generate workouts with custom settings. Track your track progress.
+                    Share your workouts and interact with friends.
+                </Text>
+            </VStack>
+            <Box bg="gray9" height={110} p="4" width="100%">
                 <Button.Group
                     isAttached
-
+                    bottom={8}
                 >
                     <Button
                         borderColor="flame"
@@ -54,7 +58,9 @@ export const AuthPage = (): JSX.Element => {
                         variant="outline"
                         onPress={(): void => navigation.navigate('LoginScreen')}
                     >
-                        Login
+                        <Text color="white" fontSize="lg" fontWeight="bold">
+                            Login
+                        </Text>
                     </Button>
                     <Button
                         borderColor="flame"
@@ -65,10 +71,12 @@ export const AuthPage = (): JSX.Element => {
                         variant="outline"
                         onPress={(): void => navigation.navigate('SignupScreen')}
                     >
-                        Signup
+                        <Text color="white" fontSize="lg" fontWeight="bold">
+                            Signup
+                        </Text>
                     </Button>
                 </Button.Group>
-            </View>
+            </Box>
         </VStack>
     );
 };

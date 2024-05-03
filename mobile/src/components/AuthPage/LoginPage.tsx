@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import {
-    TextInput, StyleSheet, Image, TouchableOpacity,
+    StyleSheet, Image, TouchableOpacity,
 } from 'react-native';
 import { useSetRecoilState } from 'recoil';
-import { Button, VStack, Text } from 'native-base';
+import {
+    Button, VStack, Text, Input,
+} from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { userState } from '../../atoms/userStateAtom';
@@ -79,14 +81,20 @@ export const LoginScreen = (): JSX.Element => {
             width="100%"
         >
             <Image source={logo} style={styles.logo} />
-            <TextInput
+            <Input
                 autoCapitalize="none"
                 placeholder="Email"
-                style={styles.input}
                 value={email}
+                width="80%"
                 onChangeText={setEmail}
             />
-            <TextInput secureTextEntry placeholder="Password" style={styles.input} value={password} onChangeText={setPassword} />
+            <Input
+                secureTextEntry
+                placeholder="Password"
+                value={password}
+                width="80%"
+                onChangeText={setPassword}
+            />
             <Button
                 borderRadius="full"
                 width="80%"

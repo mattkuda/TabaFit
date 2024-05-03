@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import {
-    TextInput, StyleSheet, Image, TouchableOpacity,
+    StyleSheet, Image, TouchableOpacity,
 } from 'react-native';
 import { useSetRecoilState } from 'recoil';
 import {
-    Button, VStack, Text, IconButton,
+    Input, VStack, Button, Text,
 } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Ionicons } from '@expo/vector-icons';
 import { userState } from '../../atoms/userStateAtom';
 import { useAuth } from '../../context/AuthContext';
 // @ts-ignore
@@ -89,30 +88,38 @@ export const SignupScreen = (): JSX.Element => {
             space={4}
             width="100%"
         >
-            <IconButton
-                icon={<Ionicons color="white" name="arrow-back" size={24} />}
-                left={4}
-                position="absolute"
-                top={4}
-                zIndex={1}
-                onPress={(): void => navigation.goBack()}
-            />
             <Image source={logo} style={styles.logo} />
-            <TextInput
+            <Input
                 autoCapitalize="none"
                 placeholder="Email"
-                style={styles.input}
                 value={email}
+                width="80%"
                 onChangeText={setEmail}
             />
-            <TextInput secureTextEntry placeholder="Password" style={styles.input} value={password} onChangeText={setPassword} />
-            <TextInput placeholder="First Name" style={styles.input} value={firstName} onChangeText={setFirstName} />
-            <TextInput placeholder="Last Name" style={styles.input} value={lastName} onChangeText={setLastName} />
-            <TextInput
+            <Input
+                secureTextEntry
+                placeholder="Password"
+                value={password}
+                width="80%"
+                onChangeText={setPassword}
+            />
+            <Input
+                placeholder="First Name"
+                value={firstName}
+                width="80%"
+                onChangeText={setFirstName}
+            />
+            <Input
+                placeholder="Last Name"
+                value={lastName}
+                width="80%"
+                onChangeText={setLastName}
+            />
+            <Input
                 autoCapitalize="none"
                 placeholder="Username"
-                style={styles.input}
                 value={username}
+                width="80%"
                 onChangeText={setUsername}
             />
             <Button
