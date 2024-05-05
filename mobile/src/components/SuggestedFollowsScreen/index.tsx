@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    Box, Button, ScrollView, VStack, Text, Icon, Avatar, HStack, Center,
+    Box, Button, ScrollView, VStack, Text, Icon, HStack, Center,
 } from 'native-base';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +9,7 @@ import { useAuth } from '../../context/AuthContext';
 import { SuggestedFollowsScreenNavigationProp } from '../../navigation/navigationTypes';
 import { User } from '../../types/users';
 import { useQuerySuggestedUsers } from '../../hooks/useQueryUserByUsername';
+import { ProfilePicture } from '../ProfilePicture';
 
 type ConnectionCardProps = {
     user: User;
@@ -38,7 +39,7 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
     return (
         <Box backgroundColor="gray9" borderColor="gray8" borderRadius="md" borderWidth="1" key={key} mt="2" p="4">
             <HStack alignItems="center" space={3}>
-                <Avatar size="48px" source={{ uri: user.profilePictureUrl }} />
+                <ProfilePicture size="48px" user={user} />
                 <VStack flex={1}>
                     <Text bold fontSize="sm">
                         {`${user.firstName} ${user.lastName}`}

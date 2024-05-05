@@ -1,10 +1,11 @@
 import React from 'react';
 import {
-    HStack, VStack, Text, Avatar, Box,
+    HStack, VStack, Text, Box,
 } from 'native-base';
 import { formatDistanceToNow } from 'date-fns';
 import { TouchableOpacity } from 'react-native';
 import { NotificationModel } from '../../types/notifications';
+import { ProfilePicture } from '../ProfilePicture';
 
 type NotificationCardProps = {
     notification: NotificationModel;
@@ -17,7 +18,7 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({ notification
         <TouchableOpacity>
             <Box backgroundColor={backgroundColor} borderRadius="md" borderWidth="1" mt="2" p="4">
                 <HStack alignItems="center" space={3}>
-                    <Avatar size="48px" source={{ uri: notification.initiatorUserInfo.profilePictureUrl }} />
+                    <ProfilePicture size="48px" user={notification?.initiatorUserInfo} />
                     <VStack flex={1}>
                         <Text bold ellipsizeMode="tail" fontSize="sm" numberOfLines={2}>{notification.summaryText}</Text>
                         <Text color="coolGray.600" fontSize="xs">

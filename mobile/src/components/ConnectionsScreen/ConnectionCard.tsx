@@ -1,12 +1,13 @@
 import React from 'react';
 import {
-    HStack, VStack, Text, Avatar, Box,
+    HStack, VStack, Text, Box,
 } from 'native-base';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { User } from '../../types/users';
 import { formatName } from '../../util/util';
 import { ProfilePageScreenNavigationProp } from '../../types/navigationTypes';
+import { ProfilePicture } from '../ProfilePicture';
 
 type NotificationCardProps = {
     user: User;
@@ -23,7 +24,7 @@ export const ConnectionCard: React.FC<NotificationCardProps> = ({ user }) => {
         <TouchableOpacity onPress={handlePressUser}>
             <Box backgroundColor="gray9" borderColor="coolGray.200" borderRadius="md" mt="2" p="4">
                 <HStack alignItems="center" space={3}>
-                    <Avatar size="48px" source={{ uri: user.profilePictureUrl }} />
+                    <ProfilePicture size="48px" user={user} />
                     <VStack>
                         <Text bold fontSize="sm">
                             {formatName(user.firstName, user.lastName)}

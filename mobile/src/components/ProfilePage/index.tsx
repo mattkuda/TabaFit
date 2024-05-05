@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-    VStack, Text, Button, Avatar, HStack, Icon, IconButton,
+    VStack, Text, Button, HStack, Icon, IconButton,
 } from 'native-base';
-import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { format } from 'date-fns';
 import { Ionicons } from '@expo/vector-icons';
 import { FlatList, RefreshControl } from 'react-native';
@@ -14,6 +14,9 @@ import { useAuth } from '../../context/AuthContext';
 import { FollowButton } from './FollowButton';
 import { PostCard } from '../common/PostCard';
 import { formatName } from '../../util/util';
+// @ts-ignore
+import logo from '../../../assets/TabatableBasicLogo.png'; // Adjust the path and filename as necessary
+import { ProfilePicture } from '../ProfilePicture';
 
 export const ProfilePage = (): JSX.Element => {
     const { onLogout } = useAuth();
@@ -21,7 +24,10 @@ export const ProfilePage = (): JSX.Element => {
     const route = useRoute<ProfileScreenRouteProp>();
     const { authState: { userId: authUserId } } = useAuth();
     const userId = route.params?.userId || authUserId;
-    const userInfo = useUserInfo(userId);
+    const {
+        data: userInfo, isSuccess: isUserInfoSuccess,
+        refetch: refetchUserInfo,
+    } = useUserInfo(userId);
     const isCurrentUserProfile = userId === authUserId;
 
     const {
@@ -40,21 +46,28 @@ export const ProfilePage = (): JSX.Element => {
         setRefreshing(false);
     };
 
-    useFocusEffect(
-        useCallback(() => {
-            userInfo.refetch();
+    // useFocusEffect(
+    //     useCallback(() => {
+    //         userInfo.refetch();
 
-            return () => {
-                // Do any cleanup if needed when the screen goes out of focus
-            };
-        }, [userInfo]),
-    );
+    //         return () => {
+    //             // Do any cleanup if needed when the screen goes out of focus
+    //         };
+    //     }, [userInfo]),
+    // );
+
+    // Refetch user info only on component mount
+    useEffect(() => {
+        refetchUserInfo();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const navigateToEditProfile = useCallback((): void => {
-        if (userInfo.isSuccess && userInfo) {
-            navigation.navigate('EditProfile', { user: userInfo.data });
+        if (isUserInfoSuccess && userInfo) {
+            navigation.navigate('EditProfile', { user: userInfo });
         }
-    }, [userInfo, navigation]);
+    }, [isUserInfoSuccess, navigation, userInfo]);
 
     const handlePressFollowers = useCallback((): void => {
         navigation.navigate('ConnectionsScreen', { userId });
@@ -77,7 +90,7 @@ export const ProfilePage = (): JSX.Element => {
                         borderRadius="full"
                         color="flame"
                         icon={<Icon as={Ionicons} name="settings-outline" />}
-                        onPress={(): void => navigation.navigate('SettingsScreen', { user: userInfo.data })}
+                        onPress={(): void => navigation.navigate('SettingsScreen', { user: userInfo })}
                     />
                 ),
             });
@@ -87,23 +100,26 @@ export const ProfilePage = (): JSX.Element => {
 
     const renderProfileHeader = React.useMemo(() => (
         <>
-            {userInfo.data && (
+            {userInfo && (
                 <HStack alignItems="center" backgroundColor="gray9" p={4} px={4} space={4} width="100%">
-                    <Avatar
+                    <ProfilePicture
                         borderColor="flame"
                         borderWidth={2}
                         size="xl"
-                        source={{ uri: userInfo.data.profilePictureUrl }}
+                        user={userInfo}
                     />
                     <VStack backgroundColor="gray9">
-                        <Text bold fontSize="lg">{formatName(userInfo.data.firstName, userInfo.data.lastName)}</Text>
+                        <Text bold fontSize="lg">{formatName(userInfo.firstName, userInfo.lastName)}</Text>
+                        <Text color="coolGray.600" fontSize="xs">
+                            {`@${userInfo.username}`}
+                        </Text>
                         <Text fontSize="sm">
-                            Member since
+                            Joined
                             {' '}
-                            {format(new Date(userInfo.data.createdAt), 'PPP')}
+                            {format(new Date(userInfo.createdAt), 'PPP')}
                         </Text>
                         <Text fontSize="sm" onPress={handlePressFollowers}>
-                            {`${userInfo.data.followersCount} Followers • ${userInfo.data.followingCount} Following`}
+                            {`${userInfo.followersCount} Followers • ${userInfo.followingCount} Following`}
                         </Text>
                     </VStack>
                 </HStack>
@@ -132,8 +148,8 @@ export const ProfilePage = (): JSX.Element => {
                 </Button>
             </HStack>
         </>
-    ), [userInfo.data, handlePressFollowers, isCurrentUserProfile,
-        navigateToEditProfile, userId, handleLogout]); // Include all dependencies used inside the render function
+    ), [userInfo, handlePressFollowers, isCurrentUserProfile,
+        navigateToEditProfile, userId, handleLogout]);
 
     return (
         <VStack backgroundColor="gray9" flex={1} space={4} width="100%">

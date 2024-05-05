@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
-    VStack, HStack, Avatar, Text, Input, Divider,
+    VStack, HStack, Text, Input, Divider,
 } from 'native-base';
 import { formatDistanceToNow } from 'date-fns';
 import { useAuth } from '../../context/AuthContext';
@@ -16,6 +16,7 @@ import { formatName } from '../../util/util';
 import { CommentCard } from './CommentCard';
 import { LikeCommentButtons } from '../common/LikeCommentButtons';
 import { WorkoutPostDisplay } from '../common/WorkoutPostDisplay';
+import { ProfilePicture } from '../ProfilePicture';
 
 export const PostScreen = (): JSX.Element => {
     const route = useRoute<PostScreenRouteProp>();
@@ -60,7 +61,7 @@ export const PostScreen = (): JSX.Element => {
         <VStack backgroundColor="gray9" borderColor="coolGray.200" flex={1} p={4} space={2}>
             <ScrollView>
                 <HStack justifyContent="space-between" space={2}>
-                    <Avatar borderColor="flame" size="48px" source={{ uri: post.user.profilePictureUrl }} />
+                    <ProfilePicture borderColor="flame" size="48px" user={post.user} />
                     <VStack flex={1}>
                         <HStack>
                             <Text bold fontSize="md" onPress={userFound && handlePressUser}>

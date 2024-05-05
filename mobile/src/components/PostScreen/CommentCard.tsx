@@ -1,12 +1,13 @@
 import React from 'react';
 import {
-    HStack, VStack, Text, Avatar, Icon, IconButton,
+    HStack, VStack, Text, Icon, IconButton,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { useNavigation } from '@react-navigation/native';
 import { PostCommentModel } from '../../types/posts';
 import { PostScreenNavigationProp } from '../../types/navigationTypes';
+import { ProfilePicture } from '../ProfilePicture';
 
 type CommentCardProps = {
     comment: PostCommentModel;
@@ -33,7 +34,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment, onDeleteComme
             space={2}
         >
             <HStack alignItems="center" space={2}>
-                <Avatar size="32px" source={{ uri: comment.user?.profilePictureUrl }} />
+                <ProfilePicture size="32px" user={comment?.user} />
                 <VStack>
                     <Text
                         fontSize="sm"

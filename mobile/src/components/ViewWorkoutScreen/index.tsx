@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useCallback, useState } from 'react';
 import {
-    ScrollView, Text, VStack, Button, Icon, Center, Spinner, HStack, Box, Avatar,
+    ScrollView, Text, VStack, Button, Icon, Center, Spinner, HStack, Box,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -17,6 +17,7 @@ import { formatBodyParts } from '../../util/util';
 import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
 import { useAuth } from '../../context/AuthContext';
 import { useMutateSaveWorkout } from '../../mutations/useMutateSaveWorkout';
+import { ProfilePicture } from '../ProfilePicture';
 
 type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'WorkoutsScreen'>;
 
@@ -133,7 +134,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                     </HStack>
                     <Box alignItems="center" flexDirection="row" justifyContent="space-between">
                         <Box alignItems="center" flexDirection="row">
-                            <Avatar size="xs" source={{ uri: workout?.user?.profilePictureUrl }} />
+                            <ProfilePicture size="xs" user={workout?.user} />
                             <Text style={{ marginLeft: 8 }}>
                                 {`${workout?.user?.firstName} ${workout?.user?.lastName}`}
                             </Text>

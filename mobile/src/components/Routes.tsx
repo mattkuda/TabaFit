@@ -1,7 +1,7 @@
 import {
     ViewStyle,
 } from 'react-native';
-import { Avatar, useTheme } from 'native-base';
+import { useTheme } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -17,6 +17,7 @@ import { useUserInfo } from '../hooks/useUserInfo';
 import { AuthStackNavigator } from '../navigation/AuthStackNavigator';
 import { SignUpWizardStackNavigator } from '../navigation/SignUpWizardStackNavigator';
 import { wizardActiveState } from '../atoms/wizardActiveAtom';
+import { ProfilePicture } from './ProfilePicture';
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
@@ -30,13 +31,11 @@ const ProfileTabIcon = ({ focused, color, size }): JSX.Element => {
 
     if (profilePictureUrl) {
         return (
-            <Avatar
+            <ProfilePicture
                 borderColor={focused ? 'flame' : 'white'}
                 borderWidth={1}
                 size="sm"
-                source={{
-                    uri: profilePictureUrl,
-                }}
+                user={data}
             />
         );
     }

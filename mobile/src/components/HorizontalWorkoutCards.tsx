@@ -1,11 +1,12 @@
 import React from 'react';
 import { ScrollView, TouchableOpacity } from 'react-native';
 import {
-    Avatar, Box, HStack, Icon, Skeleton, Text, VStack,
+    Box, HStack, Icon, Skeleton, Text, VStack,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { TabataWorkoutWithUserInfo } from '../types/workouts';
 import { getFormattedTimeForTabataWorkout } from './TabataTimerScreen/util';
+import { ProfilePicture } from './ProfilePicture';
 
 interface SlideWorkoutCardProps {
     workout: TabataWorkoutWithUserInfo;
@@ -55,7 +56,10 @@ const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress })
                 </VStack>
             </HStack>
             <Box alignItems="center" flexDirection="row" justifyContent="flex-end">
-                <Avatar size="xs" source={{ uri: workout?.user?.profilePictureUrl }} />
+                <ProfilePicture
+                    size="xs"
+                    user={workout?.user}
+                />
                 <Text style={{ marginLeft: 8 }}>
                     {`${workout?.user?.firstName} ${workout?.user?.lastName}`}
                 </Text>

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    HStack, VStack, Text, Avatar,
+    HStack, VStack, Text,
 } from 'native-base';
 import { formatDistanceToNow } from 'date-fns';
 import { useNavigation } from '@react-navigation/native';
@@ -10,6 +10,7 @@ import { PostModel } from '../../types/posts';
 import { formatName } from '../../util/util';
 import { LikeCommentButtons } from './LikeCommentButtons';
 import { WorkoutPostDisplay } from './WorkoutPostDisplay';
+import { ProfilePicture } from '../ProfilePicture';
 
 type PostCardProps = {
     post: PostModel;
@@ -51,7 +52,7 @@ export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
                 width="100%"
             >
                 <HStack justifyContent="space-between" space={2}>
-                    <Avatar size="48px" source={{ uri: post.user.profilePictureUrl }} />
+                    <ProfilePicture size="48px" user={post.user} />
                     <VStack flex={1}>
                         <Text fontSize="sm" onPress={userFound && handlePressUser}>
                             {userFound ? `${formatName(post.user.firstName, post.user.lastName)} @${post.user.username}` : 'Unknown User'}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    Box, Button, ScrollView, VStack, Text, Icon, Center, Avatar, HStack,
+    Box, Button, ScrollView, VStack, Text, Icon, Center, HStack,
 } from 'native-base';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'; // Assuming you're using Expo
 import { useSetRecoilState } from 'recoil';
@@ -12,6 +12,7 @@ import { useQuerySuggestedWorkouts } from '../../hooks/useQueryWorkouts';
 import { useMutateSaveAllSuggestedWorkout, useMutateSaveWorkout } from '../../mutations/useMutateSaveWorkout';
 import { useAuth } from '../../context/AuthContext';
 import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
+import { ProfilePicture } from '../ProfilePicture';
 
 const WorkoutCard = ({
     workout,
@@ -77,7 +78,7 @@ const WorkoutCard = ({
                     </HStack>
                     <Box alignItems="center" flexDirection="row" justifyContent="space-between">
                         <Box alignItems="center" flexDirection="row">
-                            <Avatar size="xs" source={{ uri: workout?.user?.profilePictureUrl }} />
+                            <ProfilePicture size="xs" user={workout?.user} />
                             <Text style={{ marginLeft: 8 }}>
                                 {`${workout?.user?.firstName} ${workout?.user?.lastName}`}
                             </Text>

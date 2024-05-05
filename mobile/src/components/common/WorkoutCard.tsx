@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { format } from 'date-fns';
 import {
-    Box, VStack, Text, HStack, Icon, Avatar, Menu, Pressable, Button,
+    Box, VStack, Text, HStack, Icon, Menu, Pressable, Button,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -10,6 +10,7 @@ import { TouchableOpacity } from 'react-native';
 import { TabataWorkoutWithUserInfo } from '../../types/workouts';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
+import { ProfilePicture } from '../ProfilePicture';
 
 interface WorkoutCardProps {
     workout: TabataWorkoutWithUserInfo;
@@ -89,7 +90,11 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                     </HStack>
                     <Box alignItems="center" flexDirection="row" justifyContent="space-between">
                         <Box alignItems="center" flexDirection="row">
-                            <Avatar size="xs" source={{ uri: workout?.user?.profilePictureUrl }} />
+                            <ProfilePicture
+                                borderWidth={1}
+                                size="xs"
+                                user={workout?.user}
+                            />
                             <Text style={{ marginLeft: 8 }}>
                                 {`${workout?.user?.firstName} ${workout?.user?.lastName}`}
                             </Text>

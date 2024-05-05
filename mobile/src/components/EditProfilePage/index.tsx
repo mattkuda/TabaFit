@@ -1,5 +1,5 @@
 import {
-    Avatar, Modal, VStack, Button, HStack, Input, Select, Text,
+    Modal, VStack, Button, HStack, Input, Select, Text,
 } from 'native-base';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
@@ -12,6 +12,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { ProfileStackParamList } from 'src/navigation/navigationTypes';
 import { useMutateDeleteAccount, useMutateProfilePicture, useMutateUpdateProfile } from '../../mutations/profileMutations';
 import { useAuth } from '../../context/AuthContext';
+import { ProfilePicture } from '../ProfilePicture';
 
 type EditProfileRouteProp = RouteProp<ProfileStackParamList, 'EditProfile'>;
 type EditProfileNavigationProp = StackNavigationProp<ProfileStackParamList, 'EditProfile'>;
@@ -141,13 +142,14 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
         <VStack bgColor="gray9" flex={1} style={{ padding: 20, gap: 8 }}>
             <HStack>
                 <TouchableOpacity onPress={handleProfilePictureUpdate}>
-                    <Avatar
+                    <ProfilePicture
                         borderColor="flame"
                         borderWidth={2}
                         size="xl"
                         source={{
                             uri: profilePictureUrl,
                         }}
+                        user={user}
                     />
                 </TouchableOpacity>
                 <VStack style={{ paddingLeft: 16, gap: 4, flex: 1 }}>
