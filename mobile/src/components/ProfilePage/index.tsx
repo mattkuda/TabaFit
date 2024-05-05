@@ -120,10 +120,7 @@ export const ProfilePage = (): JSX.Element => {
                         Edit
                     </Button>
                 ) : (
-                    <>
-                        <FollowButton profileUserId={userId} />
-                        <Text>other</Text>
-                    </>
+                    <FollowButton profileUserId={userId} />
                 )}
                 <Button
                     color="flame"
