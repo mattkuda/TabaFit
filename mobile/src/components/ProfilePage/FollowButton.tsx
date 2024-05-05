@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Icon } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../context/AuthContext';
@@ -17,7 +17,7 @@ export const FollowButton = ({ profileUserId }: PropTypes): JSX.Element => {
     } = useQueryFollowing(userId, profileUserId);
     const followMutation = useFollowUser();
     const unfollowMutation = useUnfollowUser();
-    const isFollowing = data.find((follow) => follow._id === profileUserId);
+    const isFollowing = data?.length > 0;
 
     const handleFollow = (): void => {
         if (userId) {
@@ -29,11 +29,18 @@ export const FollowButton = ({ profileUserId }: PropTypes): JSX.Element => {
         }
     };
 
+    // Refetch user info only on component mount
+    useEffect(() => {
+        refetch();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const handleUnfollow = (): void => {
         if (userId) {
             unfollowMutation.mutate({ followerId: userId, followeeId: profileUserId }, {
                 onSuccess: () => {
-                    refetch(); // Refetch following status after unfollowing
+                    refetch();
                 },
             });
         }
@@ -45,10 +52,12 @@ export const FollowButton = ({ profileUserId }: PropTypes): JSX.Element => {
             leftIcon={(
                 <Icon
                     as={Ionicons}
+                    color={isFollowing ? 'green.500' : 'white'}
                     name={isFollowing ? 'checkmark' : 'person-add-outline'}
                     size="sm"
                 />
             )}
+            size="sm"
             variant={isFollowing ? 'outline' : 'solid'}
             onPress={isFollowing ? handleUnfollow : handleFollow}
         >

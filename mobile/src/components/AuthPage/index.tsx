@@ -9,7 +9,7 @@ import {
 } from 'native-base';
 import { AuthStackParamList } from '../../navigation/navigationTypes';
 // @ts-ignore
-import logo from '../../../assets/TabatableBasicLogo.png'; // Adjust the path and filename as necessary
+import logo from '../../../assets/TabatableBasicLogo.png';
 
 export const AuthPage = (): JSX.Element => {
     const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
@@ -23,14 +23,13 @@ export const AuthPage = (): JSX.Element => {
             width="100%"
         >
             <VStack flex={1} justifyContent="center" p={4}>
-
                 <Image
                     source={logo}
                     style={{
-                        width: 200, // Adjust width as needed
-                        height: 40, // Adjust height as needed
+                        width: 200,
+                        height: 40,
                         marginBottom: 20,
-                        alignSelf: 'flex-start', // Align image to the left
+                        alignSelf: 'flex-start',
                     }}
                 />
                 <Text color="flame" fontSize="2xl">

@@ -29,7 +29,7 @@ export const ConnectionCard: React.FC<NotificationCardProps> = ({ user }) => {
                             {formatName(user.firstName, user.lastName)}
                         </Text>
                         <Text color="coolGray.600" fontSize="xs">
-                            {`@#${user.username}`}
+                            {`@${user.username}`}
                         </Text>
                     </VStack>
                 </HStack>

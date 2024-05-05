@@ -113,7 +113,6 @@ router.get('/:userId/followers', async (req: Request, res: Response) => {
 });
 
 // Endpoint to get a list of users a user is following, with pagination
-// Endpoint to get a list of users a user is following, with pagination
 router.get('/:userId/following', async (req: Request, res: Response) => {
   const userId = new mongoose.Types.ObjectId(req.params.userId);
   const offset = parseInt(req.query.offset as string, 10) || 0;

@@ -59,7 +59,6 @@ router.get('/:userId', async (req: AuthRequest, res: Response) => {
 
   try {
     const userIdObj = new mongoose.Types.ObjectId(req.params.userId);
-
     // Find the user
     const user = await usersCollection.findOne({ _id: userIdObj });
 
