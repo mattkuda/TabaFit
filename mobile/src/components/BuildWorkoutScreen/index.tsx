@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
     VStack, IconButton, Icon, HStack, Text, Pressable, Input,
-    Toast, Modal, Button, Checkbox, Divider, FormControl, Box,
+    Toast, Modal, Button, Checkbox, Divider, FormControl, Box, Image,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
@@ -71,9 +71,15 @@ const TabataItem = ({
                     <ScaleDecorator>
                         <HStack alignItems="center" justifyContent="space-between">
                             <Pressable flex={1} p={2} onPress={(): void => changeExercise(circuitIndex, index)}>
-                                <HStack pl={4}>
-                                    {item?.name && <Text fontSize="md" pr="2">{exerciseIconDictionary[item?.types[0]]}</Text>}
-                                    <Text fontSize="md" style={item ? {} : { fontStyle: 'italic' }}>{item?.name || `Select exercise #${index + 1}`}</Text>
+                                <HStack pl={4} space="2">
+                                    <Image
+                                        paddingX="2"
+                                        source={exerciseIconDictionary[item?.types[0]]}
+                                        style={{
+                                            height: 24, width: 24, tintColor: 'white', paddingHorizontal: 2,
+                                        }}
+                                    />
+                                    <Text fontSize="md">{item.name}</Text>
                                 </HStack>
                             </Pressable>
                             <IconButton icon={<Icon as={Ionicons} color="white" name="menu" />} onLongPress={drag} />

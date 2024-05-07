@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    VStack, FlatList, Pressable, Text, Input, Icon, HStack,
+    VStack, FlatList, Pressable, Text, Input, Icon, HStack, Image,
 } from 'native-base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -54,9 +54,16 @@ export const SelectExerciseScreen = (): JSX.Element => {
                 keyExtractor={(item): string => item._id}
                 ListEmptyComponent={<Text alignSelf="center" fontSize="md">No exercises found</Text>}
                 renderItem={({ item }): JSX.Element => (
-                    <Pressable borderColor="gray7" p="2" onPress={(): void => handleSelectExercise(item)}>
-                        <HStack>
-                            <Text fontSize="md" pr="2">{exerciseIconDictionary[item?.types[0]]}</Text>
+                    <Pressable borderColor="gray7" p="4" px="4" onPress={(): void => handleSelectExercise(item)}>
+                        <HStack space="2">
+                            {/* <Text fontSize="md" pr="2">{exerciseIconDictionary[item?.types[0]]}</Text> */}
+                            <Image
+                                paddingX="2"
+                                source={exerciseIconDictionary[item?.types[0]]}
+                                style={{
+                                    height: 24, width: 24, tintColor: 'white', paddingHorizontal: 2,
+                                }}
+                            />
                             <Text fontSize="md">{item.name}</Text>
                         </HStack>
                     </Pressable>
