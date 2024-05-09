@@ -5,9 +5,11 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "ts-node server/src/server.ts",
         "dev": "nodemon --exec ts-node src/server.ts",
-        "postinstall": "cd server && npm install"
+        "postinstall": "cd server && npm install",
+        "build": "tsc --project server",
+        "start": "node server/dist/server.js",
+        "heroku-postbuild": "npm run build"
     },
     "keywords": [],
     "author": "",
