@@ -1,0 +1,7 @@
+services:
+  web:
+    build:
+      command: "npm install && npm run build"
+    start:
+      command: "npm start"
+    rootDir: "tabafit/server"
