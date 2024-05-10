@@ -14,7 +14,7 @@ import followsRoutes from './routes/follows';
 import notificationsRoutes from './routes/notifications';
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // eslint-disable-next-line import/no-relative-packages
 
