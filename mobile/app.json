@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Abcountable",
-    "slug": "Abcountable",
+    "name": "TabaFit",
+    "slug": "TabaFit",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mattkuda.TabaFit"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,6 +29,11 @@
     },
     "plugins": [
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "a99c6905-3b89-4210-b5b7-ba66ed2975ee"
+      }
+    }
   }
 }
