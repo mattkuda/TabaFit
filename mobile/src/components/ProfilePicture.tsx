@@ -24,7 +24,7 @@ const sizes = {
 export const ProfilePicture: React.FC<ProfilePictureProps> = ({ user, size = 'md', ...avatarProps }) => {
     const fontSize = sizes[size as keyof typeof sizes] || 24;
 
-    const initials = user?.firstName || user?.lastName ? `${user?.firstName?.charAt(0).toUpperCase() ?? ''}${user?.lastName?.charAt(0).toUpperCase() ?? ''}` : user?.username?.charAt(0).toUpperCase() ?? '';
+    const initials = user?.firstName || user?.lastName ? `${user?.firstName?.charAt(0).toUpperCase() ?? ''}${user?.lastName?.charAt(0).toUpperCase() ?? ''}` : user?.username?.charAt(0).toUpperCase() ?? '?';
 
     return (
         <Avatar

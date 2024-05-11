@@ -84,7 +84,6 @@ export const Routes = (): JSX.Element => {
                     tabBarStyle: { backgroundColor: colors.gray[900] },
                     tabBarActiveTintColor: '#F3754B',
                     tabBarInactiveTintColor: 'white',
-
                     // tabBarPressColor: '#F3754B',
                     // tabBarIndicatorStyle: { backgroundColor: '#F3754B' },
                 }}

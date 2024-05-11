@@ -14,8 +14,6 @@ import { useAuth } from '../../context/AuthContext';
 import { FollowButton } from './FollowButton';
 import { PostCard } from '../common/PostCard';
 import { formatName } from '../../util/util';
-// @ts-ignore
-import logo from '../../../assets/TabatableBasicLogo.png'; // Adjust the path and filename as necessary
 import { ProfilePicture } from '../ProfilePicture';
 
 export const ProfilePage = (): JSX.Element => {
@@ -93,6 +91,11 @@ export const ProfilePage = (): JSX.Element => {
                         onPress={(): void => navigation.navigate('SettingsScreen', { user: userInfo })}
                     />
                 ),
+                headerTitle: 'You',
+            });
+        } else {
+            navigation.setOptions({
+                headerTitle: 'Profile',
             });
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
