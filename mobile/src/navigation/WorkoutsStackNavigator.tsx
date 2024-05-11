@@ -22,16 +22,69 @@ export const WorkoutsStackNavigator = (): JSX.Element => (
             },
             headerTintColor: 'white',
         }}
-        // screenOptions={{ headerShown: false }}
     >
-        <Stack.Screen component={WorkoutsScreen} name="WorkoutsScreen" />
-        <Stack.Screen component={BuildWorkoutScreen} name="BuildWorkoutScreen" />
-        <Stack.Screen component={SelectExerciseScreen} name="SelectExerciseScreen" />
-        <Stack.Screen component={TabataTimerScreen} name="TabataTimerScreen" />
-        <Stack.Screen component={ShareWorkoutScreen} name="ShareWorkoutScreen" />
-        <Stack.Screen component={ViewWorkoutScreen} name="ViewWorkoutScreen" />
-        <Stack.Screen component={LoadWorkoutScreen} name="LoadWorkoutScreen" />
-        <Stack.Screen component={DiscoverWorkoutsScreen} name="DiscoverWorkoutsScreen" />
-        <Stack.Screen component={PremadeWorkoutsScreen} name="PremadeWorkoutsScreen" />
+        <Stack.Screen
+            component={WorkoutsScreen}
+            name="WorkoutsScreen"
+            options={{
+                headerTitle: 'Workouts',
+            }}
+        />
+        <Stack.Screen
+            component={BuildWorkoutScreen}
+            name="BuildWorkoutScreen"
+            options={{
+                headerTitle: 'Build Workout',
+            }}
+        />
+        <Stack.Screen
+            component={SelectExerciseScreen}
+            name="SelectExerciseScreen"
+            options={{
+                headerTitle: 'Select Exercise',
+            }}
+        />
+        <Stack.Screen
+            component={TabataTimerScreen}
+            name="TabataTimerScreen"
+            options={{
+                headerTitle: 'Tabata Timer',
+            }}
+        />
+        <Stack.Screen
+            component={ShareWorkoutScreen}
+            name="ShareWorkoutScreen"
+            options={{
+                headerTitle: 'Share Workout',
+            }}
+        />
+        <Stack.Screen
+            component={ViewWorkoutScreen}
+            name="ViewWorkoutScreen"
+            options={{
+                headerTitle: 'View Workout',
+            }}
+        />
+        <Stack.Screen
+            component={LoadWorkoutScreen}
+            name="LoadWorkoutScreen"
+            options={{
+                headerTitle: 'Load Workout',
+            }}
+        />
+        <Stack.Screen
+            component={DiscoverWorkoutsScreen}
+            name="DiscoverWorkoutsScreen"
+            options={{
+                headerTitle: 'Discover Workouts',
+            }}
+        />
+        <Stack.Screen
+            component={PremadeWorkoutsScreen}
+            name="PremadeWorkoutsScreen"
+            options={{
+                headerTitle: 'TabaFit Workouts',
+            }}
+        />
     </Stack.Navigator>
 );

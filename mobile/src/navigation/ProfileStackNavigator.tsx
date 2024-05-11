@@ -21,9 +21,33 @@ export const ProfileStackNavigator = (): JSX.Element => (
         }}
     >
         <Stack.Screen component={ProfilePage} name="Profile" />
-        <Stack.Screen component={EditProfilePage} name="EditProfile" />
-        <Stack.Screen component={SettingsScreen} name="SettingsScreen" />
-        <Stack.Screen component={ConnectionsScreen} name="ConnectionsScreen" />
-        <Stack.Screen component={PostScreen} name="PostScreen" />
+        <Stack.Screen
+            component={EditProfilePage}
+            name="EditProfile"
+            options={{
+                headerTitle: 'Edit Prdfile',
+            }}
+        />
+        <Stack.Screen
+            component={SettingsScreen}
+            name="SettingsScreen"
+            options={{
+                headerTitle: 'Settings',
+            }}
+        />
+        <Stack.Screen
+            component={ConnectionsScreen}
+            name="ConnectionsScreen"
+            options={{
+                headerTitle: 'Connections',
+            }}
+        />
+        <Stack.Screen
+            component={PostScreen}
+            name="PostScreen"
+            options={{
+                headerTitle: 'Workout Details',
+            }}
+        />
     </Stack.Navigator>
 );

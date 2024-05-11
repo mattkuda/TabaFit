@@ -42,22 +42,65 @@ export const HomeStackNavigator = (): JSX.Element => (
             component={HomePage}
             name="HomePage"
             options={{
+                headerTitle: 'Home',
                 headerLeft: SearchButtonComponent,
                 headerRight: HeaderRightComponent,
             }}
         />
-        <Stack.Screen component={SearchPage} name="Search" />
+        <Stack.Screen
+            component={SearchPage}
+            name="Search"
+            options={{
+                headerTitle: 'Search',
+            }}
+        />
         <Stack.Screen
             component={ProfilePage}
             initialParams={{ userId: null }}
             name="Profile"
         />
-        <Stack.Screen component={PostScreen} name="PostScreen" />
-        <Stack.Screen component={NotificationsScreen} name="NotificationsScreen" />
-        <Stack.Screen component={ViewWorkoutScreen} name="ViewWorkoutScreen" />
-        <Stack.Screen component={BuildWorkoutScreen} name="BuildWorkoutScreen" />
+        <Stack.Screen
+            component={PostScreen}
+            name="PostScreen"
+            options={{
+                headerTitle: 'Post Details',
+            }}
+        />
+        <Stack.Screen
+            component={NotificationsScreen}
+            name="NotificationsScreen"
+            options={{
+                headerTitle: 'Notifications',
+            }}
+        />
+        <Stack.Screen
+            component={ViewWorkoutScreen}
+            name="ViewWorkoutScreen"
+            options={{
+                headerTitle: 'View Workout',
+            }}
+        />
+        <Stack.Screen
+            component={BuildWorkoutScreen}
+            name="BuildWorkoutScreen"
+            options={{
+                headerTitle: 'Build Workout',
+            }}
+        />
         <Stack.Screen component={TabataTimerScreen} name="TabataTimerScreen" />
-        <Stack.Screen component={ShareWorkoutScreen} name="ShareWorkoutScreen" />
-        <Stack.Screen component={ConnectionsScreen} name="ConnectionsScreen" />
+        <Stack.Screen
+            component={ShareWorkoutScreen}
+            name="ShareWorkoutScreen"
+            options={{
+                headerTitle: 'Share Workout',
+            }}
+        />
+        <Stack.Screen
+            component={ConnectionsScreen}
+            name="ConnectionsScreen"
+            options={{
+                headerTitle: 'Connections',
+            }}
+        />
     </Stack.Navigator>
 );
