@@ -4,7 +4,7 @@
     "slug": "TabaFit",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/ios-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -16,7 +16,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.mattkuda.TabaFit"
+      "bundleIdentifier": "com.mattkuda.TabaFit",
+      "icon": "./assets/ios-icon.png"
     },
     "android": {
       "adaptiveIcon": {

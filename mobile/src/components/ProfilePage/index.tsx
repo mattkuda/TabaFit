@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-    VStack, Text, Button, HStack, Icon, IconButton,
+    VStack, Text, Button, HStack, Icon, IconButton, Spinner,
 } from 'native-base';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { format } from 'date-fns';
@@ -154,7 +154,12 @@ export const ProfilePage = (): JSX.Element => {
     ), [userInfo, handlePressFollowers, isCurrentUserProfile,
         navigateToEditProfile, userId, handleLogout]);
 
-    return (
+    return data && data.pages.length === 0 ? (
+        <VStack backgroundColor="gray9" flex={1} space={4} width="100%">
+            {renderProfileHeader}
+            <Spinner color="white" mt={8} size="lg" />
+        </VStack>
+    ) : (
         <VStack backgroundColor="gray9" flex={1} space={4} width="100%">
             <FlatList
                 data={flatMap}
