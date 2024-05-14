@@ -33,7 +33,7 @@ export const AuthPage = (): JSX.Element => {
                     }}
                 />
                 <Text color="flame" fontSize="2xl">
-                    Taboot
+                    TabaFit
                 </Text>
                 <Text fontSize="4xl" fontWeight="bold">
                     Your Tabata  Workout Community
