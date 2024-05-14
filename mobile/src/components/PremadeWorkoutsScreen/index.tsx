@@ -23,7 +23,7 @@ export const PremadeWorkoutsScreen: FC = () => {
 
     return (
         <VStack backgroundColor="gray9" flex={1} p={2} space={2}>
-            <Heading px="4">Abcountable Official Workouts</Heading>
+            <Heading px="4">TabaFit Official Workouts</Heading>
             <InfiniteScrollList
                 data={flatMapWorkouts}
                 estimatedItemSize={100}
