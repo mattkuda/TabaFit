@@ -67,7 +67,7 @@ export const WorkoutsScreen = (): JSX.Element => {
         navigation.navigate('DiscoverWorkoutsScreen');
     };
 
-    const handlePressAbcountableWorkouts = (): void => {
+    const handlePressTabaFitWorkouts = (): void => {
         navigation.navigate('PremadeWorkoutsScreen');
     };
 
@@ -165,10 +165,10 @@ export const WorkoutsScreen = (): JSX.Element => {
                         workouts={mySavedWorkouts ?? []}
                         onPressWorkout={handlePressViewMyWorkout}
                     />
-                    {/* Abcountable Workouts */}
+                    {/* TabaFit Workouts */}
                     <HStack alignItems="center" justifyContent="space-between">
-                        <Heading size="md">Abcountable Workouts</Heading>
-                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressAbcountableWorkouts}>View all</Button>
+                        <Heading size="md">TabaFit Workouts</Heading>
+                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressTabaFitWorkouts}>View all</Button>
                     </HStack>
                     <HorizontalWorkoutCards
                         isLoading={false}

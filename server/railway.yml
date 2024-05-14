@@ -4,4 +4,4 @@ services:
       command: "npm install && npm run build"
     start:
       command: "npm start"
-    rootDir: "Abcountable/server"
+    rootDir: "TabaFit/server"
