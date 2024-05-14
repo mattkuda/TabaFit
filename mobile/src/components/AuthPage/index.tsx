@@ -36,7 +36,7 @@ export const AuthPage = (): JSX.Element => {
                     TabaFit
                 </Text>
                 <Text fontSize="4xl" fontWeight="bold">
-                    Your Tabata  Workout Community
+                    Your Tabata Workout Community
                 </Text>
                 <Text fontSize="xl">
                     Generate workouts with custom settings. Track your track progress.
