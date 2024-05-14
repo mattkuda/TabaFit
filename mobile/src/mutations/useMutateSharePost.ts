@@ -2,7 +2,7 @@ import { useMutation, UseMutationResult } from 'react-query';
 import axios, { AxiosError } from 'axios';
 import { TabataWorkout } from '../types/workouts'; // Import your Workout type
 
-const apiUrl = 'http://localhost:3000';
+const apiUrl = process.env.EAS_API_BASE_URL || 'http://localhost:3000';
 
 interface ShareWorkoutVariables {
     userId: string;

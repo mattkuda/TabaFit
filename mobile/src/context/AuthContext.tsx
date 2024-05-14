@@ -6,7 +6,7 @@ import * as SecureStore from 'expo-secure-store';
 import { useSetRecoilState } from 'recoil';
 import { wizardActiveState } from '../atoms/wizardActiveAtom';
 
-const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+const apiUrl = process.env.EAS_API_BASE_URL || 'http://localhost:3000';
 const tokenKey = process.env.EXPO_PUBLIC_TOKEN_KEY;
 
 interface AuthProps {

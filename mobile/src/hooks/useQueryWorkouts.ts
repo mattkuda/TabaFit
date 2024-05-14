@@ -5,7 +5,7 @@ import axios from 'axios';
 import { TabataWorkoutWithUserInfo } from '../types/workouts';
 import { PagingParams } from '../types/common';
 
-const apiUrl = 'http://localhost:3000';
+const apiUrl = process.env.EAS_API_BASE_URL || 'http://localhost:3000';
 const defaultLimit = 10;
 
 const fetchWorkouts = async ({ offset = 0, limit }: PagingParams): Promise<TabataWorkoutWithUserInfo[]> => {

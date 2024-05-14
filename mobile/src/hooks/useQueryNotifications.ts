@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from 'react-query';
 import axios from 'axios';
 import { NotificationModel } from '../types/notifications';
 
-const apiUrl = 'http://localhost:3000';
+const apiUrl = process.env.EAS_API_BASE_URL || 'http://localhost:3000';
 
 const fetchNotifications = async (unreadOnly: boolean): Promise<NotificationModel[]> => {
     try {

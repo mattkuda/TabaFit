@@ -4,7 +4,7 @@ import {
 import axios from 'axios';
 import { PostModel } from '../types/posts';
 
-const apiUrl = 'http://localhost:3000';
+const apiUrl = process.env.EAS_API_BASE_URL || 'http://localhost:3000';
 const limit = 10;
 
 export type FetchUserPostsResponse = PostModel[];
