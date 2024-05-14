@@ -23,7 +23,7 @@ const SearchButtonComponent = (): JSX.Element => <Searchbutton />;
 const HeaderRightComponent = (): JSX.Element => (
     <HStack marginRight="2" space={2}>
         <NotificationsButton />
-        <DebugModeButton />
+        {process.env.ENVIRONMENT !== 'production' && <DebugModeButton />}
     </HStack>
 );
 
