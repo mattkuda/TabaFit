@@ -2,7 +2,7 @@
 import { useMutation, UseMutationResult } from 'react-query';
 import axios, { AxiosError } from 'axios';
 
-const apiUrl = process.env.EAS_API_BASE_URL || 'http://localhost:3000';
+const apiUrl = process.env.EXPO_PUBLIC_EAS_API_BASE_URL || 'http://localhost:3000';
 
 interface FollowMutationVariables {
     followerId: string;

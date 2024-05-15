@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from 'react-query';
 import axios from 'axios';
 import { PostModel } from '../types/posts';
 
-const apiUrl = process.env.EAS_API_BASE_URL || 'http://localhost:3000';
+const apiUrl = process.env.EXPO_PUBLIC_EAS_API_BASE_URL || 'http://localhost:3000';
 
 const fetchPost = async (postId: string): Promise<PostModel> => {
     try {
