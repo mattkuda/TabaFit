@@ -102,13 +102,15 @@ export const LoginScreen = (): JSX.Element => {
             >
                 Login
             </Button>
-            <Button
-                borderRadius="full"
-                width="80%"
-                onPress={handlePrefill}
-            >
-                Pre-fill
-            </Button>
+            {process.env.ENVIRONMENT !== 'production' && (
+                <Button
+                    borderRadius="full"
+                    width="80%"
+                    onPress={handlePrefill}
+                >
+                    Pre-fill
+                </Button>
+            )}
             <Button
                 borderRadius="full"
                 colorScheme="secondary"
@@ -123,6 +125,16 @@ export const LoginScreen = (): JSX.Element => {
                     <Text textDecorationLine="underline">Sign up</Text>
                 </Text>
             </TouchableOpacity>
+            <Text color="white">
+                Environment:
+                {' '}
+                {process.env.ENVIRONMENT}
+            </Text>
+            <Text color="white">
+                Base URL:
+                {' '}
+                {process.env.EXPO_PUBLIC_EAS_API_BASE_URL}
+            </Text>
             <Text>{errorMessage}</Text>
         </VStack>
     );

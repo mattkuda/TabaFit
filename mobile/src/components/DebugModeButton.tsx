@@ -41,6 +41,12 @@ export const DebugModeButton = (): JSX.Element => {
                 onClose={(): void => setShowMenu(false)}
                 onOpen={(): void => setShowMenu(true)}
             >
+                <Menu.Item>
+                    {`EXPO_PUBLIC_EAS_API_BASE_URL: ${process.env.EXPO_PUBLIC_EAS_API_BASE_URL}`}
+                </Menu.Item>
+                <Menu.Item>
+                    {`EXPO_PUBLIC_TOKEN_KEY: ${process.env.EXPO_PUBLIC_TOKEN_KEY}`}
+                </Menu.Item>
                 <Menu.Item onPress={togglewizardActive}>
                     {`Toggle wizardActive (${wizardActive ? 'T' : 'F'})`}
                 </Menu.Item>
