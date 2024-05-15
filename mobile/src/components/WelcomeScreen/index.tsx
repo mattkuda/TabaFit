@@ -26,7 +26,7 @@ export const WelcomeScreen = (): JSX.Element => {
                 space={2}
             >
                 <Text fontSize="2xl" fontWeight="bold" mt="10" textAlign="center">
-                    Welcome to Taboot, your tabata social network!
+                    Welcome to TabaFit, your tabata social network!
                 </Text>
                 <Text fontSize="lg" mt="5" textAlign="center">
                     {`Let's get you set up`}

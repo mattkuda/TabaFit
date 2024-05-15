@@ -13,7 +13,7 @@ export const ProfileStackNavigator = (): JSX.Element => (
     <Stack.Navigator
         initialRouteName="Profile"
         screenOptions={{
-            headerTitle: 'Taboot',
+            headerTitle: 'TabaFit',
             headerStyle: {
                 backgroundColor: 'black',
             },
