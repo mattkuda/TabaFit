@@ -1,10 +1,17 @@
 # TabaFit
 
-<i>Six-packs responsibly</i>
+<i>Your Tabata Workout Community</i>
 
-This is a Tabata Timer application built with React Native and Expo. A Tabata Timer performs a particular exercise 8 times, separated by rest intervals. You can configure the number of exercises, the duration of each exercise, and the rest interval.
+Welcome to TabaFit, the ultimate Tabata Timer application built with React Native and Expo. TabaFit goes beyond just timing your workouts; it brings together a vibrant community of fitness enthusiasts where you can generate custom workouts on the fly based on your preferences, explore and save a variety of workouts, and share your own routines with the world.
 
-The application provides visual cues for the different states (work, rest, cooldown) with a large, easy-to-read timer countdown. It also displays the number of exercises completed and the total workout time.
+### Key Features
+- Generate Workouts: Create personalized Tabata workouts tailored to your specific preferences and goals.
+- Explore and Save Workouts: Browse through a diverse collection of workouts created by the community and save your favorites for easy access.
+- Share Your Workouts: Publish your own workout routines and share them with the TabaFit community.
+- Follow Users: Follow other users to keep up with their latest workouts and fitness activities.
+- Engage with the Community: Like, comment, and engage with workouts shared by other users to build connections and stay motivated.
+
+Join TabaFit today and be part of a community that shares your passion for fitness and helps you achieve your workout goals!
 
 ## Getting Started
 
