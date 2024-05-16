@@ -110,6 +110,7 @@ export const Routes = (): JSX.Element => {
                     options={{
                         tabBarIcon: ProfileTabIcon,
                         tabBarStyle,
+                        tabBarLabel: 'Profile',
                     }}
                 />
             </Tab.Navigator>
