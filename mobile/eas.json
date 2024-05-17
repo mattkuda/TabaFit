@@ -8,7 +8,7 @@
       "distribution": "internal",
       "env": {
         "ENVIRONMENT": "development",
-        "EAS_API_BASE_URL": "http://localhost:3000"
+        "EXPO_PUBLIC_EAS_API_BASE_URL": "http://localhost:3000"
 
       }
     },
@@ -18,7 +18,7 @@
     "production": {
       "env": {
         "ENVIRONMENT": "production",
-        "EAS_API_BASE_URL": "https://tabafit.up.railway.app"
+        "EXPO_PUBLIC_EAS_API_BASE_URL": "https://tabafit.up.railway.app"
       }
     }
   },

@@ -2,14 +2,14 @@
   "expo": {
     "name": "TabaFit",
     "slug": "Abcountable",
-    "version": "1.0.0",
+    "version": "0.1.2",
     "orientation": "portrait",
     "icon": "./assets/ios-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/ios-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#18181b"
     },
     "assetBundlePatterns": [
       "**/*"
