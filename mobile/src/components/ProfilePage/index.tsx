@@ -112,11 +112,17 @@ export const ProfilePage = (): JSX.Element => {
                         user={userInfo}
                     />
                     <VStack backgroundColor="gray9">
-                        <Text bold fontSize="lg">{formatName(userInfo.firstName, userInfo.lastName)}</Text>
-                        <Text color="coolGray.600" fontSize="xs">
-                            {`@${userInfo.username}`}
+                        <Text>
+                            <Text bold fontSize="lg">{formatName(userInfo.firstName, userInfo.lastName)}</Text>
+                            {'  '}
+                            <Text color="coolGray.600" fontSize="lg">
+                                {`@${userInfo.username}`}
+                            </Text>
                         </Text>
                         <Text fontSize="sm">
+                            {userInfo.bio}
+                        </Text>
+                        <Text italic fontSize="sm">
                             Joined
                             {' '}
                             {format(new Date(userInfo.createdAt), 'PPP')}

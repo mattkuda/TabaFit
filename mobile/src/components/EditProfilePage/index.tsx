@@ -10,6 +10,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { StackNavigationProp } from '@react-navigation/stack';
 // eslint-disable-next-line import/no-unresolved
 import { ProfileStackParamList } from 'src/navigation/navigationTypes';
+import { useQueryClient } from 'react-query';
 import { useMutateDeleteAccount, useMutateProfilePicture, useMutateUpdateProfile } from '../../mutations/profileMutations';
 import { useAuth } from '../../context/AuthContext';
 import { ProfilePicture } from '../ProfilePicture';
@@ -38,6 +39,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
     const deleteAccountMutation = useMutateDeleteAccount();
     const [showModal, setShowModal] = useState(false);
     const { onLogout } = useAuth();
+    const queryClient = useQueryClient();
 
     const handleUpdate = useCallback((): void => {
         updateProfileMutation.mutate({
@@ -52,9 +54,14 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                 gender,
                 weight,
             },
-        }, { onSuccess: () => navigation.goBack() });
+        }, {
+            onSuccess: () => {
+                queryClient.invalidateQueries(['userInfo', user._id.toString()]);
+                navigation.goBack();
+            },
+        });
     }, [bio, birthday, city, firstName, gender, lastName, navigation,
-        state, updateProfileMutation, user._id, weight]);
+        queryClient, state, updateProfileMutation, user._id, weight]);
 
     const handleProfilePictureUpdate = async (): Promise<void> => {
         const result = await ImagePicker.launchImageLibraryAsync({
