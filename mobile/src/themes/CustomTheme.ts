@@ -5,8 +5,8 @@ import { extendTheme, theme as baseTheme } from 'native-base';
 export const theme = extendTheme({
     colors: {
         primary: baseTheme.colors.blue,
-        flame: '#F3754B',
-        flamelight: '#fac8b7',
+        flame: '#ff9f27',
+        cherry: '#ff2760',
         blue: {
             100: '#E6F0FF',
             200: '#CCE1FF',

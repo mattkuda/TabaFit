@@ -91,10 +91,10 @@ export const ConnectionsScreen = (): JSX.Element => {
             <Tab.Navigator
                 screenOptions={{
                     tabBarStyle: { backgroundColor: colors.gray[900] },
-                    tabBarActiveTintColor: '#F3754B',
-                    tabBarInactiveTintColor: '#F3754B',
-                    tabBarPressColor: '#F3754B',
-                    tabBarIndicatorStyle: { backgroundColor: '#F3754B' },
+                    tabBarActiveTintColor: '#ff9f27',
+                    tabBarInactiveTintColor: '#ff9f27',
+                    tabBarPressColor: '#ff9f27',
+                    tabBarIndicatorStyle: { backgroundColor: '#ff9f27' },
                 }}
             >
                 <Tab.Screen component={FollowingTab} name="Following" />

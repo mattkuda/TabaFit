@@ -6,7 +6,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Animated } from 'react-native';
+import { Animated, TouchableOpacity } from 'react-native';
 import { format } from 'date-fns';
 import { useQueryClient } from 'react-query';
 import { TabataCircuit, TabataWorkout, TabataWorkoutWithUserInfo } from '../../types/workouts';
@@ -94,7 +94,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
     Animated.loop(
         Animated.sequence([
             Animated.timing(scaleAnimation, {
-                toValue: 1.2,
+                toValue: 1.4,
                 duration: 500,
                 useNativeDriver: true,
             }),
@@ -174,24 +174,37 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                     ))}
                 </VStack>
             </ScrollView>
-            <Box flex={1} px={4}>
-                <Button
+            {/* Start Button */}
+            <TouchableOpacity onPress={handleStartWorkout}>
+                {/* Build Workout Row */}
+                <Box
+                    alignItems="center"
+                    bg={{
+                        linearGradient: {
+                            colors: ['flame', 'cherry'],
+                            start: [0, 1],
+                            end: [1, 0],
+                        },
+                    }}
                     borderRadius="full"
                     bottom={0}
-                    endIcon={(
-                        <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>
-                            <Icon as={Ionicons} name="flash" />
-                        </Animated.View>
-                    )}
                     flex={1}
-                    m={4}
+                    flexDirection="row"
+                    // @ts-expect-error
+                    gap={2}
+                    justifyContent="center"
+                    mb="4"
+                    p="4"
                     position="absolute"
+                    px={4}
                     width="100%"
-                    onPress={handleStartWorkout}
                 >
-                    Start
-                </Button>
-            </Box>
+                    <Text bold fontSize="lg">Start</Text>
+                    <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>
+                        <Icon as={Ionicons} name="flash" />
+                    </Animated.View>
+                </Box>
+            </TouchableOpacity>
         </VStack>
     );
 };
