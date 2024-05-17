@@ -3,6 +3,7 @@ import { NativeBaseProvider } from 'native-base';
 import { RecoilRoot } from 'recoil';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { LinearGradient } from 'expo-linear-gradient';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Routes } from './src/components/Routes';
 import { AuthProvider } from './src/context/AuthContext';
 import { theme } from './src/themes/CustomTheme';
@@ -18,11 +19,13 @@ const config = {
 export const App = (): JSX.Element => (
     <QueryClientProvider client={queryClient}>
         <RecoilRoot>
-            <AuthProvider>
-                <NativeBaseProvider config={config} theme={theme}>
-                    <Routes />
-                </NativeBaseProvider>
-            </AuthProvider>
+            <SafeAreaProvider>
+                <AuthProvider>
+                    <NativeBaseProvider config={config} theme={theme}>
+                        <Routes />
+                    </NativeBaseProvider>
+                </AuthProvider>
+            </SafeAreaProvider>
         </RecoilRoot>
     </QueryClientProvider>
 );
