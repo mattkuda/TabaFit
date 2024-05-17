@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { useSetRecoilState } from 'recoil';
 import { Audio } from 'expo-av';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TabataTimerScreenRouteProp } from '../../navigation/navigationTypes';
 import { TabataExercise } from '../../types/workouts';
 import { Intervals } from '../../util/constants';
@@ -50,6 +51,7 @@ export const TabataTimerScreen = (): JSX.Element => {
     const [showAlert, setShowAlert] = useState(false);
     const setShowFooter = useSetRecoilState(showFooterState);
     const [sound, setSound] = useState<Audio.Sound>();
+    const insets = useSafeAreaInsets();
 
     async function playSound(name: string): Promise<void> {
         console.log('Playing sound:', name);
@@ -246,21 +248,16 @@ export const TabataTimerScreen = (): JSX.Element => {
     };
 
     return (
-        <Flex backgroundColor="gray9" flex={1}>
-            {/* <IconButton
-                icon={<Icon as={Ionicons} name="arrow-back" />}
-                left={0}
-                position="absolute"
-                top={0}
-                onPress={(): void => {
-                    navigation.reset({
-                        index: 0,
-                        routes: [{ name: 'ShuffleScreen' }],
-                    });
-                    navigation.navigate('ShuffleScreen');
-                }}
-            /> */}
-            {/* Alighn this to the top of the screen */}
+        <Flex
+            backgroundColor="gray9"
+            flex={1}
+            style={{
+                flex: 1,
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingTop: insets.top,
+            }}
+        >
             <Flex align="center" backgroundColor="gray9" direction="row" justify="space-between" mb="4" pl={4} pr={4} w="100%">
                 <VStack alignItems="center" space={2}>
                     <Text color="gray3" fontSize="lg">Exercises</Text>
@@ -304,9 +301,18 @@ export const TabataTimerScreen = (): JSX.Element => {
                     {currentExercise ? currentExercise.name.toUpperCase() : currentInterval.toUpperCase()}
                 </Text>
             </Flex>
-            {/* Aligh this to the bottom of the screen */}
             <Box bg="gray8" p="4" width="100%">
                 <Flex alignItems="center" direction="row" justify="space-between">
+                    {/* Todo: Fix formatting here. Perhpas Center the play button and skip button in the middle. and only show cancel button on left when paused */}
+                    {!isActive && (
+                        <Button
+                            colorScheme="secondary"
+                            variant="ghost"
+                            onPress={(): void => navigation.goBack()}
+                        >
+                            Cancel
+                        </Button>
+                    )}
                     <IconButton
                         borderColor="coolGray.300"
                         borderRadius="full"

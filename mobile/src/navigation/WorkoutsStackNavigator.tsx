@@ -48,7 +48,7 @@ export const WorkoutsStackNavigator = (): JSX.Element => (
             component={TabataTimerScreen}
             name="TabataTimerScreen"
             options={{
-                headerTitle: 'Tabata Timer',
+                headerShown: false,
             }}
         />
         <Stack.Screen
