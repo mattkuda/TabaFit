@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import {
     VStack, Center,
+    Spinner,
 } from 'native-base';
 import { useQueryNotifications } from '../../hooks/useQueryNotifications';
 import { NotificationCard } from './NotificationCard';
@@ -38,15 +39,20 @@ export const NotificationsScreen = (): JSX.Element => {
     if (isLoading) return <Center>Loading...</Center>;
     if (isError || !notifications) return <Center>Error loading notifications</Center>;
 
-    return (
-        <VStack backgroundColor="gray9" flex={1}>
-            <RefreshableScrollView onRefresh={onRefresh}>
-                <VStack flex={1} p={2} space={2}>
-                    {notifications.map((notification) => (
-                        <NotificationCard key={notification._id.toString()} notification={notification} />
-                    ))}
-                </VStack>
-            </RefreshableScrollView>
-        </VStack>
-    );
+    return isLoading
+        ? (
+            <VStack backgroundColor="gray9" flex={1} space={4} width="100%">
+                <Spinner color="white" mt={8} size="lg" />
+            </VStack>
+        ) : (
+            <VStack backgroundColor="gray9" flex={1}>
+                <RefreshableScrollView onRefresh={onRefresh}>
+                    <VStack flex={1} p={2} space={2}>
+                        {notifications.map((notification) => (
+                            <NotificationCard key={notification._id.toString()} notification={notification} />
+                        ))}
+                    </VStack>
+                </RefreshableScrollView>
+            </VStack>
+        );
 };

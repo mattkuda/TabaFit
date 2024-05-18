@@ -33,6 +33,7 @@ export const ProfilePage = (): JSX.Element => {
         hasNextPage,
         fetchNextPage,
         refetch,
+        isLoading,
     } = useInfiniteQueryUserPosts(userId);
     const [refreshing, setRefreshing] = useState(false);
 
@@ -115,7 +116,7 @@ export const ProfilePage = (): JSX.Element => {
                         <Text>
                             <Text bold fontSize="lg">{formatName(userInfo.firstName, userInfo.lastName)}</Text>
                             {'  '}
-                            <Text color="coolGray.600" fontSize="lg">
+                            <Text color="coolGray.400" fontSize="lg">
                                 {`@${userInfo.username}`}
                             </Text>
                         </Text>
@@ -160,7 +161,7 @@ export const ProfilePage = (): JSX.Element => {
     ), [userInfo, handlePressFollowers, isCurrentUserProfile,
         navigateToEditProfile, userId, handleLogout]);
 
-    return data && data.pages.length === 0 ? (
+    return isLoading ? (
         <VStack backgroundColor="gray9" flex={1} space={4} width="100%">
             {renderProfileHeader}
             <Spinner color="white" mt={8} size="lg" />

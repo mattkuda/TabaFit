@@ -53,9 +53,13 @@ export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
             >
                 <HStack justifyContent="space-between" space={2}>
                     <ProfilePicture size="48px" user={post.user} />
-                    <VStack flex={1}>
-                        <Text fontSize="sm" onPress={userFound && handlePressUser}>
-                            {userFound ? `${formatName(post.user.firstName, post.user.lastName)} @${post.user.username}` : 'Unknown User'}
+                    <VStack flex={1} justifyContent="flex-start">
+                        <Text onPress={userFound && handlePressUser}>
+                            <Text bold fontSize="md">{userFound ? `${formatName(post.user.firstName, post.user.lastName)}` : 'Unknown User'}</Text>
+                            {'  '}
+                            <Text color="coolGray.400" fontSize="md">
+                                {`@${post.user.username}`}
+                            </Text>
                         </Text>
                         <Text color="white" fontSize="xs">
                             {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
