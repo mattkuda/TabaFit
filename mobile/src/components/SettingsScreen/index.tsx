@@ -1,12 +1,16 @@
 import {
-    Modal, VStack, Button,
+    Modal, VStack, Button, Text,
+    Icon,
+    HStack,
+    useTheme,
 } from 'native-base';
 import React, { useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 // eslint-disable-next-line import/no-unresolved
 import { ProfileStackParamList } from 'src/navigation/navigationTypes';
 import { RouteProp } from '@react-navigation/native';
-import { Linking } from 'react-native';
+import { Linking, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useMutateDeleteAccount } from '../../mutations/profileMutations';
 import { useAuth } from '../../context/AuthContext';
 
@@ -24,6 +28,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
     const deleteAccountMutation = useMutateDeleteAccount();
     const [showModal, setShowModal] = useState(false);
     const { onLogout, authState: { userId } } = useAuth();
+    const { colors } = useTheme();
 
     const handleLogout = async (): Promise<void> => {
         try {
@@ -41,6 +46,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
         setShowModal(false);
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const handleEditProfile = (): void => {
         navigation.navigate('EditProfile', { user });
     };
@@ -51,12 +57,67 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
     };
 
     return (
-        <VStack bgColor="gray9" height="100%" justifyContent="flex-end" style={{ padding: 20, gap: 8 }}>
-            <Button color="flame" variant="ghost" onPress={handleEditProfile}>Edit Profile</Button>
-            <Button color="flame" variant="ghost" onPress={(): void => console.log('Todo')}>About</Button>
-            <Button color="flame" variant="ghost" onPress={handleSubmitFeedback}>Submit Feedback</Button>
-            <Button color="flame" variant="ghost" onPress={handleLogout}>Logout</Button>
-            <Button disabled colorScheme="danger" variant="ghost" onPress={(): void => setShowModal(true)}>Delete Account</Button>
+        <VStack bgColor="gray9" height="100%" justifyContent="flex-start" style={{ padding: 20, gap: 8 }}>
+            {/* Disbale for now. Consider keeping here vs on main profile page.  */}
+            {/* <TouchableOpacity
+                style={{
+                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                }}
+                onPress={handleEditProfile}
+            >
+                <Ionicons color="flame" name="person" size={24} />
+                <Text color="flame" textAlign="left">Edit Profile</Text>
+                <Icon as={Ionicons} color="flame" name="chevron-forward" />
+            </TouchableOpacity> */}
+            <TouchableOpacity
+                style={{
+                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                }}
+                onPress={(): void => console.log('Todo')}
+            >
+                <HStack space="2">
+                    {/* eslint-disable-next-line dot-notation */}
+                    <Ionicons color={colors['flame']} name="information-circle" size={24} />
+                    <Text color="flame" textAlign="left">About</Text>
+                </HStack>
+                <Icon as={Ionicons} color="flame" name="chevron-forward" />
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={{
+                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                }}
+                onPress={handleSubmitFeedback}
+            >
+                <HStack space="2">
+                    {/* eslint-disable-next-line dot-notation */}
+                    <Ionicons color={colors['flame']} name="chatbox-ellipses" size={24} />
+                    <Text color="flame" textAlign="left">Submit Feedback</Text>
+                </HStack>
+                <Icon as={Ionicons} color="flame" name="chevron-forward" />
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={{
+                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                }}
+                onPress={handleLogout}
+            >
+                <HStack space="2">
+                    {/* eslint-disable-next-line dot-notation */}
+                    <Ionicons color={colors['flame']} name="log-out" size={24} />
+                    <Text color="flame" textAlign="left">Logout</Text>
+                </HStack>
+                <Icon as={Ionicons} color="flame" name="chevron-forward" />
+            </TouchableOpacity>
+            {/* <TouchableOpacity
+                disabled
+                style={{
+                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                }}
+                onPress={(): void => setShowModal(true)}
+            >
+                <Text color="flame" textAlign="left">Delete Account</Text>
+                <Icon as={Ionicons} color="flame" name="chevron-forward" />
+            </TouchableOpacity> */}
             <Modal isOpen={showModal}>
                 <Modal.Content>
                     <Modal.CloseButton />
