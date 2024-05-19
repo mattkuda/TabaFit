@@ -77,16 +77,16 @@ export const WorkoutsScreen = (): JSX.Element => {
     };
 
     return (
-        <VStack backgroundColor="gray9" flex={1}>
+        <VStack backgroundColor="gray.900" flex={1}>
             <RefreshableScrollView onRefresh={refetchData}>
-                <VStack backgroundColor="gray9" flex={1} p={4} space={2}>
+                <VStack backgroundColor="gray.900" flex={1} p={4} space={2}>
                     <TouchableOpacity onPress={handlePressQuickShuffle}>
-                        {/* Build Workout Row */}
+                        {/* Quick Shuffle Row */}
                         <Box
                             alignItems="center"
                             bg={{
                                 linearGradient: {
-                                    colors: ['orange.400', 'orange.600'],
+                                    colors: ['cherry.500', 'cherry.600'],
                                     start: [0, 1],
                                     end: [1, 0],
                                 },
@@ -101,12 +101,15 @@ export const WorkoutsScreen = (): JSX.Element => {
                                 <VStack alignItems="flex-start">
                                     <HStack alignItems="center">
                                         <Icon as={Ionicons} color="white" mr={2} name="shuffle" size="xl" />
-                                        <Heading color="warmGray.50" p={0} size="lg" textAlign="left">
+                                        <Heading color="gray.50" p={0} size="lg" textAlign="left">
                                             Quick Shuffle
                                         </Heading>
                                     </HStack>
-                                    <Text color="warmGray.50" mt={2} textAlign="left">
-                                        Quickly generate a workout with custom settings
+                                    <Text color="gray.50" mt={2} textAlign="left">
+                                        Auto-generate your workout!
+                                    </Text>
+                                    <Text color="gray.50" textAlign="left">
+                                        Choose your length, body focus, and more.
                                     </Text>
                                 </VStack>
                             </HStack>
@@ -119,7 +122,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                             alignItems="center"
                             bg={{
                                 linearGradient: {
-                                    colors: ['blue.400', 'blue.600'],
+                                    colors: ['flame.500', 'flame.600'],
                                     start: [0, 1],
                                     end: [1, 0],
                                 },
@@ -133,11 +136,11 @@ export const WorkoutsScreen = (): JSX.Element => {
                                 <VStack alignItems="flex-start">
                                     <HStack alignItems="center">
                                         <Icon as={Ionicons} color="white" mr={2} name="barbell-outline" size="xl" />
-                                        <Heading color="warmGray.50" p={0} size="lg" textAlign="left">
+                                        <Heading p={0} size="lg" textAlign="left">
                                             Build Workout
                                         </Heading>
                                     </HStack>
-                                    <Text color="warmGray.50" mt={2} textAlign="left">
+                                    <Text color="gray.50" mt={2} textAlign="left">
                                         Create a custom workout with your own settings. Complete now or save for later.
                                     </Text>
                                 </VStack>

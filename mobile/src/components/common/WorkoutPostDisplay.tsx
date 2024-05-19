@@ -35,7 +35,7 @@ export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
                         end: [1, 0],
                     },
                 }}
-                borderColor="flame"
+                borderColor="primary"
                 borderRadius="md"
                 borderWidth={1}
                 mt={2}

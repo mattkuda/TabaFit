@@ -65,9 +65,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
                 }}
                 onPress={handleEditProfile}
             >
-                <Ionicons color="flame" name="person" size={24} />
-                <Text color="flame" textAlign="left">Edit Profile</Text>
-                <Icon as={Ionicons} color="flame" name="chevron-forward" />
+                <Ionicons color="primary" name="person" size={24} />
+                <Text color="primary" textAlign="left">Edit Profile</Text>
+                <Icon as={Ionicons} color="primary" name="chevron-forward" />
             </TouchableOpacity> */}
             <TouchableOpacity
                 style={{
@@ -77,10 +77,10 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
             >
                 <HStack space="2">
                     {/* eslint-disable-next-line dot-notation */}
-                    <Ionicons color={colors['flame']} name="information-circle" size={24} />
-                    <Text color="flame" textAlign="left">About</Text>
+                    <Ionicons color={colors['primary']} name="information-circle" size={24} />
+                    <Text color="primary" textAlign="left">About</Text>
                 </HStack>
-                <Icon as={Ionicons} color="flame" name="chevron-forward" />
+                <Icon as={Ionicons} color="primary" name="chevron-forward" />
             </TouchableOpacity>
             <TouchableOpacity
                 style={{
@@ -90,10 +90,10 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
             >
                 <HStack space="2">
                     {/* eslint-disable-next-line dot-notation */}
-                    <Ionicons color={colors['flame']} name="chatbox-ellipses" size={24} />
-                    <Text color="flame" textAlign="left">Submit Feedback</Text>
+                    <Ionicons color={colors['primary']} name="chatbox-ellipses" size={24} />
+                    <Text color="primary" textAlign="left">Submit Feedback</Text>
                 </HStack>
-                <Icon as={Ionicons} color="flame" name="chevron-forward" />
+                <Icon as={Ionicons} color="primary" name="chevron-forward" />
             </TouchableOpacity>
             <TouchableOpacity
                 style={{
@@ -103,10 +103,10 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
             >
                 <HStack space="2">
                     {/* eslint-disable-next-line dot-notation */}
-                    <Ionicons color={colors['flame']} name="log-out" size={24} />
-                    <Text color="flame" textAlign="left">Logout</Text>
+                    <Ionicons color={colors['primary']} name="log-out" size={24} />
+                    <Text color="primary" textAlign="left">Logout</Text>
                 </HStack>
-                <Icon as={Ionicons} color="flame" name="chevron-forward" />
+                <Icon as={Ionicons} color="primary" name="chevron-forward" />
             </TouchableOpacity>
             {/* <TouchableOpacity
                 disabled
@@ -115,8 +115,8 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
                 }}
                 onPress={(): void => setShowModal(true)}
             >
-                <Text color="flame" textAlign="left">Delete Account</Text>
-                <Icon as={Ionicons} color="flame" name="chevron-forward" />
+                <Text color="primary" textAlign="left">Delete Account</Text>
+                <Icon as={Ionicons} color="primary" name="chevron-forward" />
             </TouchableOpacity> */}
             <Modal isOpen={showModal}>
                 <Modal.Content>

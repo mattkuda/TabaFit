@@ -4,9 +4,33 @@ import { extendTheme, theme as baseTheme } from 'native-base';
 
 export const theme = extendTheme({
     colors: {
-        primary: baseTheme.colors.blue,
-        flame: '#ff9f27',
-        cherry: '#ff2760',
+        // primary: baseTheme.colors.blue,
+        primary: '#ff9f27',
+        // To make tints, use https://maketintsandshades.com/#ff2760
+        // black: '#121212'
+        flame: {
+            100: '#ffecd4',
+            200: '#ffd9a9',
+            300: '#ffc57d',
+            400: '#ffb252',
+            500: '#ff9f27',
+            600: '#cc7f1f',
+            700: '#995f17',
+            800: '#664010',
+            900: '#332008',
+        },
+        // cherry: '#ff2760',
+        cherry: {
+            100: '#ffd4df',
+            200: '#ffa9bf',
+            300: '#ff7da0',
+            400: '#ff5280',
+            500: '#ff2760',
+            600: '#cc1f4d',
+            700: '#99173a',
+            800: '#661026',
+            900: '#330813',
+        },
         blue: {
             100: '#E6F0FF',
             200: '#CCE1FF',
@@ -18,6 +42,19 @@ export const theme = extendTheme({
             800: '#003D99',
             900: '#002966',
         },
+        // gray: {
+        //     100: '#e6e6e5',
+        //     200: '#cecdcc',
+        //     300: '#b6b4b3',
+        //     400: '#9e9d9b',
+        //     500: '#878683',
+        //     600: '#716f6c',
+        //     700: '#5c5a56',
+        //     800: '#474541',
+        //     900: '#34312d',
+        //     1000: '#211f1b',
+        // },
+
         gray10: baseTheme.colors.gray[1000],
         gray9: baseTheme.colors.gray[900],
         gray8: baseTheme.colors.gray[800],
@@ -27,9 +64,6 @@ export const theme = extendTheme({
         gray4: baseTheme.colors.gray[400],
         gray3: baseTheme.colors.gray[300],
         gray2: baseTheme.colors.gray[200],
-        gray1: baseTheme.colors.gray[200],
-        white: baseTheme.colors.white,
-
     },
     // fontConfig: {
     //     YourCustomFontName: {
@@ -84,14 +118,14 @@ export const theme = extendTheme({
         },
         Button: {
             defaultProps: {
-                color: 'flame',
+                color: 'primary',
             },
             variants: {
                 // eslint-disable-next-line consistent-return
                 solid: ({ colorScheme }): any => {
                     if (colorScheme === 'primary') {
                         return {
-                            bg: 'flame',
+                            bg: 'primary',
                             _text: {
                                 color: 'white',
                             },
@@ -101,7 +135,7 @@ export const theme = extendTheme({
                         return {
                             bg: 'white',
                             _text: {
-                                color: 'flame',
+                                color: 'primary',
                             },
                         };
                     }
@@ -110,9 +144,9 @@ export const theme = extendTheme({
                 outline: ({ colorScheme }): any => {
                     if (colorScheme === 'primary') {
                         return {
-                            borderColor: 'flame',
+                            borderColor: 'primary',
                             _text: {
-                                color: 'flame',
+                                color: 'primary',
                             },
 
                         };
@@ -133,7 +167,7 @@ export const theme = extendTheme({
                     if (colorScheme === 'primary') {
                         return {
                             _text: {
-                                color: 'flame',
+                                color: 'primary',
                             },
                         };
                     }

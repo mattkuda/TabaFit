@@ -125,7 +125,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                         <Text bold flex={1} fontSize="xl">{workout.name}</Text>
                         <Button
                             disabled={saveSuccess}
-                            rightIcon={isInMyWorkouts ? <Icon as={Ionicons} color="flame" name="pencil" /> : <Icon as={Ionicons} color={saveSuccess ? 'green.500' : 'white'} name="arrow-down-circle" />}
+                            rightIcon={isInMyWorkouts ? <Icon as={Ionicons} color="primary" name="pencil" /> : <Icon as={Ionicons} color={saveSuccess ? 'green.500' : 'white'} name="arrow-down-circle" />}
                             variant="ghost"
                             onPress={isInMyWorkouts ? handleEditWorkout : handleSaveOrUpdateWorkout}
                         >
@@ -161,7 +161,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                         {`Created on ${formattedDate}`}
                     </Text> */}
                     {workout.tabatas.map((circuit: TabataCircuit, index: number) => (
-                        <VStack borderColor="coolGray.200" borderRadius="md" borderWidth={1} key={index} mt={2} p={4} space={2}>
+                        <VStack borderColor="gray.200" borderRadius="md" borderWidth={1} key={index} mt={2} p={4} space={2}>
                             <Text bold fontSize="md">
                                 Tabata
                                 {' '}
@@ -181,7 +181,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                     alignItems="center"
                     bg={{
                         linearGradient: {
-                            colors: ['flame', 'cherry'],
+                            colors: ['primary', 'cherry'],
                             start: [0, 1],
                             end: [1, 0],
                         },

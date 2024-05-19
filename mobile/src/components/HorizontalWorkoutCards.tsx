@@ -18,13 +18,12 @@ const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress })
         <Box
             bg={{
                 linearGradient: {
-                    colors: ['gray6', 'gray7'],
+                    colors: ['gray.500', 'gray.600'],
                     start: [0, 1],
                     end: [1, 0],
                 },
             }}
             borderColor="flame"
-            borderWidth={1}
             height={150}
             justifyContent="space-between"
             p="4"
@@ -86,8 +85,8 @@ export const HorizontalWorkoutCards: React.FC<HorizontalWorkoutCardsProps> = ({
                 contentContainerStyle={{ paddingLeft: 0, paddingRight: 8 }}
                 showsHorizontalScrollIndicator={false}
             >
-                <Skeleton endColor="coolGray.400" h="150" rounded="md" startColor="coolGray.200" w="200" />
-                <Skeleton endColor="coolGray.400" h="150" ml="8" rounded="md" startColor="coolGray.200" w="200" />
+                <Skeleton endColor="gray.400" h="150" rounded="md" startColor="gray.200" w="200" />
+                <Skeleton endColor="gray.400" h="150" ml="8" rounded="md" startColor="gray.200" w="200" />
             </ScrollView>
         );
     }

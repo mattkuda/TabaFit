@@ -41,7 +41,7 @@ const TabataItem = ({
     removeTabata,
     updateExercisesOrder,
 }: TabataItemProps): JSX.Element => (
-    <VStack bg="gray8" borderColor="flame" borderRadius="md" borderWidth={1} mb={4} mt={4} space={4}>
+    <VStack bg="gray8" borderColor="primary" borderRadius="md" borderWidth={1} mb={4} mt={4} space={4}>
         <HStack alignItems="center" justifyContent="space-between">
             <IconButton
                 icon={<Icon as={Ionicons} color="white" name="arrow-up" size="6" />}
@@ -325,7 +325,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                     <Button
                         borderRadius="full"
                         justifyContent="center"
-                        leftIcon={<Icon as={Ionicons} color="flame" name="shuffle" />}
+                        leftIcon={<Icon as={Ionicons} color="primary" name="shuffle" />}
                         variant="outline"
                         width="180"
                         onPress={(): void => triggerShuffle()}
@@ -333,10 +333,10 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                         Re-Shuffle
                     </Button>
                     <IconButton
-                        borderColor="flame"
+                        borderColor="primary"
                         borderRadius="full"
                         borderWidth="1"
-                        icon={<Icon as={Ionicons} color="flame" name="settings" />}
+                        icon={<Icon as={Ionicons} color="primary" name="settings" />}
                         onPress={(): void => setShowSettingsModal(true)}
                     />
                 </HStack>
@@ -406,7 +406,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                             <HStack width="100%">
                                 <HStack flex={1}>
                                     <Checkbox
-                                        bgColor={modalWorkout.equipment.useKettlebell ? 'flame' : 'gray9'}
+                                        bgColor={modalWorkout.equipment.useKettlebell ? 'primary' : 'gray9'}
                                         isChecked={modalWorkout.equipment.useKettlebell}
                                         key="Kettlebell-checkbox"
                                         mb="2"
@@ -419,7 +419,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                 </HStack>
                                 <HStack flex={1}>
                                     <Checkbox
-                                        bgColor={modalWorkout.equipment.useDumbells ? 'flame' : 'gray9'}
+                                        bgColor={modalWorkout.equipment.useDumbells ? 'primary' : 'gray9'}
                                         isChecked={modalWorkout.equipment.useDumbells}
                                         key="Dumbells-checkbox"
                                         mb="2"
@@ -434,7 +434,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                             <HStack width="100%">
                                 <HStack flex={1}>
                                     <Checkbox
-                                        bgColor={modalWorkout.equipment.useHangingBar ? 'flame' : 'gray9'}
+                                        bgColor={modalWorkout.equipment.useHangingBar ? 'primary' : 'gray9'}
                                         isChecked={modalWorkout.equipment.useHangingBar}
                                         key="HangingBar-checkbox"
                                         mb="2"
@@ -447,7 +447,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                 </HStack>
                                 <HStack flex={1}>
                                     <Checkbox
-                                        bgColor={modalWorkout.equipment.useYogaBall ? 'flame' : 'gray9'}
+                                        bgColor={modalWorkout.equipment.useYogaBall ? 'primary' : 'gray9'}
                                         isChecked={modalWorkout.equipment.useYogaBall}
                                         key="YogaBall-checkbox"
                                         mb="2"
@@ -462,7 +462,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                             <HStack width="100%">
                                 <HStack flex={1}>
                                     <Checkbox
-                                        bgColor={modalWorkout.equipment.useWorkoutBand ? 'flame' : 'gray9'}
+                                        bgColor={modalWorkout.equipment.useWorkoutBand ? 'primary' : 'gray9'}
                                         isChecked={modalWorkout.equipment.useWorkoutBand}
                                         key="WorkoutBand-checkbox"
                                         mb="2"
@@ -475,7 +475,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                 </HStack>
                                 <HStack flex={1}>
                                     <Checkbox
-                                        bgColor={modalWorkout.equipment.useBoxPlatform ? 'flame' : 'gray9'}
+                                        bgColor={modalWorkout.equipment.useBoxPlatform ? 'primary' : 'gray9'}
                                         isChecked={modalWorkout.equipment.useBoxPlatform}
                                         key="BoxPlatform-checkbox"
                                         mb="2"

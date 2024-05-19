@@ -13,7 +13,7 @@ export const Searchbutton = (): JSX.Element => {
     return (
         <IconButton
             _icon={{
-                color: 'flame',
+                color: 'primary',
             }}
             borderRadius="full"
             icon={<Icon as={Ionicons} name="search" size="md" />}

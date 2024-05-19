@@ -21,7 +21,7 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({ notification
                     <ProfilePicture size="48px" user={notification?.initiatorUserInfo} />
                     <VStack flex={1}>
                         <Text bold ellipsizeMode="tail" fontSize="sm" numberOfLines={2}>{notification.summaryText}</Text>
-                        <Text color="coolGray.600" fontSize="xs">
+                        <Text color="gray.600" fontSize="xs">
                             {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
                         </Text>
                     </VStack>

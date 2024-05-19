@@ -1,5 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import { Button } from 'native-base';
+import { Button, useTheme } from 'native-base';
 import { useSetRecoilState } from 'recoil';
 import { WelcomeScreen } from '../components/WelcomeScreen';
 import { SuggestedFollowsScreen } from '../components/SuggestedFollowsScreen';
@@ -27,35 +27,42 @@ const SkipButton = (): JSX.Element => {
     );
 };
 
-export const SignUpWizardStackNavigator = (): JSX.Element => (
-    <SignUpWizardStack.Navigator
-        screenOptions={{
-            headerStyle: {
-                backgroundColor: 'black',
-            },
-            headerTintColor: 'white',
-        }}
-    >
-        <SignUpWizardStack.Screen
-            component={WelcomeScreen}
-            name="WelcomeScreen"
-            options={{
-                headerRight: SkipButton,
+export const SignUpWizardStackNavigator = (): JSX.Element => {
+    const { colors } = useTheme();
+
+    return (
+        <SignUpWizardStack.Navigator
+            screenOptions={{
+                headerTitle: 'TabaFit',
+
+                headerStyle: {
+                    backgroundColor: colors.gray[900],
+                },
+                headerTintColor: 'white',
+                headerShadowVisible: false,
             }}
-        />
-        <SignUpWizardStack.Screen
-            component={SuggestedFollowsScreen}
-            name="SuggestedFollowsScreen"
-            options={{
-                headerRight: SkipButton,
-            }}
-        />
-        <SignUpWizardStack.Screen
-            component={SuggestedWorkoutsScreen}
-            name="SuggestedWorkoutsScreen"
-            options={{
-                headerRight: SkipButton,
-            }}
-        />
-    </SignUpWizardStack.Navigator>
-);
+        >
+            <SignUpWizardStack.Screen
+                component={WelcomeScreen}
+                name="WelcomeScreen"
+                options={{
+                    headerRight: SkipButton,
+                }}
+            />
+            <SignUpWizardStack.Screen
+                component={SuggestedFollowsScreen}
+                name="SuggestedFollowsScreen"
+                options={{
+                    headerRight: SkipButton,
+                }}
+            />
+            <SignUpWizardStack.Screen
+                component={SuggestedWorkoutsScreen}
+                name="SuggestedWorkoutsScreen"
+                options={{
+                    headerRight: SkipButton,
+                }}
+            />
+        </SignUpWizardStack.Navigator>
+    );
+};

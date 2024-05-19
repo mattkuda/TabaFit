@@ -32,7 +32,7 @@ export const AuthPage = (): JSX.Element => {
                         alignSelf: 'flex-start',
                     }}
                 />
-                <Text color="flame" fontSize="2xl">
+                <Text color="primary" fontSize="2xl">
                     TabaFit
                 </Text>
                 <Text fontSize="4xl" fontWeight="bold">
@@ -49,7 +49,7 @@ export const AuthPage = (): JSX.Element => {
                     bottom={8}
                 >
                     <Button
-                        borderColor="flame"
+                        borderColor="primary"
                         borderLeftRadius="full"
                         borderWidth={2}
                         flex={1}
@@ -62,7 +62,7 @@ export const AuthPage = (): JSX.Element => {
                         </Text>
                     </Button>
                     <Button
-                        borderColor="flame"
+                        borderColor="primary"
                         borderRightRadius="full"
                         borderWidth={2}
                         flex={1}

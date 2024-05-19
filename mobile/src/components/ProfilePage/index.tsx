@@ -83,11 +83,11 @@ export const ProfilePage = (): JSX.Element => {
                 headerRight: (): JSX.Element => (
                     <IconButton
                         _icon={{
-                            color: 'flame',
+                            color: 'primary',
                             size: 'md',
                         }}
                         borderRadius="full"
-                        color="flame"
+                        color="primary"
                         icon={<Icon as={Ionicons} name="settings-outline" />}
                         onPress={(): void => navigation.navigate('SettingsScreen', { user: userInfo })}
                     />
@@ -105,9 +105,9 @@ export const ProfilePage = (): JSX.Element => {
     const renderProfileHeader = React.useMemo(() => (
         <>
             {userInfo && (
-                <HStack alignItems="center" backgroundColor="gray9" p={4} px={4} space={4} width="100%">
+                <HStack alignItems="center" backgroundColor="gray9" p={4} pb={0} px={4} space={4} width="100%">
                     <ProfilePicture
-                        borderColor="flame"
+                        borderColor="primary"
                         borderWidth={2}
                         size="xl"
                         user={userInfo}
@@ -116,7 +116,7 @@ export const ProfilePage = (): JSX.Element => {
                         <Text>
                             <Text bold fontSize="lg">{formatName(userInfo.firstName, userInfo.lastName)}</Text>
                             {'  '}
-                            <Text color="coolGray.400" fontSize="lg">
+                            <Text color="gray.400" fontSize="lg">
                                 {`@${userInfo.username}`}
                             </Text>
                         </Text>
@@ -134,11 +134,11 @@ export const ProfilePage = (): JSX.Element => {
                     </VStack>
                 </HStack>
             )}
-            <HStack alignItems="center" px={4} space={4} width="100%">
+            <HStack alignItems="center" backgroundColor="gray9" justifyContent="flex-end" pb={2} px={4} space={4} width="100%">
                 {isCurrentUserProfile ? (
                     <Button
-                        color="flame"
-                        leftIcon={<Icon as={<Ionicons name="pencil" />} color="flame" size="sm" />}
+                        color="primary"
+                        leftIcon={<Icon as={<Ionicons name="pencil" />} color="primary" size="sm" />}
                         size="sm"
                         variant="outline"
                         onPress={navigateToEditProfile}
@@ -149,7 +149,7 @@ export const ProfilePage = (): JSX.Element => {
                     <FollowButton profileUserId={userId} />
                 )}
                 <Button
-                    color="flame"
+                    color="primary"
                     size="sm"
                     variant="outline"
                     onPress={handleLogout}
@@ -161,33 +161,38 @@ export const ProfilePage = (): JSX.Element => {
     ), [userInfo, handlePressFollowers, isCurrentUserProfile,
         navigateToEditProfile, userId, handleLogout]);
 
-    return isLoading ? (
-        <VStack backgroundColor="gray9" flex={1} space={4} width="100%">
-            {renderProfileHeader}
-            <Spinner color="white" mt={8} size="lg" />
-        </VStack>
-    ) : (
-        <VStack backgroundColor="gray9" flex={1} space={4} width="100%">
-            <FlatList
-                data={flatMap}
-                keyExtractor={(_, index): string => `post-${index}`}
-                ListHeaderComponent={renderProfileHeader}
-                refreshControl={(
-                    <RefreshControl
-                        colors={['#FFFFFF', '#FFFFFF']}
-                        refreshing={refreshing}
-                        tintColor="#FFFFFF"
-                        onRefresh={handleRefresh}
-                    />
+    return (
+        <VStack backgroundColor="gray3" flex={1} space={4} width="100%">
+            {isLoading ? (
+                <VStack backgroundColor="gray9" flex={1} space={4} width="100%">
+                    {renderProfileHeader}
+                    <Spinner color="white" mt={8} size="lg" />
+                </VStack>
+            ) : (
+                <VStack backgroundColor="black" flex={1} space={4} width="100%">
+                    <FlatList
+                        data={flatMap}
+                        keyExtractor={(_, index): string => `post-${index}`}
+                        ListHeaderComponent={renderProfileHeader}
+                        refreshControl={(
+                            <RefreshControl
+                                colors={['#FFFFFF', '#FFFFFF']}
+                                refreshing={refreshing}
+                                tintColor="#FFFFFF"
+                                onRefresh={handleRefresh}
+                            />
                   )}
-                renderItem={({ item }): JSX.Element => <PostCard post={item} />}
-                onEndReached={(): void => {
-                    if (hasNextPage) {
-                        fetchNextPage();
-                    }
-                }}
-                onEndReachedThreshold={0.1}
-            />
+                        renderItem={({ item }): JSX.Element => <PostCard post={item} />}
+                        onEndReached={(): void => {
+                            if (hasNextPage) {
+                                fetchNextPage();
+                            }
+                        }}
+                        onEndReachedThreshold={0.1}
+                    />
+                </VStack>
+            )}
+
         </VStack>
     );
 };

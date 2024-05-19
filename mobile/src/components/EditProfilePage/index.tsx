@@ -150,7 +150,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
             <HStack>
                 <TouchableOpacity onPress={handleProfilePictureUpdate}>
                     <ProfilePicture
-                        borderColor="flame"
+                        borderColor="primary"
                         borderWidth={2}
                         size="xl"
                         source={{

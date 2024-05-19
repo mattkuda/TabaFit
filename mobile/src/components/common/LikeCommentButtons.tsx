@@ -112,8 +112,8 @@ export const LikeCommentButtons = ({ post, handleCommentPress }: LikeCommentButt
     };
 
     return (
-        <VStack backgroundColor="gray9" borderColor="coolGray.200" flex={1}>
-            <HStack color="coolGray.500" fontSize="xs" justifyContent="space-between" mt={2}>
+        <VStack backgroundColor="gray9" borderColor="gray.200" flex={1}>
+            <HStack color="gray.500" fontSize="xs" justifyContent="space-between" mt={2}>
                 <Text>
                     {likeText()}
                 </Text>
@@ -124,7 +124,7 @@ export const LikeCommentButtons = ({ post, handleCommentPress }: LikeCommentButt
             <Divider backgroundColor="gray6" mt={2} />
             <HStack justifyContent="space-between" space={4}>
                 <Button
-                    colorScheme={liked ? 'red' : 'secondary'}
+                    colorScheme={liked ? 'cherry.500' : 'secondary'}
                     flex={1}
                     size="md"
                     startIcon={(
@@ -143,7 +143,7 @@ export const LikeCommentButtons = ({ post, handleCommentPress }: LikeCommentButt
                         >
                             <Icon
                                 as={AntDesign}
-                                color={liked ? 'red.500' : 'white'}
+                                color={liked ? 'cherry.500' : 'white'}
                                 name={liked ? 'like1' : 'like2'}
                                 size="md"
                             />

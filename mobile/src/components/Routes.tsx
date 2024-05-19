@@ -32,7 +32,7 @@ const ProfileTabIcon = ({ focused, color, size }): JSX.Element => {
     if (profilePictureUrl) {
         return (
             <ProfilePicture
-                borderColor={focused ? 'flame' : 'white'}
+                borderColor={focused ? 'primary' : 'white'}
                 borderWidth={1}
                 size="sm"
                 user={data}
@@ -66,9 +66,9 @@ export const Routes = (): JSX.Element => {
     }
 
     const tabBarStyle: ViewStyle = {
-        // paddingBottom: 0,
-        // height: 49,
-        backgroundColor: colors.gray[900], // Set the background color to gray[900]
+        backgroundColor: colors.gray[900],
+        borderTopWidth: 0,
+        borderTopColor: colors.gray[500],
     };
     const tabBarStyleNoFooter: ViewStyle = {
         ...tabBarStyle,
@@ -81,11 +81,9 @@ export const Routes = (): JSX.Element => {
                 initialRouteName="Home"
                 screenOptions={{
                     headerShown: false,
-                    tabBarStyle: { backgroundColor: colors.gray[900] },
+                    tabBarStyle: { backgroundColor: colors.gray[700] },
                     tabBarActiveTintColor: '#ff9f27',
                     tabBarInactiveTintColor: 'white',
-                    // tabBarPressColor: '#ff9f27',
-                    // tabBarIndicatorStyle: { backgroundColor: '#ff9f27' },
                 }}
             >
                 <Tab.Screen

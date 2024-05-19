@@ -314,7 +314,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                         </Button>
                     )}
                     <IconButton
-                        borderColor="coolGray.300"
+                        borderColor="gray.300"
                         borderRadius="full"
                         borderWidth="1"
                         icon={<Icon as={Ionicons} color="white" name={isActive ? 'pause' : 'play'} size="lg" />}
@@ -324,14 +324,14 @@ export const TabataTimerScreen = (): JSX.Element => {
                         {!isActive && (
                             <>
                                 <IconButton
-                                    borderColor="coolGray.300"
+                                    borderColor="gray.300"
                                     borderRadius="full"
                                     borderWidth="1"
                                     icon={<Icon as={Ionicons} color="white" name="play-skip-back" size="lg" />}
                                     onPress={reset}
                                 />
                                 <IconButton
-                                    borderColor="coolGray.300"
+                                    borderColor="gray.300"
                                     borderRadius="full"
                                     borderWidth="1"
                                     icon={<Icon as={Ionicons} color="white" name="play-skip-forward" size="lg" />}
@@ -340,7 +340,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                         )}
                         {isActive && (
                         <IconButton
-                            borderColor="coolGray.300"
+                            borderColor="gray.300"
                             borderRadius="full"
                             borderWidth="1"
                             icon={<Icon as={Ionicons} color="white" name="flag" size="lg" />}
@@ -349,7 +349,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                         )}
                     </HStack>
                     <IconButton
-                        borderColor="coolGray.300"
+                        borderColor="gray.300"
                         borderRadius="full"
                         borderWidth="1"
                         icon={<Icon as={Ionicons} color="white" name="refresh" size="lg" />}

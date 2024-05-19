@@ -44,14 +44,14 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
                     <Text bold fontSize="sm">
                         {`${user.firstName} ${user.lastName}`}
                     </Text>
-                    <Text color="coolGray.600" fontSize="xs">
+                    <Text color="gray.600" fontSize="xs">
                         {`@${user.username}`}
                     </Text>
                 </VStack>
                 <Button
                     colorScheme={isFollowed || isAllFollowed ? 'success' : 'primary'}
                     isDisabled={isFollowed || isAllFollowed}
-                    leftIcon={<Icon as={MaterialIcons} color={isFollowed ? 'green.500' : 'flame'} name={isFollowed || isAllFollowed ? 'check' : 'add'} size="sm" />}
+                    leftIcon={<Icon as={MaterialIcons} color={isFollowed ? 'green.500' : 'primary'} name={isFollowed || isAllFollowed ? 'check' : 'add'} size="sm" />}
                     variant="ghost"
                     onPress={handleFollow}
                 >
@@ -140,6 +140,7 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
                 <Button
                     borderRadius="full"
                     bottom={8}
+                    color={isAnyFollowed ? 'primary' : 'gray4'}
                     endIcon={(
                         <Icon as={Ionicons} name="chevron-forward" />
                     )}

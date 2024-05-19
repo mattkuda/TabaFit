@@ -42,9 +42,8 @@ export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
         >
             <VStack
                 backgroundColor="gray9"
-                borderColor="gray7"
                 borderRadius="md"
-                borderWidth={1}
+                // borderWidth={1}
                 mt={4}
                 pt={4}
                 px={4}
@@ -57,7 +56,7 @@ export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
                         <Text onPress={userFound && handlePressUser}>
                             <Text bold fontSize="md">{userFound ? `${formatName(post.user.firstName, post.user.lastName)}` : 'Unknown User'}</Text>
                             {'  '}
-                            <Text color="coolGray.400" fontSize="md">
+                            <Text color="gray.400" fontSize="md">
                                 {`@${post.user.username}`}
                             </Text>
                         </Text>

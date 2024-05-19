@@ -58,21 +58,21 @@ export const PostScreen = (): JSX.Element => {
     const userFound = post?.user?.username;
 
     return (
-        <VStack backgroundColor="gray9" borderColor="coolGray.200" flex={1} p={4} space={2}>
+        <VStack backgroundColor="gray9" borderColor="gray.200" flex={1} p={4} space={2}>
             <ScrollView>
                 <HStack justifyContent="space-between" space={2}>
-                    <ProfilePicture borderColor="flame" size="48px" user={post.user} />
+                    <ProfilePicture borderColor="primary" size="48px" user={post.user} />
                     <VStack flex={1}>
                         <HStack>
                             <Text bold fontSize="md" onPress={userFound && handlePressUser}>
                                 {userFound ? `${formatName(post.user.firstName, post.user.lastName)}` : 'Unknown User'}
                             </Text>
-                            <Text color="coolGray.300" fontSize="md">
+                            <Text color="gray.300" fontSize="md">
                                 {userFound ? ` @${post.user.username}` : ''}
                             </Text>
                         </HStack>
 
-                        <Text color="coolGray.300" fontSize="xs">
+                        <Text color="gray.300" fontSize="xs">
                             {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
                         </Text>
                     </VStack>
@@ -92,7 +92,7 @@ export const PostScreen = (): JSX.Element => {
                     borderColor="gray5"
                     InputRightElement={(
                         <Text
-                            color="flame"
+                            color="primary"
                             fontSize="sm"
                             fontWeight="bold"
                             mr={2}

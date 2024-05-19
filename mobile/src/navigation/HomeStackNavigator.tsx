@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { HStack } from 'native-base';
+import { HStack, useTheme } from 'native-base';
 import { PostScreen } from '../components/PostScreen';
 import { ProfilePage } from '../components/ProfilePage';
 import { HomePage } from '../components/HomePage';
@@ -27,80 +27,86 @@ const HeaderRightComponent = (): JSX.Element => (
     </HStack>
 );
 
-export const HomeStackNavigator = (): JSX.Element => (
-    <Stack.Navigator
-        initialRouteName="HomePage"
-        screenOptions={{
-            headerTitle: 'TabaFit',
-            headerStyle: {
-                backgroundColor: 'black',
-            },
-            headerTintColor: 'white',
-        }}
-    >
-        <Stack.Screen
-            component={HomePage}
-            name="HomePage"
-            options={{
-                headerTitle: 'Home',
-                headerLeft: SearchButtonComponent,
-                headerRight: HeaderRightComponent,
+export const HomeStackNavigator = (): JSX.Element => {
+    const { colors } = useTheme();
+
+    return (
+        <Stack.Navigator
+            initialRouteName="HomePage"
+            screenOptions={{
+                headerTitle: 'TabaFit',
+
+                headerStyle: {
+                    backgroundColor: colors.gray[900],
+                },
+                headerTintColor: 'white',
+                headerShadowVisible: false,
             }}
-        />
-        <Stack.Screen
-            component={SearchPage}
-            name="Search"
-            options={{
-                headerTitle: 'Search',
-            }}
-        />
-        <Stack.Screen
-            component={ProfilePage}
-            initialParams={{ userId: null }}
-            name="Profile"
-        />
-        <Stack.Screen
-            component={PostScreen}
-            name="PostScreen"
-            options={{
-                headerTitle: 'Post Details',
-            }}
-        />
-        <Stack.Screen
-            component={NotificationsScreen}
-            name="NotificationsScreen"
-            options={{
-                headerTitle: 'Notifications',
-            }}
-        />
-        <Stack.Screen
-            component={ViewWorkoutScreen}
-            name="ViewWorkoutScreen"
-            options={{
-                headerTitle: 'View Workout',
-            }}
-        />
-        <Stack.Screen
-            component={BuildWorkoutScreen}
-            name="BuildWorkoutScreen"
-            options={{
-                headerTitle: 'Build Workout',
-            }}
-        />
-        <Stack.Screen component={TabataTimerScreen} name="TabataTimerScreen" />
-        <Stack.Screen
-            component={ShareWorkoutScreen}
-            name="ShareWorkoutScreen"
-            options={{
-                headerTitle: 'Share Workout',
-            }}
-        />
-        <Stack.Screen
-            component={ConnectionsScreen}
-            name="ConnectionsScreen"
-            options={{
-                headerTitle: 'Connections',
-            }}
-        />
-    </Stack.Navigator>
-);
+        >
+            <Stack.Screen
+                component={HomePage}
+                name="HomePage"
+                options={{
+                    headerTitle: 'Home',
+                    headerLeft: SearchButtonComponent,
+                    headerRight: HeaderRightComponent,
+                }}
+            />
+            <Stack.Screen
+                component={SearchPage}
+                name="Search"
+                options={{
+                    headerTitle: 'Search',
+                }}
+            />
+            <Stack.Screen
+                component={ProfilePage}
+                initialParams={{ userId: null }}
+                name="Profile"
+            />
+            <Stack.Screen
+                component={PostScreen}
+                name="PostScreen"
+                options={{
+                    headerTitle: 'Post Details',
+                }}
+            />
+            <Stack.Screen
+                component={NotificationsScreen}
+                name="NotificationsScreen"
+                options={{
+                    headerTitle: 'Notifications',
+                }}
+            />
+            <Stack.Screen
+                component={ViewWorkoutScreen}
+                name="ViewWorkoutScreen"
+                options={{
+                    headerTitle: 'View Workout',
+                }}
+            />
+            <Stack.Screen
+                component={BuildWorkoutScreen}
+                name="BuildWorkoutScreen"
+                options={{
+                    headerTitle: 'Build Workout',
+                }}
+            />
+            <Stack.Screen component={TabataTimerScreen} name="TabataTimerScreen" />
+            <Stack.Screen
+                component={ShareWorkoutScreen}
+                name="ShareWorkoutScreen"
+                options={{
+                    headerTitle: 'Share Workout',
+                }}
+            />
+            <Stack.Screen
+                component={ConnectionsScreen}
+                name="ConnectionsScreen"
+                options={{
+                    headerTitle: 'Connections',
+                }}
+            />
+        </Stack.Navigator>
+    );
+};

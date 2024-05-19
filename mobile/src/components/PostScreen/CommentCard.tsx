@@ -43,7 +43,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment, onDeleteComme
                     >
                         {comment.user ? `${comment.user.firstName} ${comment.user.lastName}` : 'Unknown User'}
                     </Text>
-                    <Text color="coolGray.600" fontSize="xs">
+                    <Text color="gray.600" fontSize="xs">
                         {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
                     </Text>
                 </VStack>
