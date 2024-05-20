@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQueryClient } from 'react-query';
+import { Animated, TouchableOpacity } from 'react-native';
 import { WorkoutsStackParamList } from '../../navigation/navigationTypes';
 import { useMutateSaveWorkout, useMutateUpdateWorkout } from '../../mutations/useMutateSaveWorkout';
 import {
@@ -28,7 +29,7 @@ type TabataItemProps = {
     changeExercise: (tabataIndex: number, exerciseIndex: number) => void;
     moveTabataUp: (index: number) => void;
     moveTabataDown: (index: number) => void;
-    removeTabata: (index: number) => void;
+    removeTabata?: (index: number) => void;
     updateExercisesOrder: (tabataIndex: number, newExercisesOrder: TabataExercise[]) => void;
 };
 
@@ -41,7 +42,20 @@ const TabataItem = ({
     removeTabata,
     updateExercisesOrder,
 }: TabataItemProps): JSX.Element => (
-    <VStack bg="gray8" borderColor="primary" borderRadius="md" borderWidth={1} mb={4} mt={4} space={4}>
+    <VStack
+        bg={{
+            linearGradient: {
+                colors: ['gray.600', 'gray.700'],
+                start: [0, 1],
+                end: [1, 0],
+            },
+        }}
+        borderColor="primary"
+        borderRadius="md"
+        borderWidth={1}
+        mb={2}
+        mt={2}
+    >
         <HStack alignItems="center" justifyContent="space-between">
             <IconButton
                 icon={<Icon as={Ionicons} color="white" name="arrow-up" size="6" />}
@@ -57,7 +71,9 @@ const TabataItem = ({
                 onPress={(): void => moveTabataDown(circuitIndex)}
             />
             <IconButton
+                disabled={!removeTabata}
                 icon={<Icon as={Ionicons} color="red.600" name="close-circle" size="6" />}
+                opacity={removeTabata ? 1 : 0}
                 onPress={(): void => removeTabata(circuitIndex)}
             />
         </HStack>
@@ -79,7 +95,7 @@ const TabataItem = ({
                                             height: 24, width: 24, tintColor: 'white', paddingHorizontal: 2,
                                         }}
                                     />
-                                    <Text fontSize="md">{item.name}</Text>
+                                    <Text fontSize="md">{item?.name}</Text>
                                 </HStack>
                             </Pressable>
                             <IconButton icon={<Icon as={Ionicons} color="white" name="menu" />} onLongPress={drag} />
@@ -111,16 +127,40 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     const [modalWorkout, setModalWorkout] = useState<TabataWorkout>(workout);
     const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
 
-    const addTabata = (): void => {
-        setWorkout((currentWorkout) => ({
-            ...currentWorkout,
-            tabatas: [...workout.tabatas, emptyTabata],
-        }));
+    const hanldeAddTabata = (): void => {
+        if (isShuffle) {
+            const {
+                includeUpper, includeLower, includeAbs, includeCardio,
+            } = workout.includeSettings;
+            const selectedEquipment = workout.equipment;
+
+            const newlyShuffledTabata = shuffleExercises(
+                1,
+                selectedEquipment,
+                includeUpper,
+                includeLower,
+                includeAbs,
+                includeCardio,
+            );
+
+            setWorkout((prev) => ({
+                ...prev,
+                numberOfTabatas: workout.numberOfTabatas + 1,
+                tabatas: [...workout.tabatas, newlyShuffledTabata[0]],
+            }));
+        } else {
+            setWorkout((currentWorkout) => ({
+                ...currentWorkout,
+                numberOfTabatas: workout.numberOfTabatas + 1,
+                tabatas: [...workout.tabatas, emptyTabata],
+            }));
+        }
     };
 
     const removeTabata = (index: number): void => {
         setWorkout((currentWorkout) => ({
             ...currentWorkout,
+            numberOfTabatas: workout.numberOfTabatas - 1,
             tabatas: currentWorkout.tabatas.filter((_, i) => i !== index),
         }));
     };
@@ -145,7 +185,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         });
     };
 
-    const startWorkout = (): void => {
+    const handleStartWorkout = (): void => {
         navigation.navigate('TabataTimerScreen', { workout });
     };
 
@@ -312,12 +352,28 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         }));
     };
 
+    const scaleAnimation = new Animated.Value(1);
+
+    Animated.loop(
+        Animated.sequence([
+            Animated.timing(scaleAnimation, {
+                toValue: 1.4,
+                duration: 500,
+                useNativeDriver: true,
+            }),
+            Animated.timing(scaleAnimation, {
+                toValue: 1,
+                duration: 500,
+                useNativeDriver: true,
+            }),
+        ]),
+    ).start();
+
     return (
         <VStack
             backgroundColor="gray9"
             flex={1}
             space={0}
-            width="100%"
         >
             {isShuffle ? (
                 <HStack alignItems="center" justifyContent="space-between" pt={4} px={4} space={4} width="100%">
@@ -325,18 +381,17 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                     <Button
                         borderRadius="full"
                         justifyContent="center"
-                        leftIcon={<Icon as={Ionicons} color="primary" name="shuffle" />}
-                        variant="outline"
+                        leftIcon={<Icon as={Ionicons} name="shuffle" />}
                         width="180"
                         onPress={(): void => triggerShuffle()}
                     >
                         Re-Shuffle
                     </Button>
                     <IconButton
-                        borderColor="primary"
+                        bg="flame.500"
                         borderRadius="full"
                         borderWidth="1"
-                        icon={<Icon as={Ionicons} color="primary" name="settings" />}
+                        icon={<Icon as={Ionicons} color="white" name="settings" />}
                         onPress={(): void => setShowSettingsModal(true)}
                     />
                 </HStack>
@@ -349,48 +404,60 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                     onChangeText={handleChange}
                 />
             )}
-            <NestableScrollContainer style={{ margin: 2 }}>
+            <NestableScrollContainer
+                style={{ margin: 2 }}
+            >
                 {workout.tabatas.map((tabataCircuit, index) => (
                     <TabataItem
                         changeExercise={handleSelectExercise}
                         circuitIndex={index}
                         moveTabataDown={moveTabataDown}
                         moveTabataUp={moveTabataUp}
-                        removeTabata={removeTabata}
+                        removeTabata={workout.tabatas.length > 1 && removeTabata}
                         tabataCircuit={tabataCircuit}
                         updateExercisesOrder={updateExercisesOrder}
                     />
                 ))}
-            </NestableScrollContainer>
-            <Button
-                borderRadius="full"
-                bottom={4}
-                endIcon={(
-                    <Icon as={Ionicons} name="add" />
-                )}
-                position="absolute"
-                right={2}
-                onPress={addTabata}
-
-            >
-                Add Tabata
-            </Button>
-            <Box flex={1} px={4}>
                 <Button
+                    alignSelf="flex-end"
                     borderRadius="full"
-                    bottom={0}
                     endIcon={(
-                        <Icon as={Ionicons} name="flash" />
+                        <Icon as={Ionicons} color="flame.500" name="add" />
                     )}
-                    flex={1}
-                    m={4}
-                    position="absolute"
-                    width="100%"
-                    onPress={startWorkout}
+                    mb={4}
+                    variant="outline"
+                    onPress={hanldeAddTabata}
                 >
-                    Start
+                    Add Tabata
                 </Button>
-            </Box>
+            </NestableScrollContainer>
+            <TouchableOpacity onPress={handleStartWorkout}>
+                {/* Build Workout Row */}
+                <Box
+                    alignItems="center"
+                    bg={{
+                        linearGradient: {
+                            colors: ['flame.500', 'cherry.500'],
+                            start: [0, 1],
+                            end: [1, 0],
+                        },
+                    }}
+                    borderRadius="full"
+                    flexDirection="row"
+                    // @ts-expect-error
+                    gap={2}
+                    justifyContent="center"
+                    mb="4"
+                    p="4"
+                    px={4}
+                    width="100%"
+                >
+                    <Text bold fontSize="lg">Start</Text>
+                    <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>
+                        <Icon as={Ionicons} name="flash" />
+                    </Animated.View>
+                </Box>
+            </TouchableOpacity>
             {/* Settings Modal */}
             {/* TDOD: Move to its own component */}
             <Modal isOpen={showSettingsModal} size="full" onClose={(): void => setShowSettingsModal(false)}>
