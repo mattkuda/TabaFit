@@ -4,10 +4,10 @@
     "slug": "Abcountable",
     "version": "0.1.2",
     "orientation": "portrait",
-    "icon": "./assets/ios-icon.png",
+    "icon": "./assets/tabafit-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/ios-icon.png",
+      "image": "./assets/tabafit-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#18181b"
     },
@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.mattkuda.TabaFit",
-      "icon": "./assets/ios-icon.png"
+      "icon": "./assets/tabafit-icon.png"
     },
     "android": {
       "adaptiveIcon": {

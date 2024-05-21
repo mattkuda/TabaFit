@@ -11,7 +11,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { userState } from '../../atoms/userStateAtom';
 import { useAuth } from '../../context/AuthContext';
 // @ts-ignore
-import logo from '../../../assets/TabatableBasicLogo.png'; // Adjust the path and filename as necessary
+// eslint-disable-next-line import/extensions, import/no-unresolved
+import logo from '../../../assets/tabafit-icon.png';
 import { AuthStackParamList } from '../../navigation/navigationTypes';
 
 const styles = StyleSheet.create({

@@ -9,7 +9,7 @@ import {
 } from 'native-base';
 import { AuthStackParamList } from '../../navigation/navigationTypes';
 // @ts-ignore
-import logo from '../../../assets/TabatableBasicLogo.png';
+import logo from '../../../assets/tabafit-icon.png';
 
 export const AuthPage = (): JSX.Element => {
     const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
@@ -26,8 +26,8 @@ export const AuthPage = (): JSX.Element => {
                 <Image
                     source={logo}
                     style={{
-                        width: 200,
-                        height: 40,
+                        width: 80,
+                        height: 80,
                         marginBottom: 20,
                         alignSelf: 'flex-start',
                     }}
@@ -35,12 +35,17 @@ export const AuthPage = (): JSX.Element => {
                 <Text color="primary" fontSize="2xl">
                     TabaFit
                 </Text>
-                <Text fontSize="4xl" fontWeight="bold">
+                <Text color="cherry.500" fontSize="4xl" fontWeight="bold">
                     Your Tabata Workout Community
                 </Text>
                 <Text fontSize="xl">
-                    Generate workouts with custom settings. Track your track progress.
-                    Share your workouts and interact with friends.
+                    Generate workouts with custom settings
+                </Text>
+                <Text fontSize="xl">
+                    Track your track progress
+                </Text>
+                <Text fontSize="xl">
+                    Share with your friends
                 </Text>
             </VStack>
             <Box bg="gray9" height={110} p="4" width="100%">
