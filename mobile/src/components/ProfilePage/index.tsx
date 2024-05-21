@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
     VStack, Text, Button, HStack, Icon, IconButton, Spinner,
+    Flex,
 } from 'native-base';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { format } from 'date-fns';
 import { Ionicons } from '@expo/vector-icons';
-import { FlatList, RefreshControl } from 'react-native';
+import { FlatList, RefreshControl, TouchableOpacity } from 'react-native';
 import { useInfiniteQueryUserPosts } from '../../hooks/useQueryUserPosts';
 import { ProfileScreenRouteProp } from '../../navigation/navigationTypes';
 import { useUserInfo } from '../../hooks/useUserInfo';
@@ -128,34 +129,45 @@ export const ProfilePage = (): JSX.Element => {
                             {' '}
                             {format(new Date(userInfo.createdAt), 'PPP')}
                         </Text>
-                        <Text fontSize="sm" onPress={handlePressFollowers}>
-                            {`${userInfo.followersCount} Followers • ${userInfo.followingCount} Following`}
-                        </Text>
                     </VStack>
                 </HStack>
             )}
-            <HStack alignItems="center" backgroundColor="gray9" justifyContent="flex-end" pb={2} px={4} space={4} width="100%">
-                {isCurrentUserProfile ? (
+            <HStack alignItems="center" backgroundColor="gray9" justifyContent="space-between" p={2} px={4} space={4} width="100%">
+                <TouchableOpacity onPress={handlePressFollowers}>
+                    <Flex align="center" backgroundColor="gray9" direction="row" gap={4} justify="space-between">
+                        <VStack alignItems="center">
+                            <Text fontSize="md">Following</Text>
+                            <Text bold fontSize="md">{userInfo.followingCount}</Text>
+                        </VStack>
+                        <VStack alignItems="center">
+                            <Text fontSize="md">Followers</Text>
+                            <Text bold fontSize="md">{userInfo.followersCount}</Text>
+                        </VStack>
+                    </Flex>
+                </TouchableOpacity>
+                <HStack space={4}>
+                    {isCurrentUserProfile ? (
+                        <Button
+                            color="primary"
+                            leftIcon={<Icon as={<Ionicons name="pencil" />} color="primary" size="sm" />}
+                            size="sm"
+                            variant="outline"
+                            onPress={navigateToEditProfile}
+                        >
+                            Edit
+                        </Button>
+                    ) : (
+                        <FollowButton profileUserId={userId} />
+                    )}
                     <Button
                         color="primary"
-                        leftIcon={<Icon as={<Ionicons name="pencil" />} color="primary" size="sm" />}
                         size="sm"
                         variant="outline"
-                        onPress={navigateToEditProfile}
+                        onPress={handleLogout}
                     >
-                        Edit
+                        E-Logout
                     </Button>
-                ) : (
-                    <FollowButton profileUserId={userId} />
-                )}
-                <Button
-                    color="primary"
-                    size="sm"
-                    variant="outline"
-                    onPress={handleLogout}
-                >
-                    E-Logout
-                </Button>
+                </HStack>
             </HStack>
         </>
     ), [userInfo, handlePressFollowers, isCurrentUserProfile,
