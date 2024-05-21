@@ -124,7 +124,7 @@ export const LikeCommentButtons = ({ post, handleCommentPress }: LikeCommentButt
             <Divider backgroundColor="gray6" mt={2} />
             <HStack justifyContent="space-between" space={4}>
                 <Button
-                    colorScheme={liked ? 'cherry.500' : 'secondary'}
+                    color={liked ? 'cherry.500' : 'white'}
                     flex={1}
                     size="md"
                     startIcon={(
@@ -152,7 +152,7 @@ export const LikeCommentButtons = ({ post, handleCommentPress }: LikeCommentButt
                     variant="ghost"
                     onPress={handleLikePress}
                 >
-                    Like
+                    <Text color={liked ? 'cherry.500' : 'white'}>Like</Text>
                 </Button>
                 <Button
                     colorScheme="secondary"
