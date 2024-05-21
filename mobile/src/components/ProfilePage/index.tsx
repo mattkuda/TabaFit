@@ -134,7 +134,14 @@ export const ProfilePage = (): JSX.Element => {
             )}
             <HStack alignItems="center" backgroundColor="gray9" justifyContent="space-between" p={2} px={4} space={4} width="100%">
                 <TouchableOpacity onPress={handlePressFollowers}>
-                    <Flex align="center" backgroundColor="gray9" direction="row" gap={4} justify="space-between">
+                    <Flex
+                        align="center"
+                        backgroundColor="gray9"
+                        direction="row"
+                        // @ts-expect-error
+                        gap={4}
+                        justify="space-between"
+                    >
                         <VStack alignItems="center">
                             <Text fontSize="md">Following</Text>
                             <Text bold fontSize="md">{userInfo.followingCount}</Text>

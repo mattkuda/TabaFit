@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
     VStack, Text, Button, Icon, Input, TextArea,
+    HStack,
 } from 'native-base';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-
 import { useQueryClient } from 'react-query';
 import { ShareWorkoutrScreenNavigationProp } from '../../types/navigationTypes';
 import { useAuth } from '../../context/AuthContext';
@@ -128,22 +128,28 @@ export const ShareWorkoutScreen = (): JSX.Element => {
                 value={workoutDescription}
                 onChangeText={setWorkoutDescription}
             />
-            {isInMyWorkouts
-                ? <Text>Workout Saved</Text>
-                : (
-                    <Button
-                        disabled={isInMyWorkouts || isWorkoutSaved}
-                        leftIcon={
+            <HStack alignItems="center" justifyContent="space-between">
+                <Text>
+                    Save workout for later?
+                </Text>
+                {isInMyWorkouts
+                    ? <Text>Workout Saved</Text>
+                    : (
+                        <Button
+                            borderRadius="full"
+                            disabled={isInMyWorkouts || isWorkoutSaved}
+                            leftIcon={
                             isInMyWorkouts || isWorkoutSaved
                                 ? <Icon as={<Ionicons name="checkmark" />} color="green.500" size="sm" />
-                                : <Icon as={<Ionicons color="green.500" name="save-outline" />} size="sm" />
+                                : <Icon as={<Ionicons name="save-outline" />} color="flame.500" size="sm" />
                             }
-                        variant="outline"
-                        onPress={handleSaveWorkout}
-                    >
-                        {isInMyWorkouts || isWorkoutSaved ? 'Workout Saved' : 'Save Workout'}
-                    </Button>
-                )}
+                            variant="outline"
+                            onPress={handleSaveWorkout}
+                        >
+                            {isInMyWorkouts || isWorkoutSaved ? 'Workout Saved' : 'Save Workout'}
+                        </Button>
+                    )}
+            </HStack>
         </VStack>
     );
 };

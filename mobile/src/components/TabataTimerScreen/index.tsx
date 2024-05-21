@@ -2,8 +2,8 @@
 /* eslint-disable global-require */
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-    VStack, Text, Button, IconButton, Icon,
-    Modal, Box, Heading, Divider, Flex, HStack,
+    VStack, Text, IconButton, Icon,
+    Box, Flex,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
@@ -48,7 +48,6 @@ export const TabataTimerScreen = (): JSX.Element => {
     const [remainingTime, setRemainingTime] = useState(0);
     const [currentExercise, setCurrentExercise] = useState<TabataExercise | null>(null);
     const currentTabata = tabatas[circuitsDone];
-    const [showAlert, setShowAlert] = useState(false);
     const setShowFooter = useSetRecoilState(showFooterState);
     const [sound, setSound] = useState<Audio.Sound>();
     const insets = useSafeAreaInsets();
@@ -238,18 +237,15 @@ export const TabataTimerScreen = (): JSX.Element => {
         warmupDuration, exerciseDuration, restDuration, exercisesPerTabata, numberOfTabatas,
         intermisionDuration, cooldownDuration, currentTabata, currentExercise]);
 
-    const handleReturnHome = (): void => {
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'WorkoutsPage' }],
-        });
-        navigation.navigate('HomePage');
-        setShowAlert(false);
-    };
-
     return (
-        <Flex
-            backgroundColor="gray9"
+        <Box
+            bg={{
+                linearGradient: {
+                    colors: ['gray.700', 'gray.900'],
+                    start: [0],
+                    end: [1],
+                },
+            }}
             flex={1}
             style={{
                 flex: 1,
@@ -258,9 +254,9 @@ export const TabataTimerScreen = (): JSX.Element => {
                 paddingTop: insets.top,
             }}
         >
-            <Flex align="center" backgroundColor="gray9" direction="row" justify="space-between" mb="4" pl={4} pr={4} w="100%">
+            <Flex align="center" direction="row" justify="space-between" mb="4" pl={4} pr={4} w="100%">
                 <VStack alignItems="center" space={2}>
-                    <Text color="gray3" fontSize="lg">Exercises</Text>
+                    <Text color="gray.200" fontSize="lg">Exercises</Text>
                     <Text fontSize="xl">
                         {currentInterval === Intervals.Intermission || currentInterval === Intervals.Warmup
                             ? `0/${exercisesPerTabata}`
@@ -268,7 +264,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                     </Text>
                 </VStack>
                 <VStack alignItems="center" space={2}>
-                    <Text color="gray3" fontSize="lg">Tabatas</Text>
+                    <Text color="gray.200" fontSize="lg">Tabatas</Text>
                     <Text fontSize="xl">
                         {currentInterval === Intervals.Intermission && `0/${numberOfTabatas}`}
                         {currentInterval === Intervals.Exercise || currentInterval === Intervals.Rest || currentInterval === Intervals.Cooldown
@@ -277,11 +273,11 @@ export const TabataTimerScreen = (): JSX.Element => {
                     </Text>
                 </VStack>
                 <VStack alignItems="center" space={2}>
-                    <Text color="gray3" fontSize="lg">Total Time</Text>
+                    <Text color="gray.200" fontSize="lg">Total Time</Text>
                     <Text fontSize="xl">{formatTime(remainingTime)}</Text>
                 </VStack>
             </Flex>
-            <Flex alignItems="center" backgroundColor="gray9" flex={1} justifyContent="flex-end">
+            <Flex alignItems="center" flex={1} justifyContent="flex-end">
                 <Text
                         // eslint-disable-next-line no-nested-ternary
                     color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
@@ -292,8 +288,9 @@ export const TabataTimerScreen = (): JSX.Element => {
                     {formatTime(seconds)}
                 </Text>
             </Flex>
-            <Flex alignItems="center" backgroundColor="gray9" flex={1} justify="flex-start">
+            <Flex alignItems="center" flex={1} justify="flex-start">
                 <Text
+                    bold
                         // eslint-disable-next-line no-nested-ternary
                     color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
                     style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}
@@ -301,82 +298,65 @@ export const TabataTimerScreen = (): JSX.Element => {
                     {currentExercise ? currentExercise.name.toUpperCase() : currentInterval.toUpperCase()}
                 </Text>
             </Flex>
-            <Box bg="gray8" p="4" width="100%">
-                <Flex alignItems="center" direction="row" justify="space-between">
-                    {/* Todo: Fix formatting here. Perhpas Center the play button and skip button in the middle. and only show cancel button on left when paused */}
-                    {!isActive && (
-                        <Button
-                            colorScheme="secondary"
-                            variant="ghost"
-                            onPress={(): void => navigation.goBack()}
-                        >
-                            Cancel
-                        </Button>
+            {/* Controls row */}
+            <Box mb={4} mt={-4} p="4" width="100%">
+                <Flex
+                    alignItems="center"
+                    direction="row"
+                    // @ts-expect-error
+                    gap={6}
+                    justify="center"
+                >
+                    {isActive ? (
+                        <Box alignItems="center" flexDirection="row" justifyContent="flex-end" width="70px">
+                            <IconButton
+                                alignSelf="right"
+                                borderColor="gray.300"
+                                borderRadius="full"
+                                borderWidth="1"
+                                icon={<Icon as={Ionicons} color="white" name="flag" size="lg" />}
+                                w="46px"
+                                onPress={mockFinish}
+                            />
+                        </Box>
+                    ) : (
+                        <Box alignItems="center" flexDirection="row" justifyContent="flex-end" width="70px">
+                            <IconButton
+                                borderColor="gray.300"
+                                borderRadius="full"
+                                borderWidth="1"
+                                icon={<Icon as={Ionicons} color="white" name="close" size="lg" />}
+                                onPress={(): void => navigation.goBack()}
+                            />
+                        </Box>
                     )}
                     <IconButton
                         borderColor="gray.300"
                         borderRadius="full"
                         borderWidth="1"
-                        icon={<Icon as={Ionicons} color="white" name={isActive ? 'pause' : 'play'} size="lg" />}
+                        height={100}
+                        icon={<Icon as={Ionicons} color="white" name={isActive ? 'pause' : 'play'} pl={isActive ? 0 : 1} size="6xl" />}
+                        width={100}
                         onPress={toggle}
                     />
-                    <HStack alignItems="center" space={2}>
-                        {!isActive && (
-                            <>
-                                <IconButton
-                                    borderColor="gray.300"
-                                    borderRadius="full"
-                                    borderWidth="1"
-                                    icon={<Icon as={Ionicons} color="white" name="play-skip-back" size="lg" />}
-                                    onPress={reset}
-                                />
-                                <IconButton
-                                    borderColor="gray.300"
-                                    borderRadius="full"
-                                    borderWidth="1"
-                                    icon={<Icon as={Ionicons} color="white" name="play-skip-forward" size="lg" />}
-                                />
-                            </>
-                        )}
-                        {isActive && (
+                    <Box width="70px">
                         <IconButton
                             borderColor="gray.300"
                             borderRadius="full"
                             borderWidth="1"
-                            icon={<Icon as={Ionicons} color="white" name="flag" size="lg" />}
-                            onPress={mockFinish}
+                            icon={<Icon as={Ionicons} color="white" name="play-skip-forward" size="lg" />}
+                            w="46px"
                         />
-                        )}
-                    </HStack>
-                    <IconButton
+                    </Box>
+                    {/* <IconButton
                         borderColor="gray.300"
                         borderRadius="full"
                         borderWidth="1"
                         icon={<Icon as={Ionicons} color="white" name="refresh" size="lg" />}
                         onPress={reset}
-                    />
+                    /> */}
                 </Flex>
             </Box>
-            <Modal isOpen={showAlert} onClose={(): void => setShowAlert(false)}>
-                <Modal.Content maxWidth="400px">
-                    <Modal.CloseButton />
-                    <Modal.Header>Congrats!</Modal.Header>
-                    <Modal.Body>
-                        <Box mb={5}>
-                            <Heading my={2} size="lg">
-                                Your workout was
-                                {' '}
-                                {formatTime(totalWorkoutTime)}
-                                {' '}
-                                long.
-                            </Heading>
-                        </Box>
-                        <Divider my={5} />
-                        <Button colorScheme="twitter" mb={4} onPress={handleReturnHome}>Share to Twitter</Button>
-                        <Button onPress={handleReturnHome}>Return Home</Button>
-                    </Modal.Body>
-                </Modal.Content>
-            </Modal>
-        </Flex>
+        </Box>
     );
 };
