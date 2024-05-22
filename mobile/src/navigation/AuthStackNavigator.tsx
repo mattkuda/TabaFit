@@ -18,6 +18,7 @@ export const AuthStackNavigator = (): JSX.Element => (
             options={{
                 headerLeft: headerLeftComponent,
                 headerTransparent: true,
+                headerTitle: '',
             }}
         />
         <Stack.Screen
@@ -26,6 +27,7 @@ export const AuthStackNavigator = (): JSX.Element => (
             options={{
                 headerLeft: headerLeftComponent,
                 headerTransparent: true,
+                headerTitle: '',
             }}
         />
     </Stack.Navigator>

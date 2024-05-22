@@ -1,6 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HStack, useTheme } from 'native-base';
+import { Image } from 'react-native';
 import { PostScreen } from '../components/PostScreen';
 import { ProfilePage } from '../components/ProfilePage';
 import { HomePage } from '../components/HomePage';
@@ -15,6 +16,9 @@ import { TabataTimerScreen } from '../components/TabataTimerScreen';
 import { ShareWorkoutScreen } from '../components/ShareWorkoutScreen';
 import { ConnectionsScreen } from '../components/ConnectionsScreen';
 import { DebugModeButton } from '../components/DebugModeButton';
+// @ts-ignore
+// eslint-disable-next-line import/extensions, import/no-unresolved
+import logo from '../../assets/tabafit-icon.png';
 
 const Stack = createStackNavigator<HomeStackParamList>();
 
@@ -25,6 +29,13 @@ const HeaderRightComponent = (): JSX.Element => (
         <NotificationsButton />
         {process.env.ENVIRONMENT !== 'production' && <DebugModeButton />}
     </HStack>
+);
+
+const HeaderImageomponent = (): JSX.Element => (
+    <Image
+        source={logo}
+        style={{ width: 30, height: 30 }}
+    />
 );
 
 export const HomeStackNavigator = (): JSX.Element => {
@@ -47,7 +58,7 @@ export const HomeStackNavigator = (): JSX.Element => {
                 component={HomePage}
                 name="HomePage"
                 options={{
-                    headerTitle: 'Home',
+                    headerTitle: HeaderImageomponent,
                     headerLeft: SearchButtonComponent,
                     headerRight: HeaderRightComponent,
                 }}

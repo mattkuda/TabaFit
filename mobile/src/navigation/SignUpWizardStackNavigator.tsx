@@ -34,7 +34,6 @@ export const SignUpWizardStackNavigator = (): JSX.Element => {
         <SignUpWizardStack.Navigator
             screenOptions={{
                 headerTitle: 'TabaFit',
-
                 headerStyle: {
                     backgroundColor: colors.gray[900],
                 },
