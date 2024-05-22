@@ -7,7 +7,7 @@
     "icon": "./assets/tabafit-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/tabafit-icon.png",
+      "image": "./assets/wide_tabafit_logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#18181b"
     },

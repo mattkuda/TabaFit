@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable global-require */
 import React, { useState, useEffect, useCallback } from 'react';
+import { useKeepAwake } from 'expo-keep-awake';
 import {
     VStack, Text, IconButton, Icon,
     Box, Flex,
@@ -51,6 +52,8 @@ export const TabataTimerScreen = (): JSX.Element => {
     const setShowFooter = useSetRecoilState(showFooterState);
     const [sound, setSound] = useState<Audio.Sound>();
     const insets = useSafeAreaInsets();
+
+    useKeepAwake();
 
     async function playSound(name: string): Promise<void> {
         console.log('Playing sound:', name);
