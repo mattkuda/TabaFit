@@ -172,10 +172,15 @@ function extractFileName(url: string): string | null {
   return null;
 }
 
-router.post('/upload/:userId', upload.single('file'), async (req: AuthRequest, res: Response) => {
+router.post('/upload/:userId', authenticate, upload.single('file'), async (req: AuthRequest, res: Response) => {
   const { file, userId } = req;
 
-  if (req.userId !== userId) {
+  if (!userId) {
+    res.status(400).send({ message: 'User ID is required' });
+    return;
+  }
+
+  if (req.params.userId !== userId) {
     res.status(403).send({ message: 'Forbidden: You are not authorized to make this request.' });
     return;
   }
@@ -262,10 +267,11 @@ router.get('/search/:query', async (req: AuthRequest, res: Response) => {
 router.put('/:userId', authenticate, async (req: AuthRequest, res: Response) => {
   try {
     const { userId } = req;
+    const { userId: userIdToUpdate } = req.params;
     const updateData: Partial<User> = req.body; // Get the data to update from the request body
 
     // Check if the authenticated user is the same as the user being updated
-    if (req.userId !== userId) {
+    if (userIdToUpdate !== userId) {
       res.status(403).send({ message: 'Forbidden: You cannot update other users\' information.' });
       return;
     }
@@ -274,16 +280,12 @@ router.put('/:userId', authenticate, async (req: AuthRequest, res: Response) => 
     delete updateData._id;
     delete updateData.password;
 
-    const result = await usersCollection.updateOne(
+    await usersCollection.updateOne(
       { _id: new mongoose.Types.ObjectId(userId) },
       { $set: updateData },
     );
 
-    if (result.modifiedCount === 0) {
-      res.status(404).send({ message: 'User not found or no changes made' });
-    } else {
-      res.status(200).send({ message: 'User updated successfully' });
-    }
+    res.status(200).send({ message: 'User updated successfully' });
   } catch (err) {
     console.error('Failed to update user', err);
     res.status(500).send({ message: 'Failed to update user' });
