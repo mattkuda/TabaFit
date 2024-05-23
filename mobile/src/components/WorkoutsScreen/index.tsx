@@ -8,7 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
-import { soundTestingWorkout } from '../shuffleUtil';
+import { shuffleWorkoutTemplate } from '../shuffleUtil';
 import { BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
 import { TabataWorkout } from '../../types/workouts';
 import { RefreshableScrollView } from '../RefreshableScrollView';
@@ -30,12 +30,11 @@ export const WorkoutsScreen = (): JSX.Element => {
         isLoading: isNewWorkoutsLoading,
     } = useQueryWorkouts({ limit: 5, offset: 0 });
 
-    const shuffledWorkout = soundTestingWorkout;
-
     const handlePressQuickShuffle = (): void => {
         // First go to customizable settings screen (to-build)
         navigation.navigate('BuildWorkoutScreen', {
-            customWorkout: shuffledWorkout,
+            customWorkout: shuffleWorkoutTemplate,
+            // customWorkout: soundTestingWorkout,
             isShuffle: true,
             isSavedWorkout: false,
         } as BuildWorkoutScreenProps);

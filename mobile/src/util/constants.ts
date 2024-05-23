@@ -29,13 +29,7 @@ export const lowerBodyExercises: TabataExercise[] = [
         _id: 'lb6', name: 'Side Lunges', types: ['Lower Body'], description: 'Lunge to the side.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
     },
     {
-        _id: 'lb7', name: 'Donkey Kicks', types: ['Lower Body'], description: 'Kick back with knees bent.', difficulty: 'Easy', videoLink: '', equipment: ['None'],
-    },
-    {
-        _id: 'lb8', name: 'Wall Sit', types: ['Lower Body'], description: 'Sit against a wall without a chair.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
-    },
-    {
-        _id: 'lb9', name: 'Single Leg Deadlift', types: ['Lower Body'], description: 'Lift one leg behind as you bend forward.', difficulty: 'Hard', videoLink: '', equipment: ['None'],
+        _id: 'lb9', name: 'Dumbbell Romanian Deadlift', types: ['Lower Body'], description: 'Deadlift with dumbells in each hand.', difficulty: 'Hard', videoLink: '', equipment: ['None'],
     },
     {
         _id: 'lb10', name: 'Jump Squats', types: ['Lower Body'], description: 'Squat followed by a jump.', difficulty: 'Hard', videoLink: '', equipment: ['None'],
@@ -47,10 +41,19 @@ export const lowerBodyExercises: TabataExercise[] = [
         _id: 'lb12', name: 'Kettlebell Swings', types: ['Lower Body'], equipment: ['Kettlebell'], description: 'Swing a kettlebell up and down.', difficulty: 'Medium', videoLink: '',
     },
     {
-        _id: 'lb13', name: 'Banded Squats', types: ['Lower Body'], equipment: ['Workout Band'], description: 'Squats with a resistance band.', difficulty: 'Medium', videoLink: '',
+        _id: 'lb12', name: 'Kettlebell Swings', types: ['Lower Body'], equipment: ['Kettlebell'], description: 'Swing a kettlebell up and down.', difficulty: 'Medium', videoLink: '',
+    },
+    {
+        _id: 'lb999', name: 'Kettlebell Deadlift', types: ['Lower Body'], equipment: ['Workout Band'], description: 'Deadlift with a kettlebell.', difficulty: 'Medium', videoLink: '',
     },
     {
         _id: 'lb14', name: 'Yoga Ball Squats', types: ['Lower Body'], equipment: ['Yoga Ball'], description: 'Squats against a yoga ball placed on a wall.', difficulty: 'Easy', videoLink: '',
+    },
+    {
+        _id: 'lb13', name: 'Alternating Jump Lunges', types: ['Lower Body'], description: 'Jump lunges alternating legs.', difficulty: 'Hard', videoLink: '', equipment: ['None'],
+    },
+    {
+        _id: 'lb15', name: 'Single-Leg Glute Bridge', types: ['Lower Body'], description: 'Bridge with one leg lifted.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
     },
 ];
 
@@ -59,43 +62,31 @@ export const upperBodyExercises: TabataExercise[] = [
         _id: 'ub1', name: 'Push-Ups', types: ['Upper Body'], description: 'Standard push-ups.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
     },
     {
-        _id: 'ub2', name: 'Tricep Dips', types: ['Upper Body'], description: 'Dips using a chair or bench.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
-    },
-    {
-        _id: 'ub3', name: 'Pike Push-Ups', types: ['Upper Body'], description: 'Push-ups with elevated hips for shoulder focus.', difficulty: 'Hard', videoLink: '', equipment: ['None'],
-    },
-    {
-        _id: 'ub4', name: 'Arm Circles', types: ['Upper Body'], description: 'Rotate arms in large circles.', difficulty: 'Easy', videoLink: '', equipment: ['None'],
-    },
-    {
-        _id: 'ub5', name: 'Diamond Push-Ups', types: ['Upper Body'], description: 'Push-ups with hands forming a diamond shape.', difficulty: 'Hard', videoLink: '', equipment: ['None'],
-    },
-    {
-        _id: 'ub6', name: 'Plank Ups', types: ['Upper Body'], description: 'Start in a plank, then push up to a push-up position.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
-    },
-    {
-        _id: 'ub7', name: 'Superman', types: ['Upper Body'], description: 'Lie down, extend arms, and lift chest and legs.', difficulty: 'Easy', videoLink: '', equipment: ['None'],
-    },
-    {
-        _id: 'ub8', name: 'Bear Crawl', types: ['Upper Body'], description: 'Crawl on all fours, keeping your knees off the ground.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
-    },
-    {
-        _id: 'ub9', name: 'Inchworm', types: ['Upper Body'], description: 'Walk hands forward from a standing position.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
-    },
-    {
         _id: 'ub10', name: 'Box Dips', types: ['Upper Body'], description: 'Dips on a box or sturdy surface.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
     },
     {
-        _id: 'ub11', name: 'Kettlebell Press', types: ['Upper Body'], equipment: ['Kettlebell'], description: 'Press a kettlebell overhead.', difficulty: 'Medium', videoLink: '',
+        _id: 'ub11', name: 'Kettlebell Shoulder Press', types: ['Upper Body'], equipment: ['Kettlebell'], description: 'Press a kettlebell overhead.', difficulty: 'Medium', videoLink: '',
+    },
+    {
+        _id: 'ub101', name: 'Kettlebell Tricep Press', types: ['Upper Body'], equipment: ['Kettlebell'], description: 'Press a kettlebell behind your head extending your triceps.', difficulty: 'Medium', videoLink: '',
     },
     {
         _id: 'ub12', name: 'Dumbbell Flyes', types: ['Upper Body'], equipment: ['Dumbells'], description: 'Extend arms with dumbbells in a flying motion.', difficulty: 'Medium', videoLink: '',
     },
     {
-        _id: 'ub13', name: 'Band Pull Aparts', types: ['Upper Body'], equipment: ['Workout Band'], description: 'Pull a resistance band apart.', difficulty: 'Easy', videoLink: '',
+        _id: 'ub14', name: 'Pull ups', types: ['Upper Body'], equipment: ['Hanging Bar'], description: 'Pull up to the bar.', difficulty: 'Hard', videoLink: '',
     },
     {
-        _id: 'ub14', name: 'Pull ups', types: ['Upper Body'], equipment: ['Hanging Bar'], description: 'Pull up to the bar.', difficulty: 'Hard', videoLink: '',
+        _id: 'ub15', name: 'Dumbbell Shoulder Press', types: ['Upper Body'], equipment: ['Dumbells'], description: 'Press dumbbells overhead.', difficulty: 'Medium', videoLink: '',
+    },
+    {
+        _id: 'ub16', name: 'Dumbbell Bicep Curls', types: ['Upper Body'], equipment: ['Dumbells'], description: 'Curl dumbbells towards your shoulders.', difficulty: 'Easy', videoLink: '',
+    },
+    {
+        _id: 'ub17', name: 'Dumbbell Delt Flyes', types: ['Upper Body'], equipment: ['Dumbells'], description: 'Extend arms out to the sides with dumbbells.', difficulty: 'Medium', videoLink: '',
+    },
+    {
+        _id: 'ub18', name: 'Dumbbell Lying Chest Press', types: ['Upper Body'], equipment: ['Dumbells'], description: 'Press dumbbells while lying on a bench.', difficulty: 'Medium', videoLink: '',
     },
 ];
 
@@ -125,9 +116,6 @@ export const absExercises: TabataExercise[] = [
         _id: 'abs8', name: 'Flutter Kicks', types: ['Abs'], description: 'Kick legs up and down in a small range.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
     },
     {
-        _id: 'abs9', name: 'Reverse Crunches', types: ['Abs'], description: 'Lift hips off the ground.', difficulty: 'Easy', videoLink: '', equipment: ['None'],
-    },
-    {
         _id: 'abs10', name: 'Plank Jacks', types: ['Abs'], description: 'Jump feet in and out while in plank position.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
     },
     {
@@ -140,7 +128,13 @@ export const absExercises: TabataExercise[] = [
         _id: 'abs13', name: 'Yoga Ball Crunches', types: ['Abs'], equipment: ['Yoga Ball'], description: 'Crunches on a yoga ball.', difficulty: 'Easy', videoLink: '',
     },
     {
-        _id: 'abs14', name: 'Banded Twists', types: ['Abs'], equipment: ['Workout Band'], description: 'Twist torso with a resistance band.', difficulty: 'Medium', videoLink: '',
+        _id: 'abs15', name: 'Windshield Wipers', types: ['Abs'], description: 'Rotate legs side to side in a controlled motion.', difficulty: 'Hard', videoLink: '', equipment: ['None'],
+    },
+    {
+        _id: 'abs14', name: 'Hollow Rocks', types: ['Abs'], description: 'Rock forward and back in a strong hollow position.', difficulty: 'Hard', videoLink: '', equipment: ['None'],
+    },
+    {
+        _id: 'abs77', name: 'Inchworm', types: ['Upper Body'], description: 'Walk hands forward from a standing position.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
     },
 ];
 
@@ -164,9 +158,7 @@ export const cardioExercises: TabataExercise[] = [
         _id: 'cardio6', name: 'Butt Kicks', types: ['Cardio'], description: 'Run in place kicking heels to glutes.', difficulty: 'Easy', videoLink: '', equipment: ['None'],
     },
     {
-        _id: 'cardio7', name: 'Tuck Jumps', types: ['Cardio'], description: 'Jump and bring knees to chest.', difficulty: 'Hard', videoLink: '', equipment: ['None'],
-    },
-    {
+        // Move this to lower body
         _id: 'cardio8', name: 'Squat Jumps', types: ['Cardio'], description: 'Squat down and jump up explosively.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
     },
     {
@@ -176,13 +168,10 @@ export const cardioExercises: TabataExercise[] = [
         _id: 'cardio10', name: 'Fast Feet', types: ['Cardio'], description: 'Quickly shuffle feet in place.', difficulty: 'Easy', videoLink: '', equipment: ['None'],
     },
     {
-        _id: 'cardio12', name: 'Dumbbell Punches', types: ['Cardio'], equipment: ['Dumbells'], description: 'Punch forward with dumbbells in hands.', difficulty: 'Medium', videoLink: '',
+        _id: 'cardio15', name: 'Sprints', types: ['Cardio'], description: 'Run at full speed.', difficulty: 'Hard', videoLink: '', equipment: ['None'],
     },
     {
-        _id: 'cardio13', name: 'Banded Jumps', types: ['Cardio'], equipment: ['Workout Band'], description: 'Jump with a resistance band around legs.', difficulty: 'Medium', videoLink: '',
-    },
-    {
-        _id: 'cardio14', name: 'Box Jumps', types: ['Cardio'], equipment: ['Box Platform'], description: 'Jump onto a raised platform and back down.', difficulty: 'Medium', videoLink: '',
+        _id: 'cardio16', name: 'Bear Crawl', types: ['Upper Body'], description: 'Crawl on all fours, keeping your knees off the ground.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
     },
 ];
 
