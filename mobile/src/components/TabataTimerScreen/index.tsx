@@ -240,6 +240,60 @@ export const TabataTimerScreen = (): JSX.Element => {
         warmupDuration, exerciseDuration, restDuration, exercisesPerTabata, numberOfTabatas,
         intermisionDuration, cooldownDuration, currentTabata, currentExercise]);
 
+    const handleSkip = (): void => {
+        let nextInterval = currentInterval;
+        let nextSeconds = 0;
+        let nextExercise = currentExercise;
+        let nextExercisesDone = exercisesDone;
+        let nextCircuitsDone = circuitsDone;
+
+        const timeSkipped = seconds; // Capture the time being skipped
+
+        if (currentInterval === Intervals.Warmup) {
+            nextInterval = Intervals.Exercise;
+            nextSeconds = exerciseDuration;
+            [nextExercise] = currentTabata;
+        } else if (currentInterval === Intervals.Exercise) {
+            nextInterval = Intervals.Rest;
+            nextSeconds = restDuration;
+            nextExercise = null;
+        } else if (currentInterval === Intervals.Rest) {
+            if (exercisesDone < exercisesPerTabata - 1) {
+                nextInterval = Intervals.Exercise;
+                nextSeconds = exerciseDuration;
+                nextExercisesDone = exercisesDone + 1;
+                nextExercise = currentTabata[nextExercisesDone];
+            } else {
+                if (circuitsDone < numberOfTabatas - 1) {
+                    nextInterval = Intervals.Intermission;
+                    nextSeconds = intermisionDuration;
+                } else {
+                    nextInterval = Intervals.Cooldown;
+                    nextSeconds = cooldownDuration;
+                }
+                nextExercise = null;
+                nextCircuitsDone = circuitsDone + 1;
+            }
+        } else if (currentInterval === Intervals.Intermission) {
+            nextInterval = Intervals.Exercise;
+            nextSeconds = exerciseDuration;
+            nextExercisesDone = 0;
+            [nextExercise] = currentTabata;
+        } else if (currentInterval === Intervals.Cooldown) {
+            setIsActive(false);
+            playSound('workoutcomplete');
+            navigateToSharePostScreen();
+            return;
+        }
+
+        setCurrentInterval(nextInterval);
+        setSeconds(nextSeconds);
+        setCurrentExercise(nextExercise);
+        setExercisesDone(nextExercisesDone);
+        setCircuitsDone(nextCircuitsDone);
+        setRemainingTime((prev) => prev - timeSkipped); // Adjust remaining time correctly
+    };
+
     return (
         <Box
             bg={{
@@ -349,6 +403,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                             borderWidth="1"
                             icon={<Icon as={Ionicons} color="white" name="play-skip-forward" size="lg" />}
                             w="46px"
+                            onPress={handleSkip}
                         />
                     </Box>
                     {/* <IconButton

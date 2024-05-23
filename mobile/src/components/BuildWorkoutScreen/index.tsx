@@ -87,15 +87,19 @@ const TabataItem = ({
                     <ScaleDecorator>
                         <HStack alignItems="center" justifyContent="space-between">
                             <Pressable flex={1} p={2} onPress={(): void => changeExercise(circuitIndex, index)}>
-                                <HStack pl={4} space="2">
-                                    <Image
-                                        paddingX="2"
-                                        source={exerciseIconDictionary[item?.types[0]]}
-                                        style={{
-                                            height: 24, width: 24, tintColor: 'white', paddingHorizontal: 2,
-                                        }}
-                                    />
-                                    <Text fontSize="md">{item?.name}</Text>
+                                <HStack pl={2} space="2">
+                                    {item ? (
+                                        <>
+                                            <Image
+                                                paddingX="2"
+                                                source={exerciseIconDictionary[item?.types[0]]}
+                                                style={{
+                                                    height: 24, width: 24, tintColor: 'white', paddingHorizontal: 2,
+                                                }}
+                                            />
+                                            <Text fontSize="md">{item?.name}</Text>
+                                        </>
+                                    ) : <Text italic color="gray.200" fontSize="md">Select an exercise</Text>}
                                 </HStack>
                             </Pressable>
                             <IconButton icon={<Icon as={Ionicons} color="white" name="menu" />} onLongPress={drag} />
@@ -126,6 +130,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     const updateWorkoutMutation = useMutateUpdateWorkout();
     const [modalWorkout, setModalWorkout] = useState<TabataWorkout>(workout);
     const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
+    const [showHelpDialog, setShowHelpDialog] = useState<boolean>(false);
 
     const hanldeAddTabata = (): void => {
         if (isShuffle) {
@@ -251,22 +256,27 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         navigation, updateWorkoutMutation, saveWorkoutMutation]);
 
     useEffect(() => {
-        if (!isShuffle) {
-            navigation.setOptions({
-                // eslint-disable-next-line react/no-unstable-nested-components
-                headerRight: (): JSX.Element => (
-                    <Button
-                        variant="ghost"
-                        onPress={handleSaveOrUpdateWorkout}
-                    >
-                        {isSavedWorkoutByUser ? 'Update' : 'Save'}
-                    </Button>
-                ),
-            });
-        }
-
+        navigation.setOptions({
+            // eslint-disable-next-line react/no-unstable-nested-components
+            headerRight: (): JSX.Element => (
+                <HStack marginRight="2" space={2}>
+                    <IconButton
+                        icon={<Icon as={Ionicons} color="flame.500" name="help-circle" />}
+                        onPress={(): void => setShowHelpDialog(true)}
+                    />
+                    {(!isShuffle) && (
+                        <Button
+                            variant="ghost"
+                            onPress={handleSaveOrUpdateWorkout}
+                        >
+                            {isSavedWorkoutByUser ? 'Update' : 'Save'}
+                        </Button>
+                    )}
+                </HStack>
+            ),
+        });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [navigation, handleSaveOrUpdateWorkout]);
+    }, [isShuffle, navigation, handleSaveOrUpdateWorkout]);
 
     const updateExercisesOrder = (tabataIndex: number, newExercisesOrder: TabataExercise[]): void => {
         setWorkout((currentWorkout) => {
@@ -374,6 +384,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             backgroundColor="gray9"
             flex={1}
             space={0}
+            width="100%"
         >
             {isShuffle ? (
                 <HStack alignItems="center" justifyContent="space-between" pt={4} px={4} space={4} width="100%">
@@ -385,7 +396,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                         width="180"
                         onPress={(): void => triggerShuffle()}
                     >
-                        Re-Shuffle
+                        <Text bold>Re-Shuffle</Text>
                     </Button>
                     <IconButton
                         bg="flame.500"
@@ -448,9 +459,9 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                     gap={2}
                     justifyContent="center"
                     mb="4"
+                    mx="4"
                     p="4"
                     px={4}
-                    width="100%"
                 >
                     <Text bold fontSize="lg">Start</Text>
                     <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>
@@ -609,6 +620,35 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                     <Modal.Footer backgroundColor="gray9">
                         <Button onPress={handleModalDone}>Done</Button>
                         <Button variant="ghost" onPress={handleModalCancel}>Cancel</Button>
+                    </Modal.Footer>
+                </Modal.Content>
+            </Modal>
+            {/* Help Dialog */}
+            <Modal isOpen={showHelpDialog} size="full" onClose={(): void => setShowHelpDialog(false)}>
+                <Modal.Content backgroundColor="gray9">
+                    <Modal.CloseButton />
+                    <Modal.Header backgroundColor="gray9">
+                        <Text bold fontSize="lg">
+                            Build Workout Help
+                        </Text>
+                    </Modal.Header>
+                    <Modal.Body backgroundColor="gray.900">
+                        <Box>
+                            <Text mb={2}>
+                                &bull; Select exercises for each Tabata circuit by clicking
+                                on their titles.
+                            </Text>
+                            <Text mb={2}>&bull; Click and hold an exercise to drag and drop it to a new position.</Text>
+                            <Text mb={2}>&bull; Use the up and down arrows to move a Tabata circuit up or down.</Text>
+                            <Text mb={2}>
+                                &bull; In shuffle mode, clicking the Re-Shuffle
+                                button will shuffle the exercises in each Tabata according to your settings.
+                            </Text>
+                            <Text mb={2}>&bull; Adjust settings in the Settings modal by clicking the gear icon.</Text>
+                        </Box>
+                    </Modal.Body>
+                    <Modal.Footer backgroundColor="gray9">
+                        <Button onPress={(): void => setShowHelpDialog(false)}>Done</Button>
                     </Modal.Footer>
                 </Modal.Content>
             </Modal>
