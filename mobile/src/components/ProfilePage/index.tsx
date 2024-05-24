@@ -166,14 +166,16 @@ export const ProfilePage = (): JSX.Element => {
                     ) : (
                         <FollowButton profileUserId={userId} />
                     )}
-                    <Button
-                        color="primary"
-                        size="sm"
-                        variant="outline"
-                        onPress={handleLogout}
-                    >
-                        E-Logout
-                    </Button>
+                    {process.env.ENVIRONMENT !== 'production' && (
+                        <Button
+                            color="primary"
+                            size="sm"
+                            variant="outline"
+                            onPress={handleLogout}
+                        >
+                            E-Logout
+                        </Button>
+                    )}
                 </HStack>
             </HStack>
         </>

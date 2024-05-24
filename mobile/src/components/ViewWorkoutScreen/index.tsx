@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useCallback, useState } from 'react';
 import {
-    ScrollView, Text, VStack, Button, Icon, Center, Spinner, HStack, Box,
+    ScrollView, Text, VStack, Button, Icon, Center, Spinner, HStack, Box, Image,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -13,7 +13,7 @@ import { TabataCircuit, TabataWorkout, TabataWorkoutWithUserInfo } from '../../t
 import { ViewWorkoutScreenRouteProp, BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useQueryWorkoutById } from '../../hooks/useQueryWorkoutById';
-import { formatBodyParts } from '../../util/util';
+import { exerciseIconDictionary, formatBodyParts } from '../../util/util';
 import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
 import { useAuth } from '../../context/AuthContext';
 import { useMutateSaveWorkout } from '../../mutations/useMutateSaveWorkout';
@@ -125,8 +125,8 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                         <Text bold flex={1} fontSize="xl">{workout.name}</Text>
                         <Button
                             disabled={saveSuccess}
-                            rightIcon={isInMyWorkouts ? <Icon as={Ionicons} color="primary" name="pencil" /> : <Icon as={Ionicons} color={saveSuccess ? 'green.500' : 'white'} name="arrow-down-circle" />}
-                            variant="ghost"
+                            rightIcon={isInMyWorkouts ? <Icon as={Ionicons} color="primary" name="pencil" /> : <Icon as={Ionicons} color={saveSuccess ? 'green.500' : 'flame.500'} name="arrow-down-circle" />}
+                            variant="outline"
                             onPress={isInMyWorkouts ? handleEditWorkout : handleSaveOrUpdateWorkout}
                         >
                             {saveButtonText}
@@ -161,14 +161,38 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                         {`Created on ${formattedDate}`}
                     </Text> */}
                     {workout.tabatas.map((circuit: TabataCircuit, index: number) => (
-                        <VStack borderColor="gray.200" borderRadius="md" borderWidth={1} key={index} mt={2} p={4} space={2}>
+                        <VStack
+                            bg={{
+                                linearGradient: {
+                                    colors: ['gray.600', 'gray.700'],
+                                    start: [0, 1],
+                                    end: [1, 0],
+                                },
+                            }}
+                            borderColor="primary"
+                            borderRadius="md"
+                            borderWidth={1}
+                            key={index}
+                            mt={2}
+                            p={4}
+                            space={2}
+                        >
                             <Text bold fontSize="md">
                                 Tabata
                                 {' '}
                                 {index + 1}
                             </Text>
                             {circuit.map((exercise, exIndex) => (
-                                <Text key={exIndex}>{exercise.name}</Text>
+                                <HStack space="2">
+                                    <Image
+                                        paddingX="2"
+                                        source={exerciseIconDictionary[exercise.types[0]]}
+                                        style={{
+                                            height: 24, width: 24, tintColor: 'white', paddingHorizontal: 2,
+                                        }}
+                                    />
+                                    <Text key={exIndex}>{exercise.name}</Text>
+                                </HStack>
                             ))}
                         </VStack>
                     ))}
@@ -176,28 +200,24 @@ export const ViewWorkoutScreen = (): JSX.Element => {
             </ScrollView>
             {/* Start Button */}
             <TouchableOpacity onPress={handleStartWorkout}>
-                {/* Build Workout Row */}
                 <Box
                     alignItems="center"
                     bg={{
                         linearGradient: {
-                            colors: ['primary', 'cherry'],
+                            colors: ['flame.500', 'cherry.500'],
                             start: [0, 1],
                             end: [1, 0],
                         },
                     }}
                     borderRadius="full"
-                    bottom={0}
-                    flex={1}
                     flexDirection="row"
                     // @ts-expect-error
                     gap={2}
                     justifyContent="center"
                     mb="4"
+                    mx="4"
                     p="4"
-                    position="absolute"
                     px={4}
-                    width="100%"
                 >
                     <Text bold fontSize="lg">Start</Text>
                     <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>

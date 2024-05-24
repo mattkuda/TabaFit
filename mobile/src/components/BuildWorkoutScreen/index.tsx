@@ -259,7 +259,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         navigation.setOptions({
             // eslint-disable-next-line react/no-unstable-nested-components
             headerRight: (): JSX.Element => (
-                <HStack marginRight="2" space={2}>
+                <HStack marginRight="2" space={0}>
                     <IconButton
                         icon={<Icon as={Ionicons} color="flame.500" name="help-circle" />}
                         onPress={(): void => setShowHelpDialog(true)}
@@ -269,7 +269,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                             variant="ghost"
                             onPress={handleSaveOrUpdateWorkout}
                         >
-                            {isSavedWorkoutByUser ? 'Update' : 'Save'}
+                            <Text color="flame.500" fontSize="md">{isSavedWorkoutByUser ? 'Update' : 'Save'}</Text>
                         </Button>
                     )}
                 </HStack>

@@ -24,7 +24,7 @@ export const WorkoutsStackNavigator = (): JSX.Element => {
                 headerStyle: {
                     backgroundColor: colors.gray[900],
                 },
-                headerTintColor: 'white',
+                headerTitleStyle: { color: 'white' },
                 headerShadowVisible: false,
             }}
         >
@@ -67,14 +67,14 @@ export const WorkoutsStackNavigator = (): JSX.Element => {
                 component={ViewWorkoutScreen}
                 name="ViewWorkoutScreen"
                 options={{
-                    headerTitle: 'View Workout',
+                    headerTitle: 'Workout Details',
                 }}
             />
             <Stack.Screen
                 component={LoadWorkoutScreen}
                 name="LoadWorkoutScreen"
                 options={{
-                    headerTitle: 'Load Workout',
+                    headerTitle: 'My Saved Workouts',
                 }}
             />
             <Stack.Screen

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import {
-    VStack, Heading,
+    VStack,
 } from 'native-base';
 import { useInfiniteQueryWorkouts } from '../../hooks/useQueryWorkouts';
 import { WorkoutCard } from '../common/WorkoutCard';
@@ -24,8 +24,7 @@ export const DiscoverWorkoutsScreen: FC = () => {
     const flatMapWorkouts = workoutsData?.pages.flatMap((page) => page) || [];
 
     return (
-        <VStack backgroundColor="gray9" flex={1} p={2} space={2}>
-            <Heading px="4">Discover Workouts</Heading>
+        <VStack backgroundColor="black" flex={1} p={2} space={2}>
             <InfiniteScrollList
                 data={flatMapWorkouts}
                 estimatedItemSize={100} // Adjust based on the average size of your WorkoutCard

@@ -50,9 +50,7 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
         >
             <VStack
                 backgroundColor="gray9"
-                borderColor="gray7"
                 borderRadius="md"
-                borderWidth={1}
                 mt={4}
                 p={4}
                 space={4}
@@ -120,27 +118,42 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                         endIcon={(
                             <Icon
                                 as={Ionicons}
-                                name="information"
+                                color="white"
+                                name="eye-outline"
                             />
                         )}
-                        flex={1}
                         size="md"
-                        variant="outline"
+                        variant="ghost"
                         onPress={handleClickCard}
                     >
-                        View
+                        Details
                     </Button>
-                    <Button
-                        endIcon={(
+                    <TouchableOpacity onPress={handleQuickStart}>
+                        {/* Build Workout Row */}
+                        <Box
+                            alignItems="center"
+                            bg={{
+                                linearGradient: {
+                                    colors: ['flame.500', 'cherry.500'],
+                                    start: [0, 1],
+                                    end: [1, 0],
+                                },
+                            }}
+                            borderRadius="full"
+                            flexDirection="row"
+                            justifyContent="center"
+                            p="3"
+                            width={150}
+                            px={4}
+                            // @ts-expect-error
+                            gap={2}
+                        >
+                            <Text>
+                                Quick Start
+                            </Text>
                             <Icon as={Ionicons} name="flash" />
-                            )}
-                        flex={1}
-                        size="md"
-                        onPress={handleQuickStart}
-                    >
-                        Quick Start
-                    </Button>
-
+                        </Box>
+                    </TouchableOpacity>
                 </HStack>
             </VStack>
         </TouchableOpacity>

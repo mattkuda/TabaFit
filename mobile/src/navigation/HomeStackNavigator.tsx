@@ -46,11 +46,9 @@ export const HomeStackNavigator = (): JSX.Element => {
             initialRouteName="HomePage"
             screenOptions={{
                 headerTitle: 'TabaFit',
-
                 headerStyle: {
                     backgroundColor: colors.gray[900],
                 },
-                headerTintColor: 'white',
                 headerShadowVisible: false,
             }}
         >
@@ -58,6 +56,7 @@ export const HomeStackNavigator = (): JSX.Element => {
                 component={HomePage}
                 name="HomePage"
                 options={{
+                    title: 'Home',
                     headerTitle: HeaderImageomponent,
                     headerLeft: SearchButtonComponent,
                     headerRight: HeaderRightComponent,
@@ -93,7 +92,7 @@ export const HomeStackNavigator = (): JSX.Element => {
                 component={ViewWorkoutScreen}
                 name="ViewWorkoutScreen"
                 options={{
-                    headerTitle: 'View Workout',
+                    headerTitle: 'Workout Details',
                 }}
             />
             <Stack.Screen

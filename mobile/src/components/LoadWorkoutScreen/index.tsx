@@ -55,12 +55,10 @@ export const LoadWorkoutScreen: FC = () => {
         setSelectedWorkout(null);
     };
 
-    // ... other parts of the component ...
-
     return (
-        <VStack backgroundColor="gray9" flex={1} p={2} space={2}>
-            <Heading>My Saved Workouts:</Heading>
-            <Button
+        <VStack backgroundColor="black" flex={1} p={2} space={2}>
+            {/* <Heading>My Saved Workouts:</Heading> */}
+            {/* <Button
                 alignSelf="flex-end"
                 endIcon={(
                     <Icon as={Ionicons} name="add" />
@@ -70,7 +68,7 @@ export const LoadWorkoutScreen: FC = () => {
                 } as BuildWorkoutScreenProps)}
             >
                 Create New Workout
-            </Button>
+            </Button> */}
             <InfiniteScrollList
                 data={workouts?.pages.flatMap((page) => page)}
                 estimatedItemSize={100} // Adjust estimatedItemSize as needed
