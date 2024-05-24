@@ -53,7 +53,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
 
     const handleSubmitFeedback = (): void => {
         // TODO: Change the URL to your Google Form URL
-        Linking.openURL('https://your-google-form-url.com');
+        Linking.openURL('https://forms.gle/q6caxGtoJNtAYX5JA');
     };
 
     return (
