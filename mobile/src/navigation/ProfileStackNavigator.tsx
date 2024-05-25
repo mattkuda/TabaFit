@@ -21,6 +21,7 @@ export const ProfileStackNavigator = (): JSX.Element => {
                 headerStyle: {
                     backgroundColor: colors.gray[900],
                 },
+                headerTitleStyle: { color: 'white' },
                 headerShadowVisible: false,
             }}
         >
