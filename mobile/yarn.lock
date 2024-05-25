@@ -5081,14 +5081,9 @@ expo-image-picker@~15.0.4:
   dependencies:
     expo-image-loader "~4.7.0"
 
-expo-keep-awake@~13.0.1:
-  version "13.0.1"
-  resolved "https://registry.npmjs.org/expo-keep-awake/-/expo-keep-awake-13.0.1.tgz"
-  integrity sha512-Kqv8Bf1f5Jp7YMUgTTyKR9GatgHJuAcC8vVWDEkgVhB3O7L3pgBy5MMSMUhkTmRRV6L8TZe/rDmjiBoVS/soFA==
-
-expo-keep-awake@~13.0.2:
+expo-keep-awake@~13.0.1, expo-keep-awake@~13.0.2:
   version "13.0.2"
-  resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-13.0.2.tgz#5ef31311a339671eec9921b934fdd90ab9652b0e"
+  resolved "https://registry.npmjs.org/expo-keep-awake/-/expo-keep-awake-13.0.2.tgz"
   integrity sha512-kKiwkVg/bY0AJ5q1Pxnm/GvpeB6hbNJhcFsoOWDh2NlpibhCLaHL826KHUM+WsnJRbVRxJ+K9vbPRHEMvFpVyw==
 
 expo-linear-gradient@~13.0.2:

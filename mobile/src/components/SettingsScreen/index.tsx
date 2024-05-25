@@ -13,6 +13,7 @@ import { Linking, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useMutateDeleteAccount } from '../../mutations/profileMutations';
 import { useAuth } from '../../context/AuthContext';
+import { version } from '../../../package.json';
 
 type SettingsScreenNavigationProp = StackNavigationProp<ProfileStackParamList, 'SettingsScreen'>;
 type SettingsScreenRouteProp = RouteProp<ProfileStackParamList, 'SettingsScreen'>;
@@ -28,7 +29,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
     const deleteAccountMutation = useMutateDeleteAccount();
     const [showModal, setShowModal] = useState(false);
     const { onLogout, authState: { userId } } = useAuth();
-    const { colors } = useTheme();
 
     const handleLogout = async (): Promise<void> => {
         try {
@@ -75,9 +75,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
                 }}
                 onPress={(): void => console.log('Todo')}
             >
-                <HStack space="2">
+                <HStack alignItems="center" space="2">
                     {/* eslint-disable-next-line dot-notation */}
-                    <Ionicons color={colors['primary']} name="information-circle" size={24} />
+                    <Icon as={Ionicons} color="primary" name="information-circle" />
                     <Text color="primary" textAlign="left">About</Text>
                 </HStack>
                 <Icon as={Ionicons} color="primary" name="chevron-forward" />
@@ -88,9 +88,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
                 }}
                 onPress={handleSubmitFeedback}
             >
-                <HStack space="2">
+                <HStack alignItems="center" space="2">
                     {/* eslint-disable-next-line dot-notation */}
-                    <Ionicons color={colors['primary']} name="chatbox-ellipses" size={24} />
+                    <Icon as={Ionicons} color="primary" name="chatbox-ellipses" />
                     <Text color="primary" textAlign="left">Submit Feedback</Text>
                 </HStack>
                 <Icon as={Ionicons} color="primary" name="chevron-forward" />
@@ -101,13 +101,16 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
                 }}
                 onPress={handleLogout}
             >
-                <HStack space="2">
+                <HStack alignItems="center" space="2">
                     {/* eslint-disable-next-line dot-notation */}
-                    <Ionicons color={colors['primary']} name="log-out" size={24} />
+                    <Icon as={Ionicons} color="primary" name="log-out" />
                     <Text color="primary" textAlign="left">Logout</Text>
                 </HStack>
                 <Icon as={Ionicons} color="primary" name="chevron-forward" />
             </TouchableOpacity>
+            <Text color="white" textAlign="center">
+                {`TabaFit Version: ${version}`}
+            </Text>
             {/* <TouchableOpacity
                 disabled
                 style={{

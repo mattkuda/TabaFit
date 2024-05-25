@@ -25,7 +25,7 @@ export const WorkoutsStackNavigator = (): JSX.Element => {
                     backgroundColor: colors.gray[900],
                 },
                 // eslint-disable-next-line
-                headerTintColor: colors["flame"][500],
+                headerTintColor: "white",
                 headerTitleStyle: { color: 'white' },
                 headerShadowVisible: false,
             }}

@@ -25,7 +25,7 @@ const Stack = createStackNavigator<HomeStackParamList>();
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const SearchButtonComponent = (): JSX.Element => <Searchbutton />;
 const HeaderRightComponent = (): JSX.Element => (
-    <HStack marginRight="2" space={2}>
+    <HStack space={2}>
         <NotificationsButton />
         {process.env.ENVIRONMENT !== 'production' && <DebugModeButton />}
     </HStack>
@@ -50,7 +50,7 @@ export const HomeStackNavigator = (): JSX.Element => {
                     backgroundColor: colors.gray[900],
                 },
                 // eslint-disable-next-line
-                headerTintColor: colors["flame"][500],
+                headerTintColor: "white",
                 headerTitleStyle: { color: 'white' },
                 headerShadowVisible: false,
             }}
