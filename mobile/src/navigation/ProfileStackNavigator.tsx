@@ -53,7 +53,7 @@ export const ProfileStackNavigator = (): JSX.Element => {
                 component={PostScreen}
                 name="PostScreen"
                 options={{
-                    headerTitle: 'Workout Details',
+                    headerTitle: 'Post Details',
                 }}
             />
         </Stack.Navigator>

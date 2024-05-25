@@ -33,7 +33,7 @@ export const SignUpWizardStackNavigator = (): JSX.Element => {
     return (
         <SignUpWizardStack.Navigator
             screenOptions={{
-                headerTitle: 'TabaFit',
+                headerTitle: '',
                 headerStyle: {
                     backgroundColor: colors.gray[900],
                 },
@@ -46,13 +46,16 @@ export const SignUpWizardStackNavigator = (): JSX.Element => {
                 name="WelcomeScreen"
                 options={{
                     headerRight: SkipButton,
+                    headerLeft: () => null,
                 }}
+
             />
             <SignUpWizardStack.Screen
                 component={SuggestedFollowsScreen}
                 name="SuggestedFollowsScreen"
                 options={{
                     headerRight: SkipButton,
+                    headerLeft: () => null,
                 }}
             />
             <SignUpWizardStack.Screen
@@ -60,6 +63,7 @@ export const SignUpWizardStackNavigator = (): JSX.Element => {
                 name="SuggestedWorkoutsScreen"
                 options={{
                     headerRight: SkipButton,
+                    headerLeft: () => null,
                 }}
             />
         </SignUpWizardStack.Navigator>

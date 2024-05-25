@@ -71,14 +71,6 @@ export const ViewWorkoutScreen = (): JSX.Element => {
         navigation.navigate('TabataTimerScreen', { workout, isInMyWorkouts });
     };
 
-    if (isLoading) {
-        return <Center flex={1}><Spinner /></Center>; // Show loading indicator while data is loading
-    }
-
-    if (isError || !workout) {
-        return <Center flex={1}><Text>Error loading workout or workout not found</Text></Center>; // Show error message
-    }
-
     const scaleAnimation = new Animated.Value(1);
 
     let saveButtonText;
@@ -105,6 +97,32 @@ export const ViewWorkoutScreen = (): JSX.Element => {
             }),
         ]),
     ).start();
+
+    if (isLoading) {
+        return (
+            <VStack
+                backgroundColor="gray9"
+                flex={1}
+                space={4}
+                width="100%"
+            >
+                <Center flex={1}><Spinner /></Center>
+            </VStack>
+        );
+    }
+
+    if (isError || !workout) {
+        return (
+            <VStack
+                backgroundColor="gray9"
+                flex={1}
+                space={4}
+                width="100%"
+            >
+                <Center flex={1}><Text>Error loading workout or workout not found</Text></Center>
+            </VStack>
+        );
+    }
 
     return (
         <VStack

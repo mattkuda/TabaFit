@@ -5,6 +5,8 @@ import {
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
     VStack, HStack, Text, Input, Divider,
+    Center,
+    Spinner,
 } from 'native-base';
 import { formatDistanceToNow } from 'date-fns';
 import { useAuth } from '../../context/AuthContext';
@@ -54,7 +56,32 @@ export const PostScreen = (): JSX.Element => {
     };
 
     if (isLoading) return <Text>Loading...</Text>;
-    if (isError || !post) return <Text>Error loading post</Text>;
+
+    if (isLoading) {
+        return (
+            <VStack
+                backgroundColor="gray9"
+                flex={1}
+                space={4}
+                width="100%"
+            >
+                <Center flex={1}><Spinner /></Center>
+            </VStack>
+        );
+    }
+
+    if (isError || !post) {
+        return (
+            <VStack
+                backgroundColor="gray9"
+                flex={1}
+                space={4}
+                width="100%"
+            >
+                <Text>Error loading post</Text>
+            </VStack>
+        );
+    }
     const userFound = post?.user?.username;
 
     return (
