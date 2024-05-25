@@ -156,10 +156,6 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                             <Text fontSize="sm">{getFormattedTimeForTabataWorkout(workout)}</Text>
                         </VStack>
                     </HStack>
-
-                    {/* <Text fontSize="md">
-                        {`Created on ${formattedDate}`}
-                    </Text> */}
                     {workout.tabatas.map((circuit: TabataCircuit, index: number) => (
                         <VStack
                             bg={{

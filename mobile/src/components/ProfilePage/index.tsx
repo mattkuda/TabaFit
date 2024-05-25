@@ -89,7 +89,7 @@ export const ProfilePage = (): JSX.Element => {
                         }}
                         borderRadius="full"
                         color="primary"
-                        icon={<Icon as={Ionicons} name="settings-outline" />}
+                        icon={<Icon as={Ionicons} name="settings" />}
                         onPress={(): void => navigation.navigate('SettingsScreen', { user: userInfo })}
                     />
                 ),

@@ -21,6 +21,8 @@ export const ProfileStackNavigator = (): JSX.Element => {
                 headerStyle: {
                     backgroundColor: colors.gray[900],
                 },
+                // eslint-disable-next-line
+                headerTintColor: colors["flame"][500],
                 headerTitleStyle: { color: 'white' },
                 headerShadowVisible: false,
             }}
