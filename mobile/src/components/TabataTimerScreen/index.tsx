@@ -206,19 +206,20 @@ export const TabataTimerScreen = (): JSX.Element => {
                     }
                 } else if (nextInterval === Intervals.Rest && nextSeconds === restDuration) {
                     playSound('rest');
-                } else if (nextSeconds === 6 && (currentInterval === Intervals.Rest
-                    || currentInterval === Intervals.Intermission
-                    || currentInterval === Intervals.Warmup)) {
-                    playSound('nextup');
-                    // playSound(nextExercise.name);
-                } else if (nextSeconds === 5 && (currentInterval === Intervals.Rest
-                    || currentInterval === Intervals.Intermission
-                    || currentInterval === Intervals.Warmup)) {
-                    const exerciseName = currentTabata[nextExercisesDone]?.name
-                        || (exercisesDone === exercisesPerTabata ? 'minuterest' : currentTabata[0]?.name);
-
-                    playSound(exerciseName);
                 }
+                // Disbaling next up logic for now until we have the sounds for all exercises
+                // else if (nextSeconds === 6 && (currentInterval === Intervals.Rest
+                //     || currentInterval === Intervals.Intermission
+                //     || currentInterval === Intervals.Warmup)) {
+                //     playSound('nextup');
+                // } else if (nextSeconds === 5 && (currentInterval === Intervals.Rest
+                //     || currentInterval === Intervals.Intermission
+                //     || currentInterval === Intervals.Warmup)) {
+                //     const exerciseName = currentTabata[nextExercisesDone]?.name
+                //         || (exercisesDone === exercisesPerTabata ? 'minuterest' : currentTabata[0]?.name);
+
+                //     playSound(exerciseName);
+                // }
 
                 setCurrentInterval(nextInterval);
                 setSeconds(nextSeconds);
@@ -336,7 +337,7 @@ export const TabataTimerScreen = (): JSX.Element => {
             </Flex>
             <Flex alignItems="center" flex={1} justifyContent="flex-end">
                 <Text
-                        // eslint-disable-next-line no-nested-ternary
+                    // eslint-disable-next-line no-nested-ternary
                     color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
                     style={{
                         fontSize: 130, textAlign: 'center', height: 100, lineHeight: 125,
@@ -383,7 +384,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                                 borderRadius="full"
                                 borderWidth="1"
                                 icon={<Icon as={Ionicons} color="white" name="close" size="lg" />}
-                                onPress={(): void => navigation.goBack()}
+                                onPress={(): void => navigation.navigate('WorkoutsScreen')}
                             />
                         </Box>
                     )}

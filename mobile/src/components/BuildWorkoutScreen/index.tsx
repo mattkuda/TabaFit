@@ -190,10 +190,6 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         });
     };
 
-    const handleStartWorkout = (): void => {
-        navigation.navigate('TabataTimerScreen', { workout });
-    };
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const validateWorkout = (): boolean => {
         if (!workoutName.trim()) {
@@ -254,6 +250,50 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         }
     }, [validateWorkout, workout, workoutName, authState.userId, isSavedWorkoutByUser, queryClient,
         navigation, updateWorkoutMutation, saveWorkoutMutation]);
+
+    const handleSaveAndStartWorkout = useCallback((): void => {
+        if (!validateWorkout()) {
+            return;
+        }
+
+        const workoutData: TabataWorkout = {
+            ...workout,
+            name: workoutName,
+            createdAt: new Date().toISOString(),
+            userId: authState.userId,
+        };
+
+        const onSuccessCallback = (): void => {
+            // Invalidate queries to refresh data
+            queryClient.invalidateQueries('my-saved-workouts');
+            queryClient.invalidateQueries(['workout', workout._id.toString()]);
+            navigation.navigate('TabataTimerScreen', { workout });
+        };
+
+        if (isSavedWorkoutByUser) {
+            updateWorkoutMutation.mutate({
+                workoutId: workout._id.toString(),
+                workout: workoutData,
+            }, {
+                onSuccess: onSuccessCallback,
+            });
+        } else {
+            saveWorkoutMutation.mutate({
+                workout: workoutData,
+            }, {
+                onSuccess: onSuccessCallback,
+            });
+        }
+    }, [validateWorkout, workout, workoutName, authState.userId, isSavedWorkoutByUser, queryClient,
+        navigation, updateWorkoutMutation, saveWorkoutMutation]);
+
+    const handleStartWorkout = (): void => {
+        if (!validateWorkout()) {
+            return;
+        }
+
+        navigation.navigate('TabataTimerScreen', { workout });
+    };
 
     useEffect(() => {
         navigation.setOptions({
@@ -442,7 +482,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                     Add Tabata
                 </Button>
             </NestableScrollContainer>
-            <TouchableOpacity onPress={handleStartWorkout}>
+            <TouchableOpacity onPress={isShuffle ? handleStartWorkout : handleSaveAndStartWorkout}>
                 {/* Build Workout Row */}
                 <Box
                     alignItems="center"
@@ -463,7 +503,9 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                     p="4"
                     px={4}
                 >
-                    <Text bold fontSize="lg">Start</Text>
+                    <Text bold fontSize="lg">
+                        {isShuffle ? 'Start' : 'Save and Start'}
+                    </Text>
                     <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>
                         <Icon as={Ionicons} name="flash" />
                     </Animated.View>

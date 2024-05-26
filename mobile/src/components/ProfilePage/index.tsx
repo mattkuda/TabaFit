@@ -166,7 +166,7 @@ export const ProfilePage = (): JSX.Element => {
                     ) : (
                         <FollowButton profileUserId={userId} />
                     )}
-                    {process.env.ENVIRONMENT !== 'production' && (
+                    {process.env.EXPO_PUBLIC_ENVIRONMENT !== 'production' && (
                         <Button
                             color="primary"
                             size="sm"

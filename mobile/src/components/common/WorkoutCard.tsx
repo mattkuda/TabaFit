@@ -70,7 +70,7 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                         >
                             {workout.name}
                         </Text>
-                        <Menu
+                        {/* <Menu
                             shadow={2}
                             // eslint-disable-next-line react/no-unstable-nested-components
                             trigger={(triggerProps): JSX.Element => <MenuTrigger triggerProps={triggerProps} />}
@@ -84,7 +84,7 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                             <Menu.Item>Helvetica</Menu.Item>
                             <Menu.Item isDisabled>Sofia</Menu.Item>
                             <Menu.Item>Cookie</Menu.Item>
-                        </Menu>
+                        </Menu> */}
                     </HStack>
                     <Box alignItems="center" flexDirection="row" justifyContent="space-between">
                         <Box alignItems="center" flexDirection="row">

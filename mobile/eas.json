@@ -7,7 +7,7 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "ENVIRONMENT": "development",
+        "EXPO_PUBLIC_ENVIRONMENT": "development",
         "EXPO_PUBLIC_EAS_API_BASE_URL": "http://localhost:3000"
 
       }
@@ -17,7 +17,7 @@
     },
     "production": {
       "env": {
-        "ENVIRONMENT": "production",
+        "EXPO_PUBLIC_ENVIRONMENT": "production",
         "EXPO_PUBLIC_EAS_API_BASE_URL": "https://tabafit.up.railway.app"
       }
     }

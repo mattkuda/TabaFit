@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-    VStack, Center,
-    Spinner,
+    VStack, Center, Text, Spinner,
 } from 'native-base';
 import { useQueryNotifications } from '../../hooks/useQueryNotifications';
 import { NotificationCard } from './NotificationCard';
@@ -36,8 +35,31 @@ export const NotificationsScreen = (): JSX.Element => {
         await refetch();
     };
 
-    if (isLoading) return <Center>Loading...</Center>;
-    if (isError || !notifications) return <Center>Error loading notifications</Center>;
+    if (isLoading) {
+        return (
+            <VStack
+                backgroundColor="gray9"
+                flex={1}
+                space={4}
+                width="100%"
+            >
+                <Center flex={1}><Spinner /></Center>
+            </VStack>
+        );
+    }
+
+    if (isError) {
+        return (
+            <VStack
+                backgroundColor="gray9"
+                flex={1}
+                space={4}
+                width="100%"
+            >
+                <Text>Error loading notifications</Text>
+            </VStack>
+        );
+    }
 
     return isLoading
         ? (

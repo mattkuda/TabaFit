@@ -2,7 +2,6 @@ import {
     Modal, VStack, Button, Text,
     Icon,
     HStack,
-    useTheme,
 } from 'native-base';
 import React, { useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -110,6 +109,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
             </TouchableOpacity>
             <Text color="white" textAlign="center">
                 {`TabaFit Version: ${version}`}
+            </Text>
+            <Text color="white" textAlign="center">
+                {`Environment: ${process.env.EXPO_PUBLIC_ENVIRONMENT}`}
             </Text>
             {/* <TouchableOpacity
                 disabled

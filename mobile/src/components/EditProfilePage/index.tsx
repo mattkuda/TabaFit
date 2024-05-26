@@ -1,5 +1,5 @@
 import {
-    Modal, VStack, Button, HStack, Input, Select, Text,
+    Modal, VStack, Button, HStack, Input, Select, Text, Toast,
 } from 'native-base';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
@@ -41,7 +41,31 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
     const { onLogout } = useAuth();
     const queryClient = useQueryClient();
 
+    const validateBio = useCallback((): boolean => {
+        if (bio.trim().length > 140) {
+            Toast.show({
+                title: 'Bio cannot exceed 140 characters',
+                bgColor: 'red.500',
+                placement: 'top',
+            });
+            return false;
+        }
+
+        if (weight && (weight < 0 || weight > 1000)) {
+            Toast.show({
+                title: 'Weight must be a valid number',
+                bgColor: 'red.500',
+                placement: 'top',
+            });
+            return false;
+        }
+
+        return true;
+    }, [bio, weight]);
+
     const handleUpdate = useCallback((): void => {
+        if (!validateBio()) return;
+
         updateProfileMutation.mutate({
             userId: user._id.toString(),
             userData: {
@@ -60,7 +84,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                 navigation.goBack();
             },
         });
-    }, [bio, birthday, city, firstName, gender, lastName, navigation,
+    }, [bio, birthday, city, firstName, gender, lastName, navigation, validateBio,
         queryClient, state, updateProfileMutation, user._id, weight]);
 
     const handleProfilePictureUpdate = async (): Promise<void> => {

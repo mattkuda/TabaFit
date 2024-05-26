@@ -55,8 +55,6 @@ export const PostScreen = (): JSX.Element => {
         navigation.navigate('Profile', { userId: post.userId });
     };
 
-    if (isLoading) return <Text>Loading...</Text>;
-
     if (isLoading) {
         return (
             <VStack

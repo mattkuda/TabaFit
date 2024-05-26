@@ -51,6 +51,9 @@ export const DebugModeButton = (): JSX.Element => {
                     {`Toggle wizardActive (${wizardActive ? 'T' : 'F'})`}
                 </Menu.Item>
                 <Menu.Item>
+                    {`EXPO_PUBLIC_ENVIRONMENT: ${process.env.EXPO_PUBLIC_ENVIRONMENT}`}
+                </Menu.Item>
+                <Menu.Item>
                     {`AuthState: ${JSON.stringify(authState)} )`}
                 </Menu.Item>
             </Menu>

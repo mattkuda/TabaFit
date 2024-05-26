@@ -1,23 +1,15 @@
 import React, { FC, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import {
-    VStack, Heading, Button, Modal, Icon,
+    VStack, Button, Modal,
 } from 'native-base';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { useQueryClient } from 'react-query';
-import { Ionicons } from '@expo/vector-icons';
 import { TabataWorkout } from '../../types/workouts';
-import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useInfiniteQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
 import { useMutateDeleteWorkout } from '../../mutations/useMutateSaveWorkout';
 import { WorkoutCard } from '../common/WorkoutCard';
 import { InfiniteScrollList } from '../common/InfiniteScrollList';
-import { BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
-
-type LoadWorkoutScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'LoadWorkoutScreen'>;
 
 export const LoadWorkoutScreen: FC = () => {
-    const navigation = useNavigation<LoadWorkoutScreenNavigationProp>();
     const [showModal,
         setShowModal] = useState(false);
     const [selectedWorkout, setSelectedWorkout] = useState<TabataWorkout | null>(null);
@@ -57,18 +49,6 @@ export const LoadWorkoutScreen: FC = () => {
 
     return (
         <VStack backgroundColor="black" flex={1} p={2} space={2}>
-            {/* <Heading>My Saved Workouts:</Heading> */}
-            {/* <Button
-                alignSelf="flex-end"
-                endIcon={(
-                    <Icon as={Ionicons} name="add" />
-                )}
-                onPress={(): void => navigation.navigate('BuildWorkoutScreen', {
-                    isSavedWorkout: true,
-                } as BuildWorkoutScreenProps)}
-            >
-                Create New Workout
-            </Button> */}
             <InfiniteScrollList
                 data={workouts?.pages.flatMap((page) => page)}
                 estimatedItemSize={100} // Adjust estimatedItemSize as needed

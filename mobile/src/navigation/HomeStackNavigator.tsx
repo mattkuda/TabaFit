@@ -27,7 +27,7 @@ const SearchButtonComponent = (): JSX.Element => <Searchbutton />;
 const HeaderRightComponent = (): JSX.Element => (
     <HStack space={2}>
         <NotificationsButton />
-        {process.env.ENVIRONMENT !== 'production' && <DebugModeButton />}
+        {process.env.EXPO_PUBLIC_ENVIRONMENT !== 'production' && <DebugModeButton />}
     </HStack>
 );
 

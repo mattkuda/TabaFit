@@ -102,7 +102,7 @@ export const LoginScreen = (): JSX.Element => {
             >
                 Login
             </Button>
-            {process.env.ENVIRONMENT !== 'production' && (
+            {process.env.EXPO_PUBLIC_ENVIRONMENT !== 'production' && (
                 <Button
                     borderRadius="full"
                     width="80%"
