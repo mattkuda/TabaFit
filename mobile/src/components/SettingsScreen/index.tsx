@@ -7,7 +7,6 @@ import React, { useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 // eslint-disable-next-line import/no-unresolved
 import { ProfileStackParamList } from 'src/navigation/navigationTypes';
-import { RouteProp } from '@react-navigation/native';
 import { Linking, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useMutateDeleteAccount } from '../../mutations/profileMutations';
@@ -15,19 +14,20 @@ import { useAuth } from '../../context/AuthContext';
 import { version } from '../../../package.json';
 
 type SettingsScreenNavigationProp = StackNavigationProp<ProfileStackParamList, 'SettingsScreen'>;
-type SettingsScreenRouteProp = RouteProp<ProfileStackParamList, 'SettingsScreen'>;
+// type SettingsScreenRouteProp = RouteProp<ProfileStackParamList, 'SettingsScreen'>;
 
 interface SettingsScreenProps {
     navigation: SettingsScreenNavigationProp;
-    route: SettingsScreenRouteProp;
+    // route: SettingsScreenRouteProp;
 
 }
 
-export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigation }) => {
-    const { user } = route.params;
+export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
+    // const { user } = route.params;
     const deleteAccountMutation = useMutateDeleteAccount();
     const [showModal, setShowModal] = useState(false);
     const { onLogout, authState: { userId } } = useAuth();
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     const handleLogout = async (): Promise<void> => {
         try {
@@ -46,8 +46,8 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const handleEditProfile = (): void => {
-        navigation.navigate('EditProfile', { user });
+    const handleAboutTabaFit = (): void => {
+        navigation.navigate('AboutScreen');
     };
 
     const handleSubmitFeedback = (): void => {
@@ -72,12 +72,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
                 style={{
                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
                 }}
-                onPress={(): void => console.log('Todo')}
+                onPress={handleAboutTabaFit}
             >
                 <HStack alignItems="center" space="2">
                     {/* eslint-disable-next-line dot-notation */}
                     <Icon as={Ionicons} color="primary" name="information-circle" />
-                    <Text color="primary" textAlign="left">About</Text>
+                    <Text color="primary" textAlign="left">About TabaFit</Text>
                 </HStack>
                 <Icon as={Ionicons} color="primary" name="chevron-forward" />
             </TouchableOpacity>
@@ -98,14 +98,14 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
                 style={{
                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
                 }}
-                onPress={handleLogout}
+                onPress={(): void => setShowLogoutModal(true)}
             >
                 <HStack alignItems="center" space="2">
                     {/* eslint-disable-next-line dot-notation */}
-                    <Icon as={Ionicons} color="primary" name="log-out" />
-                    <Text color="primary" textAlign="left">Logout</Text>
+                    <Icon as={Ionicons} color="red.500" name="log-out" />
+                    <Text color="red.500" textAlign="left">Logout</Text>
                 </HStack>
-                <Icon as={Ionicons} color="primary" name="chevron-forward" />
+                <Icon as={Ionicons} color="red.500" name="chevron-forward" />
             </TouchableOpacity>
             <Text color="white" textAlign="center">
                 {`TabaFit Version: ${version}`}
@@ -123,6 +123,23 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ route, navigatio
                 <Text color="primary" textAlign="left">Delete Account</Text>
                 <Icon as={Ionicons} color="primary" name="chevron-forward" />
             </TouchableOpacity> */}
+            <Modal isOpen={showLogoutModal} size="xl" onClose={(): void => setShowLogoutModal(false)}>
+                <Modal.Content backgroundColor="gray9">
+                    {/* @ts-expect-error */}
+                    <Modal.Body backgroundColor="gray.900" gap="4" p="8">
+                        <Text bold fontSize="lg" justifyContent="center" textAlign="center">
+                            Log out?
+                        </Text>
+                        <Text textAlign="center">Are you sure you want to log out of your account?</Text>
+                    </Modal.Body>
+                    <Modal.Footer backgroundColor="gray9" borderTopColor="gray.600" justifyContent="center" p={2}>
+                        <Button colorScheme="danger" variant="ghost" onPress={handleLogout}>Log out</Button>
+                    </Modal.Footer>
+                    <Modal.Footer backgroundColor="gray9" borderTopColor="gray.600" justifyContent="center" p={2}>
+                        <Button colorScheme="secondary" variant="ghost" onPress={(): void => setShowLogoutModal(false)}>Cancel</Button>
+                    </Modal.Footer>
+                </Modal.Content>
+            </Modal>
             <Modal isOpen={showModal}>
                 <Modal.Content>
                     <Modal.CloseButton />

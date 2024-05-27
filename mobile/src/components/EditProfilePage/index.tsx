@@ -37,7 +37,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
     const updateProfileMutation = useMutateUpdateProfile();
     const updateProfilePictureMutation = useMutateProfilePicture();
     const deleteAccountMutation = useMutateDeleteAccount();
-    const [showModal, setShowModal] = useState(false);
+    const [showDeleteAccoutModal, setShowDeleteAccoutModal] = useState(false);
     const { onLogout } = useAuth();
     const queryClient = useQueryClient();
 
@@ -151,7 +151,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
             userId: user._id.toString(),
         }, { onSuccess: () => navigation.goBack() });
         await onLogout();
-        setShowModal(false);
+        setShowDeleteAccoutModal(false);
     };
 
     useEffect(() => {
@@ -243,8 +243,9 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
             {/* <Button onPress={handleUpdate}>Update Profile</Button>
             <Button onPress={handleLogout}>Logout</Button>
             <Button onPress={(): void => navigation.goBack()}>Go Back</Button>
-            <Button onPress={(): void => setShowModal(true)}>Delete Account</Button> */}
-            <Modal isOpen={showModal}>
+            <Button onPress={(): void => setShowDeleteAccoutModal(true)}>Delete Account</Button> */}
+            {/* Help Dialog */}
+            <Modal isOpen={showDeleteAccoutModal}>
                 <Modal.Content>
                     <Modal.CloseButton />
                     <Modal.Header>Delete Account</Modal.Header>
@@ -253,7 +254,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                     </Modal.Body>
                     <Modal.Footer>
                         <Button.Group space={2}>
-                            <Button colorScheme="blueGray" variant="ghost" onPress={(): void => setShowModal(false)}>
+                            <Button colorScheme="blueGray" variant="ghost" onPress={(): void => setShowDeleteAccoutModal(false)}>
                                 Cancel
                             </Button>
                             <Button colorScheme="danger" onPress={handleDeleteAccount}>

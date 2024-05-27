@@ -7,6 +7,7 @@ import { ProfileStackParamList } from './navigationTypes';
 import { ConnectionsScreen } from '../components/ConnectionsScreen';
 import { SettingsScreen } from '../components/SettingsScreen';
 import { PostScreen } from '../components/PostScreen';
+import { AboutScreen } from '../components/AboutScreen';
 
 const Stack = createStackNavigator<ProfileStackParamList>();
 
@@ -40,6 +41,13 @@ export const ProfileStackNavigator = (): JSX.Element => {
                 name="SettingsScreen"
                 options={{
                     headerTitle: 'Settings',
+                }}
+            />
+            <Stack.Screen
+                component={AboutScreen}
+                name="AboutScreen"
+                options={{
+                    headerTitle: 'About TabaFit',
                 }}
             />
             <Stack.Screen
