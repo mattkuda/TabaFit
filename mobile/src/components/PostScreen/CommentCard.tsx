@@ -43,13 +43,13 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment, onDeleteComme
                     >
                         {comment.user ? `${comment.user.firstName} ${comment.user.lastName}` : 'Unknown User'}
                     </Text>
-                    <Text color="gray.600" fontSize="xs">
+                    <Text color="gray.400" fontSize="xs">
                         {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
                     </Text>
                 </VStack>
                 {showDeleteButton && (
                     <IconButton
-                        icon={<Icon as={Ionicons} name="trash-bin" size="sm" />}
+                        icon={<Icon as={Ionicons} color="red.500" name="trash-bin" size="sm" />}
                         ml="auto"
                         onPress={(): void => onDeleteComment(comment._id?.toString())}
                     />

@@ -1,11 +1,12 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import {
-    VStack, Heading, Button, Text, Box, HStack, Icon,
+    VStack, Heading, Button, Text, Box, HStack, Icon, Popover,
 } from 'native-base';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
+import { Pressable, TouchableOpacity } from 'react-native';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
 import { shuffleWorkoutTemplate } from '../shuffleUtil';
@@ -147,34 +148,90 @@ export const WorkoutsScreen = (): JSX.Element => {
                             <Icon as={Ionicons} color="white" mx="2" name="chevron-forward" size="xl" />
                         </Box>
                     </TouchableOpacity>
-                    {/* Discover Workouts */}
+                    {/* TabaFit Workouts */}
                     <HStack alignItems="center" justifyContent="space-between">
-                        <Heading size="md">Discover Workouts</Heading>
-                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressDiscoverWorkouts}>View all</Button>
+                        <HStack alignItems="center" space={2}>
+                            <Heading size="md">TabaFit Workouts</Heading>
+                            <Popover
+                                trigger={(triggerProps): JSX.Element => (
+                                    <Pressable {...triggerProps}>
+                                        <Icon as={Ionicons} color="gray.400" name="information-circle" />
+                                    </Pressable>
+                                )}
+                            >
+                                <Popover.Content>
+                                    <Popover.Arrow bg="gray.900" />
+                                    <Popover.Body bg="gray.900">
+                                        <Text>
+                                            Built by the TabaFit team, these workouts are designed to be
+                                            challenging and fun. Try them out!
+                                        </Text>
+                                    </Popover.Body>
+                                </Popover.Content>
+                            </Popover>
+                        </HStack>
+                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressTabaFitWorkouts}>View all</Button>
                     </HStack>
+                    <Text color="gray.300" mt={-3} />
                     <HorizontalWorkoutCards
-                        isLoading={isNewWorkoutsLoading}
-                        workouts={newWorkouts ?? []}
+                        isLoading={false}
+                        workouts={featuredWorkouts ?? []}
                         onPressWorkout={handlePressViewWorkout}
                     />
-                    {/* My Workouts */}
+                    {/* /* My Workouts */ }
                     <HStack alignItems="center" justifyContent="space-between">
-                        <Heading size="md">My Saved Workouts</Heading>
-                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressViewMyWorkouts}>View all </Button>
+                        <HStack alignItems="center" space={2}>
+                            <Heading size="md">My Saved Workouts</Heading>
+                            <Popover
+                                trigger={(triggerProps): JSX.Element => (
+                                    <Pressable {...triggerProps}>
+                                        <Icon as={Ionicons} color="gray.400" name="information-circle" />
+                                    </Pressable>
+                                )}
+                            >
+                                <Popover.Content>
+                                    <Popover.Arrow bg="gray.900" />
+                                    <Popover.Body bg="gray.900">
+                                        <Text>View and manage your saved workouts here.</Text>
+                                    </Popover.Body>
+                                </Popover.Content>
+                            </Popover>
+                        </HStack>
+                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressViewMyWorkouts}>
+                            View all
+                        </Button>
                     </HStack>
                     <HorizontalWorkoutCards
                         isLoading={isMySavedWorkoutsLoading}
                         workouts={mySavedWorkouts ?? []}
                         onPressWorkout={handlePressViewMyWorkout}
                     />
-                    {/* TabaFit Workouts */}
+                    {/* Discover Workouts */}
                     <HStack alignItems="center" justifyContent="space-between">
-                        <Heading size="md">TabaFit Workouts</Heading>
-                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressTabaFitWorkouts}>View all</Button>
+                        <HStack alignItems="center" space={2}>
+                            <Heading size="md">Discover Workouts</Heading>
+                            <Popover
+                                trigger={(triggerProps): JSX.Element => (
+                                    <Pressable {...triggerProps}>
+                                        <Icon as={Ionicons} color="gray.400" name="information-circle" />
+                                    </Pressable>
+                                )}
+                            >
+                                <Popover.Content>
+                                    <Popover.Arrow bg="gray.900" />
+                                    <Popover.Body bg="gray.900">
+                                        <Text>
+                                            Explore new workouts built by the community.
+                                        </Text>
+                                    </Popover.Body>
+                                </Popover.Content>
+                            </Popover>
+                        </HStack>
+                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressDiscoverWorkouts}>View all</Button>
                     </HStack>
                     <HorizontalWorkoutCards
-                        isLoading={false}
-                        workouts={featuredWorkouts ?? []}
+                        isLoading={isNewWorkoutsLoading}
+                        workouts={newWorkouts ?? []}
                         onPressWorkout={handlePressViewWorkout}
                     />
                 </VStack>

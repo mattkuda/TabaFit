@@ -97,7 +97,7 @@ export const PostScreen = (): JSX.Element => {
                             </Text>
                         </HStack>
 
-                        <Text color="gray.300" fontSize="xs">
+                        <Text color="gray.400" fontSize="xs">
                             {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
                         </Text>
                     </VStack>

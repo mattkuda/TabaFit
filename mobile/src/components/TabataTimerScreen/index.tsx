@@ -57,7 +57,6 @@ export const TabataTimerScreen = (): JSX.Element => {
     useKeepAwake();
 
     async function playSound(name: string): Promise<void> {
-        console.log('Playing sound:', name);
         const soundToPlay = sounds[name.toLowerCase()] || sounds.exercise;
         const { sound: newSound } = await Audio.Sound.createAsync(soundToPlay, { shouldPlay: true });
 
@@ -193,8 +192,6 @@ export const TabataTimerScreen = (): JSX.Element => {
                             break;
                     }
                 }
-
-                console.log('Next interval:', nextInterval);
 
                 // Update this to play sound for the next exercise
                 if (nextSeconds === 3 || nextSeconds === 2 || nextSeconds === 1) {

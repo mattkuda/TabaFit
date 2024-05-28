@@ -60,7 +60,7 @@ export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
                                 {`@${post.user.username}`}
                             </Text>
                         </Text>
-                        <Text color="white" fontSize="xs">
+                        <Text color="gray.400" fontSize="xs">
                             {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
                         </Text>
                     </VStack>
