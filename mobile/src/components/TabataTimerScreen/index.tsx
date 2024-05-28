@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
 /* eslint-disable global-require */
 import React, { useState, useEffect, useCallback } from 'react';
@@ -295,6 +296,13 @@ export const TabataTimerScreen = (): JSX.Element => {
         setRemainingTime((prev) => prev - timeSkipped); // Adjust remaining time correctly
     };
 
+    const formatSplitTime = (input: number): { minutes: string, secs: string } => {
+        const formattedTime = formatTime(input);
+        const [minutes, secs] = formattedTime.split(':');
+
+        return { minutes, secs };
+    };
+
     return (
         <Box
             bg={{
@@ -335,15 +343,42 @@ export const TabataTimerScreen = (): JSX.Element => {
                     <Text fontSize="xl">{formatTime(remainingTime)}</Text>
                 </VStack>
             </Flex>
-            <Flex alignItems="center" flex={1} justifyContent="flex-end">
+            {/* This is very hacky codee to replicate a monospaced font */}
+            <Flex alignItems="flex-end" direction="row" flex={1}>
                 <Text
-                    // eslint-disable-next-line no-nested-ternary
                     color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
+                    flex={1}
                     style={{
-                        fontSize: 130, textAlign: 'center', height: 100, lineHeight: 125,
+                        fontSize: 130,
+                        textAlign: 'right',
+                        height: 100,
+                        lineHeight: 125,
                     }}
                 >
-                    {formatTime(seconds)}
+                    {formatSplitTime(seconds).minutes}
+                </Text>
+                <Text
+                    color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
+                    style={{
+                        fontSize: 130,
+                        textAlign: 'center',
+                        height: 100,
+                        lineHeight: 125,
+                    }}
+                >
+                    :
+                </Text>
+                <Text
+                    color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
+                    flex={1}
+                    style={{
+                        fontSize: 130,
+                        textAlign: 'left',
+                        height: 100,
+                        lineHeight: 125,
+                    }}
+                >
+                    {formatSplitTime(seconds).secs}
                 </Text>
             </Flex>
             <Flex alignItems="center" flex={1} justify="flex-start">
