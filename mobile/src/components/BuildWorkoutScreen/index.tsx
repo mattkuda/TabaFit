@@ -91,13 +91,16 @@ const TabataItem = ({
                                     {item ? (
                                         <>
                                             <Image
+                                                key={item?.name}
                                                 paddingX="2"
                                                 source={exerciseIconDictionary[item?.types[0]]}
                                                 style={{
                                                     height: 24, width: 24, tintColor: 'white', paddingHorizontal: 2,
                                                 }}
                                             />
-                                            <Text fontSize="md">{item?.name}</Text>
+                                            <Text fontSize="md">
+                                                {item?.name}
+                                            </Text>
                                         </>
                                     ) : <Text italic color="gray.200" fontSize="md">Select an exercise</Text>}
                                 </HStack>
