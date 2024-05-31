@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
     VStack, IconButton, Icon, HStack, Text, Pressable, Input,
-    Toast, Modal, Button, Checkbox, Divider, FormControl, Box, Image,
+    Toast, Modal, Button, Checkbox, FormControl, Box, Image,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
@@ -519,7 +519,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             <Modal isOpen={showSettingsModal} size="full" onClose={(): void => setShowSettingsModal(false)}>
                 <Modal.Content backgroundColor="gray9">
                     <Modal.CloseButton />
-                    <Modal.Header backgroundColor="gray9">
+                    <Modal.Header backgroundColor="gray9" borderBottomWidth={0}>
                         <Text bold fontSize="lg">
                             Settings
                         </Text>
@@ -611,7 +611,6 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                 </HStack>
                             </HStack>
                         </VStack>
-                        <Divider my="2" />
                         <FormControl.Label>Warmup</FormControl.Label>
                         <Input
                             keyboardType="numeric"
@@ -662,7 +661,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                             onChangeText={(text): void => handleWorkoutSettingChange('cooldownDuration', parseInt(text, 10) || 0)}
                         />
                     </Modal.Body>
-                    <Modal.Footer backgroundColor="gray9">
+                    <Modal.Footer backgroundColor="gray9" borderTopWidth={0}>
                         <Button onPress={handleModalDone}>Done</Button>
                         <Button variant="ghost" onPress={handleModalCancel}>Cancel</Button>
                     </Modal.Footer>
