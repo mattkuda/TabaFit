@@ -9,6 +9,7 @@ type TabBarIconProps = {
 
 export const ProfileTabBarIcon: React.FC<TabBarIconProps> = ({ focused, color, size }) => (
     <Image
+        alt="profile icon"
         source={{ uri: '../../../assets/icon.png' }} // Adjust the path to your image
         style={{
             width: size,

@@ -346,10 +346,10 @@ export const TabataTimerScreen = (): JSX.Element => {
                     color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
                     flex={1}
                     style={{
-                        fontSize: 130,
+                        fontSize: 150,
                         textAlign: 'right',
-                        height: 100,
-                        lineHeight: 125,
+                        height: 135,
+                        lineHeight: 165,
                     }}
                 >
                     {formatSplitTime(seconds).minutes}
@@ -357,10 +357,10 @@ export const TabataTimerScreen = (): JSX.Element => {
                 <Text
                     color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
                     style={{
-                        fontSize: 130,
+                        fontSize: 150,
                         textAlign: 'center',
-                        height: 100,
-                        lineHeight: 125,
+                        height: 135,
+                        lineHeight: 150,
                     }}
                 >
                     :
@@ -369,10 +369,10 @@ export const TabataTimerScreen = (): JSX.Element => {
                     color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
                     flex={1}
                     style={{
-                        fontSize: 130,
+                        fontSize: 150,
                         textAlign: 'left',
-                        height: 100,
-                        lineHeight: 125,
+                        height: 135,
+                        lineHeight: 165,
                     }}
                 >
                     {formatSplitTime(seconds).secs}
@@ -381,7 +381,7 @@ export const TabataTimerScreen = (): JSX.Element => {
             <Flex alignItems="center" flex={1} justify="flex-start">
                 <Text
                     bold
-                        // eslint-disable-next-line no-nested-ternary
+                    // eslint-disable-next-line no-nested-ternary
                     color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
                     style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}
                 >

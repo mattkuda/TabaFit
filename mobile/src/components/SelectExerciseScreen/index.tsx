@@ -18,10 +18,16 @@ import { exerciseIconDictionary } from '../../util/util';
 type SelectExerciseScreenNavigationProp = StackNavigationProp<OldWorkoutsStackParamList, 'SelectExerciseScreen'>;
 type OldSelectExerciseScreenRouteProp = RouteProp<OldWorkoutsStackParamList, 'SelectExerciseScreen'>;
 
-export const SelectExerciseScreen = (): JSX.Element => {
-    const exercises = [...lowerBodyExercises, ...upperBodyExercises, ...absExercises, ...cardioExercises].sort(
+const exercises = [
+    ...Object.values(lowerBodyExercises),
+    ...Object.values(upperBodyExercises),
+    ...Object.values(absExercises),
+    ...Object.values(cardioExercises)]
+    .sort(
         (a, b) => a.name.localeCompare(b.name),
     );
+
+export const SelectExerciseScreen = (): JSX.Element => {
     const navigation = useNavigation<SelectExerciseScreenNavigationProp>();
     const route = useRoute<OldSelectExerciseScreenRouteProp>();
 
@@ -58,6 +64,7 @@ export const SelectExerciseScreen = (): JSX.Element => {
                         <HStack space="2">
                             {/* <Text fontSize="md" pr="2">{exerciseIconDictionary[item?.types[0]]}</Text> */}
                             <Image
+                                alt={`${item?.types[0]} icon`}
                                 paddingX="2"
                                 source={exerciseIconDictionary[item?.types[0]]}
                                 style={{

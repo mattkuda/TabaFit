@@ -199,6 +199,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                             {circuit.map((exercise, exIndex) => (
                                 <HStack space="2">
                                     <Image
+                                        alt={`${exercise.types[0]} icon`}
                                         paddingX="2"
                                         source={exerciseIconDictionary[exercise.types[0]]}
                                         style={{

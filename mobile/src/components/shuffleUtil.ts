@@ -39,26 +39,19 @@ export const shuffleExercises = (
             || (equip === 'Hanging Bar' && selectedEquipment.useHangingBar));
     };
 
+    const getShuffledExercises = (): (type: TabataExerciseType) => TabataExercise[] => {
+        const shuffledExercises = {
+            'Lower Body': shuffleArray(Object.values(lowerBodyExercises)),
+            'Upper Body': shuffleArray(Object.values(upperBodyExercises)),
+            Abs: shuffleArray(Object.values(absExercises)),
+            Cardio: shuffleArray(Object.values(cardioExercises)),
+        };
+
+        return (type: TabataExerciseType): TabataExercise[] => shuffledExercises[type];
+    };
+
     const getRandomExercise = (type: TabataExerciseType): TabataExercise => {
-        let exercises;
-
-        switch (type) {
-            case 'Lower Body':
-                exercises = shuffleArray(lowerBodyExercises);
-                break;
-            case 'Upper Body':
-                exercises = shuffleArray(upperBodyExercises);
-                break;
-            case 'Abs':
-                exercises = shuffleArray(absExercises);
-                break;
-            case 'Cardio':
-                exercises = shuffleArray(cardioExercises);
-                break;
-            default:
-                exercises = [];
-        }
-
+        const exercises = getShuffledExercises()(type);
         const filteredExercises = exercises.filter(equipmentFilter);
 
         return filteredExercises.length > 0

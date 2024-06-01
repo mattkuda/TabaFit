@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
     VStack, IconButton, Icon, HStack, Text, Pressable, Input,
     Toast, Modal, Button, Checkbox, FormControl, Box, Image,
+    Select,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from 'react-native-draggable-flatlist';
@@ -91,6 +92,7 @@ const TabataItem = ({
                                     {item ? (
                                         <>
                                             <Image
+                                                alt={`${item?.types[0]} icon`}
                                                 key={item?.name}
                                                 paddingX="2"
                                                 source={exerciseIconDictionary[item?.types[0]]}
@@ -363,6 +365,8 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 includeCardio,
             );
 
+            console.log('Number of tabatas in triggerShuffle: ', workout.numberOfTabatas);
+
             setWorkout((prev) => ({
                 ...prev,
                 tabatas: shuffledTabatas,
@@ -377,6 +381,14 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // When the select is used to change the number of tabatas, shuffle the exercises
+    useEffect(() => {
+        if (isShuffle) {
+            triggerShuffle();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [workout.numberOfTabatas]);
+
     const handleModalDone = (): void => {
         setShowSettingsModal(false);
         setWorkout(modalWorkout);
@@ -386,6 +398,13 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     const handleModalCancel = (): void => {
         setShowSettingsModal(false);
         setModalWorkout(workout);
+    };
+
+    const handleNumberTabatasChange = (itemValue): void => {
+        setWorkout((prevWorkout) => ({
+            ...prevWorkout,
+            numberOfTabatas: itemValue,
+        }));
     };
 
     const handleWorkoutSettingChange = (name, value): void => {
@@ -430,22 +449,53 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             width="100%"
         >
             {isShuffle ? (
-                <HStack alignItems="center" justifyContent="space-between" pt={4} px={4} space={4} width="100%">
-                    <Box width="42" />
+                <HStack alignItems="center" justifyContent="space-between" pt={4} px={2} space={4} width="100%">
+                    <Box width="42">
+                        <Select
+                            _actionSheetContent={{
+                                bg: 'gray.900',
+                            }}
+                            _item={{
+                                bg: 'gray.900',
+                                color: 'white',
+                                _text: {
+                                    color: 'white',
+                                },
+                                _pressed: {
+                                    bg: 'gray.800',
+                                },
+                            }}
+                            _selectedItem={{
+                                bg: 'gray.700',
+                                color: 'white',
+                            }}
+                            borderColor="transparent"
+                            dropdownIcon={<Icon as={Ionicons} color="gray.400" ml={0} mr={4} name="chevron-down" pl={0} size="xs" />}
+                            minWidth="135"
+                            selectedValue={workout.numberOfTabatas.toString()}
+                            size="lg"
+                            onValueChange={(itemValue): void => handleNumberTabatasChange(parseInt(itemValue, 10) || 0)}
+                        >
+                            {[...Array(99).keys()].map((val, i) => (
+                                <Select.Item key={val} label={`${(i + 1).toString()} ${i > 0 ? 'Tabatas' : 'Tabata'}`} value={(i + 1).toString()} />
+                            ))}
+                        </Select>
+                    </Box>
                     <Button
                         borderRadius="full"
                         justifyContent="center"
                         leftIcon={<Icon as={Ionicons} name="shuffle" />}
-                        width="180"
+                        width="150"
                         onPress={(): void => triggerShuffle()}
                     >
                         <Text bold>Re-Shuffle</Text>
                     </Button>
                     <IconButton
-                        bg="flame.500"
+                        borderColor="flame.500"
                         borderRadius="full"
-                        borderWidth="1"
-                        icon={<Icon as={Ionicons} color="white" name="settings" />}
+                        borderWidth={1}
+                        color="flame.500"
+                        icon={<Icon as={Ionicons} color="flame.500" name="settings" />}
                         onPress={(): void => setShowSettingsModal(true)}
                     />
                 </HStack>
@@ -611,6 +661,13 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                 </HStack>
                             </HStack>
                         </VStack>
+                        <FormControl.Label>Number of Tabatas</FormControl.Label>
+                        <Input
+                            keyboardType="numeric"
+                            placeholder="Number of Tabatas"
+                            value={modalWorkout?.numberOfTabatas.toString()}
+                            onChangeText={(text): void => handleWorkoutSettingChange('numberOfTabatas', parseInt(text, 10) || 0)}
+                        />
                         <FormControl.Label>Warmup</FormControl.Label>
                         <Input
                             keyboardType="numeric"
@@ -631,13 +688,6 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                             placeholder="Rest Duration (seconds)"
                             value={modalWorkout?.restDuration.toString()}
                             onChangeText={(text): void => handleWorkoutSettingChange('restDuration', parseInt(text, 10) || 0)}
-                        />
-                        <FormControl.Label>Number of Tabatas</FormControl.Label>
-                        <Input
-                            keyboardType="numeric"
-                            placeholder="Number of Tabatas"
-                            value={modalWorkout?.numberOfTabatas.toString()}
-                            onChangeText={(text): void => handleWorkoutSettingChange('numberOfTabatas', parseInt(text, 10) || 0)}
                         />
                         <FormControl.Label>Exercises Per Tabata</FormControl.Label>
                         <Input

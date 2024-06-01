@@ -35,7 +35,11 @@ export const AboutScreen: React.FC = () => (
     >
         <ScrollView>
             <VStack bgColor="gray9" height="100%" justifyContent="flex-start" style={{ padding: 20, gap: 8 }}>
-                <Image source={logo} style={[styles.logo]} />
+                <Image
+                    alt="TabaFit Logo"
+                    source={logo}
+                    style={[styles.logo]}
+                />
                 <Text color="white" fontSize="xl" fontWeight="bold" mt={4} textAlign="center">
                     Our Mission
                 </Text>
@@ -67,7 +71,11 @@ export const AboutScreen: React.FC = () => (
                 <Text color="white" fontSize="xl" fontWeight="bold" mt={4} textAlign="center">
                     Our Team
                 </Text>
-                <Image source={mattkuda} style={[styles.circularImage]} />
+                <Image
+                    alt="kuda"
+                    source={mattkuda}
+                    style={[styles.circularImage]}
+                />
                 <Text color="white" textAlign="center">
                     Hi I'm Matt, the developer of TabaFit. As fullstack software engineer, this is my first mobile app.
                     Besides Tabata, I stay active with volleyball, yoga, and hiking.

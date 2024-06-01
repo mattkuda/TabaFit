@@ -33,6 +33,7 @@ const HeaderRightComponent = (): JSX.Element => (
 
 const HeaderImageomponent = (): JSX.Element => (
     <Image
+        alt="TabaFit logo"
         source={logo}
         style={{ width: 30, height: 30 }}
     />

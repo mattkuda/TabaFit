@@ -1,6 +1,6 @@
 import { TabataWorkoutWithUserInfo } from '../types/workouts';
 
-const basicWorkout1: TabataWorkoutWithUserInfo = {
+const featuredWorkout1: TabataWorkoutWithUserInfo = {
     _id: `workout-shuffle`,
     name: `Tabata Shuffle`,
     description: 'TODO refine and add more of these.',
@@ -15,7 +15,15 @@ const basicWorkout1: TabataWorkoutWithUserInfo = {
     exercisesPerTabata: 8,
     intermisionDuration: 1,
     cooldownDuration: 0,
-    equipment: [],
+    equipment: {
+        useKettlebell: false,
+        useBoxPlatform: false,
+        useYogaBall: false,
+        useWorkoutBand: false,
+        useDumbells: false,
+        useHangingBar: false,
+        useNone: true,
+    },
     includeSettings: {
         includeUpper: true,
         includeAbs: true,
@@ -25,4 +33,4 @@ const basicWorkout1: TabataWorkoutWithUserInfo = {
     user: null,
 };
 
-export const featuredWorkouts: TabataWorkoutWithUserInfo[] = [basicWorkout1];
+export const featuredWorkouts: TabataWorkoutWithUserInfo[] = [featuredWorkout1];

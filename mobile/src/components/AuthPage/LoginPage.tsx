@@ -80,7 +80,11 @@ export const LoginScreen = (): JSX.Element => {
             space={4}
             width="100%"
         >
-            <Image source={logo} style={styles.logo} />
+            <Image
+                alt="TabaFit Logo"
+                source={logo}
+                style={styles.logo}
+            />
             <Input
                 autoCapitalize="none"
                 placeholder="Email"

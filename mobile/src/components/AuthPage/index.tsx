@@ -24,6 +24,7 @@ export const AuthPage = (): JSX.Element => {
         >
             <VStack flex={1} justifyContent="center" p={4}>
                 <Image
+                    alt="TabaFit Logo"
                     source={logo}
                     style={{
                         width: 80,
