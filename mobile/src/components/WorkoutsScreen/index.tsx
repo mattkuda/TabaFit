@@ -15,7 +15,7 @@ import { TabataWorkout } from '../../types/workouts';
 import { RefreshableScrollView } from '../RefreshableScrollView';
 import { HorizontalWorkoutCards } from '../HorizontalWorkoutCards';
 import { useQueryWorkouts } from '../../hooks/useQueryWorkouts';
-import { featuredWorkouts } from '../../util/featuredWorkouts';
+import { tabaFitWorkouts } from '../../util/tabaFitWorkouts';
 
 type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'WorkoutsScreen'>;
 
@@ -49,7 +49,11 @@ export const WorkoutsScreen = (): JSX.Element => {
     };
 
     const handlePressViewWorkout = (workout: TabataWorkout): void => {
-        navigation.navigate('ViewWorkoutScreen', { workoutId: workout._id.toString() });
+        if (workout._id.toString().startsWith('tabafit')) {
+            navigation.navigate('ViewWorkoutScreen', { workout });
+        } else {
+            navigation.navigate('ViewWorkoutScreen', { workoutId: workout._id.toString() });
+        }
     };
 
     const handlePressViewMyWorkout = (workout: TabataWorkout): void => {
@@ -164,7 +168,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                                     <Popover.Body bg="gray.900">
                                         <Text>
                                             Built by the TabaFit team, these workouts are designed to be
-                                            challenging and fun. Try them out!
+                                            challenging and fun
                                         </Text>
                                     </Popover.Body>
                                 </Popover.Content>
@@ -175,7 +179,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                     <Text color="gray.300" mt={-3} />
                     <HorizontalWorkoutCards
                         isLoading={false}
-                        workouts={featuredWorkouts ?? []}
+                        workouts={tabaFitWorkouts ?? []}
                         onPressWorkout={handlePressViewWorkout}
                     />
                     {/* /* My Workouts */ }
@@ -192,7 +196,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                                 <Popover.Content>
                                     <Popover.Arrow bg="gray.900" />
                                     <Popover.Body bg="gray.900">
-                                        <Text>View and manage your saved workouts here.</Text>
+                                        <Text>View and manage your saved workouts</Text>
                                     </Popover.Body>
                                 </Popover.Content>
                             </Popover>
@@ -221,7 +225,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                                     <Popover.Arrow bg="gray.900" />
                                     <Popover.Body bg="gray.900">
                                         <Text>
-                                            Explore new workouts built by the community.
+                                            Explore new workouts built by the community
                                         </Text>
                                     </Popover.Body>
                                 </Popover.Content>

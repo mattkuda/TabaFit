@@ -1,7 +1,9 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
 /* eslint-disable global-require */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+    useState, useEffect, useCallback,
+} from 'react';
 import { useKeepAwake } from 'expo-keep-awake';
 import {
     VStack, Text, IconButton, Icon,
@@ -44,7 +46,7 @@ export const TabataTimerScreen = (): JSX.Element => {
     const [exercisesDone, setExercisesDone] = useState(0);
     const [circuitsDone, setCircuitsDone] = useState(0);
     const [seconds, setSeconds] = useState(warmupDuration);
-    const [isActive, setIsActive] = useState(false);
+    const [isActive, setIsActive] = useState(true);
     const [isReset, setIsReset] = useState(false);
     const [totalWorkoutTime, setTotalWorkoutTime] = useState(0);
     const [remainingTime, setRemainingTime] = useState(0);
@@ -261,7 +263,8 @@ export const TabataTimerScreen = (): JSX.Element => {
                 nextInterval = Intervals.Exercise;
                 nextSeconds = exerciseDuration;
                 nextExercisesDone = exercisesDone + 1;
-                nextExercise = currentTabata[nextExercisesDone];
+                nextExercise = currentTabata[nextExercisesDone > 3
+                    ? nextExercisesDone - 4 : nextExercisesDone];
             } else {
                 if (circuitsDone < numberOfTabatas - 1) {
                     nextInterval = Intervals.Intermission;

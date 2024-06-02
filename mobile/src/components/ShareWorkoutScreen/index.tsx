@@ -1,12 +1,13 @@
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import {
-    VStack, Text, Button, Icon, Input, TextArea,
-    HStack,
+    VStack, Text, Button, Input, TextArea,
+    HStack, Switch,
 } from 'native-base';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
 import { useQueryClient } from 'react-query';
-import { ShareWorkoutrScreenNavigationProp } from '../../types/navigationTypes';
+import { ShareWorkoutScreenNavigationProp } from '../../types/navigationTypes';
 import { useAuth } from '../../context/AuthContext';
 import { useMutateShareWorkout } from '../../mutations/useMutateSharePost';
 import { ShareWorkoutScreenRouteProp } from '../../navigation/navigationTypes';
@@ -20,12 +21,13 @@ export const ShareWorkoutScreen = (): JSX.Element => {
     const shareWorkoutMutation = useMutateShareWorkout();
     const { authState } = useAuth();
     const userId = authState?.userId;
-    const navigation = useNavigation<ShareWorkoutrScreenNavigationProp>();
+    const navigation = useNavigation<ShareWorkoutScreenNavigationProp>();
     const saveWorkoutMutation = useMutateSaveWorkout();
-    const [isWorkoutSaved, setIsWorkoutSaved] = useState(false);
+    const [isWorkoutSaved, setIsWorkoutSaved] = useState(isInMyWorkouts);
+    const [saveWorkoutSwitch, setSaveWorkoutSwitch] = useState(isInMyWorkouts);
     const queryClient = useQueryClient();
 
-    const handleSaveWorkout = (): void => {
+    const handleSaveWorkout = (): Promise<void> => new Promise((resolve, reject) => {
         if (authState?.userId && workout) {
             saveWorkoutMutation.mutate({
                 workout: {
@@ -35,12 +37,17 @@ export const ShareWorkoutScreen = (): JSX.Element => {
             }, {
                 onSuccess: () => {
                     setIsWorkoutSaved(true);
+                    resolve();
+                },
+                onError: () => {
+                    reject();
                 },
             });
+        } else {
+            resolve();
         }
-    };
+    });
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleReturnHome = (): void => {
         navigation.reset({
             index: 0,
@@ -49,27 +56,42 @@ export const ShareWorkoutScreen = (): JSX.Element => {
         navigation.navigate('HomePage');
     };
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleShareWorkout = (): void => {
-        shareWorkoutMutation.mutate({
-            userId,
-            workout,
-            title: workoutTitle,
-            description: workoutDescription,
-        }, {
-            onSuccess: () => {
-                queryClient.invalidateQueries('following-posts');
-                handleReturnHome();
-            },
-        });
+        if (saveWorkoutSwitch && !isWorkoutSaved) {
+            handleSaveWorkout().finally(() => {
+                shareWorkoutMutation.mutate({
+                    userId,
+                    workout,
+                    title: workoutTitle,
+                    description: workoutDescription,
+                }, {
+                    onSuccess: () => {
+                        queryClient.invalidateQueries('following-posts');
+                        handleReturnHome();
+                    },
+                });
+            });
+        } else {
+            shareWorkoutMutation.mutate({
+                userId,
+                workout,
+                title: workoutTitle,
+                description: workoutDescription,
+            }, {
+                onSuccess: () => {
+                    queryClient.invalidateQueries('following-posts');
+                    handleReturnHome();
+                },
+            });
+        }
     };
 
     const getTimeOfDay = (date: Date): string => {
         const hour = date.getHours();
 
         if (hour >= 4 && hour < 11) return 'Morning';
-        if (hour >= 1 && hour < 1) return 'Lunch';
-        if (hour >= 1 && hour <= 5) return 'Afternoon';
+        if (hour >= 11 && hour < 14) return 'Lunch';
+        if (hour >= 14 && hour <= 17) return 'Afternoon';
         return 'Evening';
     };
 
@@ -77,12 +99,10 @@ export const ShareWorkoutScreen = (): JSX.Element => {
         const timeOfDay = getTimeOfDay(completedAt);
 
         setWorkoutTitle(`${timeOfDay} Tabata`);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [completedAt]);
 
     useEffect(() => {
         navigation.setOptions({
-            // eslint-disable-next-line react/no-unstable-nested-components
             headerRight: (): JSX.Element => (
                 <Button
                     size="lg"
@@ -97,7 +117,6 @@ export const ShareWorkoutScreen = (): JSX.Element => {
 
     useEffect(() => {
         navigation.setOptions({
-            // eslint-disable-next-line react/no-unstable-nested-components
             headerLeft: (): JSX.Element => (
                 <Button
                     colorScheme="dull"
@@ -113,7 +132,6 @@ export const ShareWorkoutScreen = (): JSX.Element => {
 
     return (
         <VStack backgroundColor="gray9" flex={1} p={4} space={4}>
-            <Text bold alignSelf="center" fontSize="xl">Share Your Workout 💪</Text>
             <Input
                 fontSize="md"
                 placeholder="Enter Post Name"
@@ -128,26 +146,20 @@ export const ShareWorkoutScreen = (): JSX.Element => {
                 value={workoutDescription}
                 onChangeText={setWorkoutDescription}
             />
-            <HStack alignItems="center" justifyContent="space-between">
-                <Text>
-                    Save workout for later?
-                </Text>
+            <HStack alignItems="center" space={4}>
+                <Text>{!isWorkoutSaved ? 'Save workout when sharing?' : 'Workout saved'}</Text>
                 {isInMyWorkouts
-                    ? <Text>Workout Saved</Text>
+                    ? <Text>Saved</Text>
                     : (
-                        <Button
-                            borderRadius="full"
-                            disabled={isInMyWorkouts || isWorkoutSaved}
-                            leftIcon={
-                            isInMyWorkouts || isWorkoutSaved
-                                ? <Icon as={<Ionicons name="checkmark" />} color="green.500" size="sm" />
-                                : <Icon as={<Ionicons name="save-outline" />} color="flame.500" size="sm" />
-                            }
-                            variant="outline"
-                            onPress={handleSaveWorkout}
-                        >
-                            {isInMyWorkouts || isWorkoutSaved ? 'Workout Saved' : 'Save Workout'}
-                        </Button>
+                        <Switch
+                            disabled={isWorkoutSaved}
+                            isChecked={isWorkoutSaved || saveWorkoutSwitch}
+                            offThumbColor="gray7"
+                            offTrackColor="gray2"
+                            onThumbColor="gray7"
+                            onToggle={(): void => setSaveWorkoutSwitch(!saveWorkoutSwitch)}
+                            onTrackColor="flame.500"
+                        />
                     )}
             </HStack>
         </VStack>

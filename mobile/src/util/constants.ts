@@ -90,8 +90,8 @@ export const absExercises: Record<string, TabataExercise> = {
     Crunches: {
         _id: 'abs1', name: 'Crunches', types: ['Abs'], description: 'Basic crunches for core.', difficulty: 'Easy', videoLink: '', equipment: ['None'],
     },
-    'Leg Raises': {
-        _id: 'abs2', name: 'Leg Raises', types: ['Abs'], description: 'Lift legs for lower abs.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
+    'Lying Leg Raises': {
+        _id: 'abs2', name: 'Lying Leg Raises', types: ['Abs'], description: 'Lift legs for lower abs.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
     },
     Planks: {
         _id: 'abs3', name: 'Planks', types: ['Abs'], description: 'Hold a plank position for core strength.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
@@ -139,10 +139,7 @@ export const cardioExercises: Record<string, TabataExercise> = {
         _id: 'cardio1', name: 'High Knees', types: ['Cardio'], description: 'Run in place with high knees.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
     },
     Burpees: {
-        _id: 'cardio2', name: 'Burpees', types: ['Cardio'], description: 'Full body exercise with a jump.', difficulty: 'Hard', videoLink: '', equipment: ['None'],
-    },
-    'Mountain Climbers': {
-        _id: 'cardio3', name: 'Mountain Climbers', types: ['Cardio'], description: 'Rapid knee drives from a plank position.', difficulty: 'Medium', videoLink: '', equipment: ['None'],
+        _id: 'cardio2', name: 'Burpees', types: ['Cardio', 'Abs'], description: 'Full body exercise with a jump.', difficulty: 'Hard', videoLink: '', equipment: ['None'],
     },
     'Jumping Jacks': {
         _id: 'cardio4', name: 'Jumping Jacks', types: ['Cardio'], description: 'Jump with spread legs and clapping hands overhead.', difficulty: 'Easy', videoLink: '', equipment: ['None'],

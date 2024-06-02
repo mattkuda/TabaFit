@@ -106,7 +106,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                 space={4}
                 width="100%"
             >
-                <Center flex={1}><Spinner /></Center>
+                <Center flex={1}><Spinner color="white" /></Center>
             </VStack>
         );
     }
@@ -123,6 +123,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
             </VStack>
         );
     }
+    const isTabaFitAdmin = workout?._id.toString().startsWith('tabafit');
 
     return (
         <VStack
@@ -152,9 +153,9 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                     </HStack>
                     <Box alignItems="center" flexDirection="row" justifyContent="space-between">
                         <Box alignItems="center" flexDirection="row">
-                            <ProfilePicture size="xs" user={workout?.user} />
+                            <ProfilePicture isTabaFitAdmin={isTabaFitAdmin} size="xs" user={workout?.user} />
                             <Text style={{ marginLeft: 8 }}>
-                                {`${workout?.user?.firstName} ${workout?.user?.lastName}`}
+                                {isTabaFitAdmin ? 'TabaFit' : `${workout?.user?.firstName} ${workout?.user?.lastName}`}
                             </Text>
                         </Box>
                         {formattedDate}
@@ -178,14 +179,13 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                         <VStack
                             bg={{
                                 linearGradient: {
-                                    colors: ['gray.600', 'gray.700'],
+                                    colors: ['gray.500', 'gray.600'],
                                     start: [0, 1],
                                     end: [1, 0],
                                 },
                             }}
                             borderColor="primary"
                             borderRadius="md"
-                            borderWidth={1}
                             key={index}
                             mt={2}
                             p={4}

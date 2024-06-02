@@ -45,7 +45,7 @@ export type TabataTimerScreenNavigationProp = StackNavigationProp<TabNavigatorPa
     params: TabataWorkout;
 };
 
-export type ShareWorkoutrScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'ShareWorkout'> & {
+export type ShareWorkoutScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'ShareWorkout'> & {
     params: TabataWorkout;
 };
 

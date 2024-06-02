@@ -5,10 +5,13 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { UserFullInfoModel } from '../types/users';
 import { UserInfo } from '../types/workouts';
+// @ts-ignore
+import logo from '../../assets/tabafit-icon.png';
 
 interface ProfilePictureProps extends IAvatarProps {
     user: UserFullInfoModel | UserInfo;
     showEdit?: boolean;
+    isTabaFitAdmin?: boolean;
 }
 
 const sizes = {
@@ -26,18 +29,26 @@ const sizes = {
 };
 
 export const ProfilePicture: React.FC<ProfilePictureProps> = ({
-    user, size = 'md', showEdit, ...avatarProps
+    user, isTabaFitAdmin, size = 'md', showEdit, ...avatarProps
 }) => {
     const fontSize = sizes[size as keyof typeof sizes] || 24;
 
     const initials = user?.firstName || user?.lastName ? `${user?.firstName?.charAt(0).toUpperCase() ?? ''}${user?.lastName?.charAt(0).toUpperCase() ?? ''}` : user?.username?.charAt(0).toUpperCase() ?? '?';
+
+    let profilePictureSource;
+
+    if (isTabaFitAdmin) {
+        profilePictureSource = logo;
+    } else if (user?.profilePictureUrl) {
+        profilePictureSource = { uri: user.profilePictureUrl };
+    }
 
     return (
         <Avatar
             alignItems="center"
             justifyContent="center"
             size={size}
-            source={user?.profilePictureUrl ? { uri: user.profilePictureUrl } : undefined}
+            source={profilePictureSource}
             {...avatarProps}
         >
             <Text color="white" fontSize={fontSize} fontWeight="bold">

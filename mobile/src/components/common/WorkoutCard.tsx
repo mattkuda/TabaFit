@@ -15,6 +15,7 @@ import { ProfilePicture } from '../ProfilePicture';
 interface WorkoutCardProps {
     workout: TabataWorkoutWithUserInfo;
     isInMyWorkouts: boolean;
+    isTabaFitWorkout?: boolean;
     onDelete?: (workout: TabataWorkoutWithUserInfo) => void;
     onEdit?: () => void;
     onSave?: () => void;
@@ -28,7 +29,7 @@ const MenuTrigger = ({ triggerProps }): JSX.Element => (
 );
 
 export const WorkoutCard: FC<WorkoutCardProps> = ({
-    workout, isInMyWorkouts, onDelete, onEdit, onSave, onUnsave,
+    workout, isTabaFitWorkout, isInMyWorkouts, onDelete, onEdit, onSave, onUnsave,
 }) => {
     const navigation = useNavigation<StackNavigationProp<TabNavigatorParamList>>();
     const formattedDate = format(new Date(workout.createdAt), 'MMMM do, yyyy');
@@ -41,12 +42,16 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
         navigation.navigate('ViewWorkoutScreen', { workoutId: workout._id.toString() });
     };
 
+    const handleClickTabaFitWorkout = (): void => {
+        navigation.navigate('ViewWorkoutScreen', { workout });
+    };
+
     return (
         <TouchableOpacity
             style={{
                 width: '100%', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5,
             }}
-            onPress={handleClickCard}
+            onPress={isTabaFitWorkout ? handleClickTabaFitWorkout : handleClickCard}
         >
             <VStack
                 backgroundColor="gray9"
