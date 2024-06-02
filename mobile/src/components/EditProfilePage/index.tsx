@@ -174,6 +174,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
             <HStack>
                 <TouchableOpacity onPress={handleProfilePictureUpdate}>
                     <ProfilePicture
+                        showEdit
                         borderColor="primary"
                         borderWidth={2}
                         size="xl"

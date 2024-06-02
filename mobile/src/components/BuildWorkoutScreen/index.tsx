@@ -46,14 +46,13 @@ const TabataItem = ({
     <VStack
         bg={{
             linearGradient: {
-                colors: ['gray.600', 'gray.700'],
+                colors: ['gray.500', 'gray.600'],
                 start: [0, 1],
                 end: [1, 0],
             },
         }}
         borderColor="primary"
         borderRadius="md"
-        borderWidth={1}
         mb={2}
         mt={2}
     >
@@ -73,7 +72,7 @@ const TabataItem = ({
             />
             <IconButton
                 disabled={!removeTabata}
-                icon={<Icon as={Ionicons} color="red.600" name="close-circle" size="6" />}
+                icon={<Icon as={Ionicons} color="gray.400" name="remove-circle-outline" size="6" />}
                 opacity={removeTabata ? 1 : 0}
                 onPress={(): void => removeTabata(circuitIndex)}
             />
@@ -365,8 +364,6 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 includeCardio,
             );
 
-            console.log('Number of tabatas in triggerShuffle: ', workout.numberOfTabatas);
-
             setWorkout((prev) => ({
                 ...prev,
                 tabatas: shuffledTabatas,
@@ -483,8 +480,9 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                     </Box>
                     <Button
                         borderRadius="full"
+                        color="flame.500"
                         justifyContent="center"
-                        leftIcon={<Icon as={Ionicons} name="shuffle" />}
+                        leftIcon={<Icon as={Ionicons} name="shuffle" size="lg" />}
                         width="150"
                         onPress={(): void => triggerShuffle()}
                     >
@@ -536,7 +534,6 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 </Button>
             </NestableScrollContainer>
             <TouchableOpacity onPress={isShuffle ? handleStartWorkout : handleSaveAndStartWorkout}>
-                {/* Build Workout Row */}
                 <Box
                     alignItems="center"
                     bg={{
@@ -551,8 +548,8 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                     // @ts-expect-error
                     gap={2}
                     justifyContent="center"
-                    mb="4"
                     mx="4"
+                    my="2"
                     p="4"
                     px={4}
                 >
