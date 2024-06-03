@@ -40,7 +40,7 @@ export const getFormattedTimeForTabataWorkout = (workout: TabataWorkout): string
         workout.warmupDuration,
         workout.exerciseDuration,
         workout.restDuration,
-        workout.numberOfTabatas,
+        workout.tabatas.length,
         workout.exercisesPerTabata,
         workout.intermisionDuration,
         workout.cooldownDuration,
