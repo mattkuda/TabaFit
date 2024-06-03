@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Icon, IconButton, Box, Badge,
+    Icon, IconButton, Box, Text,
 } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -26,21 +26,21 @@ export const NotificationsButton = (): JSX.Element => {
                 onPress={(): void => navigation.navigate('NotificationsScreen')}
             />
             {unreadNotificationsCount > 0 && (
-                <Badge
-                    _text={{
-                        fontSize: 'xs',
-                    }}
-                    colorScheme="danger"
+                <Box
+                    alignItems="center"
+                    bg="red.500"
+                    borderRadius="full"
+                    height={3}
+                    justifyContent="center"
                     position="absolute"
-                    right={0}
-                    rounded="full"
-                    top={0}
-                    variant="solid"
-                    zIndex={1}
+                    right={2}
+                    top={2}
+                    width={3}
                 >
-                    {unreadNotificationsCount}
-                </Badge>
-
+                    <Text color="white" fontSize="10" pb={4}>
+                        {unreadNotificationsCount}
+                    </Text>
+                </Box>
             )}
         </Box>
     );

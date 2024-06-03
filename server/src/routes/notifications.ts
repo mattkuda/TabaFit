@@ -51,7 +51,7 @@ const addUserInfoToNotifications = async (notifcations: NotificationSchema[]) =>
         lastName: user?.lastName,
         profilePictureUrl: user?.profilePictureUrl,
       },
-      summaryText: generatesummaryText(notif, `${user?.firstName} + ${user?.lastName}`),
+      summaryText: generatesummaryText(notif, `${user?.firstName} ${user?.lastName}`),
     };
   }),
 );
@@ -107,12 +107,14 @@ router.post('/', authenticate, async (req: AuthRequest, res: Response) => {
 // Mark all notifications as read
 router.put('/mark-as-read', authenticate, async (req: AuthRequest, res: Response) => {
   const { userId } = req;
+  console.log('Marking notifications as read');
 
   try {
     await notificationsCollection.updateMany(
       { recipientUserId: new ObjectId(userId), read: false },
       { $set: { read: true } },
     );
+    console.log('Notifications marked as read');
     res.status(200).send({ message: 'Notifications marked as read' });
   } catch (err) {
     console.error('Failed to mark notifications as read', err);

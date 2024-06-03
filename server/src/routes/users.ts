@@ -41,6 +41,8 @@ router.get('/suggested', async (req: AuthRequest, res: Response) => {
   try {
     const idsToFetch = SUGGESTED_USER_IDS.map((id) => new mongoose.Types.ObjectId(id));
     const suggestedUsers = await usersCollection.find({ _id: { $in: idsToFetch } }).toArray();
+    const newestUsers = await usersCollection.find().sort({ createdAt: -1 }).limit(2).toArray();
+    suggestedUsers.push(...newestUsers);
 
     res.status(200).send(suggestedUsers);
   } catch (err) {

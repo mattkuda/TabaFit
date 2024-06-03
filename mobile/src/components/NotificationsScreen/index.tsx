@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import {
     VStack, Center, Text, Spinner,
 } from 'native-base';
+import { useQueryClient } from 'react-query';
 import { useQueryNotifications } from '../../hooks/useQueryNotifications';
 import { NotificationCard } from './NotificationCard';
 import { useMutateNotificationsRead } from '../../mutations/useMutateNotificationsRead';
@@ -15,7 +16,7 @@ export const NotificationsScreen = (): JSX.Element => {
     const { mutate: markNotificationsRead } = useMutateNotificationsRead();
     const { authState } = useAuth();
     const userId = authState?.userId;
-    // This effect runs when the component is mounted and whenever notifications are refetched
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         if (notifications?.length > 0) {
@@ -26,10 +27,14 @@ export const NotificationsScreen = (): JSX.Element => {
 
             if (unreadNotificationIds.length > 0) {
                 // Call the mutation to mark them as read
-                markNotificationsRead({ userId });
+                markNotificationsRead(
+                    { userId },
+                    { onSuccess: () => queryClient.invalidateQueries('notifications') },
+                );
             }
         }
-    }, [notifications, markNotificationsRead, userId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const onRefresh = async (): Promise<void> => {
         await refetch();
