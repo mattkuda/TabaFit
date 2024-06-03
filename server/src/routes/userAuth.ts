@@ -31,13 +31,14 @@ let usersCollection: Collection<IUser>;
 router.post('/signup', async (req: Request, res: Response) => {
   try {
     const {
-      email, password, username, firstName, lastName, createdAt,
+      email, password, username, firstName, lastName,
     } = req.body;
     const existingUser = await usersCollection.findOne({ email });
     if (existingUser) {
       return res.json({ message: 'User already exists' });
     }
     const hashedPassword = await bcrypt.hash(password, 12);
+    const createdAt = new Date();
     const result = await usersCollection.insertOne({
       email,
       password: hashedPassword,

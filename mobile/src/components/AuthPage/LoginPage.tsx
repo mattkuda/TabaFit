@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
 import {
-    StyleSheet, Image, TouchableOpacity,
+    StyleSheet, Image,
 } from 'react-native';
 import { useSetRecoilState } from 'recoil';
 import {
     Button, VStack, Text, Input,
 } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { userState } from '../../atoms/userStateAtom';
 import { useAuth } from '../../context/AuthContext';
 // @ts-ignore
 import logo from '../../../assets/tabafit-icon.png';
-import { AuthStackParamList } from '../../navigation/navigationTypes';
 
 const styles = StyleSheet.create({
     container: {
@@ -44,7 +41,6 @@ export const LoginScreen = (): JSX.Element => {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const setUser = useSetRecoilState(userState);
     const { onLogin } = useAuth();
-    const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
     const handleSignIn = async (): Promise<void> => {
         try {
             const data = await onLogin(email, password);
@@ -115,20 +111,6 @@ export const LoginScreen = (): JSX.Element => {
                     Pre-fill
                 </Button>
             )}
-            <Button
-                borderRadius="full"
-                colorScheme="secondary"
-                width="80%"
-                onPress={(): void => navigation.navigate('SignupScreen')}
-            >
-                Create a new account
-            </Button>
-            <TouchableOpacity onPress={(): void => navigation.navigate('SignupScreen')}>
-                <Text color="white">
-                    Not a member?
-                    <Text textDecorationLine="underline">Sign up</Text>
-                </Text>
-            </TouchableOpacity>
             <Text>{errorMessage}</Text>
         </VStack>
     );

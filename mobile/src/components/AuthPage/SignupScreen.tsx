@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
 import {
-    StyleSheet, Image, TouchableOpacity,
+    StyleSheet, Image,
 } from 'react-native';
 import { useSetRecoilState } from 'recoil';
 import {
     Input, VStack, Button, Text,
 } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { userState } from '../../atoms/userStateAtom';
 import { useAuth } from '../../context/AuthContext';
 // @ts-ignore
 // eslint-disable-next-line import/extensions, import/no-unresolved
 import logo from '../../../assets/tabafit-icon.png';
-import { AuthStackParamList } from '../../navigation/navigationTypes';
 
 const styles = StyleSheet.create({
     container: {
@@ -48,7 +45,6 @@ export const SignupScreen = (): JSX.Element => {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const setUser = useSetRecoilState(userState);
     const { onRegister } = useAuth();
-    const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
 
     const handleSignUp = async (): Promise<void> => {
         try {
@@ -135,19 +131,21 @@ export const SignupScreen = (): JSX.Element => {
             >
                 Sign Up
             </Button>
-            <Button
-                borderRadius="full"
-                width="80%"
-                onPress={handlePrefill}
-            >
-                Pre-fill
-            </Button>
-            <TouchableOpacity onPress={(): void => navigation.navigate('LoginScreen')}>
+            {process.env.EXPO_PUBLIC_ENVIRONMENT !== 'production' && (
+                <Button
+                    borderRadius="full"
+                    width="80%"
+                    onPress={handlePrefill}
+                >
+                    Pre-fill
+                </Button>
+            )}
+            {/* <TouchableOpacity onPress={(): void => navigation.navigate('LoginScreen')}>
                 <Text color="white">
                     Already have an account?
                     <Text textDecorationLine="underline">Log in</Text>
                 </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <Text>{errorMessage}</Text>
         </VStack>
     );

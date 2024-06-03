@@ -144,11 +144,11 @@ export const ProfilePage = (): JSX.Element => {
                     >
                         <VStack alignItems="center">
                             <Text fontSize="md">Following</Text>
-                            <Text bold fontSize="md">{userInfo?.followingCount || '--'}</Text>
+                            <Text bold fontSize="md">{isUserInfoSuccess ? userInfo.followingCount : '--'}</Text>
                         </VStack>
                         <VStack alignItems="center">
                             <Text fontSize="md">Followers</Text>
-                            <Text bold fontSize="md">{userInfo?.followersCount || '--'}</Text>
+                            <Text bold fontSize="md">{isUserInfoSuccess ? userInfo.followersCount : '--'}</Text>
                         </VStack>
                     </Flex>
                 </TouchableOpacity>
@@ -179,7 +179,7 @@ export const ProfilePage = (): JSX.Element => {
                 </HStack>
             </HStack>
         </VStack>
-    ), [userInfo, handlePressFollowers, isCurrentUserProfile,
+    ), [userInfo, handlePressFollowers, isUserInfoSuccess, isCurrentUserProfile,
         navigateToEditProfile, userId, handleLogout]);
 
     return (
