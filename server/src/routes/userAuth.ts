@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import createSecretToken from '../util/createSecretToken';
 import { IUser } from '../models/UserModel';
+import { validateUsername } from '../util/util';
 
 const router = express.Router();
 const connectionString = process.env.MONGODB_URI;
@@ -33,6 +34,13 @@ router.post('/signup', async (req: Request, res: Response) => {
     const {
       email, password, username, firstName, lastName,
     } = req.body;
+
+    // Validate the username
+    const { isValid, errorMessage } = validateUsername(username);
+    if (!isValid) {
+      return res.status(400).json({ message: errorMessage });
+    }
+
     const existingUser = await usersCollection.findOne({ email });
     if (existingUser) {
       return res.json({ message: 'User already exists' });

@@ -40,7 +40,9 @@ const featuredWorkout1: TabataWorkoutWithUserInfo = {
         includeCardio: true,
         includeLower: true,
     },
-    user: null,
+    user: {
+        username: 'tabafit',
+    },
 };
 
 const featuredWorkout2: TabataWorkoutWithUserInfo = {
@@ -98,7 +100,9 @@ const featuredWorkout2: TabataWorkoutWithUserInfo = {
         includeCardio: true,
         includeLower: true,
     },
-    user: null,
+    user: {
+        username: 'tabafit',
+    },
 };
 
 export const tabaFitWorkouts: TabataWorkoutWithUserInfo[] = [featuredWorkout1, featuredWorkout2];

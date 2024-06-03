@@ -17,7 +17,7 @@ import { exerciseIconDictionary, formatBodyParts } from '../../util/util';
 import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
 import { useAuth } from '../../context/AuthContext';
 import { useMutateSaveWorkout } from '../../mutations/useMutateSaveWorkout';
-import { ProfilePicture } from '../ProfilePicture';
+import { PictureWithName } from '../PictureWithName';
 
 type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'WorkoutsScreen'>;
 
@@ -123,7 +123,6 @@ export const ViewWorkoutScreen = (): JSX.Element => {
             </VStack>
         );
     }
-    const isTabaFitAdmin = workout?._id.toString().startsWith('tabafit');
 
     return (
         <VStack
@@ -152,12 +151,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                         </Button>
                     </HStack>
                     <Box alignItems="center" flexDirection="row" justifyContent="space-between">
-                        <Box alignItems="center" flexDirection="row">
-                            <ProfilePicture isTabaFitAdmin={isTabaFitAdmin} size="xs" user={workout?.user} />
-                            <Text style={{ marginLeft: 8 }}>
-                                {isTabaFitAdmin ? 'TabaFit' : `${workout?.user?.firstName} ${workout?.user?.lastName}`}
-                            </Text>
-                        </Box>
+                        <PictureWithName user={workout.user} />
                         {formattedDate}
                     </Box>
                     <Text italic fontSize="sm">

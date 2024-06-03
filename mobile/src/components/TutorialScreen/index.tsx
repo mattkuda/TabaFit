@@ -43,9 +43,8 @@ export const TutorialScreen = (): JSX.Element => {
                         Explore posts from your following or the global community.
                         Use this tab to search for users and check notifications.
                     </Text>
-
                     <HStack alignItems="center" space={2}>
-                        <Icon as={Ionicons} name="fitness-outline" size="lg" />
+                        <Icon as={Ionicons} name="timer-outline" size="lg" />
                         <Text fontSize="lg" fontWeight="bold">
                             Workouts
                         </Text>

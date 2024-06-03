@@ -6,7 +6,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { TabataWorkoutWithUserInfo } from '../types/workouts';
 import { getFormattedTimeForTabataWorkout } from './TabataTimerScreen/util';
-import { ProfilePicture } from './ProfilePicture';
+import { PictureWithName } from './PictureWithName';
 
 interface SlideWorkoutCardProps {
     workout: TabataWorkoutWithUserInfo;
@@ -55,13 +55,7 @@ const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress })
                 </VStack>
             </HStack>
             <Box alignItems="center" flexDirection="row" justifyContent="flex-end">
-                <ProfilePicture
-                    size="xs"
-                    user={workout?.user}
-                />
-                <Text style={{ marginLeft: 8 }}>
-                    {`${workout?.user?.firstName} ${workout?.user?.lastName}`}
-                </Text>
+                <PictureWithName user={workout.user} />
             </Box>
         </Box>
     </TouchableOpacity>

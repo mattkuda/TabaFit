@@ -23,8 +23,8 @@ export const WelcomeScreen = (): JSX.Element => {
             <VStack
                 flex={1}
                 justifyContent="center"
-                p={8}
-                space={2}
+                px={4}
+                space={4}
             >
                 <Text fontSize="2xl" fontWeight="bold" mt="10" textAlign="center">
                     Welcome to
@@ -33,9 +33,10 @@ export const WelcomeScreen = (): JSX.Element => {
                     , your tabata social network!
                 </Text>
                 <Text fontSize="lg" mt="5" textAlign="center">
-                    Thank you for being a part of the alpha testing.
+                    Thank you for being a part of the alpha testing cohort.
                     We're excited to have you here.
                 </Text>
+
                 <Text fontSize="lg" mt="5" textAlign="center">
                     Let's familiarize you with your new HIIT home!
                 </Text>

@@ -93,14 +93,15 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
         <VStack
             backgroundColor="gray9"
             flex={1}
+            space={0}
             width="100%"
         >
             <ScrollView flex={1}>
                 <VStack
+                    flex={1}
                     justifyContent="center"
-                    mt="5"
-                    px="4"
-                    space={8}
+                    px={4}
+                    space={4}
                 >
                     <VStack
                         flex={1}
