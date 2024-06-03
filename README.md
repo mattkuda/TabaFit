@@ -5,6 +5,7 @@
 Welcome to TabaFit, the ultimate Tabata Timer application built with React Native and Expo. TabaFit goes beyond just timing your workouts; it brings together a vibrant community of fitness enthusiasts where you can generate custom workouts on the fly based on your preferences, explore and save a variety of workouts, and share your own routines with the world.
 
 ### Key Features
+
 - Generate Workouts: Create personalized Tabata workouts tailored to your specific preferences and goals.
 - Explore and Save Workouts: Browse through a diverse collection of workouts created by the community and save your favorites for easy access.
 - Share Your Workouts: Publish your own workout routines and share them with the TabaFit community.
@@ -53,6 +54,8 @@ Ensure that you have the following installed on your local machine:
    ```
 
 This will open Expo Dev Tools in the browser. You can then use an emulator or a physical device connected to your machine to run the application.
+
+To build expo, run `eas build --platform ios --profile production`. Use the transfer app to upload the .eas file to the Apple Connect.
 
 #### Backend
 
