@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import {
     VStack, Text, Button, Input, TextArea,
-    HStack, Switch,
+    HStack,
+    Checkbox,
 } from 'native-base';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useQueryClient } from 'react-query';
@@ -147,20 +148,16 @@ export const ShareWorkoutScreen = (): JSX.Element => {
                 onChangeText={setWorkoutDescription}
             />
             <HStack alignItems="center" space={4}>
-                <Text>{!isWorkoutSaved ? 'Save workout when sharing?' : 'Workout saved'}</Text>
-                {isInMyWorkouts
-                    ? <Text>Saved</Text>
-                    : (
-                        <Switch
-                            disabled={isWorkoutSaved}
-                            isChecked={isWorkoutSaved || saveWorkoutSwitch}
-                            offThumbColor="gray7"
-                            offTrackColor="gray2"
-                            onThumbColor="gray7"
-                            onToggle={(): void => setSaveWorkoutSwitch(!saveWorkoutSwitch)}
-                            onTrackColor="flame.500"
-                        />
-                    )}
+                <Text>{!isWorkoutSaved ? 'Save workout to library when sharing?' : 'Workout saved to library'}</Text>
+                <Checkbox
+                    bgColor={saveWorkoutSwitch ? 'primary' : 'gray9'}
+                    isChecked={isWorkoutSaved || saveWorkoutSwitch}
+                    isDisabled={isWorkoutSaved}
+                    key="Kettlebell-checkbox"
+                    size="lg"
+                    value="Kettlebells"
+                    onChange={(): void => setSaveWorkoutSwitch(!saveWorkoutSwitch)}
+                />
             </HStack>
         </VStack>
     );

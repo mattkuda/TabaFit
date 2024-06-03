@@ -103,9 +103,11 @@ export type AuthStackParamList = {
 
 export type SignUpWizardStackParamList = {
     WelcomeScreen: undefined;
+    TutorialScreen: undefined;
     SuggestedFollowsScreen: undefined;
     SuggestedWorkoutsScreen: undefined;
 };
 export type WelcomeScreenNavigationProp = StackNavigationProp<SignUpWizardStackParamList, 'WelcomeScreen'>;
+export type TutorialScreenNavigationProp = StackNavigationProp<SignUpWizardStackParamList, 'TutorialScreen'>;
 export type SuggestedFollowsScreenNavigationProp = StackNavigationProp<SignUpWizardStackParamList, 'SuggestedFollowsScreen'>;
 export type SuggestedWorkoutsScreenNavigationProp = StackNavigationProp<SignUpWizardStackParamList, 'SuggestedWorkoutsScreen'>;

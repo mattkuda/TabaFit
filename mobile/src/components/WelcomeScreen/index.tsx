@@ -10,7 +10,7 @@ export const WelcomeScreen = (): JSX.Element => {
     const navigation = useNavigation<WelcomeScreenNavigationProp>();
     const handleContinue = async (): Promise<void> => {
         // Navigate to the Home screen
-        navigation.navigate('SuggestedFollowsScreen');
+        navigation.navigate('TutorialScreen');
     };
 
     return (
@@ -23,13 +23,21 @@ export const WelcomeScreen = (): JSX.Element => {
             <VStack
                 flex={1}
                 justifyContent="center"
+                p={8}
                 space={2}
             >
                 <Text fontSize="2xl" fontWeight="bold" mt="10" textAlign="center">
-                    Welcome to TabaFit, your tabata social network!
+                    Welcome to
+                    {' '}
+                    <Text color="flame.500">TabaFit</Text>
+                    , your tabata social network!
                 </Text>
                 <Text fontSize="lg" mt="5" textAlign="center">
-                    {`Let's get you set up`}
+                    Thank you for being a part of the alpha testing.
+                    We're excited to have you here.
+                </Text>
+                <Text fontSize="lg" mt="5" textAlign="center">
+                    Let's familiarize you with your new HIIT home!
                 </Text>
             </VStack>
             <Box flex={1} px={4}>

@@ -5,6 +5,7 @@ import { WelcomeScreen } from '../components/WelcomeScreen';
 import { SuggestedFollowsScreen } from '../components/SuggestedFollowsScreen';
 import { SuggestedWorkoutsScreen } from '../components/SuggestedWorkoutsScreen';
 import { wizardActiveState } from '../atoms/wizardActiveAtom';
+import { TutorialScreen } from '../components/TutorialScreen';
 
 const SignUpWizardStack = createStackNavigator();
 
@@ -49,6 +50,14 @@ export const SignUpWizardStackNavigator = (): JSX.Element => {
                     headerLeft: () => null,
                 }}
 
+            />
+            <SignUpWizardStack.Screen
+                component={TutorialScreen}
+                name="TutorialScreen"
+                options={{
+                    headerRight: SkipButton,
+                    headerLeft: () => null,
+                }}
             />
             <SignUpWizardStack.Screen
                 component={SuggestedFollowsScreen}

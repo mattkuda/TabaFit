@@ -3,13 +3,13 @@ import {
     Box, Button, ScrollView, VStack, Text, Icon, HStack, Center,
 } from 'native-base';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useSetRecoilState } from 'recoil';
 import { useFollowAll, useFollowUser } from '../../mutations/followMutations';
 import { useAuth } from '../../context/AuthContext';
-import { SuggestedFollowsScreenNavigationProp } from '../../navigation/navigationTypes';
 import { User } from '../../types/users';
 import { useQuerySuggestedUsers } from '../../hooks/useQueryUserByUsername';
 import { ProfilePicture } from '../ProfilePicture';
+import { wizardActiveState } from '../../atoms/wizardActiveAtom';
 
 type ConnectionCardProps = {
     user: User;
@@ -68,12 +68,13 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
     const { data: users } = useQuerySuggestedUsers();
     const [isAllFollowed, setIsAllFollowed] = useState(false);
     const [isAnyFollowed, setIsAnyFollowed] = useState(false);
+    const setwizardActive = useSetRecoilState(wizardActiveState);
 
     const userId = authState?.userId;
-    const navigation = useNavigation<SuggestedFollowsScreenNavigationProp>();
-    const handleContinue = async (): Promise<void> => {
-        navigation.navigate('SuggestedWorkoutsScreen');
-    };
+    // const navigation = useNavigation<SuggestedFollowsScreenNavigationProp>();
+    // const handleContinue = async (): Promise<void> => {
+    //     navigation.navigate('HomeScreen');
+    // };
     const handleFollowAll = (): void => {
         if (userId) {
             followAllMutation.mutate(
@@ -107,10 +108,10 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
                         space={2}
                     >
                         <Text fontSize="2xl" fontWeight="bold" mt="10" textAlign="center">
-                            {`First, let's get you connected!`}
+                            {`Let's get you connected!`}
                         </Text>
                         <Text fontSize="lg" mt="5" textAlign="center">
-                            Follow some suggested users, or follow all Tabaat users!
+                            Follow some suggested users, or follow all current TabaFit users!
                         </Text>
                     </VStack>
                     <Center>
@@ -148,9 +149,9 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
                     m={4}
                     position="absolute"
                     width="100%"
-                    onPress={handleContinue}
+                    onPress={(): void => setwizardActive(false)}
                 >
-                    Continue
+                    Finish!
                 </Button>
             </Box>
         </VStack>
