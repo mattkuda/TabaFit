@@ -39,9 +39,12 @@ const SUGGESTED_USER_IDS = ['64f4ccf351498c529ff6d7b0'];
 
 router.get('/suggested', async (req: AuthRequest, res: Response) => {
   try {
+    const { userId } = req;
     const idsToFetch = SUGGESTED_USER_IDS.map((id) => new mongoose.Types.ObjectId(id));
     const suggestedUsers = await usersCollection.find({ _id: { $in: idsToFetch } }).toArray();
-    const newestUsers = await usersCollection.find().sort({ createdAt: -1 }).limit(2).toArray();
+
+    const newestUsers = await usersCollection.find({ _id: { $ne: userId } })
+      .sort({ createdAt: -1 }).limit(2).toArray();
     suggestedUsers.push(...newestUsers);
 
     res.status(200).send(suggestedUsers);
