@@ -34,9 +34,9 @@ router.post('/signup', async (req: Request, res: Response) => {
     const {
       email, password, username, firstName, lastName,
     } = req.body;
-
+    const trimmedUsername = username.trim();
     // Validate the username
-    const { isValid, errorMessage } = validateUsername(username);
+    const { isValid, errorMessage } = validateUsername(trimmedUsername);
     if (!isValid) {
       return res.status(400).json({ message: errorMessage });
     }
@@ -48,11 +48,11 @@ router.post('/signup', async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(password, 12);
     const createdAt = new Date();
     const result = await usersCollection.insertOne({
-      email,
+      email: email.trim(),
       password: hashedPassword,
-      username,
-      firstName,
-      lastName,
+      username: trimmedUsername,
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
       createdAt,
     } as IUser);
     const token = createSecretToken(result.insertedId.toString());
