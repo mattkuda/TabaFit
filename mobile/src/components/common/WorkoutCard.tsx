@@ -53,13 +53,19 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
             }}
             onPress={isTabaFitWorkout ? handleClickTabaFitWorkout : handleClickCard}
         >
-            <VStack
-                backgroundColor="gray9"
-                borderRadius="md"
-                mt={4}
-                p={4}
-                space={4}
-                width="100%"
+            <Box
+                bg={{
+                    linearGradient: {
+                        colors: ['gray.500', 'gray.600'],
+                        start: [0, 1],
+                        end: [1, 0],
+                    },
+                }}
+                borderColor="flame"
+                justifyContent="space-between"
+                my={2}
+                p="4"
+                rounded="md"
             >
                 <VStack space={0}>
                     <HStack justifyContent="space-between">
@@ -117,14 +123,14 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                         <Text fontSize="sm">{getFormattedTimeForTabataWorkout(workout)}</Text>
                     </VStack>
                 </HStack>
-                <HStack justifyContent="space-between" space={4}>
+                <HStack justifyContent="space-between" pt={4} space={4}>
                     <Button
                         colorScheme="secondary"
                         endIcon={(
                             <Icon
                                 as={Ionicons}
                                 color="white"
-                                name="eye-outline"
+                                name="information-circle"
                             />
                         )}
                         size="md"
@@ -160,7 +166,7 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                         </Box>
                     </TouchableOpacity>
                 </HStack>
-            </VStack>
+            </Box>
         </TouchableOpacity>
     );
 };
