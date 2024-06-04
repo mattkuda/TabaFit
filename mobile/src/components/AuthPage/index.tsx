@@ -39,14 +39,14 @@ export const AuthPage = (): JSX.Element => {
                 <Text color="cherry.500" fontSize="4xl" fontWeight="bold">
                     Your Tabata Workout Community
                 </Text>
-                <Text fontSize="xl" pt={1}>
-                    Create custom workouts that fit your goals
+                <Text fontSize="xl" pt={2}>
+                    Create custom workouts
                 </Text>
-                <Text fontSize="xl" pt={1}>
-                    Track your progress with precision
+                <Text fontSize="xl" pt={2}>
+                    Track your progress
                 </Text>
-                <Text fontSize="xl" pt={1}>
-                    Inspire and share with your friends
+                <Text fontSize="xl" pt={2}>
+                    Inspire and share with friends
                 </Text>
             </VStack>
             <Box bg="gray9" height={110} p="4" width="100%">

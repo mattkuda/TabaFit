@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Button, Icon } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
+import { useQueryClient } from 'react-query';
 import { useAuth } from '../../context/AuthContext';
 import { useFollowUser, useUnfollowUser } from '../../mutations/followMutations';
 import { useQueryFollowing } from '../../hooks/useQueryFollowing';
@@ -18,12 +19,14 @@ export const FollowButton = ({ profileUserId }: PropTypes): JSX.Element => {
     const followMutation = useFollowUser();
     const unfollowMutation = useUnfollowUser();
     const isFollowing = data?.length > 0;
+    const queryClient = useQueryClient();
 
     const handleFollow = (): void => {
         if (userId) {
             followMutation.mutate({ followerId: userId, followeeId: profileUserId }, {
                 onSuccess: () => {
                     refetch();
+                    queryClient.invalidateQueries('userInfo');
                 },
             });
         }
@@ -41,6 +44,7 @@ export const FollowButton = ({ profileUserId }: PropTypes): JSX.Element => {
             unfollowMutation.mutate({ followerId: userId, followeeId: profileUserId }, {
                 onSuccess: () => {
                     refetch();
+                    queryClient.invalidateQueries('userInfo');
                 },
             });
         }

@@ -1,5 +1,7 @@
 import React from 'react';
-import { Box, useTheme } from 'native-base';
+import {
+    Box, Spinner, VStack, useTheme,
+} from 'native-base';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useInfiniteQueryPostsFollowing, FetchPostsResponse } from '../../hooks/useQueryPostsFollowing';
 import { PostCard } from '../common/PostCard';
@@ -11,6 +13,7 @@ const Tab = createMaterialTopTabNavigator();
 const FollowingTab = (): JSX.Element => {
     const {
         data: postData,
+        isLoading,
         hasNextPage,
         fetchNextPage,
         isFetchingNextPage,
@@ -23,24 +26,31 @@ const FollowingTab = (): JSX.Element => {
     };
 
     return (
-        <Box backgroundColor="black" flex={1} justifyContent="center">
-            <InfiniteScrollList
-                data={flatMap}
-                estimatedItemSize={285}
-                fetchData={fetchNextPage}
-                hasNextPage={hasNextPage}
-                isFetchingNextPage={isFetchingNextPage}
-                keyExtractor={(_, index): string => `post-${index}`}
-                renderItem={(item): JSX.Element => <PostCard post={item} />}
-                onRefresh={onRefresh}
-            />
-        </Box>
+        isLoading ? (
+            <VStack backgroundColor="gray9" flex={1} space={0} width="100%">
+                <Spinner color="white" mt={8} size="lg" />
+            </VStack>
+        ) : (
+            <Box backgroundColor="black" flex={1} justifyContent="center">
+                <InfiniteScrollList
+                    data={flatMap}
+                    estimatedItemSize={285}
+                    fetchData={fetchNextPage}
+                    hasNextPage={hasNextPage}
+                    isFetchingNextPage={isFetchingNextPage}
+                    keyExtractor={(_, index): string => `post-${index}`}
+                    renderItem={(item): JSX.Element => <PostCard post={item} />}
+                    onRefresh={onRefresh}
+                />
+            </Box>
+        )
     );
 };
 
 const GlobalTab = (): JSX.Element => {
     const {
         data: postData,
+        isLoading,
         hasNextPage,
         fetchNextPage,
         isFetchingNextPage,
@@ -54,18 +64,24 @@ const GlobalTab = (): JSX.Element => {
     const flatMap2 = postData?.pages.flatMap((page: FetchPostsResponse) => page);
 
     return (
-        <Box backgroundColor="black" flex={1} justifyContent="center">
-            <InfiniteScrollList
-                data={flatMap2}
-                estimatedItemSize={285}
-                fetchData={fetchNextPage}
-                hasNextPage={hasNextPage}
-                isFetchingNextPage={isFetchingNextPage}
-                keyExtractor={(_, index): string => `post-${index}`}
-                renderItem={(item): JSX.Element => <PostCard post={item} />}
-                onRefresh={onRefresh}
-            />
-        </Box>
+        isLoading ? (
+            <VStack backgroundColor="gray9" flex={1} space={0} width="100%">
+                <Spinner color="white" mt={8} size="lg" />
+            </VStack>
+        ) : (
+            <Box backgroundColor="black" flex={1} justifyContent="center">
+                <InfiniteScrollList
+                    data={flatMap2}
+                    estimatedItemSize={285}
+                    fetchData={fetchNextPage}
+                    hasNextPage={hasNextPage}
+                    isFetchingNextPage={isFetchingNextPage}
+                    keyExtractor={(_, index): string => `post-${index}`}
+                    renderItem={(item): JSX.Element => <PostCard post={item} />}
+                    onRefresh={onRefresh}
+                />
+            </Box>
+        )
     );
 };
 

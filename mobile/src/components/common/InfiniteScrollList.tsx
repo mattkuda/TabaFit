@@ -4,12 +4,12 @@ import { FlashList } from '@shopify/flash-list';
 
 type InfiniteScrollListProps<T> = {
     data: T[] | undefined;
-    fetchData: () => void;
-    hasNextPage: boolean;
-    isFetchingNextPage: boolean;
-    keyExtractor: (item: T, index: number) => string;
-    renderItem: (item: T) => JSX.Element;
-    onRefresh: () => Promise<void>;
+    fetchData?: () => void;
+    hasNextPage?: boolean;
+    isFetchingNextPage?: boolean;
+    keyExtractor?: (item: T, index: number) => string;
+    renderItem?: (item: T) => JSX.Element;
+    onRefresh?: () => Promise<void>;
     estimatedItemSize: number;
 };
 // TODO: Update to the functionality of that in ProfilePage
