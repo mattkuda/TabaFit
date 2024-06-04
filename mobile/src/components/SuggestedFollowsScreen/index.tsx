@@ -28,7 +28,7 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
     const followMutation = useFollowUser();
 
     const handleFollow = (): void => {
-        followMutation.mutate({ followerId: user._id.toString(), followeeId: userId }, {
+        followMutation.mutate({ followerId: userId, followeeId: user._id.toString() }, {
             onSuccess: () => {
                 setIsFollowed(true);
                 onFollowed();

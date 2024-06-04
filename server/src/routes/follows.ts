@@ -1,7 +1,7 @@
-import express, { Request, Response } from 'express';
+import express, { Response } from 'express';
 import { MongoClient, Collection, ObjectId } from 'mongodb';
 import mongoose from 'mongoose';
-import authenticate from '../middleware/authenticate';
+import authenticate, { AuthRequest } from '../middleware/authenticate';
 
 const router = express.Router();
 const connectionString = process.env.MONGODB_URI;
@@ -27,8 +27,9 @@ let usersCollection: Collection;
 })();
 
 // Endpoint to follow a user
-router.post('/follow', authenticate, async (req: Request, res: Response) => {
-  const { followerId, followeeId } = req.body;
+router.post('/follow', authenticate, async (req: AuthRequest, res: Response) => {
+  const { followeeId } = req.body;
+  const followerId = req.userId;
 
   try {
     // Check if the follow relationship already exists
@@ -56,8 +57,9 @@ router.post('/follow', authenticate, async (req: Request, res: Response) => {
 });
 
 // Endpoint to unfollow a user
-router.delete('/unfollow', authenticate, async (req: Request, res: Response) => {
-  const { followerId, followeeId } = req.body;
+router.delete('/unfollow', authenticate, async (req: AuthRequest, res: Response) => {
+  const { followeeId } = req.body;
+  const followerId = req.userId;
 
   try {
     // Check if the follow relationship exists
@@ -84,7 +86,7 @@ router.delete('/unfollow', authenticate, async (req: Request, res: Response) => 
 });
 
 // Endpoint to get a list of followers for a user, with pagination
-router.get('/:userId/followers', async (req: Request, res: Response) => {
+router.get('/:userId/followers', async (req: AuthRequest, res: Response) => {
   const userId = new mongoose.Types.ObjectId(req.params.userId);
   const offset = parseInt(req.query.offset as string, 10) || 0;
   const limit = parseInt(req.query.limit as string, 10) || 10;
@@ -113,7 +115,7 @@ router.get('/:userId/followers', async (req: Request, res: Response) => {
 });
 
 // Endpoint to get a list of users a user is following, with pagination
-router.get('/:userId/following', async (req: Request, res: Response) => {
+router.get('/:userId/following', async (req: AuthRequest, res: Response) => {
   const userId = new mongoose.Types.ObjectId(req.params.userId);
   const offset = parseInt(req.query.offset as string, 10) || 0;
   const limit = parseInt(req.query.limit as string, 10) || 10;
@@ -143,9 +145,8 @@ router.get('/:userId/following', async (req: Request, res: Response) => {
 });
 
 // Endpoint to follow multiple users
-router.post('/followAll', authenticate, async (req: Request, res: Response) => {
-  const { followerId } = req.body;
-
+router.post('/followAll', authenticate, async (req: AuthRequest, res: Response) => {
+  const followerId = req.userId;
   if (!followerId) {
     res.status(400).send({ message: 'User ID is required' });
     return;
