@@ -1,38 +1,23 @@
 import React, { useState } from 'react';
 import {
-    StyleSheet, Image,
+    StyleSheet, Image, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { useSetRecoilState } from 'recoil';
 import {
-    Input, VStack, Button, Text,
+    Input, VStack, Button, Text, ScrollView,
 } from 'native-base';
 import { userState } from '../../atoms/userStateAtom';
 import { useAuth } from '../../context/AuthContext';
 // @ts-ignore
-// eslint-disable-next-line import/extensions, import/no-unresolved
 import logo from '../../../assets/tabafit-icon.png';
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-    },
     logo: {
         maxWidth: '80%',
         height: 100,
         resizeMode: 'contain',
-        marginHorizontal: 100,
         marginBottom: 20,
-    },
-    input: {
-        width: '80%',
-        padding: 10,
-        marginVertical: 8,
-        borderWidth: 1,
-        borderColor: 'grey',
-        borderRadius: 5,
+        alignSelf: 'center',
     },
 });
 
@@ -78,75 +63,83 @@ export const SignupScreen = (): JSX.Element => {
 
     return (
         <VStack
-            alignItems="center"
             backgroundColor="gray9"
             flex={1}
-            justifyContent="center"
-            space={4}
             width="100%"
         >
-            <Image
-                alt="TabaFt logo"
-                source={logo}
-                style={styles.logo}
-            />
-            <Input
-                autoCapitalize="none"
-                placeholder="Email"
-                value={email}
-                width="80%"
-                onChangeText={setEmail}
-            />
-            <Input
-                secureTextEntry
-                placeholder="Password"
-                value={password}
-                width="80%"
-                onChangeText={setPassword}
-            />
-            <Input
-                placeholder="First Name"
-                value={firstName}
-                width="80%"
-                onChangeText={setFirstName}
-            />
-            <Input
-                placeholder="Last Name"
-                value={lastName}
-                width="80%"
-                onChangeText={setLastName}
-            />
-            <Input
-                autoCapitalize="none"
-                placeholder="Username"
-                value={username}
-                width="80%"
-                onChangeText={setUsername}
-            />
-            <Button
-                borderRadius="full"
-                disabled={isFormIncomplete}
-                width="80%"
-                onPress={handleSignUp}
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={{ flex: 1 }}
             >
-                Sign Up
-            </Button>
-            {process.env.EXPO_PUBLIC_ENVIRONMENT !== 'production' && (
-                <Button
-                    borderRadius="full"
-                    width="80%"
-                    onPress={handlePrefill}
-                >
-                    Pre-fill
-                </Button>
-            )}
-            {/* <TouchableOpacity onPress={(): void => navigation.navigate('LoginScreen')}>
-                <Text color="white">
-                    Already have an account?
-                    <Text textDecorationLine="underline">Log in</Text>
-                </Text>
-            </TouchableOpacity> */}
-            <Text>{errorMessage}</Text>
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                    <VStack
+                        alignItems="center"
+                        backgroundColor="gray9"
+                        flex={1}
+                        justifyContent="center"
+                        padding={4}
+                        space={4}
+                        width="100%"
+                    >
+                        <Image
+                            alt="TabaFit logo"
+                            source={logo}
+                            style={styles.logo}
+                        />
+                        <Input
+                            autoCapitalize="none"
+                            placeholder="Email"
+                            value={email}
+                            width="80%"
+                            onChangeText={setEmail}
+                        />
+                        <Input
+                            secureTextEntry
+                            placeholder="Password"
+                            value={password}
+                            width="80%"
+                            onChangeText={setPassword}
+                        />
+                        <Input
+                            placeholder="First Name"
+                            value={firstName}
+                            width="80%"
+                            onChangeText={setFirstName}
+                        />
+                        <Input
+                            placeholder="Last Name"
+                            value={lastName}
+                            width="80%"
+                            onChangeText={setLastName}
+                        />
+                        <Input
+                            autoCapitalize="none"
+                            placeholder="Username"
+                            value={username}
+                            width="80%"
+                            onChangeText={setUsername}
+                        />
+                        <Button
+                            borderRadius="full"
+                            disabled={isFormIncomplete}
+                            width="80%"
+                            onPress={handleSignUp}
+                        >
+                            Sign Up
+                        </Button>
+                        {process.env.EXPO_PUBLIC_ENVIRONMENT !== 'production' && (
+                        <Button
+                            borderRadius="full"
+                            width="80%"
+                            onPress={handlePrefill}
+                        >
+                            Pre-fill
+                        </Button>
+                        )}
+                        <Text>{errorMessage}</Text>
+                    </VStack>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </VStack>
     );
 };
