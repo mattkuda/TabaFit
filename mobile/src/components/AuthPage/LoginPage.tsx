@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    StyleSheet, Image,
+    StyleSheet, Image, ScrollView, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { useSetRecoilState } from 'recoil';
 import {
@@ -69,49 +69,62 @@ export const LoginScreen = (): JSX.Element => {
 
     return (
         <VStack
-            alignItems="center"
             backgroundColor="gray9"
             flex={1}
-            justifyContent="center"
-            space={4}
             width="100%"
         >
-            <Image
-                alt="TabaFit Logo"
-                source={logo}
-                style={styles.logo}
-            />
-            <Input
-                autoCapitalize="none"
-                placeholder="Email"
-                value={email}
-                width="80%"
-                onChangeText={setEmail}
-            />
-            <Input
-                secureTextEntry
-                placeholder="Password"
-                value={password}
-                width="80%"
-                onChangeText={setPassword}
-            />
-            <Button
-                borderRadius="full"
-                width="80%"
-                onPress={handleSignIn}
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={{ flex: 1 }}
             >
-                Login
-            </Button>
-            {process.env.EXPO_PUBLIC_ENVIRONMENT !== 'production' && (
-                <Button
-                    borderRadius="full"
-                    width="80%"
-                    onPress={handlePrefill}
-                >
-                    Pre-fill
-                </Button>
-            )}
-            <Text>{errorMessage}</Text>
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                    <VStack
+                        alignItems="center"
+                        flex={1}
+                        justifyContent="center"
+                        padding={4}
+                        space={4}
+                        width="100%"
+                    >
+                        <Image
+                            alt="TabaFit Logo"
+                            source={logo}
+                            style={styles.logo}
+                        />
+                        <Input
+                            autoCapitalize="none"
+                            placeholder="Email"
+                            value={email}
+                            width="80%"
+                            onChangeText={setEmail}
+                        />
+                        <Input
+                            secureTextEntry
+                            placeholder="Password"
+                            value={password}
+                            width="80%"
+                            onChangeText={setPassword}
+                        />
+                        <Button
+                            borderRadius="full"
+                            width="80%"
+                            onPress={handleSignIn}
+                        >
+                            Login
+                        </Button>
+                        {process.env.EXPO_PUBLIC_ENVIRONMENT !== 'production' && (
+                        <Button
+                            borderRadius="full"
+                            width="80%"
+                            onPress={handlePrefill}
+                        >
+                            Pre-fill
+                        </Button>
+                        )}
+                        <Text>{errorMessage}</Text>
+                    </VStack>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </VStack>
     );
 };

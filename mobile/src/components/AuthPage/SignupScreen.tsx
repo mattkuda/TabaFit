@@ -74,7 +74,6 @@ export const SignupScreen = (): JSX.Element => {
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <VStack
                         alignItems="center"
-                        backgroundColor="gray9"
                         flex={1}
                         justifyContent="center"
                         padding={4}
@@ -128,13 +127,13 @@ export const SignupScreen = (): JSX.Element => {
                             Sign Up
                         </Button>
                         {process.env.EXPO_PUBLIC_ENVIRONMENT !== 'production' && (
-                        <Button
-                            borderRadius="full"
-                            width="80%"
-                            onPress={handlePrefill}
-                        >
-                            Pre-fill
-                        </Button>
+                            <Button
+                                borderRadius="full"
+                                width="80%"
+                                onPress={handlePrefill}
+                            >
+                                Pre-fill
+                            </Button>
                         )}
                         <Text>{errorMessage}</Text>
                     </VStack>
