@@ -21,6 +21,7 @@ import {
     TabataExercise, TabataWorkout,
 } from '../../types/workouts';
 import { exerciseIconDictionary } from '../../util/util';
+import { GradientVStack } from '../common/GradientVStack';
 
 export type TabataCircuit = (TabataExercise | null)[];
 
@@ -44,14 +45,14 @@ const TabataItem = ({
     updateExercisesOrder,
 }: TabataItemProps): JSX.Element => (
     <VStack
-        bg={{
-            linearGradient: {
-                colors: ['gray.500', 'gray.600'],
-                start: [0, 1],
-                end: [1, 0],
-            },
-        }}
-        borderColor="primary"
+        // bg={{
+        //     linearGradient: {
+        //         colors: ['gray.500', 'gray.600'],
+        //         start: [0, 1],
+        //         end: [1, 0],
+        //     },
+        // }}
+        bg="gray.700"
         borderRadius="md"
         mb={2}
         mt={2}
@@ -303,9 +304,10 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         navigation.setOptions({
             // eslint-disable-next-line react/no-unstable-nested-components
             headerRight: (): JSX.Element => (
-                <HStack marginRight="2" space={0}>
+                <HStack marginRight="3" space={0}>
                     <IconButton
-                        icon={<Icon as={Ionicons} color="flame.500" name="help-circle" />}
+                        icon={<Icon as={Ionicons} color="white" name="help-circle" />}
+                        size="lg"
                         onPress={(): void => setShowHelpDialog(true)}
                     />
                     {(!isShuffle) && (
@@ -439,15 +441,15 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     ).start();
 
     return (
-        <VStack
-            backgroundColor="gray9"
+        <GradientVStack
             flex={1}
+            px={4}
             space={0}
             width="100%"
         >
             {isShuffle ? (
-                <HStack alignItems="center" justifyContent="space-between" pt={4} px={2} space={4} width="100%">
-                    <Box width="42">
+                <HStack alignItems="center" background="transparent" justifyContent="space-between" pt={2} space={4} width="100%">
+                    <Box ml={-6} width="42">
                         <Select
                             _actionSheetContent={{
                                 bg: 'gray.900',
@@ -466,10 +468,15 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                 bg: 'gray.700',
                                 color: 'white',
                             }}
+                            backgroundColor="transparent"
                             borderColor="transparent"
-                            dropdownIcon={<Icon as={Ionicons} color="gray.400" ml={0} mr={4} name="chevron-down" pl={0} size="xs" />}
-                            minWidth="135"
-                            selectedValue={workout.numberOfTabatas.toString()}
+                            dropdownIcon={(
+                                <HStack alignItems="center" space={2}>
+                                    <Text fontSize="md">{`${workout.numberOfTabatas.toString()} ${workout.numberOfTabatas > 0 ? 'Tabatas' : 'Tabata'}`}</Text>
+                                    <Icon as={Ionicons} color="gray.400" ml={0} mr={4} name="chevron-down" pl={0} size="xs" />
+                                </HStack>
+                            )}
+                            minWidth="125"
                             size="lg"
                             onValueChange={(itemValue): void => handleNumberTabatasChange(parseInt(itemValue, 10) || 0)}
                         >
@@ -483,10 +490,11 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                         color="flame.500"
                         justifyContent="center"
                         leftIcon={<Icon as={Ionicons} name="shuffle" size="lg" />}
+                        ml={6}
                         width="150"
                         onPress={(): void => triggerShuffle()}
                     >
-                        <Text bold>Re-Shuffle</Text>
+                        <Text bold>Re-Shufflffe</Text>
                     </Button>
                     <IconButton
                         borderColor="flame.500"
@@ -500,15 +508,13 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             ) : (
                 <Input
                     fontSize="lg"
-                    m="4"
+                    mb="4"
                     placeholder="Enter Workout Name"
                     value={workoutName}
                     onChangeText={handleChange}
                 />
             )}
-            <NestableScrollContainer
-                style={{ margin: 2 }}
-            >
+            <NestableScrollContainer>
                 {workout.tabatas.map((tabataCircuit, index) => (
                     <TabataItem
                         changeExercise={handleSelectExercise}
@@ -527,6 +533,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                         <Icon as={Ionicons} color="flame.500" name="add" />
                     )}
                     mb={4}
+                    mt={2}
                     variant="outline"
                     onPress={hanldeAddTabata}
                 >
@@ -743,6 +750,6 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                     </Modal.Footer>
                 </Modal.Content>
             </Modal>
-        </VStack>
+        </GradientVStack>
     );
 };
