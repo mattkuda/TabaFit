@@ -8,6 +8,7 @@ import { NotificationCard } from './NotificationCard';
 import { useMutateNotificationsRead } from '../../mutations/useMutateNotificationsRead';
 import { useAuth } from '../../context/AuthContext';
 import { RefreshableScrollView } from '../RefreshableScrollView';
+import { GradientVStack } from '../common/GradientVStack';
 
 export const NotificationsScreen = (): JSX.Element => {
     const {
@@ -42,37 +43,35 @@ export const NotificationsScreen = (): JSX.Element => {
 
     if (isLoading) {
         return (
-            <VStack
-                backgroundColor="gray9"
+            <GradientVStack
                 flex={1}
                 space={4}
                 width="100%"
             >
                 <Center flex={1}><Spinner /></Center>
-            </VStack>
+            </GradientVStack>
         );
     }
 
     if (isError) {
         return (
-            <VStack
-                backgroundColor="gray9"
+            <GradientVStack
                 flex={1}
                 space={4}
                 width="100%"
             >
                 <Text>Error loading notifications</Text>
-            </VStack>
+            </GradientVStack>
         );
     }
 
     return isLoading
         ? (
-            <VStack backgroundColor="gray9" flex={1} space={4} width="100%">
+            <GradientVStack backgroundColor="gray9" flex={1} space={4} width="100%">
                 <Spinner color="white" mt={8} size="lg" />
-            </VStack>
+            </GradientVStack>
         ) : (
-            <VStack backgroundColor="gray9" flex={1}>
+            <GradientVStack backgroundColor="gray9" flex={1}>
                 <RefreshableScrollView onRefresh={onRefresh}>
                     <VStack flex={1} p={2} space={2}>
                         {notifications.map((notification) => (
@@ -80,6 +79,6 @@ export const NotificationsScreen = (): JSX.Element => {
                         ))}
                     </VStack>
                 </RefreshableScrollView>
-            </VStack>
+            </GradientVStack>
         );
 };

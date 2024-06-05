@@ -22,7 +22,7 @@ export const ConnectionCard: React.FC<NotificationCardProps> = ({ user }) => {
 
     return (
         <TouchableOpacity onPress={handlePressUser}>
-            <Box backgroundColor="gray9" borderColor="gray.200" borderRadius="md" mt="2" p="4">
+            <Box borderColor="gray.200" borderRadius="md" mt="2" p="4">
                 <HStack alignItems="center" space={3}>
                     <ProfilePicture size="48px" user={user} />
                     <VStack>

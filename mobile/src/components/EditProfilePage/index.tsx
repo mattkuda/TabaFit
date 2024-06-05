@@ -14,6 +14,7 @@ import { useQueryClient } from 'react-query';
 import { useMutateDeleteAccount, useMutateProfilePicture, useMutateUpdateProfile } from '../../mutations/profileMutations';
 import { useAuth } from '../../context/AuthContext';
 import { ProfilePicture } from '../ProfilePicture';
+import { GradientVStack } from '../common/GradientVStack';
 
 type EditProfileRouteProp = RouteProp<ProfileStackParamList, 'EditProfile'>;
 type EditProfileNavigationProp = StackNavigationProp<ProfileStackParamList, 'EditProfile'>;
@@ -170,7 +171,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
     }, [handleUpdate, navigation]);
 
     return (
-        <VStack bgColor="gray9" flex={1} style={{ padding: 20, gap: 8 }}>
+        <GradientVStack flex={1} style={{ padding: 20, gap: 8 }}>
             <HStack>
                 <TouchableOpacity onPress={handleProfilePictureUpdate}>
                     <ProfilePicture
@@ -265,6 +266,6 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                     </Modal.Footer>
                 </Modal.Content>
             </Modal>
-        </VStack>
+        </GradientVStack>
     );
 };

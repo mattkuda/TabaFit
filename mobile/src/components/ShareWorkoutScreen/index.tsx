@@ -2,17 +2,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import {
-    VStack, Text, Button, Input, TextArea,
+    Text, Button, Input, TextArea,
     HStack,
     Checkbox,
+    Icon,
 } from 'native-base';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useQueryClient } from 'react-query';
+import { Ionicons } from '@expo/vector-icons';
 import { ShareWorkoutScreenNavigationProp } from '../../types/navigationTypes';
 import { useAuth } from '../../context/AuthContext';
 import { useMutateShareWorkout } from '../../mutations/useMutateSharePost';
 import { ShareWorkoutScreenRouteProp } from '../../navigation/navigationTypes';
 import { useMutateSaveWorkout } from '../../mutations/useMutateSaveWorkout';
+import { GradientVStack } from '../common/GradientVStack';
 
 export const ShareWorkoutScreen = (): JSX.Element => {
     const route = useRoute<ShareWorkoutScreenRouteProp>();
@@ -24,9 +27,9 @@ export const ShareWorkoutScreen = (): JSX.Element => {
     const userId = authState?.userId;
     const navigation = useNavigation<ShareWorkoutScreenNavigationProp>();
     const saveWorkoutMutation = useMutateSaveWorkout();
-    const [isWorkoutSaved, setIsWorkoutSaved] = useState(isInMyWorkouts);
     const [saveWorkoutSwitch, setSaveWorkoutSwitch] = useState(isInMyWorkouts);
     const queryClient = useQueryClient();
+    const [isSavingComplete, setIsSavingComplete] = useState(false);
 
     const handleSaveWorkout = (): Promise<void> => new Promise((resolve, reject) => {
         if (authState?.userId && workout) {
@@ -37,7 +40,6 @@ export const ShareWorkoutScreen = (): JSX.Element => {
                 },
             }, {
                 onSuccess: () => {
-                    setIsWorkoutSaved(true);
                     resolve();
                 },
                 onError: () => {
@@ -58,7 +60,8 @@ export const ShareWorkoutScreen = (): JSX.Element => {
     };
 
     const handleShareWorkout = (): void => {
-        if (saveWorkoutSwitch && !isWorkoutSaved) {
+        setIsSavingComplete(false); // Reset saving complete state
+        if (saveWorkoutSwitch && !isInMyWorkouts) {
             handleSaveWorkout().finally(() => {
                 shareWorkoutMutation.mutate({
                     userId,
@@ -106,6 +109,7 @@ export const ShareWorkoutScreen = (): JSX.Element => {
         navigation.setOptions({
             headerRight: (): JSX.Element => (
                 <Button
+                    rightIcon={<Icon as={Ionicons} color="flame.500" name="add" size="lg" />}
                     size="lg"
                     variant="ghost"
                     onPress={handleShareWorkout}
@@ -132,8 +136,9 @@ export const ShareWorkoutScreen = (): JSX.Element => {
     }, [handleReturnHome, navigation]);
 
     return (
-        <VStack backgroundColor="gray9" flex={1} p={4} space={4}>
+        <GradientVStack flex={1} p={4} space={4}>
             <Input
+                backgroundColor="gray.900"
                 fontSize="md"
                 placeholder="Enter Post Name"
                 value={workoutTitle}
@@ -141,6 +146,7 @@ export const ShareWorkoutScreen = (): JSX.Element => {
             />
             <TextArea
                 autoCompleteType={undefined}
+                backgroundColor="gray.900"
                 fontSize="md"
                 h={40}
                 placeholder="Describe your workout"
@@ -148,17 +154,21 @@ export const ShareWorkoutScreen = (): JSX.Element => {
                 onChangeText={setWorkoutDescription}
             />
             <HStack alignItems="center" space={4}>
-                <Text>{!isWorkoutSaved ? 'Save workout to library when sharing?' : 'Workout saved to library'}</Text>
+                <Text>
+                    {!isInMyWorkouts && !isSavingComplete ? 'Save workout to library when sharing?' : 'Workout saved to library'}
+                </Text>
                 <Checkbox
-                    bgColor={saveWorkoutSwitch ? 'primary' : 'gray9'}
-                    isChecked={isWorkoutSaved || saveWorkoutSwitch}
-                    isDisabled={isWorkoutSaved}
-                    key="Kettlebell-checkbox"
+                    bgColor={saveWorkoutSwitch ? 'primary' : 'gray.900'}
+                    borderColor="gray.600"
+                    borderWidth={1}
+                    isChecked={isInMyWorkouts || saveWorkoutSwitch}
+                    isDisabled={isInMyWorkouts}
+                    key="save-workout-switch"
                     size="lg"
-                    value="Kettlebells"
+                    value="save-workout-switch"
                     onChange={(): void => setSaveWorkoutSwitch(!saveWorkoutSwitch)}
                 />
             </HStack>
-        </VStack>
+        </GradientVStack>
     );
 };

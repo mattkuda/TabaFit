@@ -19,6 +19,7 @@ import { CommentCard } from './CommentCard';
 import { LikeCommentButtons } from '../common/LikeCommentButtons';
 import { WorkoutPostDisplay } from '../common/WorkoutPostDisplay';
 import { ProfilePicture } from '../ProfilePicture';
+import { GradientVStack } from '../common/GradientVStack';
 
 export const PostScreen = (): JSX.Element => {
     const route = useRoute<PostScreenRouteProp>();
@@ -83,7 +84,7 @@ export const PostScreen = (): JSX.Element => {
     const userFound = post?.user?.username;
 
     return (
-        <VStack backgroundColor="gray9" borderColor="gray.200" flex={1} p={4} space={2}>
+        <GradientVStack backgroundColor="gray9" borderColor="gray.200" flex={1} p={4} space={2}>
             <ScrollView>
                 <HStack justifyContent="space-between" space={2}>
                     <ProfilePicture borderColor="primary" size="48px" user={post.user} />
@@ -114,10 +115,10 @@ export const PostScreen = (): JSX.Element => {
                 <LikeCommentButtons post={post} />
                 <Divider backgroundColor="gray6" />
                 <Input
-                    borderColor="gray5"
+                    backgroundColor="gray.900"
                     InputRightElement={(
                         <Text
-                            color="primary"
+                            color="white"
                             fontSize="sm"
                             fontWeight="bold"
                             mr={2}
@@ -142,7 +143,7 @@ export const PostScreen = (): JSX.Element => {
                     />
                 ))}
             </ScrollView>
-        </VStack>
+        </GradientVStack>
 
     );
 };

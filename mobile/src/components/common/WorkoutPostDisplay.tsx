@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native';
 import { HomeScreenNavigationProp } from '../../types/navigationTypes';
-import { formatBodyParts } from '../../util/util';
+import { formatBodyParts, getWorkoutDifficultyGradient } from '../../util/util';
 import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
 import { TabataWorkout } from '../../types/workouts';
 
@@ -28,17 +28,26 @@ export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
     return (
         <TouchableOpacity onPress={handleWorkoutNamePress}>
             <Box
+                // bg={{
+                //     linearGradient: {
+                //         colors: getWorkoutDifficultyGradient(workout.numberOfTabatas),
+                //         start: [0, 1],
+                //         end: [1, 0],
+                //     },
+                // }}
                 bg={{
                     linearGradient: {
-                        colors: ['gray.500', 'gray.600'],
-                        start: [0, 1],
-                        end: [1, 0],
+                        colors: ['workoutDisplayGray', getWorkoutDifficultyGradient(workout.tabatas.length)[0]],
+                        start: [0.5, 0.5],
+                        end: [1.3, 1.3],
+
                     },
                 }}
-                borderColor="primary"
+                // bg="workoutDisplayGray"
                 borderRadius="md"
                 mt={2}
                 p={2}
+
             >
                 <HStack
                     justifyContent="space-between"
@@ -49,7 +58,7 @@ export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
                         alignItems="center"
                         space={2}
                     >
-                        <Icon as={Ionicons} name="barbell-outline" size="sm" />
+                        <Icon as={Ionicons} color={getWorkoutDifficultyGradient(workout.numberOfTabatas)} name="barbell-outline" size="sm" />
                         <Text bold fontSize="md" onPress={handleWorkoutNamePress}>
                             {workout.name}
                         </Text>
@@ -62,7 +71,7 @@ export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
                     <VStack alignItems="center" flex={1} space={0}>
                         <Icon as={Ionicons} name="body-outline" size="md" />
                         <Text fontSize="sm">
-                            {`${workout.numberOfTabatas} ${workout.numberOfTabatas === 1 ? 'Tabata' : 'Tabatas'}`}
+                            {`${workout.tabatas.length} ${workout.tabatas.length === 1 ? 'Tabata' : 'Tabatas'}`}
                         </Text>
                     </VStack>
                     <VStack alignItems="center" flex={1} space={0}>

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { format } from 'date-fns';
 import {
-    Box, VStack, Text, HStack, Icon, Menu, Pressable, Button,
+    Box, VStack, Text, HStack, Icon, Button,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -11,25 +11,26 @@ import { TabataWorkoutWithUserInfo } from '../../types/workouts';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
 import { ProfilePicture } from '../ProfilePicture';
+import { getWorkoutDifficultyGradient } from '../../util/util';
 
 interface WorkoutCardProps {
     workout: TabataWorkoutWithUserInfo;
     isInMyWorkouts: boolean;
     isTabaFitWorkout?: boolean;
-    onDelete?: (workout: TabataWorkoutWithUserInfo) => void;
-    onEdit?: () => void;
-    onSave?: () => void;
-    onUnsave?: () => void;
+    // onDelete?: (workout: TabataWorkoutWithUserInfo) => void;
+    // onEdit?: () => void;
+    // onSave?: () => void;
+    // onUnsave?: () => void;
 }
 
-const MenuTrigger = ({ triggerProps }): JSX.Element => (
-    <Pressable accessibilityLabel="More options menu" {...triggerProps}>
-        <Icon as={Ionicons} name="ellipsis-vertical-outline" size="md" />
-    </Pressable>
-);
+// const MenuTrigger = ({ triggerProps }): JSX.Element => (
+//     <Pressable accessibilityLabel="More options menu" {...triggerProps}>
+//         <Icon as={Ionicons} name="ellipsis-vertical-outline" size="md" />
+//     </Pressable>
+// );
 
 export const WorkoutCard: FC<WorkoutCardProps> = ({
-    workout, isTabaFitWorkout, isInMyWorkouts, onDelete, onEdit, onSave, onUnsave,
+    workout, isTabaFitWorkout, isInMyWorkouts,
 }) => {
     const navigation = useNavigation<StackNavigationProp<TabNavigatorParamList>>();
     const formattedDate = format(new Date(workout.createdAt), 'MMMM do, yyyy');
@@ -56,27 +57,29 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
             <Box
                 bg={{
                     linearGradient: {
-                        colors: ['gray.500', 'gray.600'],
-                        start: [0, 1],
-                        end: [1, 0],
+                        colors: ['workoutDisplayGray', getWorkoutDifficultyGradient(workout.tabatas.length)[0]],
+                        start: [0.5, 0.5],
+                        end: [1.3, 1.3],
+
                     },
                 }}
                 borderColor="flame"
+                // @ts-ignore
+                gap={4}
                 justifyContent="space-between"
                 my={2}
                 p="4"
                 rounded="md"
             >
-                <VStack space={0}>
-                    <HStack justifyContent="space-between">
+                <VStack space={4}>
+                    <HStack alignItems="center" justifyContent="flex-start">
+                        <Icon as={Ionicons} color={getWorkoutDifficultyGradient(workout.tabatas.length)} mr={2} name="barbell-outline" size="md" />
                         <Text
                             ellipsizeMode="tail"
-                            fontSize="md"
+                            fontSize="lg"
                             numberOfLines={2}
                             style={{
                                 fontWeight: 'bold',
-                                lineHeight: 16,
-                                height: 32,
                             }}
                         >
                             {workout.name}
@@ -111,11 +114,11 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                         {formattedDate}
                     </Box>
                 </VStack>
-                <HStack justifyContent="space-between" mt={2}>
+                <HStack justifyContent="space-between">
                     <VStack alignItems="center" flex={1} space={0}>
                         <Icon as={Ionicons} name="body-outline" size="md" />
                         <Text fontSize="sm">
-                            {`${workout.numberOfTabatas} ${workout.numberOfTabatas === 1 ? 'Tabata' : 'Tabatas'}`}
+                            {`${workout.tabatas.length} ${workout.tabatas.length === 1 ? 'Tabata' : 'Tabatas'}`}
                         </Text>
                     </VStack>
                     <VStack alignItems="center" flex={1} space={0}>
@@ -123,7 +126,7 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                         <Text fontSize="sm">{getFormattedTimeForTabataWorkout(workout)}</Text>
                     </VStack>
                 </HStack>
-                <HStack justifyContent="space-between" pt={4} space={4}>
+                <HStack justifyContent="space-between" space={4}>
                     <Button
                         colorScheme="secondary"
                         endIcon={(
@@ -152,12 +155,12 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                             }}
                             borderRadius="full"
                             flexDirection="row"
-                            justifyContent="center"
-                            p="3"
-                            width={150}
-                            px={4}
                             // @ts-expect-error
                             gap={2}
+                            justifyContent="center"
+                            p="3"
+                            px={4}
+                            width={150}
                         >
                             <Text>
                                 Quick Start

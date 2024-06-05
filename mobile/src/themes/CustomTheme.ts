@@ -4,7 +4,14 @@ import { extendTheme, theme as baseTheme } from 'native-base';
 
 export const theme = extendTheme({
     colors: {
-        // primary: baseTheme.colors.blue,
+        gray: {
+            800: '#182329',
+            900: '#0f1317',
+        },
+        cardGray: '#182329',
+        // This is the gray from whoop
+        workoutDisplayGray: '#31373c',
+        displayGray: '#71777C',
         primary: '#ff9f27',
         // To make tints, use https://maketintsandshades.com/#ff2760
         // black: '#121212'
@@ -19,7 +26,29 @@ export const theme = extendTheme({
             800: '#664010',
             900: '#332008',
         },
-        // cherry: '#ff2760',
+        flameCherry: {
+            100: '#FF942C',
+
+            200: '#FF8931',
+
+            300: '#FF7E37',
+
+            400: '#FF733C',
+
+            500: '#FF6841',
+
+            600: '#FF5E46',
+
+            700: '#FF534B',
+
+            800: '#FF4850',
+
+            900: '#FF3D56',
+
+            1000: '#FF325B',
+        },
+
+        // cherry: '#"ff2760',"
         cherry: {
             100: '#ffd4df',
             200: '#ffa9bf',
@@ -54,7 +83,8 @@ export const theme = extendTheme({
         //     900: '#34312d',
         //     1000: '#211f1b',
         // },
-
+        easyGreen: '#00f3a1',
+        success: '#00f3a1',
         gray10: baseTheme.colors.gray[1000],
         gray9: baseTheme.colors.gray[900],
         gray8: baseTheme.colors.gray[800],
@@ -105,7 +135,7 @@ export const theme = extendTheme({
         Input: {
             defaultProps: {
                 color: 'white',
-                backgroundColor: 'gray9',
+                backgroundColor: 'gray.900',
                 borderColor: 'gray7',
             },
         },

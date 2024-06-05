@@ -36,7 +36,7 @@ export const SignUpWizardStackNavigator = (): JSX.Element => {
             screenOptions={{
                 headerTitle: '',
                 headerStyle: {
-                    backgroundColor: colors.gray[900],
+                    backgroundColor: colors.gray[800],
                 },
                 headerTintColor: 'white',
                 headerShadowVisible: false,

@@ -26,6 +26,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment, onDeleteComme
 
     return (
         <VStack
+            bg="cardGray"
             borderColor="gray5"
             borderRadius="md"
             borderWidth={1}

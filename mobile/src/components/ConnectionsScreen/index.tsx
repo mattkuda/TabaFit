@@ -1,11 +1,12 @@
 import React from 'react';
-import { Box, VStack, useTheme } from 'native-base';
+import { Box, useTheme } from 'native-base';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { ConnectionCard } from './ConnectionCard';
 import { useInfiniteQueryFollowers, useInfiniteQueryFollowing } from '../../hooks/useQueryFollowing';
 import { useAuth } from '../../context/AuthContext';
 import { InfiniteScrollList } from '../common/InfiniteScrollList';
 import { User } from '../../types/users';
+import { GradientVStack } from '../common/GradientVStack';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -26,8 +27,7 @@ const FollowingTab = (): JSX.Element => {
     };
 
     return (
-        <VStack
-            backgroundColor="gray9"
+        <GradientVStack
             flex={1}
             space={0}
             width="100%"
@@ -42,7 +42,7 @@ const FollowingTab = (): JSX.Element => {
                 renderItem={(item): JSX.Element => <ConnectionCard user={item} />}
                 onRefresh={onRefresh}
             />
-        </VStack>
+        </GradientVStack>
     );
 };
 
@@ -63,8 +63,7 @@ const FollowersTab = (): JSX.Element => {
     const flatMap2 = data?.pages.flatMap((page: User[]) => page);
 
     return (
-        <VStack
-            backgroundColor="gray9"
+        <GradientVStack
             flex={1}
             space={0}
             width="100%"
@@ -79,7 +78,7 @@ const FollowersTab = (): JSX.Element => {
                 renderItem={(item): JSX.Element => <ConnectionCard user={item} />}
                 onRefresh={onRefresh}
             />
-        </VStack>
+        </GradientVStack>
     );
 };
 
@@ -90,9 +89,9 @@ export const ConnectionsScreen = (): JSX.Element => {
         <Box flex={1} justifyContent="center">
             <Tab.Navigator
                 screenOptions={{
-                    tabBarStyle: { backgroundColor: colors.gray[900] },
+                    tabBarStyle: { backgroundColor: colors.gray[800] },
                     tabBarActiveTintColor: '#ff9f27',
-                    tabBarInactiveTintColor: '#ff9f27',
+                    tabBarInactiveTintColor: '#b6b4b3',
                     tabBarPressColor: '#ff9f27',
                     tabBarIndicatorStyle: { backgroundColor: '#ff9f27' },
                 }}

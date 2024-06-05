@@ -52,7 +52,7 @@ const TabataItem = ({
         //         end: [1, 0],
         //     },
         // }}
-        bg="gray.700"
+        bg="workoutDisplayGray"
         borderRadius="md"
         mb={2}
         mt={2}
@@ -443,13 +443,12 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     return (
         <GradientVStack
             flex={1}
-            px={4}
             space={0}
             width="100%"
         >
             {isShuffle ? (
                 <HStack alignItems="center" background="transparent" justifyContent="space-between" pt={2} space={4} width="100%">
-                    <Box ml={-6} width="42">
+                    <Box alignItems="flex-start" flex={1}>
                         <Select
                             _actionSheetContent={{
                                 bg: 'gray.900',
@@ -477,6 +476,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                 </HStack>
                             )}
                             minWidth="125"
+                            ml={-2}
                             size="lg"
                             onValueChange={(itemValue): void => handleNumberTabatasChange(parseInt(itemValue, 10) || 0)}
                         >
@@ -485,25 +485,51 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                             ))}
                         </Select>
                     </Box>
-                    <Button
-                        borderRadius="full"
-                        color="flame.500"
-                        justifyContent="center"
-                        leftIcon={<Icon as={Ionicons} name="shuffle" size="lg" />}
-                        ml={6}
-                        width="150"
-                        onPress={(): void => triggerShuffle()}
+                    <Box alignItems="center" flex={1} position="relative">
+                        <TouchableOpacity
+                            onPress={(): void => triggerShuffle()}
+                        >
+                            <Box
+                                alignItems="center"
+                                bg={{
+                                    linearGradient: {
+                                        colors: ['flame.500', 'cherry.500'],
+                                        start: [0, 1],
+                                        end: [1, 0],
+                                    },
+                                }}
+                                borderRadius="full"
+                                flexDirection="row"
+                                // @ts-ignore
+                                gap={2}
+                                justifyContent="center"
+                                mx="4"
+                                my="2"
+                                p="2"
+                                px={4}
+                                width="150"
+                            >
+                                <Icon as={Ionicons} name="shuffle" size="lg" />
+                                <Text fontSize="md" fontWeight="semibold">
+                                    Re-Shuffle
+                                </Text>
+                            </Box>
+                        </TouchableOpacity>
+                    </Box>
+                    <Box
+                        alignItems="flex-end"
+                        flex={1}
                     >
-                        <Text bold>Re-Shufflffe</Text>
-                    </Button>
-                    <IconButton
-                        borderColor="flame.500"
-                        borderRadius="full"
-                        borderWidth={1}
-                        color="flame.500"
-                        icon={<Icon as={Ionicons} color="flame.500" name="settings" />}
-                        onPress={(): void => setShowSettingsModal(true)}
-                    />
+                        <IconButton
+                            borderColor="white"
+                            borderRadius="full"
+                            borderWidth={1}
+                            color="flame.500"
+                            icon={<Icon as={Ionicons} color="white" name="settings" />}
+                            mr={4}
+                            onPress={(): void => setShowSettingsModal(true)}
+                        />
+                    </Box>
                 </HStack>
             ) : (
                 <Input
@@ -514,7 +540,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                     onChangeText={handleChange}
                 />
             )}
-            <NestableScrollContainer>
+            <NestableScrollContainer style={{ paddingHorizontal: 16 }}>
                 {workout.tabatas.map((tabataCircuit, index) => (
                     <TabataItem
                         changeExercise={handleSelectExercise}
@@ -529,8 +555,9 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 <Button
                     alignSelf="flex-end"
                     borderRadius="full"
+                    colorScheme="secondary"
                     endIcon={(
-                        <Icon as={Ionicons} color="flame.500" name="add" />
+                        <Icon as={Ionicons} color="white" name="add" />
                     )}
                     mb={4}
                     mt={2}
@@ -571,19 +598,19 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             {/* Settings Modal */}
             {/* TDOD: Move to its own component */}
             <Modal isOpen={showSettingsModal} size="full" onClose={(): void => setShowSettingsModal(false)}>
-                <Modal.Content backgroundColor="gray9">
+                <Modal.Content backgroundColor="gray.900">
                     <Modal.CloseButton />
-                    <Modal.Header backgroundColor="gray9" borderBottomWidth={0}>
+                    <Modal.Header backgroundColor="gray.900" borderBottomWidth={0}>
                         <Text bold fontSize="lg">
                             Settings
                         </Text>
                     </Modal.Header>
-                    <Modal.Body backgroundColor="gray9">
+                    <Modal.Body backgroundColor="gray.900">
                         <VStack space={2}>
                             <HStack width="100%">
                                 <HStack flex={1}>
                                     <Checkbox
-                                        bgColor={modalWorkout.equipment.useKettlebell ? 'primary' : 'gray9'}
+                                        bgColor={modalWorkout.equipment.useKettlebell ? 'primary' : 'gray.900'}
                                         isChecked={modalWorkout.equipment.useKettlebell}
                                         key="Kettlebell-checkbox"
                                         mb="2"
@@ -596,7 +623,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                 </HStack>
                                 <HStack flex={1}>
                                     <Checkbox
-                                        bgColor={modalWorkout.equipment.useDumbells ? 'primary' : 'gray9'}
+                                        bgColor={modalWorkout.equipment.useDumbells ? 'primary' : 'gray.900'}
                                         isChecked={modalWorkout.equipment.useDumbells}
                                         key="Dumbells-checkbox"
                                         mb="2"
@@ -611,7 +638,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                             <HStack width="100%">
                                 <HStack flex={1}>
                                     <Checkbox
-                                        bgColor={modalWorkout.equipment.useHangingBar ? 'primary' : 'gray9'}
+                                        bgColor={modalWorkout.equipment.useHangingBar ? 'primary' : 'gray.900'}
                                         isChecked={modalWorkout.equipment.useHangingBar}
                                         key="HangingBar-checkbox"
                                         mb="2"
@@ -624,7 +651,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                 </HStack>
                                 <HStack flex={1}>
                                     <Checkbox
-                                        bgColor={modalWorkout.equipment.useYogaBall ? 'primary' : 'gray9'}
+                                        bgColor={modalWorkout.equipment.useYogaBall ? 'primary' : 'gray.900'}
                                         isChecked={modalWorkout.equipment.useYogaBall}
                                         key="YogaBall-checkbox"
                                         mb="2"
@@ -639,7 +666,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                             <HStack width="100%">
                                 <HStack flex={1}>
                                     <Checkbox
-                                        bgColor={modalWorkout.equipment.useWorkoutBand ? 'primary' : 'gray9'}
+                                        bgColor={modalWorkout.equipment.useWorkoutBand ? 'primary' : 'gray.900'}
                                         isChecked={modalWorkout.equipment.useWorkoutBand}
                                         key="WorkoutBand-checkbox"
                                         mb="2"
@@ -652,7 +679,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                 </HStack>
                                 <HStack flex={1}>
                                     <Checkbox
-                                        bgColor={modalWorkout.equipment.useBoxPlatform ? 'primary' : 'gray9'}
+                                        bgColor={modalWorkout.equipment.useBoxPlatform ? 'primary' : 'gray.900'}
                                         isChecked={modalWorkout.equipment.useBoxPlatform}
                                         key="BoxPlatform-checkbox"
                                         mb="2"
@@ -715,7 +742,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                             onChangeText={(text): void => handleWorkoutSettingChange('cooldownDuration', parseInt(text, 10) || 0)}
                         />
                     </Modal.Body>
-                    <Modal.Footer backgroundColor="gray9" borderTopWidth={0}>
+                    <Modal.Footer backgroundColor="gray.900" borderTopWidth={0}>
                         <Button onPress={handleModalDone}>Done</Button>
                         <Button variant="ghost" onPress={handleModalCancel}>Cancel</Button>
                     </Modal.Footer>
@@ -723,9 +750,9 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             </Modal>
             {/* Help Dialog */}
             <Modal isOpen={showHelpDialog} size="full" onClose={(): void => setShowHelpDialog(false)}>
-                <Modal.Content backgroundColor="gray9">
+                <Modal.Content backgroundColor="gray.900">
                     <Modal.CloseButton />
-                    <Modal.Header backgroundColor="gray9">
+                    <Modal.Header backgroundColor="gray.900">
                         <Text bold fontSize="lg">
                             Build Workout Help
                         </Text>
@@ -745,7 +772,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                             <Text mb={2}>&bull; Adjust settings in the Settings modal by clicking the gear icon.</Text>
                         </Box>
                     </Modal.Body>
-                    <Modal.Footer backgroundColor="gray9">
+                    <Modal.Footer backgroundColor="gray.900">
                         <Button onPress={(): void => setShowHelpDialog(false)}>Done</Button>
                     </Modal.Footer>
                 </Modal.Content>

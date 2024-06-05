@@ -1,5 +1,5 @@
 import {
-    Modal, VStack, Button, Text,
+    Modal, Button, Text,
     Icon,
     HStack,
 } from 'native-base';
@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useMutateDeleteAccount } from '../../mutations/profileMutations';
 import { useAuth } from '../../context/AuthContext';
 import { version } from '../../../package.json';
+import { GradientVStack } from '../common/GradientVStack';
 
 type SettingsScreenNavigationProp = StackNavigationProp<ProfileStackParamList, 'SettingsScreen'>;
 // type SettingsScreenRouteProp = RouteProp<ProfileStackParamList, 'SettingsScreen'>;
@@ -56,7 +57,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
     };
 
     return (
-        <VStack bgColor="gray9" height="100%" justifyContent="flex-start" style={{ padding: 20, gap: 8 }}>
+        <GradientVStack height="100%" justifyContent="flex-start" style={{ padding: 20, gap: 8 }}>
             {/* Disbale for now. Consider keeping here vs on main profile page.  */}
             {/* <TouchableOpacity
                 style={{
@@ -132,10 +133,10 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
                         </Text>
                         <Text textAlign="center">Are you sure you want to log out of your account?</Text>
                     </Modal.Body>
-                    <Modal.Footer backgroundColor="gray9" borderTopColor="gray.600" justifyContent="center" p={2}>
+                    <Modal.Footer backgroundColor="gray.900" borderTopColor="gray.600" justifyContent="center" p={2}>
                         <Button colorScheme="danger" variant="ghost" onPress={handleLogout}>Log out</Button>
                     </Modal.Footer>
-                    <Modal.Footer backgroundColor="gray9" borderTopColor="gray.600" justifyContent="center" p={2}>
+                    <Modal.Footer backgroundColor="gray.900" borderTopColor="gray.600" justifyContent="center" p={2}>
                         <Button colorScheme="secondary" variant="ghost" onPress={(): void => setShowLogoutModal(false)}>Cancel</Button>
                     </Modal.Footer>
                 </Modal.Content>
@@ -159,6 +160,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
                     </Modal.Footer>
                 </Modal.Content>
             </Modal>
-        </VStack>
+        </GradientVStack>
     );
 };

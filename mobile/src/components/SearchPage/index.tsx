@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import {
-    Input, FlatList, Text, VStack, Icon, Spinner, Box,
+    Input, FlatList, Text, Icon, Spinner, Box,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useSearchUsers } from '../../hooks/useSearchUsers'; // Make sure to create this hook
 import { User } from '../../types/users';
 import { ConnectionCard } from '../ConnectionsScreen/ConnectionCard';
+import { GradientVStack } from '../common/GradientVStack';
 
 export const SearchPage = (): JSX.Element => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -13,7 +14,7 @@ export const SearchPage = (): JSX.Element => {
     // const navigation = useNavigation<ProfilePageScreenNavigationProp>(); // Use the hook to get the navigation object
 
     return (
-        <VStack
+        <GradientVStack
             backgroundColor="gray9"
             flex={1}
             space={0}
@@ -41,7 +42,6 @@ export const SearchPage = (): JSX.Element => {
                     )}
                 />
             )}
-        </VStack>
-
+        </GradientVStack>
     );
 };

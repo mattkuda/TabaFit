@@ -112,7 +112,7 @@ export const LikeCommentButtons = ({ post, handleCommentPress }: LikeCommentButt
     };
 
     return (
-        <VStack backgroundColor="gray9" borderColor="gray.200" flex={1}>
+        <VStack borderColor="gray.200" flex={1}>
             <HStack color="gray.500" fontSize="xs" justifyContent="space-between" mt={2}>
                 <Text>
                     {likeText()}

@@ -30,6 +30,8 @@ export const InfiniteScrollList = <T, >({
             keyExtractor={keyExtractor}
             refreshing={isFetchingNextPage}
             renderItem={({ item }): JSX.Element => renderItem(item)}
+            showsHorizontalScrollIndicator={false} // Hide horizontal scroll indicator
+            showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
             onEndReached={hasNextPage ? fetchData : undefined}
             onEndReachedThreshold={0.2}
             onRefresh={onRefresh}

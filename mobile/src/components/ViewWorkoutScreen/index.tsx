@@ -13,11 +13,12 @@ import { TabataCircuit, TabataWorkout, TabataWorkoutWithUserInfo } from '../../t
 import { ViewWorkoutScreenRouteProp, BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useQueryWorkoutById } from '../../hooks/useQueryWorkoutById';
-import { exerciseIconDictionary, formatBodyParts } from '../../util/util';
+import { exerciseIconDictionary, formatBodyParts, getWorkoutDifficultyGradient } from '../../util/util';
 import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
 import { useAuth } from '../../context/AuthContext';
 import { useMutateSaveWorkout } from '../../mutations/useMutateSaveWorkout';
 import { PictureWithName } from '../PictureWithName';
+import { GradientVStack } from '../common/GradientVStack';
 
 type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'WorkoutsScreen'>;
 
@@ -125,26 +126,25 @@ export const ViewWorkoutScreen = (): JSX.Element => {
     }
 
     return (
-        <VStack
-            backgroundColor="gray9"
+        <GradientVStack
             flex={1}
             space={4}
             width="100%"
         >
             <ScrollView>
                 <VStack
-                    backgroundColor="gray9"
-                    borderColor="gray7"
                     p={4}
                     space={4}
                     width="100%"
                 >
-                    <HStack>
+                    <HStack alignItems="center">
+                        <Icon as={Ionicons} color={getWorkoutDifficultyGradient(workout.tabatas.length)} mr={2} name="barbell-outline" size="md" />
                         <Text bold flex={1} fontSize="xl">{workout.name}</Text>
                         <Button
+                            colorScheme="secondary"
                             disabled={saveSuccess}
-                            rightIcon={isInMyWorkouts ? <Icon as={Ionicons} color="primary" name="pencil" /> : <Icon as={Ionicons} color={saveSuccess ? 'green.500' : 'flame.500'} name="arrow-down-circle" />}
-                            variant="outline"
+                            rightIcon={isInMyWorkouts ? <Icon as={Ionicons} name="pencil" /> : <Icon as={Ionicons} color={saveSuccess ? 'green.500' : 'white'} name="arrow-down-circle" />}
+                            variant="ghost"
                             onPress={isInMyWorkouts ? handleEditWorkout : handleSaveOrUpdateWorkout}
                         >
                             {saveButtonText}
@@ -161,7 +161,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                         <VStack alignItems="center" flex={1} space={0}>
                             <Icon as={Ionicons} name="body-outline" size="md" />
                             <Text fontSize="sm">
-                                {`${workout.numberOfTabatas} ${workout.numberOfTabatas === 1 ? 'Tabata' : 'Tabatas'}`}
+                                {`${workout.tabatas.length} ${workout.tabatas.length === 1 ? 'Tabata' : 'Tabatas'}`}
                             </Text>
                         </VStack>
                         <VStack alignItems="center" flex={1} space={0}>
@@ -171,13 +171,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                     </HStack>
                     {workout.tabatas.map((circuit: TabataCircuit, index: number) => (
                         <VStack
-                            bg={{
-                                linearGradient: {
-                                    colors: ['gray.500', 'gray.600'],
-                                    start: [0, 1],
-                                    end: [1, 0],
-                                },
-                            }}
+                            bg="workoutDisplayGray"
                             borderColor="primary"
                             borderRadius="md"
                             key={index}
@@ -234,6 +228,6 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                     </Animated.View>
                 </Box>
             </TouchableOpacity>
-        </VStack>
+        </GradientVStack>
     );
 };

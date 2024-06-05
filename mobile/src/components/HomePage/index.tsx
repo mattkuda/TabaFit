@@ -1,12 +1,13 @@
 import React from 'react';
 import {
-    Box, Spinner, VStack, useTheme,
+    Box, Spinner, useTheme,
 } from 'native-base';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useInfiniteQueryPostsFollowing, FetchPostsResponse } from '../../hooks/useQueryPostsFollowing';
 import { PostCard } from '../common/PostCard';
 import { InfiniteScrollList } from '../common/InfiniteScrollList';
 import { useInfiniteQueryPosts } from '../../hooks/useQueryPosts';
+import { GradientVStack } from '../common/GradientVStack';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -27,11 +28,11 @@ const FollowingTab = (): JSX.Element => {
 
     return (
         isLoading ? (
-            <VStack backgroundColor="gray9" flex={1} space={0} width="100%">
+            <GradientVStack flex={1} space={0} width="100%">
                 <Spinner color="white" mt={8} size="lg" />
-            </VStack>
+            </GradientVStack>
         ) : (
-            <Box backgroundColor="black" flex={1} justifyContent="center">
+            <GradientVStack flex={1} justifyContent="center">
                 <InfiniteScrollList
                     data={flatMap}
                     estimatedItemSize={285}
@@ -42,7 +43,7 @@ const FollowingTab = (): JSX.Element => {
                     renderItem={(item): JSX.Element => <PostCard post={item} />}
                     onRefresh={onRefresh}
                 />
-            </Box>
+            </GradientVStack>
         )
     );
 };
@@ -65,11 +66,11 @@ const GlobalTab = (): JSX.Element => {
 
     return (
         isLoading ? (
-            <VStack backgroundColor="gray9" flex={1} space={0} width="100%">
+            <GradientVStack flex={1} space={0} width="100%">
                 <Spinner color="white" mt={8} size="lg" />
-            </VStack>
+            </GradientVStack>
         ) : (
-            <Box backgroundColor="black" flex={1} justifyContent="center">
+            <GradientVStack flex={1} justifyContent="center">
                 <InfiniteScrollList
                     data={flatMap2}
                     estimatedItemSize={285}
@@ -80,7 +81,7 @@ const GlobalTab = (): JSX.Element => {
                     renderItem={(item): JSX.Element => <PostCard post={item} />}
                     onRefresh={onRefresh}
                 />
-            </Box>
+            </GradientVStack>
         )
     );
 };
@@ -93,9 +94,9 @@ export const HomePage = (): JSX.Element => {
             <Tab.Navigator
                 initialRouteName="Following"
                 screenOptions={{
-                    tabBarStyle: { backgroundColor: colors.gray[900] },
+                    tabBarStyle: { backgroundColor: colors.gray[800] },
                     tabBarActiveTintColor: '#ff9f27',
-                    tabBarInactiveTintColor: '#ff9f27',
+                    tabBarInactiveTintColor: '#b6b4b3',
                     tabBarPressColor: '#ff9f27',
                     tabBarIndicatorStyle: { backgroundColor: '#ff9f27' },
                 }}

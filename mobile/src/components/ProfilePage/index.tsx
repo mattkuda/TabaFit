@@ -16,6 +16,7 @@ import { FollowButton } from './FollowButton';
 import { PostCard } from '../common/PostCard';
 import { formatName } from '../../util/util';
 import { ProfilePicture } from '../ProfilePicture';
+import { GradientVStack } from '../common/GradientVStack';
 
 export const ProfilePage = (): JSX.Element => {
     const { onLogout } = useAuth();
@@ -84,11 +85,10 @@ export const ProfilePage = (): JSX.Element => {
                 headerRight: (): JSX.Element => (
                     <IconButton
                         _icon={{
-                            color: 'primary',
+                            color: 'white',
                             size: 'md',
                         }}
                         borderRadius="full"
-                        color="primary"
                         icon={<Icon as={Ionicons} name="settings" />}
                         onPress={(): void => navigation.navigate('SettingsScreen', { user: userInfo })}
                     />
@@ -106,14 +106,14 @@ export const ProfilePage = (): JSX.Element => {
     const renderProfileHeader = React.useMemo(() => (
         <VStack>
             {userInfo && (
-                <HStack alignItems="center" backgroundColor="gray9" p={4} pb={0} px={4} space={4} width="100%">
+                <HStack alignItems="center" p={4} pb={0} px={4} space={4} width="100%">
                     <ProfilePicture
                         borderColor="primary"
                         borderWidth={2}
                         size="xl"
                         user={userInfo}
                     />
-                    <VStack backgroundColor="gray9">
+                    <VStack>
                         <Text>
                             <Text bold fontSize="lg">{formatName(userInfo.firstName, userInfo.lastName)}</Text>
                             {'  '}
@@ -132,11 +132,10 @@ export const ProfilePage = (): JSX.Element => {
                     </VStack>
                 </HStack>
             )}
-            <HStack alignItems="center" backgroundColor="gray9" justifyContent="space-between" p={2} px={4} space={4} width="100%">
+            <HStack alignItems="center" justifyContent="space-between" p={2} px={4} space={4} width="100%">
                 <TouchableOpacity onPress={handlePressFollowers}>
                     <Flex
                         align="center"
-                        backgroundColor="gray9"
                         direction="row"
                         // @ts-expect-error
                         gap={4}
@@ -155,8 +154,8 @@ export const ProfilePage = (): JSX.Element => {
                 <HStack space={4}>
                     {isCurrentUserProfile ? (
                         <Button
-                            color="primary"
-                            leftIcon={<Icon as={<Ionicons name="pencil" />} color="primary" size="sm" />}
+                            colorScheme="secondary"
+                            leftIcon={<Icon as={<Ionicons name="pencil" />} color="white" size="sm" />}
                             size="sm"
                             variant="outline"
                             onPress={navigateToEditProfile}
@@ -183,16 +182,16 @@ export const ProfilePage = (): JSX.Element => {
         navigateToEditProfile, userId, handleLogout]);
 
     return (
-        <VStack backgroundColor="gray3" flex={1} space={4} width="100%">
+        <GradientVStack flex={1} space={4} width="100%">
             {isLoading ? (
-                <VStack backgroundColor="gray9" flex={1} space={0} width="100%">
+                <VStack flex={1} space={0} width="100%">
                     {renderProfileHeader}
-                    <VStack backgroundColor="black" flex={1} space={4} width="100%">
+                    <VStack flex={1} space={4} width="100%">
                         <Spinner color="white" mt={8} size="lg" />
                     </VStack>
                 </VStack>
             ) : (
-                <VStack backgroundColor="black" flex={1} space={4} width="100%">
+                <VStack flex={1} space={4} width="100%">
                     <FlatList
                         data={flatMap}
                         keyExtractor={(_, index): string => `post-${index}`}
@@ -216,6 +215,6 @@ export const ProfilePage = (): JSX.Element => {
                 </VStack>
             )}
 
-        </VStack>
+        </GradientVStack>
     );
 };

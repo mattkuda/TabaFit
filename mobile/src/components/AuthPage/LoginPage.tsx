@@ -10,6 +10,7 @@ import { userState } from '../../atoms/userStateAtom';
 import { useAuth } from '../../context/AuthContext';
 // @ts-ignore
 import logo from '../../../assets/tabafit-icon.png';
+import { GradientVStack } from '../common/GradientVStack';
 
 const styles = StyleSheet.create({
     container: {
@@ -68,7 +69,7 @@ export const LoginScreen = (): JSX.Element => {
     };
 
     return (
-        <VStack
+        <GradientVStack
             backgroundColor="gray9"
             flex={1}
             width="100%"
@@ -125,6 +126,6 @@ export const LoginScreen = (): JSX.Element => {
                     </VStack>
                 </ScrollView>
             </KeyboardAvoidingView>
-        </VStack>
+        </GradientVStack>
     );
 };

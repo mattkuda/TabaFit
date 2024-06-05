@@ -10,12 +10,13 @@ import {
 import { AuthStackParamList } from '../../navigation/navigationTypes';
 // @ts-ignore
 import logo from '../../../assets/tabafit-icon.png';
+import { GradientVStack } from '../common/GradientVStack';
 
 export const AuthPage = (): JSX.Element => {
     const navigation = useNavigation<StackNavigationProp<AuthStackParamList>>();
 
     return (
-        <VStack
+        <GradientVStack
             backgroundColor="gray9"
             flex={1}
             height="100%"
@@ -82,6 +83,6 @@ export const AuthPage = (): JSX.Element => {
                     </Button>
                 </Button.Group>
             </Box>
-        </VStack>
+        </GradientVStack>
     );
 };

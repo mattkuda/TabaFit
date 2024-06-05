@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import {
-    VStack, Button, Modal,
+    Button, Modal,
 } from 'native-base';
 import { useQueryClient } from 'react-query';
 import { TabataWorkout } from '../../types/workouts';
@@ -8,6 +8,7 @@ import { useInfiniteQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWork
 import { useMutateDeleteWorkout } from '../../mutations/useMutateSaveWorkout';
 import { WorkoutCard } from '../common/WorkoutCard';
 import { InfiniteScrollList } from '../common/InfiniteScrollList';
+import { GradientVStack } from '../common/GradientVStack';
 
 export const LoadWorkoutScreen: FC = () => {
     const [showModal,
@@ -48,7 +49,7 @@ export const LoadWorkoutScreen: FC = () => {
     };
 
     return (
-        <VStack backgroundColor="black" flex={1} p={2} space={2}>
+        <GradientVStack flex={1} p={4} space={2}>
             <InfiniteScrollList
                 data={workouts?.pages.flatMap((page) => page)}
                 estimatedItemSize={100} // Adjust estimatedItemSize as needed
@@ -84,6 +85,6 @@ export const LoadWorkoutScreen: FC = () => {
                     </Modal.Footer>
                 </Modal.Content>
             </Modal>
-        </VStack>
+        </GradientVStack>
     );
 };

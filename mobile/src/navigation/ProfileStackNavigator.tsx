@@ -20,7 +20,7 @@ export const ProfileStackNavigator = (): JSX.Element => {
             screenOptions={{
                 headerTitle: 'TabaFit',
                 headerStyle: {
-                    backgroundColor: colors.gray[900],
+                    backgroundColor: colors.gray[800],
                 },
                 // eslint-disable-next-line
                 headerTintColor: "white",

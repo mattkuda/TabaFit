@@ -41,13 +41,19 @@ export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
             onPress={handlePress}
         >
             <VStack
-                backgroundColor="gray9"
-                borderRadius="md"
-                // borderWidth={1}
+                backgroundColor="cardGray"
                 mt={4}
                 pt={4}
                 px={4}
                 space={2}
+                style={{
+                    width: '100%',
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 3.84,
+                    elevation: 5,
+                }}
                 width="100%"
             >
                 <HStack justifyContent="space-between" space={2}>

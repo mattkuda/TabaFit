@@ -9,6 +9,7 @@ import { Image, ScrollView, StyleSheet } from 'react-native';
 import logo from '../../../assets/tabafit-icon.png';
 // @ts-ignore
 import mattkuda from '../../../assets/mattkuda.png';
+import { GradientVStack } from '../common/GradientVStack';
 
 const styles = StyleSheet.create({
     logo: {
@@ -28,13 +29,12 @@ const styles = StyleSheet.create({
 });
 
 export const AboutScreen: React.FC = () => (
-    <VStack
-        backgroundColor="gray9"
+    <GradientVStack
         flex={1}
         width="100%"
     >
         <ScrollView>
-            <VStack bgColor="gray9" height="100%" justifyContent="flex-start" style={{ padding: 20, gap: 8 }}>
+            <VStack height="100%" justifyContent="flex-start" style={{ padding: 20, gap: 8 }}>
                 <Image
                     alt="TabaFit Logo"
                     source={logo}
@@ -89,5 +89,5 @@ export const AboutScreen: React.FC = () => (
                 </Text>
             </VStack>
         </ScrollView>
-    </VStack>
+    </GradientVStack>
 );

@@ -16,6 +16,7 @@ import { RefreshableScrollView } from '../RefreshableScrollView';
 import { HorizontalWorkoutCards } from '../HorizontalWorkoutCards';
 import { useQueryWorkouts } from '../../hooks/useQueryWorkouts';
 import { tabaFitWorkouts } from '../../util/tabaFitWorkouts';
+import { GradientVStack } from '../common/GradientVStack';
 
 type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'WorkoutsScreen'>;
 
@@ -81,16 +82,28 @@ export const WorkoutsScreen = (): JSX.Element => {
     };
 
     return (
-        <VStack backgroundColor="gray.900" flex={1}>
+        <GradientVStack flex={1}>
             <RefreshableScrollView onRefresh={refetchData}>
-                <VStack backgroundColor="gray.900" flex={1} p={4} space={2}>
+                <VStack
+                    backgroundColor="gray.900"
+                    bg={{
+                        linearGradient: {
+                            colors: ['gray.800', 'gray.900'], // Adjust these colors for your preference
+                            start: [0, 0], // Top left
+                            end: [0, 1], // Bottom left (creates vertical gradient)
+                        },
+                    }}
+                    flex={1}
+                    p={4}
+                    space={2}
+                >
                     <TouchableOpacity onPress={handlePressQuickShuffle}>
                         {/* Quick Shuffle Row */}
                         <Box
                             alignItems="center"
                             bg={{
                                 linearGradient: {
-                                    colors: ['cherry.500', 'cherry.600'],
+                                    colors: ['flameCherry.900', 'cherry.600'],
                                     start: [0, 1],
                                     end: [1, 0],
                                 },
@@ -126,7 +139,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                             alignItems="center"
                             bg={{
                                 linearGradient: {
-                                    colors: ['flame.500', 'flame.600'],
+                                    colors: ['flame.500', 'flameCherry.500'],
                                     start: [0, 1],
                                     end: [1, 0],
                                 },
@@ -240,6 +253,6 @@ export const WorkoutsScreen = (): JSX.Element => {
                     />
                 </VStack>
             </RefreshableScrollView>
-        </VStack>
+        </GradientVStack>
     );
 };

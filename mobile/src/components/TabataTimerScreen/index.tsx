@@ -20,6 +20,7 @@ import { Intervals } from '../../util/constants';
 import { TimerScreenNavigationProp } from '../../types/navigationTypes';
 import { showFooterState } from '../../atoms/showFooterAtom';
 import { calculateTotalWorkoutTime, formatTime } from './util';
+import { GradientVStack } from '../common/GradientVStack';
 
 const sounds = {
     beep: require('../../../assets/sounds/beep.wav'),
@@ -304,14 +305,7 @@ export const TabataTimerScreen = (): JSX.Element => {
     };
 
     return (
-        <Box
-            bg={{
-                linearGradient: {
-                    colors: ['gray.700', 'gray.900'],
-                    start: [0],
-                    end: [1],
-                },
-            }}
+        <GradientVStack
             flex={1}
             style={{
                 flex: 1,
@@ -451,6 +445,6 @@ export const TabataTimerScreen = (): JSX.Element => {
                     /> */}
                 </Flex>
             </Box>
-        </Box>
+        </GradientVStack>
     );
 };

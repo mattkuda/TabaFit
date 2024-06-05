@@ -10,6 +10,7 @@ import { userState } from '../../atoms/userStateAtom';
 import { useAuth } from '../../context/AuthContext';
 // @ts-ignore
 import logo from '../../../assets/tabafit-icon.png';
+import { GradientVStack } from '../common/GradientVStack';
 
 const styles = StyleSheet.create({
     logo: {
@@ -62,7 +63,7 @@ export const SignupScreen = (): JSX.Element => {
     const isFormIncomplete = !email || !password || !firstName || !lastName || !username;
 
     return (
-        <VStack
+        <GradientVStack
             backgroundColor="gray9"
             flex={1}
             width="100%"
@@ -139,6 +140,6 @@ export const SignupScreen = (): JSX.Element => {
                     </VStack>
                 </ScrollView>
             </KeyboardAvoidingView>
-        </VStack>
+        </GradientVStack>
     );
 };

@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { TabataWorkoutWithUserInfo } from '../types/workouts';
 import { getFormattedTimeForTabataWorkout } from './TabataTimerScreen/util';
 import { PictureWithName } from './PictureWithName';
+import { getWorkoutDifficultyGradient } from '../util/util';
 
 interface SlideWorkoutCardProps {
     workout: TabataWorkoutWithUserInfo;
@@ -18,16 +19,33 @@ const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress })
         <Box
             bg={{
                 linearGradient: {
-                    colors: ['gray.500', 'gray.600'],
-                    start: [0, 1],
-                    end: [1, 0],
+                    colors: ['workoutDisplayGray', getWorkoutDifficultyGradient(workout.tabatas.length)[0]],
+                    start: [0.5, 0.6],
+                    end: [1.35, 1.05],
                 },
             }}
-            borderColor="flame"
+            borderRadius="md"
+            borderWidth={1}
             height={150}
             justifyContent="space-between"
             p="4"
-            rounded="md"
+            style={{
+                width: '100%',
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+                elevation: 5,
+            }}
+            // bg={{
+            //     linearGradient: {
+            //         colors: ['workoutDisplayGray', getWorkoutDifficultyGradient(workout.tabatas.length)[0]],
+            //         start: [0.6, 0.85],
+            //         end: [1, 1],
+
+            //     },
+            // }}
+            // bgColor="cardGray"\\
         >
             <Text
                 ellipsizeMode="tail"
@@ -46,7 +64,7 @@ const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress })
                 <VStack alignItems="center" flex={1} space={0}>
                     <Icon as={Ionicons} name="body-outline" size="md" />
                     <Text fontSize="sm">
-                        {`${workout.numberOfTabatas} ${workout.numberOfTabatas === 1 ? 'Tabata' : 'Tabatas'}`}
+                        {`${workout.tabatas.length} ${workout.tabatas.length === 1 ? 'Tabata' : 'Tabatas'}`}
                     </Text>
                 </VStack>
                 <VStack alignItems="center" flex={1} space={0}>

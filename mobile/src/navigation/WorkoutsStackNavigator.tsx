@@ -22,7 +22,7 @@ export const WorkoutsStackNavigator = (): JSX.Element => {
             initialRouteName="WorkoutsScreen"
             screenOptions={{
                 headerStyle: {
-                    backgroundColor: colors.gray[900],
+                    backgroundColor: colors.gray[800],
                 },
                 // eslint-disable-next-line
                 headerTintColor: "white",

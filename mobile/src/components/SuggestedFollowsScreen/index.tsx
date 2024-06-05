@@ -4,12 +4,14 @@ import {
 } from 'native-base';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useSetRecoilState } from 'recoil';
+import { TouchableOpacity } from 'react-native';
 import { useFollowAll, useFollowUser } from '../../mutations/followMutations';
 import { useAuth } from '../../context/AuthContext';
 import { User } from '../../types/users';
 import { useQuerySuggestedUsers } from '../../hooks/useQueryUserByUsername';
 import { ProfilePicture } from '../ProfilePicture';
 import { wizardActiveState } from '../../atoms/wizardActiveAtom';
+import { GradientVStack } from '../common/GradientVStack';
 
 type ConnectionCardProps = {
     user: User;
@@ -37,7 +39,7 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
     };
 
     return (
-        <Box backgroundColor="gray9" borderColor="gray8" borderRadius="md" borderWidth="1" key={key} mt="2" p="4">
+        <Box backgroundColor="gray.900" borderColor="gray8" borderRadius="md" borderWidth="1" key={key} mt="2" p="4">
             <HStack alignItems="center" space={3}>
                 <ProfilePicture size="48px" user={user} />
                 <VStack flex={1}>
@@ -51,7 +53,7 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
                 <Button
                     colorScheme={isFollowed || isAllFollowed ? 'success' : 'primary'}
                     isDisabled={isFollowed || isAllFollowed}
-                    leftIcon={<Icon as={MaterialIcons} color={isFollowed ? 'green.500' : 'primary'} name={isFollowed || isAllFollowed ? 'check' : 'add'} size="sm" />}
+                    leftIcon={<Icon as={MaterialIcons} color={isFollowed ? 'easyGreen' : 'primary'} name={isFollowed || isAllFollowed ? 'check' : 'add'} size="sm" />}
                     variant="ghost"
                     onPress={handleFollow}
                 >
@@ -90,8 +92,7 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
     };
 
     return (
-        <VStack
-            backgroundColor="gray9"
+        <GradientVStack
             flex={1}
             space={0}
             width="100%"
@@ -112,21 +113,39 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
                             {`Let's get you connected!`}
                         </Text>
                         <Text fontSize="lg" mt="5" textAlign="center">
-                            Follow some suggested users, or follow all current TabaFit users!
+                            Follow some suggested users, or follow all current TabaFit users! (recommended)
                         </Text>
                     </VStack>
                     <Center>
-                        <Button
-                            borderRadius="full"
-                            colorScheme="primary"
-                            isLoading={followAllMutation.isLoading}
-                            leftIcon={<Icon as={MaterialIcons} color={followAllMutation.isSuccess ? 'green.500' : 'white'} name={followAllMutation.isSuccess ? 'check' : 'add'} size="sm" />}
-                            variant="solid"
-                            width={180}
+                        <TouchableOpacity
                             onPress={handleFollowAll}
                         >
-                            Follow All
-                        </Button>
+                            <Box
+                                alignItems="center"
+                                bg={{
+                                    linearGradient: {
+                                        colors: ['flame.500', 'cherry.500'],
+                                        start: [0, 1],
+                                        end: [1, 0],
+                                    },
+                                }}
+                                borderRadius="full"
+                                flexDirection="row"
+                                // @ts-ignore
+                                gap={2}
+                                justifyContent="center"
+                                mx="4"
+                                my="2"
+                                p="2"
+                                px={4}
+                                width="150"
+                            >
+                                <Icon as={Ionicons} name="add" size="lg" />
+                                <Text fontSize="md" fontWeight="semibold">
+                                    Follow All
+                                </Text>
+                            </Box>
+                        </TouchableOpacity>
                     </Center>
                     {users?.map((user) => (
                         <ConnectionCard
@@ -138,23 +157,32 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
                     ))}
                 </VStack>
             </ScrollView>
-            <Box bg="gray9" height={110} p="4" width="100%">
-                <Button
+            <TouchableOpacity onPress={(): void => setwizardActive(false)}>
+                <Box
+                    alignItems="center"
+                    bg={isAnyFollowed ? {
+                        linearGradient: {
+                            colors: ['flame.500', 'cherry.500'],
+                            start: [0, 1],
+                            end: [1, 0],
+                        },
+                    } : 'gray.800'}
                     borderRadius="full"
-                    bottom={8}
-                    color={isAnyFollowed ? 'primary' : 'gray4'}
-                    endIcon={(
-                        <Icon as={Ionicons} name="chevron-forward" />
-                    )}
-                    flex={1}
-                    m={4}
-                    position="absolute"
-                    width="100%"
-                    onPress={(): void => setwizardActive(false)}
+                    flexDirection="row"
+                    // @ts-expect-error
+                    gap={2}
+                    justifyContent="center"
+                    mx="4"
+                    my="16"
+                    p="4"
+                    px={4}
                 >
-                    Finish!
-                </Button>
-            </Box>
-        </VStack>
+                    <Text bold color={isAnyFollowed ? 'white' : 'gray.600'} fontSize="lg">
+                        Finish!
+                    </Text>
+                    <Icon as={Ionicons} color={isAnyFollowed ? 'white' : 'gray.600'} name="chevron-forward" size="lg" />
+                </Box>
+            </TouchableOpacity>
+        </GradientVStack>
     );
 };

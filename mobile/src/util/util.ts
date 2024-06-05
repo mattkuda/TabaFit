@@ -54,3 +54,31 @@ export const exerciseIconDictionary: Record<string, any> = {
     Glutes: cardioIcon,
     Spicy: cardioIcon,
 };
+
+export const workoutDifficultyGradients = {
+    easy: ['easyGreen', '#00C06E'],
+    medium: ['#3f8fdf', '#0C5CAC'],
+    hard: ['rgba(255, 159, 39, 17)', 'flameCherry.500'],
+    extreme: ['flameCherry.900', 'cherry.600'],
+};
+
+export const getWorkoutDifficultyGradient = (numberOfTabatas: number): string[] => {
+    let difficultyColor;
+
+    switch (true) {
+        case numberOfTabatas > 9:
+            difficultyColor = workoutDifficultyGradients.extreme;
+            break;
+        case numberOfTabatas > 6:
+            difficultyColor = workoutDifficultyGradients.hard;
+            break;
+        case numberOfTabatas > 3:
+            difficultyColor = workoutDifficultyGradients.medium;
+            break;
+        default:
+            difficultyColor = workoutDifficultyGradients.easy;
+            break;
+    }
+
+    return difficultyColor;
+};

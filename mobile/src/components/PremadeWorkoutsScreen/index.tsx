@@ -1,16 +1,14 @@
 import React, { FC } from 'react';
-import {
-    VStack,
-} from 'native-base';
 import { WorkoutCard } from '../common/WorkoutCard';
 import { InfiniteScrollList } from '../common/InfiniteScrollList';
 import { tabaFitWorkouts } from '../../util/tabaFitWorkouts';
+import { GradientVStack } from '../common/GradientVStack';
 
 export const PremadeWorkoutsScreen: FC = () => {
     const flatMapWorkouts = tabaFitWorkouts;
 
     return (
-        <VStack backgroundColor="gray9" flex={1} p={2} space={2}>
+        <GradientVStack flex={1} p={4} space={2}>
             <InfiniteScrollList
                 data={flatMapWorkouts}
                 estimatedItemSize={100}
@@ -22,6 +20,6 @@ export const PremadeWorkoutsScreen: FC = () => {
                     />
                 )}
             />
-        </VStack>
+        </GradientVStack>
     );
 };

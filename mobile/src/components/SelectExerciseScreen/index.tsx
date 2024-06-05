@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    VStack, FlatList, Pressable, Text, Input, Icon, HStack, Image,
+    FlatList, Pressable, Text, Input, Icon, HStack, Image,
 } from 'native-base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -14,6 +14,7 @@ import {
 import { OldWorkoutsStackParamList } from '../../navigation/navigationTypes';
 import { TabataExercise } from '../../types/workouts';
 import { exerciseIconDictionary } from '../../util/util';
+import { GradientVStack } from '../common/GradientVStack';
 
 type SelectExerciseScreenNavigationProp = StackNavigationProp<OldWorkoutsStackParamList, 'SelectExerciseScreen'>;
 type OldSelectExerciseScreenRouteProp = RouteProp<OldWorkoutsStackParamList, 'SelectExerciseScreen'>;
@@ -40,7 +41,7 @@ export const SelectExerciseScreen = (): JSX.Element => {
     const [search, setSearch] = useState<string>('');
 
     return (
-        <VStack
+        <GradientVStack
             backgroundColor="gray9"
             flex={1}
             space={0}
@@ -76,6 +77,6 @@ export const SelectExerciseScreen = (): JSX.Element => {
                     </Pressable>
                 )}
             />
-        </VStack>
+        </GradientVStack>
     );
 };

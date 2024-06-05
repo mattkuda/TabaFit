@@ -1,10 +1,8 @@
 import React, { FC } from 'react';
-import {
-    VStack,
-} from 'native-base';
 import { useInfiniteQueryWorkouts } from '../../hooks/useQueryWorkouts';
 import { WorkoutCard } from '../common/WorkoutCard';
 import { InfiniteScrollList } from '../common/InfiniteScrollList';
+import { GradientVStack } from '../common/GradientVStack';
 
 // NOTE: Keep this similar to LoadWorkoutScreen
 // TODO: Make workout card a common component
@@ -24,7 +22,7 @@ export const DiscoverWorkoutsScreen: FC = () => {
     const flatMapWorkouts = workoutsData?.pages.flatMap((page) => page) || [];
 
     return (
-        <VStack backgroundColor="black" flex={1} p={2} space={2}>
+        <GradientVStack flex={1} p={2} space={2}>
             <InfiniteScrollList
                 data={flatMapWorkouts}
                 estimatedItemSize={100} // Adjust based on the average size of your WorkoutCard
@@ -40,6 +38,6 @@ export const DiscoverWorkoutsScreen: FC = () => {
                 )}
                 onRefresh={refetchData}
             />
-        </VStack>
+        </GradientVStack>
     );
 };

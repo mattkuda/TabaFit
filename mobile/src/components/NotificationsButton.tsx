@@ -17,7 +17,7 @@ export const NotificationsButton = (): JSX.Element => {
         <Box>
             <IconButton
                 _icon={{
-                    color: 'primary',
+                    color: 'white',
                     size: 'md',
                 }}
                 borderRadius="full"

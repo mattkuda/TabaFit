@@ -90,7 +90,7 @@ const WorkoutCard = ({
                     <VStack alignItems="center" flex={1} space={0}>
                         <Icon as={Ionicons} name="body-outline" size="md" />
                         <Text fontSize="sm">
-                            {`${workout.numberOfTabatas} ${workout.numberOfTabatas === 1 ? 'Tabata' : 'Tabatas'}`}
+                            {`${workout.tabatas.length} ${workout.tabatas.length === 1 ? 'Tabata' : 'Tabatas'}`}
                         </Text>
                     </VStack>
                     <VStack alignItems="center" flex={1} space={0}>
