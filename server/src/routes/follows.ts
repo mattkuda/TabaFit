@@ -2,6 +2,8 @@ import express, { Response } from 'express';
 import { MongoClient, Collection, ObjectId } from 'mongodb';
 import mongoose from 'mongoose';
 import authenticate, { AuthRequest } from '../middleware/authenticate';
+// eslint-disable-next-line import/no-relative-packages
+import { NotificationSchema } from '../../../mobile/src/types/notifications';
 
 const router = express.Router();
 const connectionString = process.env.MONGODB_URI;
@@ -14,12 +16,14 @@ const client = new MongoClient(connectionString);
 
 let followsCollection: Collection;
 let usersCollection: Collection;
+let notificationsCollection: Collection<NotificationSchema>;
 
 (async () => {
   try {
     await client.connect();
     followsCollection = client.db('AbcountableDB').collection('follows');
     usersCollection = client.db('AbcountableDB').collection('users');
+    notificationsCollection = client.db('AbcountableDB').collection('notifications');
   } catch (err) {
     console.error('Failed to connect to MongoDB', err);
     process.exit(1);
@@ -48,6 +52,17 @@ router.post('/follow', authenticate, async (req: AuthRequest, res: Response) => 
       followeeId: new ObjectId(followeeId),
       createdDate: new Date(),
     });
+
+    const notification: NotificationSchema = {
+      type: 'follow',
+      targetId: new ObjectId(followerId),
+      initiatorUserId: new ObjectId(followerId),
+      recipientUserId: new ObjectId(followeeId),
+      createdAt: new Date(),
+      read: false,
+    };
+
+    await notificationsCollection.insertOne(notification);
 
     res.status(200).send({ message: 'Followed successfully' });
   } catch (err) {
