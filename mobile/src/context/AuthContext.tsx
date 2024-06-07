@@ -18,7 +18,7 @@ interface AuthProps {
     };
     onRegister?: (email: string, password: string, firstName: string,
         lastName: string, username: string) => Promise<any>;
-    onLogin?: (email: string, password: string) => Promise<any>;
+    onLogin?: (emailOrUsername: string, password: string) => Promise<any>;
     onLogout?: () => Promise<any>;
 }
 
@@ -82,9 +82,9 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
     };
 
     // Update the onLogin function to handle user data
-    const onLogin = async (email: string, password: string): Promise<void> => {
+    const onLogin = async (emailOrUsername: string, password: string): Promise<void> => {
         try {
-            const response = await axios.post(`${apiUrl}/login`, { email, password });
+            const response = await axios.post(`${apiUrl}/login`, { emailOrUsername, password });
             const { token, user } = response.data;
 
             setAuthState({

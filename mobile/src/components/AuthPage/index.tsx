@@ -17,7 +17,6 @@ export const AuthPage = (): JSX.Element => {
 
     return (
         <GradientVStack
-            backgroundColor="gray9"
             flex={1}
             height="100%"
             space={2}
@@ -50,7 +49,7 @@ export const AuthPage = (): JSX.Element => {
                     Inspire and share with friends
                 </Text>
             </VStack>
-            <Box bg="gray9" height={110} p="4" width="100%">
+            <Box height={110} p="4" width="100%">
                 <Button.Group
                     isAttached
                     bottom={8}

@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import {
     StyleSheet, Image, ScrollView, KeyboardAvoidingView, Platform,
+    TouchableOpacity,
 } from 'react-native';
 import { useSetRecoilState } from 'recoil';
 import {
-    Button, VStack, Text, Input,
+    VStack, Text, Input,
+    Box,
+    Icon,
+    Button,
 } from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
+import axios from 'axios';
 import { userState } from '../../atoms/userStateAtom';
 import { useAuth } from '../../context/AuthContext';
 // @ts-ignore
@@ -37,33 +43,39 @@ const styles = StyleSheet.create({
 });
 
 export const LoginScreen = (): JSX.Element => {
-    const [email, setEmail] = useState('');
+    const [emailOrUsername, setEmailOrUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState<string>('');
     const setUser = useSetRecoilState(userState);
     const { onLogin } = useAuth();
+
     const handleSignIn = async (): Promise<void> => {
         try {
-            const data = await onLogin(email, password);
-
-            setErrorMessage(JSON.stringify(data));
+            const data = await onLogin(emailOrUsername, password);
 
             if (data.success) {
                 setUser((prevState) => ({
                     ...prevState,
                     isAuthenticated: true,
-                    user: data.user, // Assuming 'data.user' contains the user data returned from the server
+                    user: data.user,
                 }));
-            } else {
-                // setErrorMessage(data.message);
+                setErrorMessage('');
             }
         } catch (error) {
-            setErrorMessage(error.message);
+            if (axios.isAxiosError(error)) {
+                if (error.response) {
+                    setErrorMessage(error.response.data.message);
+                } else {
+                    setErrorMessage('An error occurred. Please try again.');
+                }
+            } else {
+                setErrorMessage('An error occurred. Please try again.');
+            }
         }
     };
 
     const handlePrefill = async (): Promise<void> => {
-        setEmail('test@gmail.com');
+        setEmailOrUsername('test@gmail.com');
         setPassword('test');
         await handleSignIn();
     };
@@ -94,10 +106,10 @@ export const LoginScreen = (): JSX.Element => {
                         />
                         <Input
                             autoCapitalize="none"
-                            placeholder="Email"
-                            value={email}
+                            placeholder="Email or username"
+                            value={emailOrUsername}
                             width="80%"
-                            onChangeText={setEmail}
+                            onChangeText={setEmailOrUsername}
                         />
                         <Input
                             secureTextEntry
@@ -106,23 +118,44 @@ export const LoginScreen = (): JSX.Element => {
                             width="80%"
                             onChangeText={setPassword}
                         />
-                        <Button
-                            borderRadius="full"
-                            width="80%"
+                        <TouchableOpacity
+                            style={{ width: '80%' }}
                             onPress={handleSignIn}
                         >
-                            Login
-                        </Button>
+                            <Box
+                                alignItems="center"
+                                bg={{
+                                    linearGradient: {
+                                        colors: ['flame.500', 'cherry.500'],
+                                        start: [0, 1],
+                                        end: [1, 0],
+                                    },
+                                }}
+                                borderRadius="full"
+                                flexDirection="row"
+                                // @ts-expect-error
+                                gap={2}
+                                justifyContent="center"
+                                p="2"
+                            >
+                                <Text
+                                    color="white" // Ensure the text color is white
+                                >
+                                    Login
+                                </Text>
+                                <Icon as={Ionicons} color="white" name="chevron-forward" size="sm" />
+                            </Box>
+                        </TouchableOpacity>
                         {process.env.EXPO_PUBLIC_ENVIRONMENT !== 'production' && (
-                        <Button
-                            borderRadius="full"
-                            width="80%"
-                            onPress={handlePrefill}
-                        >
-                            Pre-fill
-                        </Button>
+                            <Button
+                                borderRadius="full"
+                                width="80%"
+                                onPress={handlePrefill}
+                            >
+                                Pre-fill
+                            </Button>
                         )}
-                        <Text>{errorMessage}</Text>
+                        <Text style={{ minHeight: 100, color: 'red' }}>{errorMessage ?? ' '}</Text>
                     </VStack>
                 </ScrollView>
             </KeyboardAvoidingView>

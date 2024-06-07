@@ -73,18 +73,28 @@ router.post('/signup', async (req: Request, res: Response) => {
 
 router.post('/login', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
+    const { emailOrUsername, password } = req.body;
+    if (!emailOrUsername || !password) {
       return res.status(400).json({ message: 'All fields are required' });
     }
-    const user = await usersCollection.findOne({ email });
+
+    // Find user by either email or username
+    const user = await usersCollection.findOne({
+      $or: [
+        { email: emailOrUsername },
+        { username: emailOrUsername },
+      ],
+    });
+
     if (!user) {
-      return res.status(401).json({ message: 'Incorrect password or email' });
+      return res.status(401).json({ message: 'Incorrect password or email/username' });
     }
+
     const auth = await bcrypt.compare(password, user.password);
     if (!auth) {
-      return res.status(401).json({ message: 'Incorrect password or email' });
+      return res.status(401).json({ message: 'Incorrect password or email/username' });
     }
+
     const token = createSecretToken(user._id.toString());
 
     // Exclude sensitive data from the user object before sending it to the client
