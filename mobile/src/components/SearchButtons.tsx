@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { SearchScreenNavigationProp } from '../navigation/navigationTypes';
 
-export const Searchbutton = (): JSX.Element => {
+export const SearchButton = (): JSX.Element => {
     const navigation = useNavigation<SearchScreenNavigationProp>();
 
     return (
@@ -16,7 +16,7 @@ export const Searchbutton = (): JSX.Element => {
                 color: 'white',
             }}
             borderRadius="full"
-            icon={<Icon as={Ionicons} name="search" size="md" />}
+            icon={<Icon as={Ionicons} name="search" size="lg" />}
             onPress={(): void => navigation.navigate('Search')}
         />
     );

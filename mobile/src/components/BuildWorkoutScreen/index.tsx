@@ -306,7 +306,8 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             headerRight: (): JSX.Element => (
                 <HStack marginRight="3" space={0}>
                     <IconButton
-                        icon={<Icon as={Ionicons} color="white" name="help-circle" />}
+                        borderRadius="full"
+                        icon={<Icon as={Ionicons} color="white" name="help-circle" size="lg" />}
                         size="lg"
                         onPress={(): void => setShowHelpDialog(true)}
                     />

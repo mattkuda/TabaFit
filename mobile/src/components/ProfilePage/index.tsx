@@ -86,7 +86,7 @@ export const ProfilePage = (): JSX.Element => {
                     <IconButton
                         _icon={{
                             color: 'white',
-                            size: 'md',
+                            size: 'lg',
                         }}
                         borderRadius="full"
                         icon={<Icon as={Ionicons} name="settings" />}

@@ -22,7 +22,7 @@ export const NotificationsButton = (): JSX.Element => {
                 }}
                 borderRadius="full"
                 color="primary"
-                icon={<Icon as={Ionicons} name="notifications" size="md" />}
+                icon={<Icon as={Ionicons} name="notifications" size="lg" />}
                 onPress={(): void => navigation.navigate('NotificationsScreen')}
             />
             {unreadNotificationsCount > 0 && (
@@ -30,12 +30,12 @@ export const NotificationsButton = (): JSX.Element => {
                     alignItems="center"
                     bg="red.500"
                     borderRadius="full"
-                    height={3}
+                    height={4}
                     justifyContent="center"
                     position="absolute"
-                    right={2}
-                    top={2}
-                    width={3}
+                    right={1.5}
+                    top={1.5}
+                    width={4}
                 >
                     <Text color="white" fontSize="10" pb={4}>
                         {unreadNotificationsCount}
