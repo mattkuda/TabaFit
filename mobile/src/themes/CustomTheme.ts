@@ -139,6 +139,11 @@ export const theme = extendTheme({
                 borderColor: 'gray7',
             },
         },
+        Spinner: {
+            defaultProps: {
+                color: 'white',
+            },
+        },
         TextArea: {
             defaultProps: {
                 color: 'white',

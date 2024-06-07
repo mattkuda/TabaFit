@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Spinner } from 'native-base';
 import { FlashList } from '@shopify/flash-list';
+import { RefreshControl } from 'react-native';
 
 type InfiniteScrollListProps<T> = {
     data: T[] | undefined;
@@ -28,6 +29,14 @@ export const InfiniteScrollList = <T, >({
             data={data}
             estimatedItemSize={estimatedItemSize}
             keyExtractor={keyExtractor}
+            refreshControl={(
+                <RefreshControl
+                    colors={['white']}
+                    refreshing={!!isFetchingNextPage}
+                    tintColor="white"
+                    onRefresh={onRefresh}
+                />
+              )}
             refreshing={isFetchingNextPage}
             renderItem={({ item }): JSX.Element => renderItem(item)}
             showsHorizontalScrollIndicator={false} // Hide horizontal scroll indicator
@@ -38,7 +47,7 @@ export const InfiniteScrollList = <T, >({
         />
         {isFetchingNextPage && (
             <Box alignContent="center" justifyContent="center" p="4">
-                <Spinner accessibilityLabel="Loading more items" />
+                <Spinner accessibilityLabel="Loading more items" color="white" />
             </Box>
         )}
     </Box>
