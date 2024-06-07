@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HStack, useTheme } from 'native-base';
-import { Image } from 'react-native';
+import {
+    Animated, Easing, Image, TouchableOpacity,
+} from 'react-native';
 import { PostScreen } from '../components/PostScreen';
 import { ProfilePage } from '../components/ProfilePage';
 import { HomePage } from '../components/HomePage';
 import { SearchPage } from '../components/SearchPage';
 import { HomeStackParamList } from './navigationTypes';
-import { Searchbutton } from '../components/SearchButtons';
+import { SearchButton } from '../components/SearchButtons';
 import { NotificationsScreen } from '../components/NotificationsScreen';
 import { NotificationsButton } from '../components/NotificationsButton';
 import { ViewWorkoutScreen } from '../components/ViewWorkoutScreen';
@@ -23,7 +25,7 @@ import logo from '../../assets/tabafit-icon.png';
 const Stack = createStackNavigator<HomeStackParamList>();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const SearchButtonComponent = (): JSX.Element => <Searchbutton />;
+const SearchButtonComponent = (): JSX.Element => <SearchButton />;
 const HeaderRightComponent = (): JSX.Element => (
     <HStack space={2}>
         <NotificationsButton />
@@ -31,13 +33,38 @@ const HeaderRightComponent = (): JSX.Element => (
     </HStack>
 );
 
-const HeaderImageomponent = (): JSX.Element => (
-    <Image
-        alt="TabaFit logo"
-        source={logo}
-        style={{ width: 30, height: 30 }}
-    />
-);
+const HeaderImageComponent = (): JSX.Element => {
+    const spinValue = useRef(new Animated.Value(0)).current;
+    const [flipped, setFlipped] = useState(false);
+
+    const flipImage = (): void => {
+        Animated.timing(spinValue, {
+            toValue: flipped ? 0 : 1,
+            duration: 500,
+            easing: Easing.linear,
+            useNativeDriver: true,
+        }).start(() => {
+            setFlipped(!flipped);
+        });
+    };
+
+    const spin = spinValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', '180deg'],
+    });
+
+    return (
+        <TouchableOpacity onPress={flipImage}>
+            <Animated.View style={{ transform: [{ rotateY: spin }] }}>
+                <Image
+                    alt="TabaFit logo"
+                    source={logo}
+                    style={{ width: 35, height: 35 }}
+                />
+            </Animated.View>
+        </TouchableOpacity>
+    );
+};
 
 export const HomeStackNavigator = (): JSX.Element => {
     const { colors } = useTheme();
@@ -61,7 +88,7 @@ export const HomeStackNavigator = (): JSX.Element => {
                 name="HomePage"
                 options={{
                     title: 'Home',
-                    headerTitle: HeaderImageomponent,
+                    headerTitle: HeaderImageComponent,
                     headerLeft: SearchButtonComponent,
                     headerRight: HeaderRightComponent,
                 }}

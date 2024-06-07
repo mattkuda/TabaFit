@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/wide_tabafit_logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#18181b"
+      "backgroundColor": "#0f1317"
     },
     "assetBundlePatterns": [
       "**/*"
