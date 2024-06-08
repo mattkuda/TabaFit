@@ -24,8 +24,7 @@ const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress })
                     end: [1.35, 1.05],
                 },
             }}
-            borderRadius="md"
-            borderWidth={1}
+            borderRadius="lg"
             height={150}
             justifyContent="space-between"
             p="4"
@@ -37,15 +36,6 @@ const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress })
                 shadowRadius: 3.84,
                 elevation: 5,
             }}
-            // bg={{
-            //     linearGradient: {
-            //         colors: ['workoutDisplayGray', getWorkoutDifficultyGradient(workout.tabatas.length)[0]],
-            //         start: [0.6, 0.85],
-            //         end: [1, 1],
-
-            //     },
-            // }}
-            // bgColor="cardGray"\\
         >
             <Text
                 ellipsizeMode="tail"

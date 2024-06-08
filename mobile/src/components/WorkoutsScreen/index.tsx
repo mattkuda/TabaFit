@@ -97,7 +97,17 @@ export const WorkoutsScreen = (): JSX.Element => {
                     p={4}
                     space={2}
                 >
-                    <TouchableOpacity onPress={handlePressQuickShuffle}>
+                    <TouchableOpacity
+                        style={{
+                            width: '100%',
+                            shadowColor: '#000',
+                            shadowOffset: { width: 0, height: 2 },
+                            shadowOpacity: 0.25,
+                            shadowRadius: 3.84,
+                            elevation: 5,
+                        }}
+                        onPress={handlePressQuickShuffle}
+                    >
                         {/* Quick Shuffle Row */}
                         <Box
                             alignItems="center"
@@ -134,7 +144,17 @@ export const WorkoutsScreen = (): JSX.Element => {
                         </Box>
                     </TouchableOpacity>
                     {/* Build Workout Row */}
-                    <TouchableOpacity onPress={handlePressBuildWorkout}>
+                    <TouchableOpacity
+                        style={{
+                            width: '100%',
+                            shadowColor: '#000',
+                            shadowOffset: { width: 0, height: 2 },
+                            shadowOpacity: 0.25,
+                            shadowRadius: 3.84,
+                            elevation: 5,
+                        }}
+                        onPress={handlePressBuildWorkout}
+                    >
                         <Box
                             alignItems="center"
                             bg={{

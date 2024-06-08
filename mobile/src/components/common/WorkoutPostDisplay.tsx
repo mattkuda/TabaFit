@@ -25,8 +25,20 @@ export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
         }
     };
 
+    const workoutGradient = getWorkoutDifficultyGradient(workout.tabatas.length);
+
     return (
-        <TouchableOpacity onPress={handleWorkoutNamePress}>
+        <TouchableOpacity
+            style={{
+                width: '100%',
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+                elevation: 5,
+            }}
+            onPress={handleWorkoutNamePress}
+        >
             <Box
                 // bg={{
                 //     linearGradient: {
@@ -37,7 +49,7 @@ export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
                 // }}
                 bg={{
                     linearGradient: {
-                        colors: ['workoutDisplayGray', getWorkoutDifficultyGradient(workout.tabatas.length)[0]],
+                        colors: ['workoutDisplayGray', workoutGradient[0]],
                         start: [0.5, 0.5],
                         end: [1.3, 1.3],
 
@@ -47,7 +59,6 @@ export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
                 borderRadius="md"
                 mt={2}
                 p={2}
-
             >
                 <HStack
                     justifyContent="space-between"
@@ -58,7 +69,7 @@ export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
                         alignItems="center"
                         space={2}
                     >
-                        <Icon as={Ionicons} color={getWorkoutDifficultyGradient(workout.numberOfTabatas)} name="barbell-outline" size="sm" />
+                        <Icon as={Ionicons} color={workoutGradient[0]} name="barbell-outline" size="sm" />
                         <Text bold fontSize="md" onPress={handleWorkoutNamePress}>
                             {workout.name}
                         </Text>

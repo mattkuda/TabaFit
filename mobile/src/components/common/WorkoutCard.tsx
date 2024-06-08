@@ -69,7 +69,7 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                 justifyContent="space-between"
                 my={2}
                 p="4"
-                rounded="md"
+                rounded="xl"
             >
                 <VStack space={4}>
                     <HStack alignItems="center" justifyContent="flex-start">

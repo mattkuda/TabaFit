@@ -316,7 +316,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                             variant="ghost"
                             onPress={handleSaveOrUpdateWorkout}
                         >
-                            <Text color="flame.500" fontSize="md">{isSavedWorkoutByUser ? 'Update' : 'Save'}</Text>
+                            <Text color="white" fontSize="md">{isSavedWorkoutByUser ? 'Update' : 'Save'}</Text>
                         </Button>
                     )}
                 </HStack>
@@ -535,7 +535,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             ) : (
                 <Input
                     fontSize="lg"
-                    mb="4"
+                    m={4}
                     placeholder="Enter Workout Name"
                     value={workoutName}
                     onChangeText={handleChange}
