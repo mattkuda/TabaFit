@@ -512,7 +512,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                             >
                                 <Icon as={Ionicons} name="shuffle" size="lg" />
                                 <Text fontSize="md" fontWeight="semibold">
-                                    Re-Shuffle
+                                    Shuffle
                                 </Text>
                             </Box>
                         </TouchableOpacity>
@@ -767,7 +767,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                             <Text mb={2}>&bull; Click and hold an exercise to drag and drop it to a new position.</Text>
                             <Text mb={2}>&bull; Use the up and down arrows to move a Tabata circuit up or down.</Text>
                             <Text mb={2}>
-                                &bull; In shuffle mode, clicking the Re-Shuffle
+                                &bull; In shuffle mode, clicking the Shuffle
                                 button will shuffle the exercises in each Tabata according to your settings.
                             </Text>
                             <Text mb={2}>&bull; Adjust settings in the Settings modal by clicking the gear icon.</Text>
