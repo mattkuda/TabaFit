@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HStack, useTheme } from 'native-base';
 import {
@@ -35,22 +35,20 @@ const HeaderRightComponent = (): JSX.Element => (
 
 const HeaderImageComponent = (): JSX.Element => {
     const spinValue = useRef(new Animated.Value(0)).current;
-    const [flipped, setFlipped] = useState(false);
 
     const flipImage = (): void => {
+        spinValue.setValue(0);
         Animated.timing(spinValue, {
-            toValue: flipped ? 0 : 1,
-            duration: 500,
-            easing: Easing.linear,
+            toValue: 3,
+            duration: 3000,
+            easing: Easing.out(Easing.exp),
             useNativeDriver: true,
-        }).start(() => {
-            setFlipped(!flipped);
-        });
+        }).start();
     };
 
     const spin = spinValue.interpolate({
         inputRange: [0, 1],
-        outputRange: ['0deg', '180deg'],
+        outputRange: ['0deg', '360deg'],
     });
 
     return (
