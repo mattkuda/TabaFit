@@ -83,25 +83,13 @@ router.get('/global', async (req: Request, res: Response) => {
 
 router.get('/user-posts/:userId', authenticate, async (req: AuthRequest, res: Response) => {
   const requestedUserId = req.params.userId;
-  const requestingUserId = req.userId;
+  // const requestingUserId = req.userId;
   const offset = parseInt(req.query.offset as string, 10) || 0; // Set a default value for offset
   const limit = parseInt(req.query.limit as string, 10) || 10; // Set a default value for limit
 
   if (!ObjectId.isValid(requestedUserId)) {
     res.status(400).send({ message: 'Invalid user ID' });
     return;
-  }
-
-  if (requestingUserId !== requestedUserId) {
-    const isFollowing = await followsCollection.findOne({
-      followerId: new ObjectId(requestingUserId),
-      followeeId: new ObjectId(requestedUserId),
-    });
-
-    if (!isFollowing) {
-      res.status(403).send({ message: 'You are not authorized to view these posts' });
-      return;
-    }
   }
 
   try {

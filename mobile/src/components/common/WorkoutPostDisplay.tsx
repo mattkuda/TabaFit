@@ -40,6 +40,12 @@ export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
             onPress={handleWorkoutNamePress}
         >
             <Box
+                backgroundColor="workoutDisplayGray"
+                borderColor={workoutGradient[0]}
+                borderRadius="md"
+                borderWidth={1}
+                mt={2}
+                p={2}
                 // bg={{
                 //     linearGradient: {
                 //         colors: getWorkoutDifficultyGradient(workout.numberOfTabatas),
@@ -47,18 +53,14 @@ export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
                 //         end: [1, 0],
                 //     },
                 // }}
-                bg={{
-                    linearGradient: {
-                        colors: ['workoutDisplayGray', workoutGradient[0]],
-                        start: [0.5, 0.5],
-                        end: [1.3, 1.3],
+                // bg={{
+                //     linearGradient: {
+                //         colors: ['workoutDisplayGray', workoutGradient[0]],
+                //         start: [0.5, 0.5],
+                //         end: [1.3, 1.3],
 
-                    },
-                }}
-                // bg="workoutDisplayGray"
-                borderRadius="md"
-                mt={2}
-                p={2}
+                //     },
+                // }}
             >
                 <HStack
                     justifyContent="space-between"
