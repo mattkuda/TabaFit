@@ -9,7 +9,6 @@
       "env": {
         "EXPO_PUBLIC_ENVIRONMENT": "development",
         "EXPO_PUBLIC_EAS_API_BASE_URL": "http://localhost:3000"
-
       }
     },
     "preview": {

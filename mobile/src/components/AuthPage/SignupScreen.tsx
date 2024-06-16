@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import {
     StyleSheet, Image, KeyboardAvoidingView, Platform,
+    TouchableOpacity,
 } from 'react-native';
 import { useSetRecoilState } from 'recoil';
 import {
     Input, VStack, Button, Text, ScrollView,
+    Box,
+    Icon,
 } from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
 import { userState } from '../../atoms/userStateAtom';
 import { useAuth } from '../../context/AuthContext';
 // @ts-ignore
@@ -119,14 +123,33 @@ export const SignupScreen = (): JSX.Element => {
                             width="80%"
                             onChangeText={setUsername}
                         />
-                        <Button
-                            borderRadius="full"
+                        <TouchableOpacity
                             disabled={isFormIncomplete}
-                            width="80%"
+                            style={{ width: '80%' }}
                             onPress={handleSignUp}
                         >
-                            Sign Up
-                        </Button>
+                            <Box
+                                alignItems="center"
+                                bg={{
+                                    linearGradient: {
+                                        colors: ['flame.500', 'cherry.500'],
+                                        start: [0, 1],
+                                        end: [1, 0],
+                                    },
+                                }}
+                                borderRadius="full"
+                                flexDirection="row"
+                                // @ts-expect-error
+                                gap={2}
+                                justifyContent="center"
+                                p="2"
+                            >
+                                <Text color="white">
+                                    Sign Up
+                                </Text>
+                                <Icon as={Ionicons} color="white" name="chevron-forward" size="sm" />
+                            </Box>
+                        </TouchableOpacity>
                         {process.env.EXPO_PUBLIC_ENVIRONMENT !== 'production' && (
                             <Button
                                 borderRadius="full"
@@ -136,7 +159,7 @@ export const SignupScreen = (): JSX.Element => {
                                 Pre-fill
                             </Button>
                         )}
-                        <Text>{errorMessage}</Text>
+                        <Text style={{ minHeight: 100, color: 'red' }}>{errorMessage ?? ' '}</Text>
                     </VStack>
                 </ScrollView>
             </KeyboardAvoidingView>
