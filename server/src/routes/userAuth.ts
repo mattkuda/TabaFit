@@ -35,10 +35,17 @@ router.post('/signup', async (req: Request, res: Response) => {
       email, password, username, firstName, lastName,
     } = req.body;
     const trimmedUsername = username.trim();
+
     // Validate the username
     const { isValid, errorMessage } = validateUsername(trimmedUsername);
     if (!isValid) {
       return res.status(400).json({ message: errorMessage });
+    }
+
+    // Validate the email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: 'Invalid email format' });
     }
 
     const existingUser = await usersCollection.findOne({ email });
