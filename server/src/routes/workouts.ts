@@ -17,11 +17,13 @@ if (!connectionString) {
 const client = new MongoClient(connectionString);
 
 let workoutsCollection: Collection<TabataWorkout>;
+let usersCollection: Collection<User>;
 
 (async () => {
   try {
     await client.connect();
     workoutsCollection = client.db('AbcountableDB').collection<TabataWorkout>('workouts');
+    usersCollection = client.db('AbcountableDB').collection<User>('users');
   } catch (err) {
     console.error('Failed to connect to MongoDB', err);
     process.exit(1);
@@ -31,7 +33,7 @@ let workoutsCollection: Collection<TabataWorkout>;
 const addUserInfoToWorkouts = async (workouts: TabataWorkout[]):
  Promise<TabataWorkoutWithUserInfo[]> => Promise.all(workouts.map(async (workout) => {
   try {
-    const user = await client.db('AbcountableDB').collection<User>('users').findOne({ _id: new ObjectId(workout.userId) });
+    const user = await usersCollection.findOne({ _id: new ObjectId(workout.userId) });
 
     if (!user) {
       return {
@@ -68,12 +70,11 @@ const addUserInfoToWorkouts = async (workouts: TabataWorkout[]):
   }
 }));
 
-// Gets all workouts
 router.get('/', async (req: Request, res: Response) => {
   try {
     const offset = parseInt(req.query.offset as string, 10);
     const limit = parseInt(req.query.limit as string, 10);
-    const workouts = await workoutsCollection.find({})
+    const workouts = await workoutsCollection.find({ isDiscoverable: true })
       .sort({ _id: -1 })
       .skip(offset)
       .limit(limit)
@@ -103,7 +104,6 @@ router.get('/workout/:workoutId', async (req: Request, res: Response) => {
     res.status(500).send({ message: 'Failed to fetch workout' });
   }
 });
-
 // Gets a user's saved workouts
 router.get('/my-saved', authenticate, async (req: AuthRequest, res: Response) => {
   const requestingUserId = req.userId;
@@ -111,15 +111,20 @@ router.get('/my-saved', authenticate, async (req: AuthRequest, res: Response) =>
   const limit = parseInt(req.query.limit as string, 10);
 
   try {
-    const savedWorkouts = await workoutsCollection.find({
-      userId: requestingUserId,
-    })
+    const user = await usersCollection.findOne({ _id: new ObjectId(requestingUserId) });
+    if (!user) {
+      res.status(404).send({ message: 'User not found.' });
+      return;
+    }
+
+    console.log('user.savedWorkouts', user.savedWorkouts);
+
+    const workouts = await workoutsCollection.find({ _id: { $in: user.savedWorkouts ?? [] } })
       .sort({ _id: -1 })
       .skip(offset)
       .limit(limit)
       .toArray();
-
-    const savedWorkoutsWithUserInfo = await addUserInfoToWorkouts(savedWorkouts);
+    const savedWorkoutsWithUserInfo = await addUserInfoToWorkouts(workouts);
     res.send(savedWorkoutsWithUserInfo);
   } catch (err) {
     console.error('Failed to fetch saved workouts', err);
@@ -158,7 +163,13 @@ router.post('/save', authenticate, async (req: AuthRequest, res: Response) => {
   workout.userId = userId;
 
   try {
-    await workoutsCollection.insertOne(workout);
+    // Insert the new workout
+    const result = await workoutsCollection.insertOne(workout);
+
+    await usersCollection.updateOne(
+      { _id: new ObjectId(userId) },
+      { $push: { savedWorkouts: new ObjectId(result.insertedId) } },
+    );
 
     res.status(201).send({ message: 'TabataWorkout saved successfully' });
   } catch (err) {
@@ -196,40 +207,45 @@ router.delete('/:workoutId', authenticate, async (req: AuthRequest, res: Respons
     res.status(500).send({ message: 'Failed to delete workout' });
   }
 });
-
-router.put('/:workoutId', authenticate, async (req: AuthRequest, res: Response) => {
+router.post('/:workoutId', authenticate, async (req: AuthRequest, res: Response) => {
   const { workoutId } = req.params;
-  const workoutData = req.body;
+  const newWorkoutData = req.body;
   const { userId } = req;
-  delete workoutData._id;
+  delete newWorkoutData._id;
 
   try {
-    // First, find the workout to check ownership
-    const workout = await workoutsCollection.findOne({ _id: new ObjectId(workoutId) });
-    if (!workout) {
+    // First, find the existing workout to check ownership
+    const existingWorkout = await workoutsCollection.findOne({ _id: new ObjectId(workoutId) });
+    if (!existingWorkout) {
       res.status(404).send({ message: 'Workout not found' });
       return;
     }
 
     // Check if the authenticated user is the owner of the workout
-    if (workout.userId.toString() !== userId) {
+    if (existingWorkout.userId.toString() !== userId) {
       res.status(403).send({ message: 'Not authorized to update this workout' });
       return;
     }
 
-    // If the check passes, proceed to update the workout
-    const updatedWorkout = await workoutsCollection.findOneAndUpdate(
+    // Mark the old workout as non-discoverable
+    await workoutsCollection.updateOne(
       { _id: new ObjectId(workoutId) },
-      { $set: workoutData },
-      { returnDocument: 'after' },
+      { $set: { isDiscoverable: false } },
     );
 
-    if (!updatedWorkout.value) {
-      res.status(404).send({ message: 'Unable to update workout.' });
-      return;
-    }
+    // Create a new workout version with updated data
+    const newWorkout = {
+      ...newWorkoutData,
+      userId: new ObjectId(userId),
+      originalWorkout: new ObjectId(workoutId), // Reference to the original workout
+      createdAt: new Date().toISOString(),
+      isDiscoverable: true, // New workout is discoverable
+    };
 
-    res.send(updatedWorkout.value);
+    await workoutsCollection.insertOne(newWorkout);
+
+    // Return the new workout
+    res.status(201).send({ message: 'TabataWorkout saved successfully' });
   } catch (err) {
     console.error('Failed to update workout', err);
     res.status(500).send({ message: 'Failed to update workout' });
