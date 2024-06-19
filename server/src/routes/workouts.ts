@@ -155,7 +155,7 @@ router.get('/suggested', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/save', authenticate, async (req: AuthRequest, res: Response) => {
+router.post('/create', authenticate, async (req: AuthRequest, res: Response) => {
   const { workout } = req.body;
   const { userId } = req;
 
@@ -166,12 +166,31 @@ router.post('/save', authenticate, async (req: AuthRequest, res: Response) => {
     // Insert the new workout
     const result = await workoutsCollection.insertOne(workout);
 
+    // Add the created workout to the user's createdWorkouts
     await usersCollection.updateOne(
       { _id: new ObjectId(userId) },
-      { $push: { savedWorkouts: new ObjectId(result.insertedId) } },
+      { $push: { createdWorkouts: new ObjectId(result.insertedId) } },
     );
 
-    res.status(201).send({ message: 'TabataWorkout saved successfully' });
+    res.status(201).send({ message: 'TabataWorkout created successfully' });
+  } catch (err) {
+    console.error('Failed to create workout', err);
+    res.status(500).send({ message: 'Failed to create workout' });
+  }
+});
+
+router.post('/save', authenticate, async (req: AuthRequest, res: Response) => {
+  const { workoutId } = req.body;
+  const { userId } = req;
+
+  try {
+    // Add the workout to the user's savedWorkouts
+    await usersCollection.updateOne(
+      { _id: new ObjectId(userId) },
+      { $push: { savedWorkouts: new ObjectId(workoutId) } },
+    );
+
+    res.status(201).send({ message: 'Workout saved successfully' });
   } catch (err) {
     console.error('Failed to save workout', err);
     res.status(500).send({ message: 'Failed to save workout' });
@@ -207,6 +226,7 @@ router.delete('/:workoutId', authenticate, async (req: AuthRequest, res: Respons
     res.status(500).send({ message: 'Failed to delete workout' });
   }
 });
+
 router.post('/:workoutId', authenticate, async (req: AuthRequest, res: Response) => {
   const { workoutId } = req.params;
   const newWorkoutData = req.body;
