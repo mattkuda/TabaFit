@@ -9,7 +9,7 @@ import { TouchableOpacity } from 'react-native';
 import { format } from 'date-fns';
 import { wizardActiveState } from '../../atoms/wizardActiveAtom';
 import { useQuerySuggestedWorkouts } from '../../hooks/useQueryWorkouts';
-import { useMutateSaveAllSuggestedWorkout, useMutateSaveWorkout } from '../../mutations/useMutateSaveWorkout';
+import { useMutateSaveAllSuggestedWorkout, useMutateCreateWorkout } from '../../mutations/useMutateSaveWorkout';
 import { useAuth } from '../../context/AuthContext';
 import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
 import { ProfilePicture } from '../ProfilePicture';
@@ -19,7 +19,7 @@ const WorkoutCard = ({
     isSavedAll,
 }): JSX.Element => {
     const [isSaved, setIsSaved] = useState(false); // Local state to track save status
-    const saveWorkoutMutation = useMutateSaveWorkout();
+    const saveWorkoutMutation = useMutateCreateWorkout();
     const { authState } = useAuth();
     const userId = authState?.userId;
 

@@ -10,7 +10,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQueryClient } from 'react-query';
 import { Animated, TouchableOpacity } from 'react-native';
 import { WorkoutsStackParamList } from '../../navigation/navigationTypes';
-import { useMutateSaveWorkout, useMutateUpdateWorkout } from '../../mutations/useMutateSaveWorkout';
+import { useMutateCreateWorkout, useMutateUpdateWorkout } from '../../mutations/useMutateSaveWorkout';
 import {
     buildNewTabataInitialState,
     emptyTabata, shuffleExercises,
@@ -128,7 +128,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     const isShuffle = route?.params?.isShuffle || false;
     // const [workout, setWorkout] = useState<TabataWorkout>(customWorkout || soundTestingWorkout);
     const [workout, setWorkout] = useState<TabataWorkout>(customWorkout || buildNewTabataInitialState);
-    const saveWorkoutMutation = useMutateSaveWorkout();
+    const saveWorkoutMutation = useMutateCreateWorkout();
     const { authState } = useAuth();
     const [workoutName, setWorkoutName] = useState(customWorkout?.name || '');
     const queryClient = useQueryClient();

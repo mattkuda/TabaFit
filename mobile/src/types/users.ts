@@ -18,7 +18,6 @@ export interface User {
     updatedAt: string;
     savedWorkouts?: mongoose.Types.ObjectId[]; // Add saved workouts
     createdWorkouts?: mongoose.Types.ObjectId[]; // Add created workouts
-
 }
 
 export interface UserFullInfoModel extends User {

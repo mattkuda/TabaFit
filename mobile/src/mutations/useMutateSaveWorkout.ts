@@ -8,9 +8,9 @@ interface SaveWorkoutVariables {
     workout: TabataWorkout;
 }
 
-export const useMutateSaveWorkout = (): UseMutationResult<void, AxiosError, SaveWorkoutVariables> => useMutation<void, AxiosError, SaveWorkoutVariables>(
+export const useMutateCreateWorkout = (): UseMutationResult<void, AxiosError, SaveWorkoutVariables> => useMutation<void, AxiosError, SaveWorkoutVariables>(
     ({ workout }) => (
-        axios.post(`${apiUrl}/workouts/save`, { workout })),
+        axios.post(`${apiUrl}/workouts/create`, { workout })),
 );
 
 interface DeleteWorkoutVariables {
