@@ -13,7 +13,7 @@ import { WorkoutsStackParamList } from '../../navigation/navigationTypes';
 import { useCreateWorkout, useSaveWorkout, useUpdateWorkout } from '../../mutations/workoutMutations';
 import {
     buildNewTabataInitialState,
-    emptyTabata, shuffleExercises,
+    emptyTabata,
 } from '../shuffleUtil';
 import { useAuth } from '../../context/AuthContext';
 import { BuildWorkoutScreenNavigationProp } from '../../types/navigationTypes';
@@ -188,35 +188,11 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         });
     };
 
-    const handleChange = (text: string): void => setWorkoutName(text);
-
-    const triggerShuffle = (): void => {
-        if (workout.includeSettings) {
-            const {
-                includeUpper, includeLower, includeAbs, includeCardio,
-            } = workout.includeSettings;
-            const selectedEquipment = workout.equipment;
-
-            const shuffledTabatas = shuffleExercises(
-                workout.numberOfTabatas,
-                selectedEquipment,
-                includeUpper,
-                includeLower,
-                includeAbs,
-                includeCardio,
-            );
-
-            setWorkout((prev) => ({
-                ...prev,
-                tabatas: shuffledTabatas,
-            }));
-        }
-    };
+    const handleNameChange = (text: string): void => setWorkoutName(text);
 
     const handleModalDone = (): void => {
         setShowSettingsModal(false);
         setWorkout(modalWorkout);
-        triggerShuffle();
     };
 
     const handleModalCancel = (): void => {
@@ -224,11 +200,23 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         setModalWorkout(workout);
     };
 
-    const handleNumberTabatasChange = (itemValue): void => {
-        setWorkout((prevWorkout) => ({
-            ...prevWorkout,
-            numberOfTabatas: itemValue,
-        }));
+    const handleNumberTabatasChange = (itemValue: number): void => {
+        if (itemValue < 1) return;
+
+        setWorkout((prevWorkout) => {
+            const newTabatas = itemValue > prevWorkout.tabatas.length
+                ? [...prevWorkout.tabatas, ...Array.from(
+                    { length: itemValue - prevWorkout.tabatas.length },
+                    () => emptyTabata,
+                )]
+                : prevWorkout.tabatas.slice(0, itemValue);
+
+            return {
+                ...prevWorkout,
+                tabatas: newTabatas,
+                numberOfTabatas: newTabatas.length, // Update numberOfTabatas to reflect new length
+            };
+        });
     };
 
     const handleWorkoutSettingChange = (name, value): void => {
@@ -268,53 +256,77 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     return (
         <GradientVStack
             flex={1}
-            space={0}
+            space={2}
             width="100%"
         >
             <Input
                 fontSize="lg"
-                m={4}
+                mb={0}
+                mt={4}
+                mx={4}
                 placeholder="Enter Workout Name"
                 value={workoutName}
-                onChangeText={handleChange}
+                onChangeText={handleNameChange}
             />
-            <Box alignItems="flex-start" flex={1}>
-                <Select
-                    _actionSheetContent={{
-                        bg: 'gray.900',
-                    }}
-                    _item={{
-                        bg: 'gray.900',
-                        color: 'white',
-                        _text: {
+            <HStack alignItems="center" background="transparent" justifyContent="space-between" space={4} width="100%">
+                <Box alignItems="flex-start" flex={1}>
+                    <Select
+                        _actionSheetContent={{
+                            bg: 'gray.900',
+                        }}
+                        _item={{
+                            bg: 'gray.900',
                             color: 'white',
-                        },
-                        _pressed: {
-                            bg: 'gray.800',
-                        },
-                    }}
-                    _selectedItem={{
-                        bg: 'gray.700',
-                        color: 'white',
-                    }}
-                    backgroundColor="transparent"
-                    borderColor="transparent"
-                    dropdownIcon={(
-                        <HStack alignItems="center" space={2}>
-                            <Text fontSize="md">{`${workout.numberOfTabatas.toString()} ${workout.numberOfTabatas > 0 ? 'Tabatas' : 'Tabata'}`}</Text>
-                            <Icon as={Ionicons} color="gray.400" ml={0} mr={4} name="chevron-down" pl={0} size="xs" />
-                        </HStack>
-                            )}
-                    minWidth="125"
-                    ml={-2}
-                    size="lg"
-                    onValueChange={(itemValue): void => handleNumberTabatasChange(parseInt(itemValue, 10) || 0)}
+                            _text: {
+                                color: 'white',
+                            },
+                            _pressed: {
+                                bg: 'gray.800',
+                            },
+                        }}
+                        _selectedItem={{
+                            bg: 'gray.700',
+                            color: 'white',
+                        }}
+                        backgroundColor="transparent"
+                        borderColor="transparent"
+                        dropdownIcon={(
+                            <HStack alignItems="center" space={2}>
+                                <Text fontSize="md">{`${workout.tabatas.length} ${workout.tabatas.length > 1 ? 'Tabatas' : 'Tabata'}`}</Text>
+                                <Icon as={Ionicons} color="gray.400" ml={0} mr={4} name="chevron-down" pl={0} size="xs" />
+                            </HStack>
+    )}
+                        minWidth="125"
+                        ml={-2}
+                        selectedValue={workout.tabatas.length.toString()}
+                        size="lg"
+                        onValueChange={(itemValue): void => handleNumberTabatasChange(parseInt(itemValue, 10) || 0)}
+                    >
+                        {[...Array(99).keys()].map((val) => (
+                            <Select.Item
+                                key={val + 1}
+                                label={`${(val + 1)} ${val + 1 > 1 ? 'Tabatas' : 'Tabata'}`}
+                                // @ts-expect-error
+                                value={(val + 1)}
+                            />
+                        ))}
+                    </Select>
+                </Box>
+                <Box
+                    alignItems="flex-end"
+                    flex={1}
                 >
-                    {[...Array(99).keys()].map((val, i) => (
-                        <Select.Item key={val} label={`${(i + 1).toString()} ${i > 0 ? 'Tabatas' : 'Tabata'}`} value={(i + 1).toString()} />
-                    ))}
-                </Select>
-            </Box>
+                    <IconButton
+                        borderColor="white"
+                        borderRadius="full"
+                        borderWidth={1}
+                        color="flame.500"
+                        icon={<Icon as={Ionicons} color="white" name="settings" />}
+                        mr={4}
+                        onPress={(): void => setShowSettingsModal(true)}
+                    />
+                </Box>
+            </HStack>
             <NestableScrollContainer style={{ paddingHorizontal: 16 }}>
                 {workout.tabatas.map((tabataCircuit, index) => (
                     <TabataItem
