@@ -76,10 +76,12 @@ export type WorkoutsStackParamList = {
     WorkoutsScreen;
     LoadWorkoutScreen;
     BuildWorkoutScreen: {
-        isShuffle?: boolean;
-        customWorkout?: TabataWorkout;
+        shouldUpdate?: boolean;
+        workout?: TabataWorkout;
     };
-    ShuffleScreen: { workout?: TabataWorkout };
+    ShuffleWorkoutScreen: {
+        workout?: TabataWorkout;
+    };
     ViewWorkoutScreen: { workoutId?: string, workout?: TabataWorkout, isInMyWorkouts?: boolean};
     SelectExerciseScreen: {onSelectWorkout: (exercise: TabataExercise) => void };
     TabataTimerScreen: {workout: TabataWorkout, isInMyWorkouts?: boolean};
@@ -88,6 +90,7 @@ export type WorkoutsStackParamList = {
     PremadeWorkoutsScreen;
 }
 export type BuildWorkoutScreenRouteProp = StackNavigationProp<WorkoutsStackParamList, 'BuildWorkoutScreen'>;
+export type ShuffleWorkoutScreenRouteProp = StackNavigationProp<WorkoutsStackParamList, 'ShuffleWorkoutScreen'>;
 export type SelectExerciseScreenRouteProp = StackNavigationProp<WorkoutsStackParamList, 'SelectExerciseScreen'>;
 export type ShareWorkoutScreenNavigationProp = StackNavigationProp<WorkoutsStackParamList, 'ShareWorkoutScreen'>;
 export type ViewWorkoutScreenRouteProp = RouteProp<WorkoutsStackParamList, 'ViewWorkoutScreen'>;

@@ -9,7 +9,7 @@ import { TouchableOpacity } from 'react-native';
 import { format } from 'date-fns';
 import { wizardActiveState } from '../../atoms/wizardActiveAtom';
 import { useQuerySuggestedWorkouts } from '../../hooks/useQueryWorkouts';
-import { useMutateSaveAllSuggestedWorkout, useMutateCreateWorkout } from '../../mutations/useMutateSaveWorkout';
+import { useSaveAllSuggestedWorkouts, useCreateWorkout } from '../../mutations/workoutMutations';
 import { useAuth } from '../../context/AuthContext';
 import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
 import { ProfilePicture } from '../ProfilePicture';
@@ -19,7 +19,7 @@ const WorkoutCard = ({
     isSavedAll,
 }): JSX.Element => {
     const [isSaved, setIsSaved] = useState(false); // Local state to track save status
-    const saveWorkoutMutation = useMutateCreateWorkout();
+    const saveWorkoutMutation = useCreateWorkout();
     const { authState } = useAuth();
     const userId = authState?.userId;
 
@@ -124,7 +124,7 @@ export const SuggestedWorkoutsScreen = (): JSX.Element => {
     const setwizardActive = useSetRecoilState(wizardActiveState);
     const [isSavedAll, setSavedAll] = useState(false);
     const { data: workouts } = useQuerySuggestedWorkouts();
-    const saveAllMutation = useMutateSaveAllSuggestedWorkout(); // Using the save all mutation
+    const saveAllMutation = useSaveAllSuggestedWorkouts(); // Using the save all mutation
     const handleSaveAll = (): void => {
         saveAllMutation.mutate({}, {
             onSuccess: () => {

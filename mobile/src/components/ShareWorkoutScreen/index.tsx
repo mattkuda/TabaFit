@@ -14,7 +14,7 @@ import { ShareWorkoutScreenNavigationProp } from '../../types/navigationTypes';
 import { useAuth } from '../../context/AuthContext';
 import { useMutateShareWorkout } from '../../mutations/useMutateSharePost';
 import { ShareWorkoutScreenRouteProp } from '../../navigation/navigationTypes';
-import { useMutateCreateWorkout } from '../../mutations/useMutateSaveWorkout';
+import { useCreateWorkout } from '../../mutations/workoutMutations';
 import { GradientVStack } from '../common/GradientVStack';
 
 export const ShareWorkoutScreen = (): JSX.Element => {
@@ -26,7 +26,7 @@ export const ShareWorkoutScreen = (): JSX.Element => {
     const { authState } = useAuth();
     const userId = authState?.userId;
     const navigation = useNavigation<ShareWorkoutScreenNavigationProp>();
-    const saveWorkoutMutation = useMutateCreateWorkout();
+    const saveWorkoutMutation = useCreateWorkout();
     const [saveWorkoutSwitch, setSaveWorkoutSwitch] = useState(isInMyWorkouts);
     const queryClient = useQueryClient();
     const [isSavingComplete, setIsSavingComplete] = useState(false);

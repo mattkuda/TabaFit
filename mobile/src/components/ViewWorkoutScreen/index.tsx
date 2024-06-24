@@ -16,7 +16,7 @@ import { useQueryWorkoutById } from '../../hooks/useQueryWorkoutById';
 import { exerciseIconDictionary, formatBodyParts, getWorkoutDifficultyGradient } from '../../util/util';
 import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
 import { useAuth } from '../../context/AuthContext';
-import { useMutateCreateWorkout } from '../../mutations/useMutateSaveWorkout';
+import { useCreateWorkout } from '../../mutations/workoutMutations';
 import { PictureWithName } from '../PictureWithName';
 import { GradientVStack } from '../common/GradientVStack';
 
@@ -31,7 +31,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
     const { authState } = useAuth();
     const queryClient = useQueryClient();
     const navigation = useNavigation<WorkoutsScreenNavigationProp>();
-    const saveWorkoutMutation = useMutateCreateWorkout();
+    const saveWorkoutMutation = useCreateWorkout();
     const formattedDate = workout?.createdAt ? format(new Date(workout.createdAt), 'MMM do, yyyy') : 'emtpy date';
     const [saveSuccess, setSaveSuccess] = useState(false);
 

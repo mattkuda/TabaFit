@@ -50,8 +50,13 @@ export type ShareWorkoutScreenNavigationProp = StackNavigationProp<TabNavigatorP
 };
 
 export type BuildWorkoutScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'BuildWorkoutScreen'> & {
-    params: {isShuffle?: boolean, customWorkout?: TabataWorkout, isSaved?: boolean};
+    params: {workout?: TabataWorkout, shouldUpdate?: boolean};
 };
+
+export type ShuffleWorkoutScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'ShuffleWorkoutScreen'> & {
+    params: {workout?: TabataWorkout};
+};
+
 // I think I can delete the above params
 
 export type ConnectionsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'ConnectionsScreen'>;

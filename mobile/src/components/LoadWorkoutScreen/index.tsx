@@ -5,7 +5,7 @@ import {
 import { useQueryClient } from 'react-query';
 import { TabataWorkout } from '../../types/workouts';
 import { useInfiniteQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
-import { useMutateDeleteWorkout } from '../../mutations/useMutateSaveWorkout';
+import { useDeleteWorkout } from '../../mutations/workoutMutations';
 import { WorkoutCard } from '../common/WorkoutCard';
 import { InfiniteScrollList } from '../common/InfiniteScrollList';
 import { GradientVStack } from '../common/GradientVStack';
@@ -14,7 +14,7 @@ export const LoadWorkoutScreen: FC = () => {
     const [showModal,
         setShowModal] = useState(false);
     const [selectedWorkout, setSelectedWorkout] = useState<TabataWorkout | null>(null);
-    const deleteWorkoutMutation = useMutateDeleteWorkout();
+    const deleteWorkoutMutation = useDeleteWorkout();
     const {
         data: workouts,
         fetchNextPage,

@@ -13,7 +13,7 @@ export interface TabataExercise {
     videoLink: string;
 }
 
-export type TabataCircuit = TabataExercise[]
+export type TabataCircuit = (TabataExercise | null)[];
 
 export interface WorkoutEquipmentSettings {
     useKettlebell: boolean,
@@ -33,7 +33,7 @@ export interface WorkoutIncludeSettings {
 }
 
 export interface TabataWorkout {
-    _id: mongoose.Types.ObjectId | string;
+    _id: mongoose.Types.ObjectId;
     name: string;
     description: string;
     createdAt: string;
