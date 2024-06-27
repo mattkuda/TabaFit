@@ -244,7 +244,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                     {/* /* My Workouts */ }
                     <HStack alignItems="center" justifyContent="space-between">
                         <HStack alignItems="center" space={2}>
-                            <Heading size="md">My Saved Workouts</Heading>
+                            <Heading size="md">Saved Workouts</Heading>
                             <Popover
                                 trigger={(triggerProps): JSX.Element => (
                                     <Pressable {...triggerProps}>

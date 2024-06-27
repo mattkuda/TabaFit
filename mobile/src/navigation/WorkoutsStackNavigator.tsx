@@ -76,7 +76,7 @@ export const WorkoutsStackNavigator = (): JSX.Element => {
                 component={LoadWorkoutScreen}
                 name="LoadWorkoutScreen"
                 options={{
-                    headerTitle: 'My Saved Workouts',
+                    headerTitle: 'Saved Workouts',
                 }}
             />
             <Stack.Screen
