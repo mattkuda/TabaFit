@@ -104,6 +104,7 @@ router.get('/workout/:workoutId', async (req: Request, res: Response) => {
     res.status(500).send({ message: 'Failed to fetch workout' });
   }
 });
+
 // Gets a user's saved workouts
 router.get('/my-saved', authenticate, async (req: AuthRequest, res: Response) => {
   const requestingUserId = req.userId;
@@ -126,6 +127,34 @@ router.get('/my-saved', authenticate, async (req: AuthRequest, res: Response) =>
       .toArray();
     const savedWorkoutsWithUserInfo = await addUserInfoToWorkouts(workouts);
     res.send(savedWorkoutsWithUserInfo);
+  } catch (err) {
+    console.error('Failed to fetch saved workouts', err);
+    res.status(500).send({ message: 'Failed to fetch saved workouts' });
+  }
+});
+
+// Gets a user's created workouts
+router.get('/my-created', authenticate, async (req: AuthRequest, res: Response) => {
+  const requestingUserId = req.userId;
+  const offset = parseInt(req.query.offset as string, 10);
+  const limit = parseInt(req.query.limit as string, 10);
+
+  try {
+    const user = await usersCollection.findOne({ _id: new ObjectId(requestingUserId) });
+    if (!user) {
+      res.status(404).send({ message: 'User not found.' });
+      return;
+    }
+
+    console.log('user.createdWorkouts', user.createdWorkouts);
+
+    const workouts = await workoutsCollection.find({ _id: { $in: user.createdWorkouts ?? [] } })
+      .sort({ _id: -1 })
+      .skip(offset)
+      .limit(limit)
+      .toArray();
+    const createdWorkoutsWithUserInfo = await addUserInfoToWorkouts(workouts);
+    res.send(createdWorkoutsWithUserInfo);
   } catch (err) {
     console.error('Failed to fetch saved workouts', err);
     res.status(500).send({ message: 'Failed to fetch saved workouts' });
