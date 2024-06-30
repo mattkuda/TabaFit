@@ -213,6 +213,21 @@ router.post('/save', authenticate, async (req: AuthRequest, res: Response) => {
   const { userId } = req;
 
   try {
+    // Check if the workout is already saved by the user
+    const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
+
+    // Convert workoutId to string for comparison
+    const workoutIdStr = workoutId.toString();
+
+    const isAlreadySaved = user?.savedWorkouts?.some(
+      (savedWorkout) => savedWorkout.toString() === workoutIdStr,
+    );
+    if (isAlreadySaved) {
+      console.log('Workout already saved');
+      res.status(400).send({ message: 'Workout already saved' });
+      return;
+    }
+
     // Add the workout to the user's savedWorkouts
     await usersCollection.updateOne(
       { _id: new ObjectId(userId) },
@@ -223,6 +238,41 @@ router.post('/save', authenticate, async (req: AuthRequest, res: Response) => {
   } catch (err) {
     console.error('Failed to save workout', err);
     res.status(500).send({ message: 'Failed to save workout' });
+  }
+});
+
+router.delete('/unsave/:workoutId', authenticate, async (req: AuthRequest, res: Response) => {
+  const { workoutId } = req.params;
+  const { userId } = req;
+
+  try {
+    // Check if the workout is saved by the user
+    const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
+    if (!user) {
+      res.status(404).send({ message: 'User not found' });
+      return;
+    }
+
+    const workoutIdStr = workoutId.toString();
+    const isSaved = user?.savedWorkouts?.some(
+      (savedWorkout) => savedWorkout.toString() === workoutIdStr,
+    );
+
+    if (!isSaved) {
+      res.status(400).send({ message: 'Workout not found in saved workouts' });
+      return;
+    }
+
+    // Remove the workout from the user's savedWorkouts
+    await usersCollection.updateOne(
+      { _id: new ObjectId(userId) },
+      { $pull: { savedWorkouts: new ObjectId(workoutId) } },
+    );
+
+    res.status(200).send({ message: 'Workout unsaved successfully' });
+  } catch (err) {
+    console.error('Failed to unsave workout', err);
+    res.status(500).send({ message: 'Failed to unsave workout' });
   }
 });
 

@@ -40,3 +40,34 @@ export const useInfiniteQueryMySavedWorkouts = (): UseInfiniteQueryResult<FetchW
         },
     },
 );
+
+const fetchMyCreatedWorkouts = async ({ offset = 0 }: PagingParams): Promise<FetchWorkoutsResponse> => {
+    try {
+        const response = await axios.get<FetchWorkoutsResponse>(`${apiUrl}/workouts/my-created`, {
+            params: { offset, limit },
+        });
+
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            throw new Error(error.response?.data.message || 'An error occurred while fetching my created workouts');
+        }
+        throw new Error('An error occurred while fetching my created workouts');
+    }
+};
+
+export const useQueryMyCreatedWorkouts = (pagingParams?: PagingParams): UseQueryResult<TabataWorkoutWithUserInfo[], Error> => useQuery([
+    'my-created-workouts', pagingParams], () => fetchMyCreatedWorkouts(pagingParams));
+
+export const useInfiniteQueryMyCreatedWorkouts = (): UseInfiniteQueryResult<FetchWorkoutsResponse, Error> => useInfiniteQuery(
+    ['my-created-workouts'],
+    ({ pageParam = { offset: 0, limit: 0 } }) => fetchMyCreatedWorkouts(pageParam),
+    {
+        getNextPageParam: (lastPage, allPages) => {
+            if (lastPage.length < limit) {
+                return undefined;
+            }
+            return allPages.length * limit;
+        },
+    },
+);

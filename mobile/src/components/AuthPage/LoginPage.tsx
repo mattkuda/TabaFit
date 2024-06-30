@@ -80,6 +80,12 @@ export const LoginScreen = (): JSX.Element => {
         await handleSignIn();
     };
 
+    const handlePrefillOther = async (): Promise<void> => {
+        setEmailOrUsername('other@gmail.com');
+        setPassword('other');
+        await handleSignIn();
+    };
+
     return (
         <GradientVStack
             backgroundColor="gray9"
@@ -153,6 +159,15 @@ export const LoginScreen = (): JSX.Element => {
                                 onPress={handlePrefill}
                             >
                                 Pre-fill
+                            </Button>
+                        )}
+                        {process.env.EXPO_PUBLIC_ENVIRONMENT !== 'production' && (
+                            <Button
+                                borderRadius="full"
+                                width="80%"
+                                onPress={handlePrefillOther}
+                            >
+                                Pre-fill for Other User
                             </Button>
                         )}
                         <Text style={{ minHeight: 100, color: 'red' }}>{errorMessage ?? ' '}</Text>

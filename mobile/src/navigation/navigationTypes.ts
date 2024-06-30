@@ -70,6 +70,9 @@ export interface BuildWorkoutScreenProps {
     isShuffle?: boolean;
     customWorkout?: TabataWorkout;
 }
+export interface ShuffleWorkoutScreenProps {
+    workout?: TabataWorkout;
+}
 
 // (New) Workouts Stack
 export type WorkoutsStackParamList = {

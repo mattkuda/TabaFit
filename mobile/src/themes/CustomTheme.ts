@@ -83,6 +83,7 @@ export const theme = extendTheme({
         //     900: '#34312d',
         //     1000: '#211f1b',
         // },
+        green: '#00f3a1',
         easyGreen: '#00f3a1',
         success: '#00f3a1',
         gray10: baseTheme.colors.gray[1000],
@@ -217,6 +218,13 @@ export const theme = extendTheme({
                         return {
                             _text: {
                                 color: 'gray7',
+                            },
+                        };
+                    }
+                    if (colorScheme === 'success') {
+                        return {
+                            _text: {
+                                color: 'easyGreen',
                             },
                         };
                     }

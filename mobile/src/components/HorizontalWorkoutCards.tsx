@@ -99,9 +99,9 @@ export const HorizontalWorkoutCards: React.FC<HorizontalWorkoutCardsProps> = ({
             contentContainerStyle={{ paddingLeft: 0, paddingRight: 8 }}
             showsHorizontalScrollIndicator={false}
         >
-            {workouts.map((workout) => (
+            {workouts.map((workout, index) => (
                 <SlideWorkoutCard
-                    key={workout._id.toString()}
+                    key={workout._id.toString() + index.toString()}
                     workout={workout}
                     onPress={(): void => onPressWorkout(workout)}
                 />

@@ -303,6 +303,8 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                     <TabataItem
                         changeExercise={handleSelectExercise}
                         circuitIndex={index}
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={`tabata-${index}`}
                         moveTabataDown={moveTabataDown}
                         moveTabataUp={moveTabataUp}
                         removeTabata={workout.tabatas.length > 1 && removeTabata}

@@ -21,7 +21,7 @@ import {
     TabataExercise, TabataWorkout,
 } from '../../types/workouts';
 import { GradientVStack } from '../common/GradientVStack';
-import { useUserInfo } from '../../hooks/useUserInfo';
+import { useWorkoutOwnership } from '../../hooks/useUserInfo';
 import { TabataItem } from './TabataItem';
 
 type BuildWorkoutScreenRouteProp = RouteProp<WorkoutsStackParamList, 'BuildWorkoutScreen'>;
@@ -30,9 +30,10 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     const navigation = useNavigation<BuildWorkoutScreenNavigationProp>();
     const route = useRoute<BuildWorkoutScreenRouteProp>();
     const { authState } = useAuth();
-    const { data: userInfo } = useUserInfo(authState.userId);
+    // const { data: userInfo } = useUserInfo(authState.userId);
     const { workout: routeWorkout } = route.params;
-    const isSavedWorkoutByUser = routeWorkout && userInfo?.createdWorkouts?.includes(route?.params?.workout._id);
+    const { isWorkoutCreatedByUser, isWorkoutSavedByUser } = useWorkoutOwnership(route?.params?.workout?._id);
+    // const isSavedWorkoutByUser = routeWorkout && userInfo?.createdWorkouts?.includes(route?.params?.workout._id);
     // const [workout, setWorkout] = useState<TabataWorkout>(workout || soundTestingWorkout);
     const [workout, setWorkout] = useState<TabataWorkout>(routeWorkout || buildNewTabataInitialState);
     const createWorkoutMutation = useCreateWorkout();
@@ -124,7 +125,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             navigation.goBack();
         };
 
-        if (isSavedWorkoutByUser) {
+        if (isWorkoutSavedByUser) {
             updateWorkoutMutation.mutate({
                 workoutId: workout._id.toString(),
                 workout: workoutData,
@@ -138,7 +139,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 onSuccess: onSuccessCallback,
             });
         }
-    }, [validateWorkout, workout, workoutName, authState.userId, isSavedWorkoutByUser, queryClient,
+    }, [validateWorkout, workout, workoutName, authState.userId, isWorkoutSavedByUser, queryClient,
         navigation, updateWorkoutMutation, createWorkoutMutation]);
 
     useEffect(() => {
@@ -156,7 +157,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                         variant="ghost"
                         onPress={handleSaveOrUpdateWorkout}
                     >
-                        <Text color="white" fontSize="md">{isSavedWorkoutByUser ? 'Update' : 'Save'}</Text>
+                        <Text color="white" fontSize="md">{isWorkoutSavedByUser ? 'Update' : 'Save'}</Text>
                     </Button>
                 </HStack>
             ),

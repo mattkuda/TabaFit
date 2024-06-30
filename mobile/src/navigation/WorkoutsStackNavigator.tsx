@@ -11,6 +11,7 @@ import { ViewWorkoutScreen } from '../components/ViewWorkoutScreen';
 import { LoadWorkoutScreen } from '../components/LoadWorkoutScreen';
 import { DiscoverWorkoutsScreen } from '../components/DiscoverWorkoutsScreen';
 import { PremadeWorkoutsScreen } from '../components/PremadeWorkoutsScreen';
+import { ShuffleWorkoutScreen } from '../components/ShuffleWorkoutScreen';
 
 const Stack = createStackNavigator<WorkoutsStackParamList>();
 
@@ -42,6 +43,13 @@ export const WorkoutsStackNavigator = (): JSX.Element => {
                 name="BuildWorkoutScreen"
                 options={{
                     headerTitle: 'Build Workout',
+                }}
+            />
+            <Stack.Screen
+                component={ShuffleWorkoutScreen}
+                name="ShuffleWorkoutScreen"
+                options={{
+                    headerTitle: 'Shuffle Workout',
                 }}
             />
             <Stack.Screen

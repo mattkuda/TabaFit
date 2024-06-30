@@ -10,7 +10,7 @@ export interface TabNavigatorParamList extends ParamListBase {
     EditProfile: { user: User };
     Search: undefined;
     TabataTimerScreen: {workout: TabataWorkout, isInMyWorkouts?: boolean};
-    ShuffleScreen: {workout?: TabataWorkout};
+    ShuffleWorkoutScreen: {workout?: TabataWorkout};
     // BuildWorkoutScreen: BuildWorkoutScreenProps
     BuildWorkoutScreen: {
         isShuffle?: boolean;

@@ -14,11 +14,21 @@ export const useCreateWorkout = (): UseMutationResult<void, AxiosError, CreateWo
 );
 
 interface SaveWorkoutVariables {
-    workout: TabataWorkout;
+    workoutId: string;
 }
+
 export const useSaveWorkout = (): UseMutationResult<void, AxiosError, SaveWorkoutVariables> => useMutation<void, AxiosError, SaveWorkoutVariables>(
-    ({ workout }) => (
-        axios.post(`${apiUrl}/workouts/save`, { workout })),
+    ({ workoutId }) => (
+        axios.post(`${apiUrl}/workouts/save`, { workoutId })),
+);
+
+interface DeleteWorkoutVariables {
+    workoutId: string;
+}
+
+export const useUnsaveWorkout = (): UseMutationResult<void, AxiosError, DeleteWorkoutVariables> => useMutation<void, AxiosError, DeleteWorkoutVariables>(
+    ({ workoutId }) => (
+        axios.delete(`${apiUrl}/workouts/unsave/${workoutId}`)),
 );
 
 interface DeleteWorkoutVariables {

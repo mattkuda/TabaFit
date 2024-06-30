@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     ScrollView, Text, VStack, Button, Icon, Center, Spinner, HStack, Box, Image,
 } from 'native-base';
@@ -16,52 +16,65 @@ import { useQueryWorkoutById } from '../../hooks/useQueryWorkoutById';
 import { exerciseIconDictionary, formatBodyParts, getWorkoutDifficultyGradient } from '../../util/util';
 import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
 import { useAuth } from '../../context/AuthContext';
-import { useCreateWorkout } from '../../mutations/workoutMutations';
+import { useSaveWorkout, useUnsaveWorkout } from '../../mutations/workoutMutations';
 import { PictureWithName } from '../PictureWithName';
 import { GradientVStack } from '../common/GradientVStack';
+import { useWorkoutOwnership } from '../../hooks/useUserInfo';
 
 type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'WorkoutsScreen'>;
 
 export const ViewWorkoutScreen = (): JSX.Element => {
     const route = useRoute<ViewWorkoutScreenRouteProp>();
-    const { workoutId, isInMyWorkouts } = route.params;
+    const { workoutId } = route.params;
     const customWorkout = route.params?.workout as TabataWorkoutWithUserInfo | undefined;
     const { data: queriedWorkout, isLoading, isError } = useQueryWorkoutById(workoutId);
+    const { isWorkoutCreatedByUser, isWorkoutSavedByUser } = useWorkoutOwnership(workoutId);
+
     const workout = customWorkout ?? queriedWorkout;
     const { authState } = useAuth();
     const queryClient = useQueryClient();
     const navigation = useNavigation<WorkoutsScreenNavigationProp>();
-    const saveWorkoutMutation = useCreateWorkout();
+    const saveWorkoutMutation = useSaveWorkout();
+    const unsaveWorkoutMutation = useUnsaveWorkout();
     const formattedDate = workout?.createdAt ? format(new Date(workout.createdAt), 'MMM do, yyyy') : 'emtpy date';
     const [saveSuccess, setSaveSuccess] = useState(false);
 
-    const handleEditWorkout = (): void => {
+    const handleEditWorkout = useCallback((): void => {
         navigation.navigate(
             'BuildWorkoutScreen',
             {
                 customWorkout: workout,
                 isShuffle: false,
-                isSavedWorkout: isInMyWorkouts,
             } as BuildWorkoutScreenProps,
         );
-    };
+    }, [navigation, workout]);
 
-    const handleSaveOrUpdateWorkout = useCallback((): void => {
-        const workoutData: TabataWorkout = {
-            ...workout,
-            createdAt: new Date().toISOString(),
-            userId: authState.userId,
-        };
-
+    const handleSaveWorkout = useCallback((): void => {
         const onSuccessCallback = (): void => {
             // Invalidate queries to refresh data
             queryClient.invalidateQueries('my-saved-workouts');
             queryClient.invalidateQueries(['workout', workout._id.toString()]);
-            setSaveSuccess(true);
+            queryClient.invalidateQueries(['userInfo']);
         };
 
         saveWorkoutMutation.mutate({
-            workout: workoutData,
+            workoutId: workout._id.toString(),
+        }, {
+            onSuccess: onSuccessCallback,
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [workout, authState.userId, queryClient, navigation, saveWorkoutMutation]);
+
+    const handleUnsaveWorkout = useCallback((): void => {
+        const onSuccessCallback = (): void => {
+            // Invalidate queries to refresh data
+            queryClient.invalidateQueries('my-saved-workouts');
+            queryClient.invalidateQueries(['workout', workout._id.toString()]);
+            queryClient.invalidateQueries(['userInfo']);
+        };
+
+        unsaveWorkoutMutation.mutate({
+            workoutId: workout._id.toString(),
         }, {
             onSuccess: onSuccessCallback,
         });
@@ -69,20 +82,39 @@ export const ViewWorkoutScreen = (): JSX.Element => {
     }, [workout, authState.userId, queryClient, navigation, saveWorkoutMutation]);
 
     const handleStartWorkout = (): void => {
-        navigation.navigate('TabataTimerScreen', { workout, isInMyWorkouts });
+        navigation.navigate('TabataTimerScreen', { workout });
     };
 
     const scaleAnimation = new Animated.Value(1);
 
-    let saveButtonText;
+    useEffect(() => {
+        navigation.setOptions({
+            // eslint-disable-next-line react/no-unstable-nested-components
+            headerRight: (): JSX.Element => (
+                isWorkoutCreatedByUser ? (
+                    <Button
+                        colorScheme="secondary"
+                        size="lg"
+                        variant="ghost"
+                        onPress={handleEditWorkout}
+                    >
+                        Edit
+                    </Button>
+                ) : (
+                    <Button
+                        colorScheme={isWorkoutSavedByUser ? 'success' : 'secondary'}
+                        size="lg"
+                        variant="ghost"
+                        onPress={isWorkoutSavedByUser ? handleUnsaveWorkout : handleSaveWorkout}
+                    >
+                        {isWorkoutSavedByUser ? 'Saved' : 'Save'}
+                    </Button>
+                )
 
-    if (isInMyWorkouts) {
-        saveButtonText = 'Edit';
-    } else if (saveSuccess) {
-        saveButtonText = 'Saved';
-    } else {
-        saveButtonText = 'Save';
-    }
+            ),
+        });
+    }, [navigation, isWorkoutCreatedByUser, isWorkoutSavedByUser,
+        handleSaveWorkout, handleEditWorkout, handleUnsaveWorkout]);
 
     Animated.loop(
         Animated.sequence([
@@ -140,15 +172,10 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                     <HStack alignItems="center">
                         <Icon as={Ionicons} color={getWorkoutDifficultyGradient(workout.tabatas.length)} mr={2} name="barbell-outline" size="md" />
                         <Text bold flex={1} fontSize="xl">{workout.name}</Text>
-                        <Button
-                            colorScheme="secondary"
-                            disabled={saveSuccess}
-                            rightIcon={isInMyWorkouts ? <Icon as={Ionicons} name="pencil" /> : <Icon as={Ionicons} color={saveSuccess ? 'green.500' : 'white'} name="arrow-down-circle" />}
-                            variant="ghost"
-                            onPress={isInMyWorkouts ? handleEditWorkout : handleSaveOrUpdateWorkout}
-                        >
-                            {saveButtonText}
-                        </Button>
+                        <Text bold flex={1} fontSize="xl">
+                            isWorkoutSavedByUser:
+                            {isWorkoutSavedByUser.toString()}
+                        </Text>
                     </HStack>
                     <Box alignItems="center" flexDirection="row" justifyContent="space-between">
                         <PictureWithName user={workout.user} />

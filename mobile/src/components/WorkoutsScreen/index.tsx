@@ -8,9 +8,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { Pressable, TouchableOpacity } from 'react-native';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
-import { useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
+import { useQueryMyCreatedWorkouts, useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
 import { shuffleWorkoutTemplate } from '../shuffleUtil';
-import { BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
+import { BuildWorkoutScreenProps, ShuffleWorkoutScreenProps } from '../../navigation/navigationTypes';
 import { TabataWorkout } from '../../types/workouts';
 import { RefreshableScrollView } from '../RefreshableScrollView';
 import { HorizontalWorkoutCards } from '../HorizontalWorkoutCards';
@@ -26,6 +26,10 @@ export const WorkoutsScreen = (): JSX.Element => {
         data: mySavedWorkouts, refetch: refetchMySavedWorkouts,
         isLoading: isMySavedWorkoutsLoading,
     } = useQueryMySavedWorkouts({ limit: 5, offset: 0 });
+    const {
+        data: myCreatedWorkouts, refetch: refetchMyCreatedWorkouts,
+        isLoading: isMyCreatedWorkoutsLoading,
+    } = useQueryMyCreatedWorkouts({ limit: 5, offset: 0 });
 
     const {
         data: newWorkouts, refetch: refetchNewWorkouts,
@@ -34,12 +38,9 @@ export const WorkoutsScreen = (): JSX.Element => {
 
     const handlePressQuickShuffle = (): void => {
         // First go to customizable settings screen (to-build)
-        navigation.navigate('BuildWorkoutScreen', {
-            customWorkout: shuffleWorkoutTemplate,
-            // customWorkout: soundTestingWorkout,
-            isShuffle: true,
-            isSavedWorkout: false,
-        } as BuildWorkoutScreenProps);
+        navigation.navigate('ShuffleWorkoutScreen', {
+            workout: shuffleWorkoutTemplate,
+        } as ShuffleWorkoutScreenProps);
     };
 
     const handlePressBuildWorkout = (): void => {
@@ -64,6 +65,11 @@ export const WorkoutsScreen = (): JSX.Element => {
         });
     };
 
+    const handlePressViewMyCreatedWorkouts = (): void => {
+        console.log('TODO: View my created workouts');
+        navigation.navigate('LoadWorkoutScreen');
+    };
+
     const handlePressViewMyWorkouts = (): void => {
         navigation.navigate('LoadWorkoutScreen');
     };
@@ -79,6 +85,7 @@ export const WorkoutsScreen = (): JSX.Element => {
     const refetchData = async (): Promise<void> => {
         refetchMySavedWorkouts();
         refetchNewWorkouts();
+        refetchMyCreatedWorkouts();
     };
 
     return (
@@ -232,13 +239,13 @@ export const WorkoutsScreen = (): JSX.Element => {
                                 </Popover.Content>
                             </Popover>
                         </HStack>
-                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressViewMyWorkouts}>
+                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressViewMyCreatedWorkouts}>
                             View all
                         </Button>
                     </HStack>
                     <HorizontalWorkoutCards
-                        isLoading={isMySavedWorkoutsLoading}
-                        workouts={mySavedWorkouts ?? []}
+                        isLoading={isMyCreatedWorkoutsLoading}
+                        workouts={myCreatedWorkouts ?? []}
                         onPressWorkout={handlePressViewMyWorkout}
                     />
                     {/* /* My Workouts */ }
