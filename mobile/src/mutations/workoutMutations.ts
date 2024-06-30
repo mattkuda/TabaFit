@@ -8,9 +8,13 @@ interface CreateWorkoutVariables {
     workout: TabataWorkout;
 }
 
-export const useCreateWorkout = (): UseMutationResult<void, AxiosError, CreateWorkoutVariables> => useMutation<void, AxiosError, CreateWorkoutVariables>(
+interface CreateWorkoutResponse {
+    newWorkoutId: string;
+}
+
+export const useCreateWorkout = (): UseMutationResult<CreateWorkoutResponse, AxiosError, CreateWorkoutVariables> => useMutation<CreateWorkoutResponse, AxiosError, CreateWorkoutVariables>(
     ({ workout }) => (
-        axios.post(`${apiUrl}/workouts/create`, { workout })),
+        axios.post(`${apiUrl}/workouts/create`, { workout }).then((response) => response.data)),
 );
 
 interface SaveWorkoutVariables {
@@ -50,8 +54,12 @@ interface UpdateWorkoutVariables {
     workout: TabataWorkout;
 }
 
-export const useUpdateWorkout = (): UseMutationResult<void, AxiosError, UpdateWorkoutVariables> => useMutation<void, AxiosError, UpdateWorkoutVariables>(
-    ({ workoutId, workout }) => axios.put(`${apiUrl}/workouts/${workoutId}`, workout),
+interface UpdateWorkoutResponse {
+    newWorkoutId: string;
+}
+
+export const useUpdateWorkout = (): UseMutationResult<UpdateWorkoutResponse, AxiosError, UpdateWorkoutVariables> => useMutation<UpdateWorkoutResponse, AxiosError, UpdateWorkoutVariables>(
+    ({ workoutId, workout }) => axios.put(`${apiUrl}/workouts/update/${workoutId}`, workout).then((response) => response.data),
     {
         onError: (error) => {
             console.error('Error updating workout', error.message);

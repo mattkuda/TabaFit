@@ -49,6 +49,7 @@ export interface TabataWorkout {
     intermisionDuration: number;
     cooldownDuration: number;
     includeSettings?: WorkoutIncludeSettings;
+    isDiscoverable?: boolean;
 }
 
 export interface UserInfo {

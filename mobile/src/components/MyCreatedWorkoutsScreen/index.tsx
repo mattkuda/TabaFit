@@ -4,13 +4,13 @@ import {
 } from 'native-base';
 import { useQueryClient } from 'react-query';
 import { TabataWorkout } from '../../types/workouts';
-import { useInfiniteQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
+import { useInfiniteQueryMyCreatedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
 import { useDeleteWorkout } from '../../mutations/workoutMutations';
 import { WorkoutCard } from '../common/WorkoutCard';
 import { InfiniteScrollList } from '../common/InfiniteScrollList';
 import { GradientVStack } from '../common/GradientVStack';
 
-export const LoadWorkoutScreen: FC = () => {
+export const MyCreatedWorkoutsScreen: FC = () => {
     const [showModal,
         setShowModal] = useState(false);
     const [selectedWorkout, setSelectedWorkout] = useState<TabataWorkout | null>(null);
@@ -21,7 +21,7 @@ export const LoadWorkoutScreen: FC = () => {
         hasNextPage,
         isFetchingNextPage,
         refetch,
-    } = useInfiniteQueryMySavedWorkouts();
+    } = useInfiniteQueryMyCreatedWorkouts();
 
     const queryClient = useQueryClient();
     const refetchData = async (): Promise<void> => {

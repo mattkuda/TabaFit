@@ -129,6 +129,7 @@ export const HomeStackNavigator = (): JSX.Element => {
                 name="BuildWorkoutScreen"
                 options={{
                     headerTitle: 'Build Workout',
+                    headerBackTitle: 'Back',
                 }}
             />
             <Stack.Screen component={TabataTimerScreen} name="TabataTimerScreen" />

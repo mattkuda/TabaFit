@@ -18,7 +18,8 @@ export interface TabNavigatorParamList extends ParamListBase {
     }
     WorkoutsScreen: undefined;
     ViewWorkoutScreen: { workoutId?: string, workout?: TabataWorkout, isInMyWorkouts?: boolean};
-    LoadWorkoutScreen;
+    SavedWorkoutsScreen;
+    MyCreatedWorkoutsScreen;
     PostScreen: {postId: string}
     ConnectionsScreen: {userId: string}
 }

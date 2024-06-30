@@ -4,7 +4,7 @@ import { WorkoutCard } from '../common/WorkoutCard';
 import { InfiniteScrollList } from '../common/InfiniteScrollList';
 import { GradientVStack } from '../common/GradientVStack';
 
-// NOTE: Keep this similar to LoadWorkoutScreen
+// NOTE: Keep this similar to SavedWorkoutsScreen
 // TODO: Make workout card a common component
 export const DiscoverWorkoutsScreen: FC = () => {
     const {

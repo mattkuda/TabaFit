@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
     ScrollView, Text, VStack, Button, Icon, Center, Spinner, HStack, Box, Image,
 } from 'native-base';
@@ -9,7 +9,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Animated, TouchableOpacity } from 'react-native';
 import { format } from 'date-fns';
 import { useQueryClient } from 'react-query';
-import { TabataCircuit, TabataWorkout, TabataWorkoutWithUserInfo } from '../../types/workouts';
+import { TabataCircuit, TabataWorkoutWithUserInfo } from '../../types/workouts';
 import { ViewWorkoutScreenRouteProp, BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
 import { useQueryWorkoutById } from '../../hooks/useQueryWorkoutById';
@@ -29,7 +29,6 @@ export const ViewWorkoutScreen = (): JSX.Element => {
     const customWorkout = route.params?.workout as TabataWorkoutWithUserInfo | undefined;
     const { data: queriedWorkout, isLoading, isError } = useQueryWorkoutById(workoutId);
     const { isWorkoutCreatedByUser, isWorkoutSavedByUser } = useWorkoutOwnership(workoutId);
-
     const workout = customWorkout ?? queriedWorkout;
     const { authState } = useAuth();
     const queryClient = useQueryClient();
@@ -37,17 +36,16 @@ export const ViewWorkoutScreen = (): JSX.Element => {
     const saveWorkoutMutation = useSaveWorkout();
     const unsaveWorkoutMutation = useUnsaveWorkout();
     const formattedDate = workout?.createdAt ? format(new Date(workout.createdAt), 'MMM do, yyyy') : 'emtpy date';
-    const [saveSuccess, setSaveSuccess] = useState(false);
 
     const handleEditWorkout = useCallback((): void => {
         navigation.navigate(
             'BuildWorkoutScreen',
             {
-                customWorkout: workout,
-                isShuffle: false,
+                workout,
+                shouldUpdate: isWorkoutCreatedByUser,
             } as BuildWorkoutScreenProps,
         );
-    }, [navigation, workout]);
+    }, [navigation, workout, isWorkoutCreatedByUser]);
 
     const handleSaveWorkout = useCallback((): void => {
         const onSuccessCallback = (): void => {
@@ -172,10 +170,6 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                     <HStack alignItems="center">
                         <Icon as={Ionicons} color={getWorkoutDifficultyGradient(workout.tabatas.length)} mr={2} name="barbell-outline" size="md" />
                         <Text bold flex={1} fontSize="xl">{workout.name}</Text>
-                        <Text bold flex={1} fontSize="xl">
-                            isWorkoutSavedByUser:
-                            {isWorkoutSavedByUser.toString()}
-                        </Text>
                     </HStack>
                     <Box alignItems="center" flexDirection="row" justifyContent="space-between">
                         <PictureWithName user={workout.user} />

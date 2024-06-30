@@ -220,7 +220,7 @@ export const emptyTabata: TabataCircuit = [null, null, null, null];
 
 export const buildNewTabataInitialState: TabataWorkout = {
     _id: `workout-shuffle`,
-    name: `Tabata Shuffle`,
+    name: '',
     description: 'A Tabata workout built by the user.',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

@@ -32,8 +32,8 @@ export const WorkoutsScreen = (): JSX.Element => {
     } = useQueryMyCreatedWorkouts({ limit: 5, offset: 0 });
 
     const {
-        data: newWorkouts, refetch: refetchNewWorkouts,
-        isLoading: isNewWorkoutsLoading,
+        data: discoverWorkouts, refetch: refetchNewWorkouts,
+        isLoading: isDiscoverWorkoutsLoading,
     } = useQueryWorkouts({ limit: 5, offset: 0 });
 
     const handlePressQuickShuffle = (): void => {
@@ -46,7 +46,7 @@ export const WorkoutsScreen = (): JSX.Element => {
     const handlePressBuildWorkout = (): void => {
         navigation.navigate('BuildWorkoutScreen', {
             isShuffle: false,
-            isSavedWorkout: false,
+            shouldUpdate: false,
         } as BuildWorkoutScreenProps);
     };
 
@@ -66,12 +66,11 @@ export const WorkoutsScreen = (): JSX.Element => {
     };
 
     const handlePressViewMyCreatedWorkouts = (): void => {
-        console.log('TODO: View my created workouts');
-        navigation.navigate('LoadWorkoutScreen');
+        navigation.navigate('MyCreatedWorkoutsScreen');
     };
 
-    const handlePressViewMyWorkouts = (): void => {
-        navigation.navigate('LoadWorkoutScreen');
+    const handlePressViewSavedWorkouts = (): void => {
+        navigation.navigate('SavedWorkoutsScreen');
     };
 
     const handlePressDiscoverWorkouts = (): void => {
@@ -216,8 +215,8 @@ export const WorkoutsScreen = (): JSX.Element => {
                         <Button colorScheme="secondary" variant="ghost" onPress={handlePressDiscoverWorkouts}>View all</Button>
                     </HStack>
                     <HorizontalWorkoutCards
-                        isLoading={isNewWorkoutsLoading}
-                        workouts={newWorkouts ?? []}
+                        isLoading={isDiscoverWorkoutsLoading}
+                        workouts={discoverWorkouts ?? []}
                         onPressWorkout={handlePressViewWorkout}
                     />
                     {/* /* My Workouts */ }
@@ -248,7 +247,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                         workouts={myCreatedWorkouts ?? []}
                         onPressWorkout={handlePressViewMyWorkout}
                     />
-                    {/* /* My Workouts */ }
+                    {/* /* Saved Workouts */ }
                     <HStack alignItems="center" justifyContent="space-between">
                         <HStack alignItems="center" space={2}>
                             <Heading size="md">Saved Workouts</Heading>
@@ -267,7 +266,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                                 </Popover.Content>
                             </Popover>
                         </HStack>
-                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressViewMyWorkouts}>
+                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressViewSavedWorkouts}>
                             View all
                         </Button>
                     </HStack>

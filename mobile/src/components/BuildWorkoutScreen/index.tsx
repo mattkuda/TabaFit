@@ -10,7 +10,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQueryClient } from 'react-query';
 import { Animated } from 'react-native';
 import { WorkoutsStackParamList } from '../../navigation/navigationTypes';
-import { useCreateWorkout, useSaveWorkout, useUpdateWorkout } from '../../mutations/workoutMutations';
+import { useCreateWorkout, useUpdateWorkout } from '../../mutations/workoutMutations';
 import {
     buildNewTabataInitialState,
     emptyTabata,
@@ -21,7 +21,6 @@ import {
     TabataExercise, TabataWorkout,
 } from '../../types/workouts';
 import { GradientVStack } from '../common/GradientVStack';
-import { useWorkoutOwnership } from '../../hooks/useUserInfo';
 import { TabataItem } from './TabataItem';
 
 type BuildWorkoutScreenRouteProp = RouteProp<WorkoutsStackParamList, 'BuildWorkoutScreen'>;
@@ -30,17 +29,12 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     const navigation = useNavigation<BuildWorkoutScreenNavigationProp>();
     const route = useRoute<BuildWorkoutScreenRouteProp>();
     const { authState } = useAuth();
-    // const { data: userInfo } = useUserInfo(authState.userId);
-    const { workout: routeWorkout } = route.params;
-    const { isWorkoutCreatedByUser, isWorkoutSavedByUser } = useWorkoutOwnership(route?.params?.workout?._id);
-    // const isSavedWorkoutByUser = routeWorkout && userInfo?.createdWorkouts?.includes(route?.params?.workout._id);
-    // const [workout, setWorkout] = useState<TabataWorkout>(workout || soundTestingWorkout);
+    const { workout: routeWorkout, shouldUpdate } = route.params;
     const [workout, setWorkout] = useState<TabataWorkout>(routeWorkout || buildNewTabataInitialState);
     const createWorkoutMutation = useCreateWorkout();
-    const saveWorkoutMutation = useSaveWorkout();
+    const updateWorkoutMutation = useUpdateWorkout();
     const [workoutName, setWorkoutName] = useState(workout?.name || '');
     const queryClient = useQueryClient();
-    const updateWorkoutMutation = useUpdateWorkout();
     const [modalWorkout, setModalWorkout] = useState<TabataWorkout>(workout);
     const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
     const [showHelpDialog, setShowHelpDialog] = useState<boolean>(false);
@@ -116,30 +110,37 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             name: workoutName,
             createdAt: new Date().toISOString(),
             userId: authState.userId,
+            isDiscoverable: true,
         };
 
-        const onSuccessCallback = (): void => {
+        const onSuccessCallback = (newWorkoutId: string): void => {
             // Invalidate queries to refresh data
             queryClient.invalidateQueries('my-saved-workouts');
+            queryClient.invalidateQueries('my-created-workouts');
+            queryClient.invalidateQueries('workouts');
             queryClient.invalidateQueries(['workout', workout._id.toString()]);
-            navigation.goBack();
+            if (shouldUpdate) {
+                navigation.navigate('ViewWorkoutScreen', { workoutId: newWorkoutId });
+            } else {
+                navigation.goBack();
+            }
         };
 
-        if (isWorkoutSavedByUser) {
+        if (shouldUpdate) {
             updateWorkoutMutation.mutate({
                 workoutId: workout._id.toString(),
                 workout: workoutData,
             }, {
-                onSuccess: onSuccessCallback,
+                onSuccess: (data) => onSuccessCallback(data.newWorkoutId),
             });
         } else {
             createWorkoutMutation.mutate({
                 workout: workoutData,
             }, {
-                onSuccess: onSuccessCallback,
+                onSuccess: (data) => onSuccessCallback(data.newWorkoutId),
             });
         }
-    }, [validateWorkout, workout, workoutName, authState.userId, isWorkoutSavedByUser, queryClient,
+    }, [validateWorkout, workout, workoutName, authState.userId, shouldUpdate, queryClient,
         navigation, updateWorkoutMutation, createWorkoutMutation]);
 
     useEffect(() => {
@@ -157,7 +158,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                         variant="ghost"
                         onPress={handleSaveOrUpdateWorkout}
                     >
-                        <Text color="white" fontSize="md">{isWorkoutSavedByUser ? 'Update' : 'Save'}</Text>
+                        <Text color="white" fontSize="md">{shouldUpdate ? 'Update' : 'Save'}</Text>
                     </Button>
                 </HStack>
             ),

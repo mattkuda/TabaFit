@@ -118,8 +118,6 @@ router.get('/my-saved', authenticate, async (req: AuthRequest, res: Response) =>
       return;
     }
 
-    console.log('user.savedWorkouts', user.savedWorkouts);
-
     const workouts = await workoutsCollection.find({ _id: { $in: user.savedWorkouts ?? [] } })
       .sort({ _id: -1 })
       .skip(offset)
@@ -145,8 +143,6 @@ router.get('/my-created', authenticate, async (req: AuthRequest, res: Response) 
       res.status(404).send({ message: 'User not found.' });
       return;
     }
-
-    console.log('user.createdWorkouts', user.createdWorkouts);
 
     const workouts = await workoutsCollection.find({ _id: { $in: user.createdWorkouts ?? [] } })
       .sort({ _id: -1 })
@@ -201,7 +197,8 @@ router.post('/create', authenticate, async (req: AuthRequest, res: Response) => 
       { $push: { createdWorkouts: new ObjectId(result.insertedId) } },
     );
 
-    res.status(201).send({ message: 'TabataWorkout created successfully' });
+    // Return the new workout ID
+    res.status(201).send({ newWorkoutId: result.insertedId.toString(), message: 'TabataWorkout created successfully' });
   } catch (err) {
     console.error('Failed to create workout', err);
     res.status(500).send({ message: 'Failed to create workout' });
@@ -223,7 +220,6 @@ router.post('/save', authenticate, async (req: AuthRequest, res: Response) => {
       (savedWorkout) => savedWorkout.toString() === workoutIdStr,
     );
     if (isAlreadySaved) {
-      console.log('Workout already saved');
       res.status(400).send({ message: 'Workout already saved' });
       return;
     }
@@ -306,7 +302,8 @@ router.delete('/:workoutId', authenticate, async (req: AuthRequest, res: Respons
   }
 });
 
-router.post('/:workoutId', authenticate, async (req: AuthRequest, res: Response) => {
+// Updates a workout via marking the old one as non-discoverable and creating a new version
+router.put('/update/:workoutId', authenticate, async (req: AuthRequest, res: Response) => {
   const { workoutId } = req.params;
   const newWorkoutData = req.body;
   const { userId } = req;
@@ -341,10 +338,21 @@ router.post('/:workoutId', authenticate, async (req: AuthRequest, res: Response)
       isDiscoverable: true, // New workout is discoverable
     };
 
-    await workoutsCollection.insertOne(newWorkout);
+    const result = await workoutsCollection.insertOne(newWorkout);
 
-    // Return the new workout
-    res.status(201).send({ message: 'TabataWorkout saved successfully' });
+    // Update the user's createdWorkouts array
+    await usersCollection.updateOne(
+      { _id: new ObjectId(userId) },
+      { $pull: { createdWorkouts: new ObjectId(workoutId) } },
+    );
+
+    await usersCollection.updateOne(
+      { _id: new ObjectId(userId) },
+      { $push: { createdWorkouts: new ObjectId(result.insertedId) } },
+    );
+
+    // Return the new workout ID
+    res.status(201).send({ newWorkoutId: result.insertedId.toString(), message: 'TabataWorkout updated successfully' });
   } catch (err) {
     console.error('Failed to update workout', err);
     res.status(500).send({ message: 'Failed to update workout' });

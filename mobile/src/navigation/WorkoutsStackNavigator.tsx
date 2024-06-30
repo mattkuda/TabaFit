@@ -8,10 +8,11 @@ import { WorkoutsScreen } from '../components/WorkoutsScreen';
 import { TabataTimerScreen } from '../components/TabataTimerScreen';
 import { ShareWorkoutScreen } from '../components/ShareWorkoutScreen';
 import { ViewWorkoutScreen } from '../components/ViewWorkoutScreen';
-import { LoadWorkoutScreen } from '../components/LoadWorkoutScreen';
+import { SavedWorkoutsScreen } from '../components/SavedWorkoutsScreen';
 import { DiscoverWorkoutsScreen } from '../components/DiscoverWorkoutsScreen';
 import { PremadeWorkoutsScreen } from '../components/PremadeWorkoutsScreen';
 import { ShuffleWorkoutScreen } from '../components/ShuffleWorkoutScreen';
+import { MyCreatedWorkoutsScreen } from '../components/MyCreatedWorkoutsScreen';
 
 const Stack = createStackNavigator<WorkoutsStackParamList>();
 
@@ -42,6 +43,7 @@ export const WorkoutsStackNavigator = (): JSX.Element => {
                 component={BuildWorkoutScreen}
                 name="BuildWorkoutScreen"
                 options={{
+                    headerBackTitle: 'Back',
                     headerTitle: 'Build Workout',
                 }}
             />
@@ -77,14 +79,21 @@ export const WorkoutsStackNavigator = (): JSX.Element => {
                 component={ViewWorkoutScreen}
                 name="ViewWorkoutScreen"
                 options={{
-                    headerTitle: 'Workout Details',
+                    headerTitle: 'Details',
                 }}
             />
             <Stack.Screen
-                component={LoadWorkoutScreen}
-                name="LoadWorkoutScreen"
+                component={SavedWorkoutsScreen}
+                name="SavedWorkoutsScreen"
                 options={{
                     headerTitle: 'Saved Workouts',
+                }}
+            />
+            <Stack.Screen
+                component={MyCreatedWorkoutsScreen}
+                name="MyCreatedWorkoutsScreen"
+                options={{
+                    headerTitle: 'My Created Workouts',
                 }}
             />
             <Stack.Screen
