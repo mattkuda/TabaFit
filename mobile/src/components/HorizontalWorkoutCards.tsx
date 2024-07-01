@@ -17,14 +17,17 @@ interface SlideWorkoutCardProps {
 const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress }): JSX.Element => (
     <TouchableOpacity style={{ width: 200, marginHorizontal: 8 }} onPress={onPress}>
         <Box
-            bg={{
-                linearGradient: {
-                    colors: ['workoutDisplayGray', getWorkoutDifficultyGradient(workout.tabatas.length)[0]],
-                    start: [0.5, 0.6],
-                    end: [1.35, 1.05],
-                },
-            }}
-            borderRadius="lg"
+            // bg={{
+            //     linearGradient: {
+            //         colors: ['workoutDisplayGray', getWorkoutDifficultyGradient(workout.tabatas.length)[0]],
+            //         start: [0.5, 0.6],
+            //         end: [1.35, 1.05],
+            //     },
+            // }}
+            backgroundColor="workoutDisplayGray"
+            borderColor={getWorkoutDifficultyGradient(workout.tabatas.length)[0]}
+            borderRadius="md"
+            borderWidth={1}
             height={150}
             justifyContent="space-between"
             p="4"

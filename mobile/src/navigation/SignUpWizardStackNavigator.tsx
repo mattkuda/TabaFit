@@ -6,6 +6,7 @@ import { SuggestedFollowsScreen } from '../components/SuggestedFollowsScreen';
 import { SuggestedWorkoutsScreen } from '../components/SuggestedWorkoutsScreen';
 import { wizardActiveState } from '../atoms/wizardActiveAtom';
 import { TutorialScreen } from '../components/TutorialScreen';
+import { TabataExplanationScreen } from '../components/TabataExplanationScreen';
 
 const SignUpWizardStack = createStackNavigator();
 
@@ -62,6 +63,14 @@ export const SignUpWizardStackNavigator = (): JSX.Element => {
             <SignUpWizardStack.Screen
                 component={SuggestedFollowsScreen}
                 name="SuggestedFollowsScreen"
+                options={{
+                    headerRight: SkipButton,
+                    headerLeft: () => null,
+                }}
+            />
+            <SignUpWizardStack.Screen
+                component={TabataExplanationScreen}
+                name="TabataExplanationScreen"
                 options={{
                     headerRight: SkipButton,
                     headerLeft: () => null,

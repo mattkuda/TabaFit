@@ -1,23 +1,20 @@
-import {
-    ViewStyle,
-} from 'react-native';
+import React from 'react';
+import { ViewStyle } from 'react-native';
 import { useTheme } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useRecoilValue } from 'recoil';
-import React from 'react';
 import { HomeStackNavigator } from '../navigation/HomeStackNavigator';
 import { ProfileStackNavigator } from '../navigation/ProfileStackNavigator';
 import { useAuth } from '../context/AuthContext';
 import { TabNavigatorParamList } from '../types/navigationTypes';
 import { showFooterState } from '../atoms/showFooterAtom';
 import { WorkoutsStackNavigator } from '../navigation/WorkoutsStackNavigator';
-import { useUserInfo } from '../hooks/useUserInfo';
 import { AuthStackNavigator } from '../navigation/AuthStackNavigator';
 import { SignUpWizardStackNavigator } from '../navigation/SignUpWizardStackNavigator';
-import { wizardActiveState } from '../atoms/wizardActiveAtom';
 import { ProfilePicture } from './ProfilePicture';
+import { useUserInfo } from '../hooks/useUserInfo';
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
@@ -45,9 +42,17 @@ const ProfileTabIcon = ({ focused, color, size }): JSX.Element => {
 
 export const Routes = (): JSX.Element => {
     const showFooter = useRecoilValue(showFooterState);
-    const { authState } = useAuth();
-    const wizardActive = useRecoilValue(wizardActiveState);
+    const { authState, hasSeenTutorial } = useAuth();
     const { colors } = useTheme();
+
+    console.log('Routes render:');
+    console.log('authState:', authState);
+    console.log('hasSeenTutorial:', hasSeenTutorial);
+
+    if (authState.authenticated === null || hasSeenTutorial === null) {
+        // Show a loading indicator while checking authentication and tutorial status
+        return null;
+    }
 
     if (!authState.authenticated) {
         return (
@@ -57,7 +62,7 @@ export const Routes = (): JSX.Element => {
         );
     }
 
-    if (authState.authenticated && wizardActive) {
+    if (authState.authenticated && !hasSeenTutorial) {
         return (
             <NavigationContainer>
                 <SignUpWizardStackNavigator />

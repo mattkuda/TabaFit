@@ -97,7 +97,6 @@ export const PostScreen = (): JSX.Element => {
                                 {userFound ? ` @${post.user.username}` : ''}
                             </Text>
                         </HStack>
-
                         <Text color="gray.400" fontSize="xs">
                             {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
                         </Text>
@@ -127,7 +126,7 @@ export const PostScreen = (): JSX.Element => {
                             Send
                         </Text>
                     )}
-                    mt={2}
+                    mt={4}
                     placeholder="Write a comment..."
                     ref={commentInputRef}
                     type="text"
@@ -135,13 +134,16 @@ export const PostScreen = (): JSX.Element => {
                     onChangeText={setCommentBody}
 
                 />
-                {post.comments.map((comment) => (
-                    <CommentCard
-                        comment={comment}
-                        key={comment._id?.toString()}
-                        onDeleteComment={handleDeleteComment}
-                    />
-                ))}
+                {/* @ts-expect-errors */}
+                <VStack gap={4} mt={2}>
+                    {post.comments.map((comment) => (
+                        <CommentCard
+                            comment={comment}
+                            key={comment._id?.toString()}
+                            onDeleteComment={handleDeleteComment}
+                        />
+                    ))}
+                </VStack>
             </ScrollView>
         </GradientVStack>
 

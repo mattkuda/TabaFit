@@ -3,8 +3,6 @@ import {
     Box, Menu, Icon, IconButton,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
-import { useRecoilState } from 'recoil';
-import { wizardActiveState } from '../atoms/wizardActiveAtom';
 import { useAuth } from '../context/AuthContext';
 
 const MoreOptionsTrigger = (triggerProps: any): JSX.Element => (
@@ -24,12 +22,12 @@ const MoreOptionsTrigger = (triggerProps: any): JSX.Element => (
 
 export const DebugModeButton = (): JSX.Element => {
     const [showMenu, setShowMenu] = useState(false);
-    // const setwizardActive = useSetRecoilState(wizardActiveState);
-    const [wizardActive, setwizardActive] = useRecoilState(wizardActiveState);
     const authState = useAuth();
 
-    const togglewizardActive = (): void => {
-        setwizardActive((prev) => !prev);
+    const { resetTutorial, hasSeenTutorial } = useAuth();
+
+    const togglewizardActive = async (): Promise<void> => {
+        await resetTutorial();
     };
 
     return (
@@ -48,7 +46,7 @@ export const DebugModeButton = (): JSX.Element => {
                     {`EXPO_PUBLIC_TOKEN_KEY: ${process.env.EXPO_PUBLIC_TOKEN_KEY}`}
                 </Menu.Item>
                 <Menu.Item onPress={togglewizardActive}>
-                    {`Toggle wizardActive (${wizardActive ? 'T' : 'F'})`}
+                    {`Toggle hasSeenTutorial (${hasSeenTutorial === true ? 'T' : 'F'})`}
                 </Menu.Item>
                 <Menu.Item>
                     {`EXPO_PUBLIC_ENVIRONMENT: ${process.env.EXPO_PUBLIC_ENVIRONMENT}`}

@@ -1,6 +1,8 @@
 import React from 'react';
 import {
     HStack, VStack, Text, Icon, IconButton,
+    Menu,
+    Pressable,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
@@ -13,6 +15,12 @@ type CommentCardProps = {
     comment: PostCommentModel;
     onDeleteComment: (commentId: string) => void;
 };
+
+const MenuTrigger = ({ triggerProps }): JSX.Element => (
+    <Pressable accessibilityLabel="More options menu" {...triggerProps}>
+        <Icon as={Ionicons} name="ellipsis-vertical-outline" size="md" />
+    </Pressable>
+);
 
 export const CommentCard: React.FC<CommentCardProps> = ({ comment, onDeleteComment }) => {
     // Todo: Include logic to determine if the comment should show a delete button
@@ -36,7 +44,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment, onDeleteComme
         >
             <HStack alignItems="center" space={2}>
                 <ProfilePicture size="32px" user={comment?.user} />
-                <VStack>
+                <VStack flex={1}>
                     <Text
                         fontSize="sm"
                         onPress={(): void => (comment.user
@@ -49,11 +57,22 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment, onDeleteComme
                     </Text>
                 </VStack>
                 {showDeleteButton && (
-                    <IconButton
-                        icon={<Icon as={Ionicons} color="red.500" name="trash-bin" size="sm" />}
-                        ml="auto"
-                        onPress={(): void => onDeleteComment(comment._id?.toString())}
-                    />
+                    <Menu
+                        backgroundColor="gray.900"
+                        shadow={2}
+                        // eslint-disable-next-line react/no-unstable-nested-components
+                        trigger={(triggerProps): JSX.Element => <MenuTrigger triggerProps={triggerProps} />}
+                        w="190"
+                    >
+                        <Menu.Item
+                            onPress={(): void => onDeleteComment(comment._id?.toString())}
+                        >
+                            <>
+                                <Icon as={Ionicons} color="red.500" name="trash-bin" size="sm" />
+                                <Text color="red.500">Delete comment</Text>
+                            </>
+                        </Menu.Item>
+                    </Menu>
                 )}
             </HStack>
             <Text fontSize="sm" mt={2}>

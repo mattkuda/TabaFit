@@ -47,6 +47,8 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
         navigation.navigate('ViewWorkoutScreen', { workout });
     };
 
+    const workoutDifficultyColor = getWorkoutDifficultyGradient(workout.tabatas.length);
+
     return (
         <TouchableOpacity
             style={{
@@ -55,21 +57,23 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
             onPress={isTabaFitWorkout ? handleClickTabaFitWorkout : handleClickCard}
         >
             <Box
-                bg={{
-                    linearGradient: {
-                        colors: ['workoutDisplayGray', getWorkoutDifficultyGradient(workout.tabatas.length)[0]],
-                        start: [0.5, 0.5],
-                        end: [1.3, 1.3],
-
-                    },
-                }}
-                borderColor="flame"
-                // @ts-ignore
+                backgroundColor="workoutDisplayGray"
+                borderColor={workoutDifficultyColor}
+                borderRadius="md"
+                borderWidth={1} // @ts-ignore
                 gap={4}
                 justifyContent="space-between"
                 my={2}
                 p="4"
-                rounded="xl"
+                rounded="lg"
+                // bg={{
+                //     linearGradient: {
+                //         colors: ['workoutDisplayGray', getWorkoutDifficultyGradient(workout.tabatas.length)[0]],
+                //         start: [0.5, 0.5],
+                //         end: [1.3, 1.3],
+
+                //     },
+                // }}
             >
                 <VStack space={4}>
                     <HStack alignItems="center" justifyContent="flex-start">

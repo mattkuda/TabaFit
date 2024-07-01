@@ -16,10 +16,11 @@ import { useMutateShareWorkout } from '../../mutations/useMutateSharePost';
 import { ShareWorkoutScreenRouteProp } from '../../navigation/navigationTypes';
 import { useCreateWorkout } from '../../mutations/workoutMutations';
 import { GradientVStack } from '../common/GradientVStack';
+import { useWorkoutOwnership } from '../../hooks/useUserInfo';
 
 export const ShareWorkoutScreen = (): JSX.Element => {
     const route = useRoute<ShareWorkoutScreenRouteProp>();
-    const { workout, completedAt, isInMyWorkouts } = route.params;
+    const { workout, completedAt } = route.params;
     const [workoutTitle, setWorkoutTitle] = useState('');
     const [workoutDescription, setWorkoutDescription] = useState('');
     const shareWorkoutMutation = useMutateShareWorkout();
@@ -27,7 +28,9 @@ export const ShareWorkoutScreen = (): JSX.Element => {
     const userId = authState?.userId;
     const navigation = useNavigation<ShareWorkoutScreenNavigationProp>();
     const saveWorkoutMutation = useCreateWorkout();
-    const [saveWorkoutSwitch, setSaveWorkoutSwitch] = useState(isInMyWorkouts);
+    const { isWorkoutCreatedByUser, isWorkoutSavedByUser } = useWorkoutOwnership(workout?._id);
+    const isSaved = isWorkoutCreatedByUser || isWorkoutSavedByUser;
+    const [saveWorkoutSwitch, setSaveWorkoutSwitch] = useState(isSaved);
     const queryClient = useQueryClient();
     const [isSavingComplete, setIsSavingComplete] = useState(false);
 
@@ -61,7 +64,7 @@ export const ShareWorkoutScreen = (): JSX.Element => {
 
     const handleShareWorkout = (): void => {
         setIsSavingComplete(false); // Reset saving complete state
-        if (saveWorkoutSwitch && !isInMyWorkouts) {
+        if (saveWorkoutSwitch && !isSaved) {
             handleSaveWorkout().finally(() => {
                 shareWorkoutMutation.mutate({
                     userId,
@@ -155,14 +158,14 @@ export const ShareWorkoutScreen = (): JSX.Element => {
             />
             <HStack alignItems="center" space={4}>
                 <Text>
-                    {!isInMyWorkouts && !isSavingComplete ? 'Save workout to library when sharing?' : 'Workout saved to library'}
+                    {!isSaved && !isSavingComplete ? 'Save workout to library when sharing?' : 'Workout saved to library'}
                 </Text>
                 <Checkbox
                     bgColor={saveWorkoutSwitch ? 'primary' : 'gray.900'}
                     borderColor="gray.600"
                     borderWidth={1}
-                    isChecked={isInMyWorkouts || saveWorkoutSwitch}
-                    isDisabled={isInMyWorkouts}
+                    isChecked={isSaved || saveWorkoutSwitch}
+                    isDisabled={isSaved}
                     key="save-workout-switch"
                     size="lg"
                     value="save-workout-switch"

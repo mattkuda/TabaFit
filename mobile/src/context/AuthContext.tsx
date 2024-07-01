@@ -8,6 +8,7 @@ import { wizardActiveState } from '../atoms/wizardActiveAtom';
 
 const apiUrl = process.env.EXPO_PUBLIC_EAS_API_BASE_URL || 'http://localhost:3000';
 const tokenKey = process.env.EXPO_PUBLIC_TOKEN_KEY;
+const TUTORIAL_STATUS_KEY = 'hasSeenTutorial';
 
 interface AuthProps {
     children?: React.ReactNode;
@@ -16,8 +17,11 @@ interface AuthProps {
         authenticated: boolean | null;
         userId?: string;
     };
-    onRegister?: (email: string, password: string, firstName: string,
-        lastName: string, username: string) => Promise<any>;
+    hasSeenTutorial?: boolean | null;
+    completeTutorial?: () => Promise<void>;
+    resetTutorial?: () => Promise<void>;
+    onRegister?: (email: string, password: string, firstName:
+    string, lastName: string, username: string) => Promise<any>;
     onLogin?: (emailOrUsername: string, password: string) => Promise<any>;
     onLogout?: () => Promise<any>;
 }
@@ -36,12 +40,14 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
         authenticated: null,
         userId: null,
     });
-    const setwizardActive = useSetRecoilState(wizardActiveState);
+    const [hasSeenTutorial, setHasSeenTutorial] = useState<boolean | null>(null);
+    const setWizardActive = useSetRecoilState(wizardActiveState);
 
     useEffect(() => {
         const loadToken = async (): Promise<void> => {
             const token = await SecureStore.getItemAsync(tokenKey);
             const userId = await SecureStore.getItemAsync('userId');
+            const tutorialStatus = await SecureStore.getItemAsync(TUTORIAL_STATUS_KEY);
 
             if (token) {
                 axios.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -51,6 +57,8 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
                     userId,
                 });
             }
+
+            setHasSeenTutorial(tutorialStatus === 'true');
         };
 
         loadToken();
@@ -69,12 +77,13 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
             });
             const { token, user } = response.data;
 
-            setwizardActive(true);
+            setWizardActive(true);
             setAuthState({ token, authenticated: true, userId: user._id });
 
             axios.defaults.headers.common.Authorization = `Bearer ${response.data.token}`;
 
             await SecureStore.setItemAsync(tokenKey, response.data.token);
+            await SecureStore.setItemAsync('userId', user._id);
         } catch (error) {
             console.error('Registration error:', error);
             throw error;
@@ -105,17 +114,40 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
     const onLogout = async (): Promise<void> => {
         try {
             await SecureStore.deleteItemAsync(tokenKey);
+            await SecureStore.deleteItemAsync('userId');
             axios.defaults.headers.common.Authorization = '';
             setAuthState({ token: null, authenticated: false, userId: null });
+            setHasSeenTutorial(null);
         } catch (error) {
             console.error('Logout error:', error);
             throw error;
         }
     };
 
+    const completeTutorial = async (): Promise<void> => {
+        try {
+            await SecureStore.setItemAsync(TUTORIAL_STATUS_KEY, 'true');
+            setHasSeenTutorial(true);
+        } catch (error) {
+            console.error('Failed to save tutorial status', error);
+        }
+    };
+
+    const resetTutorial = async (): Promise<void> => {
+        try {
+            await SecureStore.deleteItemAsync(TUTORIAL_STATUS_KEY);
+            setHasSeenTutorial(false);
+        } catch (error) {
+            console.error('Failed to reset tutorial status', error);
+        }
+    };
+
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     const value = {
         authState,
+        hasSeenTutorial,
+        completeTutorial,
+        resetTutorial,
         onRegister,
         onLogin,
         onLogout,

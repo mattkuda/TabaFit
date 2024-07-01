@@ -3,14 +3,12 @@ import {
     Box, Button, ScrollView, VStack, Text, Icon, HStack, Center,
 } from 'native-base';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { useSetRecoilState } from 'recoil';
 import { TouchableOpacity } from 'react-native';
 import { useFollowAll, useFollowUser } from '../../mutations/followMutations';
 import { useAuth } from '../../context/AuthContext';
 import { User } from '../../types/users';
 import { useQuerySuggestedUsers } from '../../hooks/useQueryUserByUsername';
 import { ProfilePicture } from '../ProfilePicture';
-import { wizardActiveState } from '../../atoms/wizardActiveAtom';
 import { GradientVStack } from '../common/GradientVStack';
 
 type ConnectionCardProps = {
@@ -66,11 +64,10 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
 
 export const SuggestedFollowsScreen = (): JSX.Element => {
     const followAllMutation = useFollowAll();
-    const { authState } = useAuth();
+    const { authState, completeTutorial, hasSeenTutorial } = useAuth();
     const { data: users } = useQuerySuggestedUsers();
     const [isAllFollowed, setIsAllFollowed] = useState(false);
     const [isAnyFollowed, setIsAnyFollowed] = useState(false);
-    const setwizardActive = useSetRecoilState(wizardActiveState);
 
     const userId = authState?.userId;
     // const navigation = useNavigation<SuggestedFollowsScreenNavigationProp>();
@@ -89,6 +86,11 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
                 },
             );
         }
+    };
+
+    const handleFinish = async (): Promise<void> => {
+        await completeTutorial();
+        // Navigate to the next screen in the welcome wizard flow
     };
 
     return (
@@ -114,6 +116,9 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
                         </Text>
                         <Text fontSize="lg" mt="5" textAlign="center">
                             Follow some suggested users, or follow all current TabaFit users! (recommended)
+                        </Text>
+                        <Text fontSize="lg" mt="5" textAlign="center">
+                            {hasSeenTutorial?.toString()}
                         </Text>
                     </VStack>
                     <Center>
@@ -157,7 +162,7 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
                     ))}
                 </VStack>
             </ScrollView>
-            <TouchableOpacity onPress={(): void => setwizardActive(false)}>
+            <TouchableOpacity onPress={(): Promise<void> => handleFinish()}>
                 <Box
                     alignItems="center"
                     bg={isAnyFollowed ? {
