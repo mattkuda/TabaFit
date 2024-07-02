@@ -9,7 +9,7 @@ import { NestableScrollContainer } from 'react-native-draggable-flatlist';
 import { useNavigation } from '@react-navigation/native';
 import { Animated, TouchableOpacity } from 'react-native';
 import {
-    buildNewTabataInitialState, shuffleExercises,
+    shuffleExercises, shuffleWorkoutTemplate,
 } from '../shuffleUtil';
 import { ShuffleWorkoutScreenNavigationProp } from '../../types/navigationTypes';
 import {
@@ -22,7 +22,7 @@ import { TabataItem } from '../BuildWorkoutScreen/TabataItem';
 
 export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> = (): JSX.Element => {
     const navigation = useNavigation<ShuffleWorkoutScreenNavigationProp>();
-    const [workout, setWorkout] = useState<TabataWorkout>(buildNewTabataInitialState);
+    const [workout, setWorkout] = useState<TabataWorkout>(shuffleWorkoutTemplate);
     const [modalWorkout, setModalWorkout] = useState<TabataWorkout>(workout);
     const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
     const [showHelpDialog, setShowHelpDialog] = useState<boolean>(false);

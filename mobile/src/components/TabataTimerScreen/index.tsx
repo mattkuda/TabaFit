@@ -304,6 +304,17 @@ export const TabataTimerScreen = (): JSX.Element => {
         return { minutes, secs };
     };
 
+    const nextExerciseText: string = ((): string => {
+        if (currentInterval === Intervals.Warmup) {
+            return currentTabata[0].name;
+        } if (currentInterval === Intervals.Rest && exercisesDone < exercisesPerTabata - 1) {
+            return currentTabata[exercisesDone >= 3 ? exercisesDone - 3 : exercisesDone + 1].name;
+        } if (currentInterval === Intervals.Intermission) {
+            return currentTabata[0].name;
+        }
+        return '';
+    })();
+
     return (
         <GradientVStack
             flex={1}
@@ -375,7 +386,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                     {formatSplitTime(seconds).secs}
                 </Text>
             </Flex>
-            <Flex alignItems="center" flex={1} justify="flex-start">
+            <Flex alignItems="center" flex={1} gap={2} justify="flex-start">
                 <Text
                     bold
                     // eslint-disable-next-line no-nested-ternary
@@ -384,6 +395,13 @@ export const TabataTimerScreen = (): JSX.Element => {
                 >
                     {currentExercise ? currentExercise.name.toUpperCase() : currentInterval.toUpperCase()}
                 </Text>
+                <Flex alignItems="center" flex={1} gap={2} justify="center">
+                    {nextExerciseText && (
+                    <Text bold color="gray.300" style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}>
+                        {`NEXT UP: ${nextExerciseText.toUpperCase()}`}
+                    </Text>
+                    )}
+                </Flex>
             </Flex>
             {/* Controls row */}
             <Box mb={4} mt={-4} p="4" width="100%">
