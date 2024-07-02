@@ -93,14 +93,14 @@ export const WorkoutsStackNavigator = (): JSX.Element => {
                 component={MyCreatedWorkoutsScreen}
                 name="MyCreatedWorkoutsScreen"
                 options={{
-                    headerTitle: 'My Created Workouts',
+                    headerTitle: 'My Workouts',
                 }}
             />
             <Stack.Screen
                 component={DiscoverWorkoutsScreen}
                 name="DiscoverWorkoutsScreen"
                 options={{
-                    headerTitle: 'Discover Workouts',
+                    headerTitle: 'Community Workouts',
                 }}
             />
             <Stack.Screen

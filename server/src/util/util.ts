@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 export const validateUsername = (username: string): { isValid: boolean, errorMessage?: string } => {
   const usernameRegex = /^[a-zA-Z0-9_.]+$/;
-  const reservedUsernames = ['admin', 'root', 'system'];
+  const reservedUsernames = ['admin', 'root', 'system', 'tabafit', 'moderator', 'null', 'undefined', 'anonymous'];
 
   if (username.length < 3) {
     return { isValid: false, errorMessage: 'Username is too short. It must be at least 3 characters long.' };

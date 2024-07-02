@@ -50,9 +50,9 @@ const fetchMyCreatedWorkouts = async ({ offset = 0 }: PagingParams): Promise<Fet
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            throw new Error(error.response?.data.message || 'An error occurred while fetching my created workouts');
+            throw new Error(error.response?.data.message || 'An error occurred while fetching My Workouts');
         }
-        throw new Error('An error occurred while fetching my created workouts');
+        throw new Error('An error occurred while fetching My Workouts');
     }
 };
 

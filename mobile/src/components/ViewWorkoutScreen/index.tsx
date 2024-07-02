@@ -99,19 +99,20 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                         Edit
                     </Button>
                 ) : (
-                    <Button
-                        colorScheme={isWorkoutSavedByUser ? 'success' : 'secondary'}
-                        size="lg"
-                        variant="ghost"
-                        onPress={isWorkoutSavedByUser ? handleUnsaveWorkout : handleSaveWorkout}
-                    >
-                        {isWorkoutSavedByUser ? 'Saved' : 'Save'}
-                    </Button>
+                    workout?.user.username !== 'tabafit' && (
+                        <Button
+                            colorScheme={isWorkoutSavedByUser ? 'success' : 'secondary'}
+                            size="lg"
+                            variant="ghost"
+                            onPress={isWorkoutSavedByUser ? handleUnsaveWorkout : handleSaveWorkout}
+                        >
+                            {isWorkoutSavedByUser ? 'Saved' : 'Save'}
+                        </Button>
+                    )
                 )
-
             ),
         });
-    }, [navigation, isWorkoutCreatedByUser, isWorkoutSavedByUser,
+    }, [navigation, isWorkoutCreatedByUser, isWorkoutSavedByUser, workout,
         handleSaveWorkout, handleEditWorkout, handleUnsaveWorkout]);
 
     Animated.loop(
