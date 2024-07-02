@@ -96,8 +96,6 @@ router.get('/:userId', async (req: AuthRequest, res: Response) => {
 
 router.get('/username/:username', async (req: AuthRequest, res: Response) => {
   try {
-    console.log('Fetching user by username');
-
     // Find the user by username
     const user = await usersCollection.findOne({ username: req.params.username.toLowerCase() });
 
@@ -117,8 +115,6 @@ router.get('/username/:username', async (req: AuthRequest, res: Response) => {
 
 router.get('/email/:email', async (req: AuthRequest, res: Response) => {
   try {
-    console.log('Fetching user by email');
-
     // Find the user by email
     const user = await usersCollection.findOne({ email: req.params.email.toLowerCase() });
 

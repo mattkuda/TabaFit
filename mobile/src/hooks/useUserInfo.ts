@@ -34,9 +34,5 @@ export const useWorkoutOwnership = (workoutId?: Types.ObjectId): { isWorkoutSave
         (createdWorkout) => createdWorkout.toString() === workoutIdStr,
     );
 
-    console.log('userInfo?.savedWorkouts', userInfo?.savedWorkouts);
-    console.log('workoutIdStr', workoutIdStr);
-    console.log('isWorkoutSavedByUser', isWorkoutSavedByUser);
-
     return { isWorkoutSavedByUser, isWorkoutCreatedByUser };
 };

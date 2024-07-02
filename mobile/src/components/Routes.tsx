@@ -45,10 +45,6 @@ export const Routes = (): JSX.Element => {
     const { authState, hasSeenTutorial } = useAuth();
     const { colors } = useTheme();
 
-    console.log('Routes render:');
-    console.log('authState:', authState);
-    console.log('hasSeenTutorial:', hasSeenTutorial);
-
     if (authState.authenticated === null || hasSeenTutorial === null) {
         // Show a loading indicator while checking authentication and tutorial status
         return null;

@@ -54,7 +54,6 @@ export const useMutateDeleteAccount = (): UseMutationResult<void, AxiosError, De
     {
         onSuccess: () => {
             // Here you can add any success logic, e.g., redirecting the user, showing a success message, etc.
-            console.log('Account successfully deleted');
         },
         onError: (error) => {
             console.error('Error deleting account', error.message);
