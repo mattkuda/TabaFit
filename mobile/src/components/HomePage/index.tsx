@@ -86,24 +86,30 @@ const GlobalTab = (): JSX.Element => {
     );
 };
 
-export const HomePage = (): JSX.Element => {
-    const { colors } = useTheme();
+// export const HomePage = (): JSX.Element => {
+//     const { colors } = useTheme();
 
-    return (
-        <Box flex={1} justifyContent="center">
-            <Tab.Navigator
-                initialRouteName="Following"
-                screenOptions={{
-                    tabBarStyle: { backgroundColor: colors.gray[800] },
-                    tabBarActiveTintColor: '#ff9f27',
-                    tabBarInactiveTintColor: '#b6b4b3',
-                    tabBarPressColor: '#ff9f27',
-                    tabBarIndicatorStyle: { backgroundColor: '#ff9f27' },
-                }}
-            >
-                <Tab.Screen component={FollowingTab} name="Following" />
-                <Tab.Screen component={GlobalTab} name="Global" />
-            </Tab.Navigator>
-        </Box>
-    );
-};
+//     return (
+//         <Box flex={1} justifyContent="center">
+//             <Tab.Navigator
+//                 initialRouteName="Following"
+//                 screenOptions={{
+//                     tabBarStyle: { backgroundColor: colors.gray[800] },
+//                     tabBarActiveTintColor: '#ff9f27',
+//                     tabBarInactiveTintColor: '#b6b4b3',
+//                     tabBarPressColor: '#ff9f27',
+//                     tabBarIndicatorStyle: { backgroundColor: '#ff9f27' },
+//                 }}
+//             >
+//                 <Tab.Screen component={FollowingTab} name="Following" />
+//                 <Tab.Screen component={GlobalTab} name="Global" />
+//             </Tab.Navigator>
+//         </Box>
+//     );
+// };
+
+export const HomePage = (): JSX.Element => (
+    <Box flex={1} justifyContent="center">
+        <FollowingTab />
+    </Box>
+);
