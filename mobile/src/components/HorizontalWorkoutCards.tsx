@@ -66,7 +66,7 @@ const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress })
                 </VStack>
             </HStack>
             <Box alignItems="center" flexDirection="row" justifyContent="flex-end">
-                <PictureWithName user={workout.user} />
+                <PictureWithName isTabaFitAdmin={workout.isPremade} user={workout.user} />
             </Box>
         </Box>
     </TouchableOpacity>

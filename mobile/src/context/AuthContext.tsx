@@ -3,8 +3,6 @@ import React, {
 } from 'react';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
-import { useSetRecoilState } from 'recoil';
-import { wizardActiveState } from '../atoms/wizardActiveAtom';
 
 const apiUrl = process.env.EXPO_PUBLIC_EAS_API_BASE_URL || 'http://localhost:3000';
 const tokenKey = process.env.EXPO_PUBLIC_TOKEN_KEY;
@@ -41,7 +39,6 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
         userId: null,
     });
     const [hasSeenTutorial, setHasSeenTutorial] = useState<boolean | null>(null);
-    const setWizardActive = useSetRecoilState(wizardActiveState);
 
     useEffect(() => {
         const loadToken = async (): Promise<void> => {
@@ -77,7 +74,7 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
             });
             const { token, user } = response.data;
 
-            setWizardActive(true);
+            setHasSeenTutorial(false);
             setAuthState({ token, authenticated: true, userId: user._id });
 
             axios.defaults.headers.common.Authorization = `Bearer ${response.data.token}`;
@@ -117,7 +114,6 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
             await SecureStore.deleteItemAsync('userId');
             axios.defaults.headers.common.Authorization = '';
             setAuthState({ token: null, authenticated: false, userId: null });
-            setHasSeenTutorial(null);
         } catch (error) {
             console.error('Logout error:', error);
             throw error;

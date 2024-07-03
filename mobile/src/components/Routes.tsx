@@ -1,7 +1,7 @@
 import React from 'react';
 import { ViewStyle } from 'react-native';
 import { useTheme } from 'native-base';
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useRecoilValue } from 'recoil';
@@ -45,14 +45,14 @@ export const Routes = (): JSX.Element => {
     const { authState, hasSeenTutorial } = useAuth();
     const { colors } = useTheme();
 
-    if (authState.authenticated === null || hasSeenTutorial === null) {
-        // Show a loading indicator while checking authentication and tutorial status
-        return null;
-    }
-
     if (!authState.authenticated) {
         return (
-            <NavigationContainer>
+            <NavigationContainer theme={{
+                ...DefaultTheme,
+                colors:
+                    { ...DefaultTheme.colors, background: colors.gray[900] },
+            }}
+            >
                 <AuthStackNavigator />
             </NavigationContainer>
         );
@@ -60,7 +60,12 @@ export const Routes = (): JSX.Element => {
 
     if (authState.authenticated && !hasSeenTutorial) {
         return (
-            <NavigationContainer>
+            <NavigationContainer theme={{
+                ...DefaultTheme,
+                colors:
+                    { ...DefaultTheme.colors, background: colors.gray[900] },
+            }}
+            >
                 <SignUpWizardStackNavigator />
             </NavigationContainer>
         );
@@ -77,7 +82,12 @@ export const Routes = (): JSX.Element => {
     };
 
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={{
+            ...DefaultTheme,
+            colors:
+                { ...DefaultTheme.colors, background: colors.gray[900] },
+        }}
+        >
             <Tab.Navigator
                 initialRouteName="Home"
                 screenOptions={{

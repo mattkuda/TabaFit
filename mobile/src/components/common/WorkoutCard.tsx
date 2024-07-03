@@ -16,7 +16,6 @@ import { getWorkoutDifficultyGradient } from '../../util/util';
 interface WorkoutCardProps {
     workout: TabataWorkoutWithUserInfo;
     isInMyWorkouts: boolean;
-    isTabaFitWorkout?: boolean;
     // onDelete?: (workout: TabataWorkoutWithUserInfo) => void;
     // onEdit?: () => void;
     // onSave?: () => void;
@@ -30,7 +29,7 @@ interface WorkoutCardProps {
 // );
 
 export const WorkoutCard: FC<WorkoutCardProps> = ({
-    workout, isTabaFitWorkout, isInMyWorkouts,
+    workout, isInMyWorkouts,
 }) => {
     const navigation = useNavigation<StackNavigationProp<TabNavigatorParamList>>();
     const formattedDate = format(new Date(workout.createdAt), 'MMMM do, yyyy');
@@ -43,10 +42,6 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
         navigation.navigate('ViewWorkoutScreen', { workoutId: workout._id.toString() });
     };
 
-    const handleClickTabaFitWorkout = (): void => {
-        navigation.navigate('ViewWorkoutScreen', { workout });
-    };
-
     const workoutDifficultyColor = getWorkoutDifficultyGradient(workout.tabatas.length);
 
     return (
@@ -54,7 +49,7 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
             style={{
                 width: '100%', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5,
             }}
-            onPress={isTabaFitWorkout ? handleClickTabaFitWorkout : handleClickCard}
+            onPress={handleClickCard}
         >
             <Box
                 backgroundColor="workoutDisplayGray"
@@ -108,14 +103,15 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                         <Box alignItems="center" flexDirection="row">
                             <ProfilePicture
                                 borderWidth={1}
+                                isTabaFitAdmin={workout?.isPremade}
                                 size="xs"
                                 user={workout?.user}
                             />
                             <Text style={{ marginLeft: 8 }}>
-                                {`${workout?.user?.firstName} ${workout?.user?.lastName}`}
+                                {workout?.isPremade ? 'TabaFit' : `${workout?.user?.firstName} ${workout?.user?.lastName}`}
                             </Text>
                         </Box>
-                        {formattedDate}
+                        {!workout.isPremade && <Text>{ formattedDate }</Text>}
                     </Box>
                 </VStack>
                 <HStack justifyContent="space-between">

@@ -1,31 +1,29 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import { Button, useTheme } from 'native-base';
-import { useSetRecoilState } from 'recoil';
 import { WelcomeScreen } from '../components/WelcomeScreen';
 import { SuggestedFollowsScreen } from '../components/SuggestedFollowsScreen';
 import { SuggestedWorkoutsScreen } from '../components/SuggestedWorkoutsScreen';
-import { wizardActiveState } from '../atoms/wizardActiveAtom';
 import { TutorialScreen } from '../components/TutorialScreen';
 import { TabataExplanationScreen } from '../components/TabataExplanationScreen';
+import { useAuth } from '../context/AuthContext';
 
 const SignUpWizardStack = createStackNavigator();
 
 const SkipButton = (): JSX.Element => {
-    const setwizardActive = useSetRecoilState(wizardActiveState);
+    const { completeTutorial } = useAuth();
 
-    const handleSaveOrUpdateWorkout = (): void => {
-        setwizardActive(false);
+    const handleSkip = (): void => {
+        completeTutorial();
     };
 
     return (
         <Button
             colorScheme="muted"
             variant="ghost"
-            onPress={handleSaveOrUpdateWorkout}
+            onPress={handleSkip}
         >
             Skip
         </Button>
-
     );
 };
 

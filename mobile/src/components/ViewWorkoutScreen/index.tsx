@@ -99,7 +99,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                         Edit
                     </Button>
                 ) : (
-                    workout?.user.username !== 'tabafit' && (
+                    (
                         <Button
                             colorScheme={isWorkoutSavedByUser ? 'success' : 'secondary'}
                             size="lg"
@@ -173,8 +173,8 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                         <Text bold flex={1} fontSize="xl">{workout.name}</Text>
                     </HStack>
                     <Box alignItems="center" flexDirection="row" justifyContent="space-between">
-                        <PictureWithName user={workout.user} />
-                        {formattedDate}
+                        <PictureWithName isTabaFitAdmin={workout.isPremade} user={workout.user} />
+                        {!workout.isPremade && <Text>{ formattedDate }</Text>}
                     </Box>
                     <Text italic fontSize="sm">
                         {formatBodyParts(workout.includeSettings)}

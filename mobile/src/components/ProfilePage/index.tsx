@@ -17,6 +17,7 @@ import { PostCard } from '../common/PostCard';
 import { formatName } from '../../util/util';
 import { ProfilePicture } from '../ProfilePicture';
 import { GradientVStack } from '../common/GradientVStack';
+import { EmptyState } from '../EmptyState';
 
 export const ProfilePage = (): JSX.Element => {
     const { onLogout } = useAuth();
@@ -195,6 +196,7 @@ export const ProfilePage = (): JSX.Element => {
                     <FlatList
                         data={flatMap}
                         keyExtractor={(_, index): string => `post-${index}`}
+                        ListEmptyComponent={<EmptyState />}
                         ListHeaderComponent={renderProfileHeader}
                         refreshControl={(
                             <RefreshControl

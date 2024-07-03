@@ -219,19 +219,19 @@ export const defaultShuffleTabataWorkout: TabataWorkout = {
 export const emptyTabata: TabataCircuit = [null, null, null, null];
 
 export const buildNewTabataInitialState: TabataWorkout = {
-    _id: `workout-shuffle`,
+    _id: `workout-custom`,
     name: '',
-    description: 'A Tabata workout built by the user.',
+    description: '',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     userId: null,
-    warmupDuration: 1,
+    warmupDuration: 5,
     tabatas: [emptyTabata],
-    restDuration: 1,
-    exerciseDuration: 1,
+    restDuration: 10,
+    exerciseDuration: 20,
     numberOfTabatas: 1,
     exercisesPerTabata: 8,
-    intermisionDuration: 1,
+    intermisionDuration: 60,
     cooldownDuration: 0,
     equipment: {
         useKettlebell: false,

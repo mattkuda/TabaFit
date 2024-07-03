@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Spinner } from 'native-base';
 import { FlashList } from '@shopify/flash-list';
 import { RefreshControl } from 'react-native';
+import { EmptyState } from '../EmptyState';
 
 type InfiniteScrollListProps<T> = {
     data: T[] | undefined;
@@ -29,6 +30,7 @@ export const InfiniteScrollList = <T, >({
             data={data}
             estimatedItemSize={estimatedItemSize}
             keyExtractor={keyExtractor}
+            ListEmptyComponent={<EmptyState />}
             refreshControl={(
                 <RefreshControl
                     colors={['white']}

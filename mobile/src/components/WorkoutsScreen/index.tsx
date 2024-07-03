@@ -8,14 +8,13 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { Pressable, TouchableOpacity } from 'react-native';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
-import { useQueryMyCreatedWorkouts, useQueryMySavedWorkouts } from '../../hooks/useQueryMySavedWorkouts';
+import { useQueryMyCreatedWorkouts, useQueryMySavedWorkouts, useQueryPremadeWorkouts } from '../../hooks/useQueryMySavedWorkouts';
 import { shuffleWorkoutTemplate } from '../shuffleUtil';
 import { BuildWorkoutScreenProps, ShuffleWorkoutScreenProps } from '../../navigation/navigationTypes';
 import { TabataWorkout } from '../../types/workouts';
 import { RefreshableScrollView } from '../RefreshableScrollView';
 import { HorizontalWorkoutCards } from '../HorizontalWorkoutCards';
 import { useQueryWorkouts } from '../../hooks/useQueryWorkouts';
-import { tabaFitWorkouts } from '../../util/tabaFitWorkouts';
 import { GradientVStack } from '../common/GradientVStack';
 
 type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'WorkoutsScreen'>;
@@ -35,6 +34,11 @@ export const WorkoutsScreen = (): JSX.Element => {
         data: discoverWorkouts, refetch: refetchNewWorkouts,
         isLoading: isDiscoverWorkoutsLoading,
     } = useQueryWorkouts({ limit: 5, offset: 0 });
+
+    const {
+        data: premadeWorkouts, refetch: refetchPremadeWorkouts,
+        isLoading: isPremadeWorkoutsLoading,
+    } = useQueryPremadeWorkouts({ limit: 5, offset: 0 });
 
     const handlePressQuickShuffle = (): void => {
         // First go to customizable settings screen (to-build)
@@ -77,7 +81,7 @@ export const WorkoutsScreen = (): JSX.Element => {
         navigation.navigate('DiscoverWorkoutsScreen');
     };
 
-    const handlePressTabaFitWorkouts = (): void => {
+    const handlePressPremadeWorkouts = (): void => {
         navigation.navigate('PremadeWorkoutsScreen');
     };
 
@@ -85,6 +89,7 @@ export const WorkoutsScreen = (): JSX.Element => {
         refetchMySavedWorkouts();
         refetchNewWorkouts();
         refetchMyCreatedWorkouts();
+        refetchPremadeWorkouts();
     };
 
     return (
@@ -213,12 +218,12 @@ export const WorkoutsScreen = (): JSX.Element => {
                                 </Popover.Content>
                             </Popover>
                         </HStack>
-                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressTabaFitWorkouts}>View all</Button>
+                        <Button colorScheme="secondary" variant="ghost" onPress={handlePressPremadeWorkouts}>View all</Button>
                     </HStack>
                     <Text color="gray.300" mt={-3} />
                     <HorizontalWorkoutCards
-                        isLoading={false}
-                        workouts={tabaFitWorkouts ?? []}
+                        isLoading={isPremadeWorkoutsLoading}
+                        workouts={premadeWorkouts ?? []}
                         onPressWorkout={handlePressViewWorkout}
                     />
 

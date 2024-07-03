@@ -1,5 +1,5 @@
 import React from 'react';
-import { NativeBaseProvider } from 'native-base';
+import { NativeBaseProvider, View } from 'native-base';
 import { RecoilRoot } from 'recoil';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -22,7 +22,9 @@ export const App = (): JSX.Element => (
             <SafeAreaProvider>
                 <AuthProvider>
                     <NativeBaseProvider config={config} theme={theme}>
-                        <Routes />
+                        <View style={{ flex: 1, backgroundColor: theme.colors.gray[900] }}>
+                            <Routes />
+                        </View>
                     </NativeBaseProvider>
                 </AuthProvider>
             </SafeAreaProvider>

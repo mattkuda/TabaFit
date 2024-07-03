@@ -1,6 +1,5 @@
 import { useQuery, UseQueryResult } from 'react-query';
 import axios from 'axios';
-import { Types } from 'mongoose';
 import { UserFullInfoModel } from '../types/users';
 import { useAuth } from '../context/AuthContext';
 
@@ -21,17 +20,15 @@ const fetchUserInfo = async (userId: string): Promise<UserFullInfoModel> => {
 
 export const useUserInfo = (userId: string): UseQueryResult<UserFullInfoModel, Error> => useQuery(['userInfo', userId], () => fetchUserInfo(userId));
 
-export const useWorkoutOwnership = (workoutId?: Types.ObjectId): { isWorkoutSavedByUser, isWorkoutCreatedByUser } => {
+export const useWorkoutOwnership = (workoutId?: string): { isWorkoutSavedByUser, isWorkoutCreatedByUser } => {
     const { authState } = useAuth();
     const { data: userInfo } = useUserInfo(authState.userId);
 
-    const workoutIdStr = workoutId?.toString();
-
     const isWorkoutSavedByUser = userInfo?.savedWorkouts?.some(
-        (savedWorkout) => savedWorkout.toString() === workoutIdStr,
+        (savedWorkout) => savedWorkout.toString() === workoutId,
     );
     const isWorkoutCreatedByUser = userInfo?.createdWorkouts?.some(
-        (createdWorkout) => createdWorkout.toString() === workoutIdStr,
+        (createdWorkout) => createdWorkout.toString() === workoutId,
     );
 
     return { isWorkoutSavedByUser, isWorkoutCreatedByUser };

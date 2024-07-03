@@ -50,6 +50,7 @@ export interface TabataWorkout {
     cooldownDuration: number;
     includeSettings?: WorkoutIncludeSettings;
     isDiscoverable?: boolean;
+    isPremade?: boolean;
 }
 
 export interface UserInfo {

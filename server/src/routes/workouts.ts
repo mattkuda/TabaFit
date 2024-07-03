@@ -75,7 +75,7 @@ router.get('/', async (req: Request, res: Response) => {
     const offset = parseInt(req.query.offset as string, 10);
     const limit = parseInt(req.query.limit as string, 10);
     const workouts = await workoutsCollection.find({ isDiscoverable: true })
-      .sort({ _id: -1 })
+      .sort({ updatedAt: -1 })
       .skip(offset)
       .limit(limit)
       .toArray();
@@ -119,7 +119,7 @@ router.get('/my-saved', authenticate, async (req: AuthRequest, res: Response) =>
     }
 
     const workouts = await workoutsCollection.find({ _id: { $in: user.savedWorkouts ?? [] } })
-      .sort({ _id: -1 })
+      .sort({ createdAt: 1 })
       .skip(offset)
       .limit(limit)
       .toArray();
@@ -145,7 +145,7 @@ router.get('/my-created', authenticate, async (req: AuthRequest, res: Response) 
     }
 
     const workouts = await workoutsCollection.find({ _id: { $in: user.createdWorkouts ?? [] } })
-      .sort({ _id: -1 })
+      .sort({ updatedAt: -1 })
       .skip(offset)
       .limit(limit)
       .toArray();
@@ -154,6 +154,24 @@ router.get('/my-created', authenticate, async (req: AuthRequest, res: Response) 
   } catch (err) {
     console.error('Failed to fetch saved workouts', err);
     res.status(500).send({ message: 'Failed to fetch saved workouts' });
+  }
+});
+
+// Gets a user's premade workouts
+router.get('/premade', authenticate, async (req: AuthRequest, res: Response) => {
+  const offset = parseInt(req.query.offset as string, 10);
+  const limit = parseInt(req.query.limit as string, 10);
+
+  try {
+    const workouts = await workoutsCollection.find({ isPremade: true })
+      .sort({ updatedAt: -1 })
+      .skip(offset)
+      .limit(limit)
+      .toArray();
+    res.send(workouts);
+  } catch (err) {
+    console.error('Failed to fetch premade workouts', err);
+    res.status(500).send({ message: 'Failed to fetch premade workouts' });
   }
 });
 

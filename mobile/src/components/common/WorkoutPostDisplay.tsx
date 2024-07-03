@@ -21,7 +21,7 @@ export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
 
     const handleWorkoutNamePress = (): void => {
         if (workout._id) {
-            navigation.navigate('ViewWorkoutScreen', { workout });
+            navigation.navigate('ViewWorkoutScreen', { workoutId: workout._id.toString() });
         }
     };
 

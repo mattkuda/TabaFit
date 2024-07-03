@@ -71,3 +71,35 @@ export const useInfiniteQueryMyCreatedWorkouts = (): UseInfiniteQueryResult<Fetc
         },
     },
 );
+
+/// Premade Workouts
+const fetchPremadeWorkouts = async ({ offset = 0 }: PagingParams): Promise<FetchWorkoutsResponse> => {
+    try {
+        const response = await axios.get<FetchWorkoutsResponse>(`${apiUrl}/workouts/premade`, {
+            params: { offset, limit },
+        });
+
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            throw new Error(error.response?.data.message || 'An error occurred while fetching premade workouts');
+        }
+        throw new Error('An error occurred while fetching  Premade workouts');
+    }
+};
+
+export const useQueryPremadeWorkouts = (pagingParams?: PagingParams): UseQueryResult<TabataWorkoutWithUserInfo[], Error> => useQuery([
+    'premade-workouts', pagingParams], () => fetchPremadeWorkouts(pagingParams));
+
+export const useInfiniteQueryPremadeWorkouts = (): UseInfiniteQueryResult<FetchWorkoutsResponse, Error> => useInfiniteQuery(
+    ['premade-workouts'],
+    ({ pageParam = { offset: 0, limit: 0 } }) => fetchPremadeWorkouts(pageParam),
+    {
+        getNextPageParam: (lastPage, allPages) => {
+            if (lastPage.length < limit) {
+                return undefined;
+            }
+            return allPages.length * limit;
+        },
+    },
+);
