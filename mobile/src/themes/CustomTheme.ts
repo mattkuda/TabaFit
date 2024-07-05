@@ -126,6 +126,7 @@ export const theme = extendTheme({
         Text: {
             defaultProps: {
                 color: 'white',
+                fontSize: 'md',
             },
         },
         Heading: {
@@ -138,6 +139,7 @@ export const theme = extendTheme({
                 color: 'white',
                 backgroundColor: 'gray.900',
                 borderColor: 'gray7',
+                fontSize: 'md',
             },
         },
         Spinner: {

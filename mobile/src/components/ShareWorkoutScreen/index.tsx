@@ -28,7 +28,7 @@ export const ShareWorkoutScreen = (): JSX.Element => {
     const userId = authState?.userId;
     const navigation = useNavigation<ShareWorkoutScreenNavigationProp>();
     const saveWorkoutMutation = useCreateWorkout();
-    const { isWorkoutCreatedByUser, isWorkoutSavedByUser } = useWorkoutOwnership(workout?._id);
+    const { isWorkoutCreatedByUser, isWorkoutSavedByUser } = useWorkoutOwnership(workout?._id.toString());
     const isSaved = isWorkoutCreatedByUser || isWorkoutSavedByUser;
     const [saveWorkoutSwitch, setSaveWorkoutSwitch] = useState(isSaved);
     const queryClient = useQueryClient();

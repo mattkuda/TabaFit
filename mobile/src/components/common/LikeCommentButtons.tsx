@@ -114,10 +114,10 @@ export const LikeCommentButtons = ({ post, handleCommentPress }: LikeCommentButt
     return (
         <VStack borderColor="gray.200" flex={1}>
             <HStack color="gray.500" fontSize="xs" justifyContent="space-between" mt={2}>
-                <Text>
+                <Text fontSize="sm">
                     {likeText()}
                 </Text>
-                <Text>
+                <Text fontSize="sm">
                     {post.comments.length === 1 ? '1 Comment' : `${post.comments.length} Comments`}
                 </Text>
             </HStack>

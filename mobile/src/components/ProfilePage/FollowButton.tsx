@@ -56,7 +56,7 @@ export const FollowButton = ({ profileUserId }: PropTypes): JSX.Element => {
             leftIcon={(
                 <Icon
                     as={Ionicons}
-                    color={isFollowing ? 'green.500' : 'white'}
+                    color={isFollowing ? 'flame.500' : 'white'}
                     name={isFollowing ? 'checkmark' : 'person-add-outline'}
                     size="sm"
                 />

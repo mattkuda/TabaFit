@@ -103,6 +103,7 @@ export const Routes = (): JSX.Element => {
                     options={{
                         tabBarIcon: HomeIcon,
                         tabBarStyle,
+                        tabBarLabelStyle: { fontWeight: 'bold' },
                     }}
                 />
                 <Tab.Screen
@@ -111,6 +112,7 @@ export const Routes = (): JSX.Element => {
                     options={{
                         tabBarIcon: TimerIcon,
                         tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,
+                        tabBarLabelStyle: { fontWeight: 'bold' },
                     }}
                 />
                 <Tab.Screen
@@ -120,6 +122,7 @@ export const Routes = (): JSX.Element => {
                         tabBarIcon: ProfileTabIcon,
                         tabBarStyle,
                         tabBarLabel: 'Profile',
+                        tabBarLabelStyle: { fontWeight: 'bold' },
                     }}
                 />
             </Tab.Navigator>

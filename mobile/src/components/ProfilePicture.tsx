@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Avatar, IAvatarProps, Icon, Text,
+    Avatar, IAvatarProps, Icon, Text, Image,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { UserFullInfoModel } from '../types/users';
@@ -38,8 +38,16 @@ export const ProfilePicture: React.FC<ProfilePictureProps> = ({
     let profilePictureSource;
 
     if (isTabaFitAdmin) {
-        profilePictureSource = logo;
-    } else if (user?.profilePictureUrl) {
+        return (
+            <Image
+                alt="TabaFit Logo"
+                size={fontSize + 4}
+                source={logo}
+            />
+        );
+    }
+
+    if (user?.profilePictureUrl) {
         profilePictureSource = { uri: user.profilePictureUrl };
     }
 

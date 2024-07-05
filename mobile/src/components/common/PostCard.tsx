@@ -71,7 +71,7 @@ export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
                         </Text>
                     </VStack>
                 </HStack>
-                <Text bold fontSize="md" mt={2}>
+                <Text bold fontSize="lg" mt={2}>
                     {post.title}
                 </Text>
                 {post.description?.length > 0 && (

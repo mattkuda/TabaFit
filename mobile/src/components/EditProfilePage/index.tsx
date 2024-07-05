@@ -187,10 +187,20 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                 </TouchableOpacity>
                 <VStack style={{ paddingLeft: 16, gap: 4, flex: 1 }}>
                     <Input
+                        fontSize="md"
                         placeholder="First Name"
                         value={firstName}
                         onChangeText={setFirstName}
+
                     />
+                    {/* <Input
+                        fontSize="md"
+                        InputLeftElement={<Icon as={Ionicons} ml={4} name="search-outline" size="sm" />}
+                        m="4"
+                        placeholder="Search for users"
+                        value={searchQuery}
+                        onChangeText={setSearchQuery}
+                    /> */}
                     <Input
                         placeholder="Last Name"
                         value={lastName}
