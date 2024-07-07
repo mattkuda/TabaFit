@@ -386,7 +386,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                     {formatSplitTime(seconds).secs}
                 </Text>
             </Flex>
-            <Flex alignItems="center" flex={1} gap={2} justify="flex-start">
+            <VStack alignItems="center" flex={1} justifyContent="flex-start" space={2}>
                 <Text
                     bold
                     // eslint-disable-next-line no-nested-ternary
@@ -395,14 +395,14 @@ export const TabataTimerScreen = (): JSX.Element => {
                 >
                     {currentExercise ? currentExercise.name.toUpperCase() : currentInterval.toUpperCase()}
                 </Text>
-                <Flex alignItems="center" flex={1} gap={2} justify="center">
+                <Box alignItems="center" flex={1} justifyContent="center">
                     {nextExerciseText && (
-                    <Text bold color="gray.300" style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}>
-                        {`NEXT UP: ${nextExerciseText.toUpperCase()}`}
-                    </Text>
+                        <Text bold color="gray.300" style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}>
+                            {`NEXT UP: ${nextExerciseText.toUpperCase()}`}
+                        </Text>
                     )}
-                </Flex>
-            </Flex>
+                </Box>
+            </VStack>
             {/* Controls row */}
             <Box mb={4} mt={-4} p="4" width="100%">
                 <Flex
@@ -454,13 +454,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                             onPress={handleSkip}
                         />
                     </Box>
-                    {/* <IconButton
-                        borderColor="gray.300"
-                        borderRadius="full"
-                        borderWidth="1"
-                        icon={<Icon as={Ionicons} color="white" name="refresh" size="lg" />}
-                        onPress={reset}
-                    /> */}
+
                 </Flex>
             </Box>
         </GradientVStack>
