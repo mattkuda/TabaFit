@@ -3,6 +3,7 @@
 /* eslint-disable global-require */
 import React, {
     useState, useEffect, useCallback,
+    useRef,
 } from 'react';
 import { useKeepAwake } from 'expo-keep-awake';
 import {
@@ -12,7 +13,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { useSetRecoilState } from 'recoil';
-import { Audio } from 'expo-av';
+import { Audio, ResizeMode, Video } from 'expo-av';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TabataTimerScreenRouteProp } from '../../navigation/navigationTypes';
 import { TabataExercise } from '../../types/workouts';
@@ -33,6 +34,11 @@ const sounds = {
     // Use "Nancy" voice from https://www.naturalreaders.com/online/
 };
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const testVideo = require('../../../assets/videos/test.mp4');
+
+const videoSource = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+
 export const TabataTimerScreen = (): JSX.Element => {
     const route = useRoute<TabataTimerScreenRouteProp>();
     const {
@@ -41,7 +47,13 @@ export const TabataTimerScreen = (): JSX.Element => {
         intermisionDuration, cooldownDuration,
     } = route.params.workout;
     const { isInMyWorkouts } = route.params;
+    const ref = useRef(null);
 
+    // const player = useVideoPlayer(testVideo, (player2) => {
+    //     // eslint-disable-next-line no-param-reassign
+    //     player2.loop = true;
+    //     player2.play();
+    // });
     const navigation = useNavigation<TimerScreenNavigationProp>();
     const [currentInterval, setCurrentInterval] = useState<Intervals>(Intervals.Warmup);
     const [exercisesDone, setExercisesDone] = useState(0);
@@ -348,6 +360,16 @@ export const TabataTimerScreen = (): JSX.Element => {
                     <Text fontSize="xl">{formatTime(remainingTime)}</Text>
                 </VStack>
             </Flex>
+            {currentExercise ? (
+                <Video
+                    isLooping
+                    shouldPlay
+                    ref={ref}
+                    resizeMode={ResizeMode.CONTAIN}
+                    source={testVideo}
+                    style={{ flex: 1, width: '100%', height: 100 }}
+                />
+            ) : <Text> Rest</Text>}
             {/* This is very hacky codee to replicate a monospaced font */}
             <Flex alignItems="flex-end" direction="row" flex={1}>
                 <Text
@@ -389,7 +411,6 @@ export const TabataTimerScreen = (): JSX.Element => {
             <Flex alignItems="center" flex={1} gap={2} justify="flex-start">
                 <Text
                     bold
-                    // eslint-disable-next-line no-nested-ternary
                     color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
                     style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}
                 >
@@ -397,9 +418,9 @@ export const TabataTimerScreen = (): JSX.Element => {
                 </Text>
                 <Flex alignItems="center" flex={1} gap={2} justify="center">
                     {nextExerciseText && (
-                    <Text bold color="gray.300" style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}>
-                        {`NEXT UP: ${nextExerciseText.toUpperCase()}`}
-                    </Text>
+                        <Text bold color="gray.300" style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}>
+                            {`NEXT UP: ${nextExerciseText.toUpperCase()}`}
+                        </Text>
                     )}
                 </Flex>
             </Flex>
@@ -454,13 +475,6 @@ export const TabataTimerScreen = (): JSX.Element => {
                             onPress={handleSkip}
                         />
                     </Box>
-                    {/* <IconButton
-                        borderColor="gray.300"
-                        borderRadius="full"
-                        borderWidth="1"
-                        icon={<Icon as={Ionicons} color="white" name="refresh" size="lg" />}
-                        onPress={reset}
-                    /> */}
                 </Flex>
             </Box>
         </GradientVStack>

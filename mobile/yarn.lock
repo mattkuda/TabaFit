@@ -5045,10 +5045,10 @@ expo-asset@~10.0.6:
     invariant "^2.2.4"
     md5-file "^3.2.3"
 
-expo-av@~14.0.4:
-  version "14.0.4"
-  resolved "https://registry.npmjs.org/expo-av/-/expo-av-14.0.4.tgz"
-  integrity sha512-R2UjERSVeqghma5dTPiTZbgf43zfLZAx/Ehd+s/VwNc2Cx2X34rWoEZcuT8XAq/NX0zpowsqVJeBrYSuzPfaLw==
+expo-av@~14.0.6:
+  version "14.0.6"
+  resolved "https://registry.yarnpkg.com/expo-av/-/expo-av-14.0.6.tgz#ca0eaa74f64f93f3dad79ead2c0a8e6aaebb53c0"
+  integrity sha512-8FHKgMYo49C5hhgG0ssRRd454VQ82TuujhMdlz7ScJBihEXa89kWKpfk9bXrvetFtrJoAmYuGxsXCJCygZhxfA==
 
 expo-constants@~16.0.0, expo-constants@~16.0.1:
   version "16.0.1"
@@ -5125,6 +5125,11 @@ expo-status-bar@~1.12.1:
   version "1.12.1"
   resolved "https://registry.npmjs.org/expo-status-bar/-/expo-status-bar-1.12.1.tgz"
   integrity sha512-/t3xdbS8KB0prj5KG5w7z+wZPFlPtkgs95BsmrP/E7Q0xHXTcDcQ6Cu2FkFuRM+PKTb17cJDnLkawyS5vDLxMA==
+
+expo-video@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/expo-video/-/expo-video-1.2.2.tgz#1de2eb2919a533cd5cbc9d1262373472810268ba"
+  integrity sha512-DiTqcmTwRpn7cyUK3DprJudm52am1JpNs9M44l+v1H2k9FoMnE7v5mKYGEkJ4GySFhpvHGaM5k/WU/o+cDvEjg==
 
 expo@~51.0.2:
   version "51.0.2"
