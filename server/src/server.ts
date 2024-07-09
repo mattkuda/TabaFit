@@ -12,6 +12,7 @@ import userAuthRoutes from './routes/userAuth';
 import usersRoutes from './routes/users';
 import followsRoutes from './routes/follows';
 import notificationsRoutes from './routes/notifications';
+import waitlistRoutes from './routes/waitlist';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -45,6 +46,7 @@ app.use('/posts', postRoutes);
 app.use('/users', usersRoutes);
 app.use('/follows', followsRoutes);
 app.use('/notifications', notificationsRoutes);
+app.use('/waitlist', waitlistRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
