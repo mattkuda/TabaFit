@@ -6,6 +6,7 @@ dotenv.config();
 
 import express, { Request, Response } from 'express';
 import { MongoClient } from 'mongodb';
+import cors from 'cors';
 import workoutRoutes from './routes/workouts';
 import postRoutes from './routes/posts';
 import userAuthRoutes from './routes/userAuth';
@@ -15,6 +16,13 @@ import notificationsRoutes from './routes/notifications';
 import waitlistRoutes from './routes/waitlist';
 
 const app = express();
+
+// Allow requests from your frontend domain
+app.use(cors({
+  origin: ['http://localhost:3001', 'https://tabafit.com'],
+  methods: ['GET', 'POST'], // Specify allowed methods
+  allowedHeaders: ['Content-Type'], // Specify allowed headers
+}));
 const port = process.env.PORT || 3000;
 
 // eslint-disable-next-line import/no-relative-packages

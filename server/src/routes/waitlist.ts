@@ -16,6 +16,7 @@ interface WaitlistEntry {
 
 // Connect to MongoDB
 const client = new MongoClient(connectionString);
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let waitlistCollection: Collection<WaitlistEntry>;
@@ -32,6 +33,19 @@ let waitlistCollection: Collection<WaitlistEntry>;
 
 router.post('/', async (req: AuthRequest, res: Response) => {
   const { email } = req.body;
+  console.log('req.body', req.body);
+  console.log('email', email);
+
+  if (!email) {
+    res.status(400).send({ message: 'Email is required' });
+    return;
+  }
+
+  // Validate the email
+  if (!emailRegex.test(email)) {
+    res.status(400).json({ message: 'Please enter a valid email' });
+    return;
+  }
 
   try {
     await waitlistCollection.insertOne({
