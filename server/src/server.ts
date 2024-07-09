@@ -19,7 +19,7 @@ const app = express();
 
 // Allow requests from your frontend domain
 app.use(cors({
-  origin: ['http://localhost:3001', 'https://tabafit.com'],
+  origin: ['http://localhost:3001', 'https://www.tabafit.com'],
   methods: ['GET', 'POST'], // Specify allowed methods
   allowedHeaders: ['Content-Type'], // Specify allowed headers
 }));
