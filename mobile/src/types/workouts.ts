@@ -15,6 +15,11 @@ export interface TabataExercise {
 
 export type TabataCircuit = (TabataExercise | null)[];
 
+export enum Difficulty {
+    Easy = 'Easy',
+    Medium = 'Medium',
+    Hard = 'Hard',
+}
 export interface WorkoutEquipmentSettings {
     useKettlebell: boolean,
     useBoxPlatform: boolean,
@@ -49,6 +54,7 @@ export interface TabataWorkout {
     intermisionDuration: number;
     cooldownDuration: number;
     includeSettings?: WorkoutIncludeSettings;
+    difficulty: Difficulty;
     isDiscoverable?: boolean;
     isPremade?: boolean;
 }

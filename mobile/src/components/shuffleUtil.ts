@@ -2,6 +2,7 @@ import {
     lowerBodyExercises, upperBodyExercises, absExercises, cardioExercises,
 } from '../util/constants';
 import {
+    Difficulty,
     TabataCircuit, TabataExercise, TabataExerciseType, TabataWorkout, WorkoutEquipmentSettings,
 } from '../types/workouts';
 
@@ -150,6 +151,7 @@ export const shuffleWorkoutTemplate: TabataWorkout = {
         includeCardio: true,
         includeLower: true,
     },
+    difficulty: Difficulty.Easy,
 };
 
 export const soundTestingWorkout: TabataWorkout = {
