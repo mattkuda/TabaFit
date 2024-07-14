@@ -72,6 +72,8 @@ router.get('/', authenticate, async (req: AuthRequest, res: Response) => {
     const notifications = await notificationsCollection.find(query)
       .sort({ createdAt: -1 }).toArray();
 
+    console.log('unreadCOunt', notifications.filter((n) => !n.read).length);
+
     const notificationsWithUserInfo = await addUserInfoToNotifications(notifications);
     res.send(notificationsWithUserInfo);
   } catch (err) {

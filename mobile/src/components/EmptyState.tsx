@@ -12,7 +12,6 @@ export const EmptyState: React.FC = (): JSX.Element => (
         justifyContent="center"
         p="4"
         style={{
-            marginHorizontal: 8,
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.25,

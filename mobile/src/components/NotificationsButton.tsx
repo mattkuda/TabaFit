@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     Icon, IconButton, Box, Text,
 } from 'native-base';
@@ -9,7 +9,12 @@ import { useQueryNotifications } from '../hooks/useQueryNotifications';
 
 export const NotificationsButton = (): JSX.Element => {
     const navigation = useNavigation<NotificationsScreenNavigationProp>();
-    const { data: notifications } = useQueryNotifications(true);
+    const { data: notifications, refetch } = useQueryNotifications(true);
+
+    useEffect(() => {
+        refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const unreadNotificationsCount = notifications?.filter((notif) => !notif.read).length || 0;
 

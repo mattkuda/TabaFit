@@ -351,7 +351,7 @@ export const TabataTimerScreen = (): JSX.Element => {
             {/* This is very hacky codee to replicate a monospaced font */}
             <Flex alignItems="flex-end" direction="row" flex={1}>
                 <Text
-                    color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
+                    color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Cooldown ? 'flame.500' : 'yellow.500'}
                     flex={1}
                     style={{
                         fontSize: 150,
@@ -363,7 +363,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                     {formatSplitTime(seconds).minutes}
                 </Text>
                 <Text
-                    color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
+                    color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Cooldown ? 'flame.500' : 'yellow.500'}
                     style={{
                         fontSize: 150,
                         textAlign: 'center',
@@ -374,7 +374,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                     :
                 </Text>
                 <Text
-                    color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
+                    color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Cooldown ? 'flame.500' : 'yellow.500'}
                     flex={1}
                     style={{
                         fontSize: 150,
@@ -390,11 +390,12 @@ export const TabataTimerScreen = (): JSX.Element => {
                 <Text
                     bold
                     // eslint-disable-next-line no-nested-ternary
-                    color={currentInterval === Intervals.Exercise ? 'green.500' : currentInterval === Intervals.Cooldown ? 'orange.500' : 'yellow.500'}
+                    color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Cooldown ? 'flame.500' : 'yellow.500'}
                     style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}
                 >
                     {currentExercise ? currentExercise.name.toUpperCase() : currentInterval.toUpperCase()}
                 </Text>
+                <Text>{currentInterval}</Text>
                 <Box alignItems="center" flex={1} justifyContent="center">
                     {nextExerciseText && (
                         <Text bold color="gray.300" style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}>
