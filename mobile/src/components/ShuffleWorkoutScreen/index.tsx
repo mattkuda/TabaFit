@@ -10,7 +10,7 @@ import { NestableScrollContainer } from 'react-native-draggable-flatlist';
 import { useNavigation } from '@react-navigation/native';
 import { Animated, TouchableOpacity } from 'react-native';
 import {
-    shuffleExercises, shuffleWorkoutTemplate,
+    shuffleExercises, shuffleWorkoutZeroState,
 } from '../shuffleUtil';
 import { ShuffleWorkoutScreenNavigationProp } from '../../types/navigationTypes';
 import {
@@ -22,7 +22,7 @@ import { TabataItem } from '../BuildWorkoutScreen/TabataItem';
 
 export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> = (): JSX.Element => {
     const navigation = useNavigation<ShuffleWorkoutScreenNavigationProp>();
-    const [workout, setWorkout] = useState<TabataWorkout>(shuffleWorkoutTemplate);
+    const [workout, setWorkout] = useState<TabataWorkout>(shuffleWorkoutZeroState);
     const [modalWorkout, setModalWorkout] = useState<TabataWorkout>(workout);
     const [showSettingsModal, setShowSettingsModal] = useState<boolean>(true);
     const [showHelpDialog, setShowHelpDialog] = useState<boolean>(false);
@@ -40,6 +40,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
             includeLower,
             includeAbs,
             includeCardio,
+            workout.difficulty,
         );
 
         setWorkout((prev) => ({
@@ -136,12 +137,14 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                 includeLower,
                 includeAbs,
                 includeCardio,
+                workout.difficulty,
             );
 
             setWorkout((prev) => ({
                 ...prev,
                 tabatas: shuffledTabatas,
             }));
+            console.log('Shuffle complete');
         }
     };
 
@@ -165,8 +168,15 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
         setModalWorkout(workout);
     };
 
-    const handleNumberTabatasChange = (itemValue): void => {
-        setWorkout((prevWorkout) => ({
+    // const handleNumberTabatasChange = (itemValue): void => {
+    //     setWorkout((prevWorkout) => ({
+    //         ...prevWorkout,
+    //         numberOfTabatas: itemValue,
+    //     }));
+    // };
+
+    const handleDurationChange = (itemValue): void => {
+        setModalWorkout((prevWorkout) => ({
             ...prevWorkout,
             numberOfTabatas: itemValue,
         }));
@@ -381,24 +391,21 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                             _pressed: {
                                                 bg: 'gray.800',
                                             },
-                                            startIcon: <Icon as={Ionicons} name="barbell-outline" size="sm" />,
                                         }}
                                         _selectedItem={{
                                             bg: 'gray.700',
                                             color: 'white',
-                                            startIcon: <Icon as={Ionicons} name="barbell-outline" size="sm" />,
-
                                         }}
                                         backgroundColor="transparent"
                                         borderColor="transparent"
                                         // @ts-expect-error
-                                        leftElement={<Text fontSize="xl">{`${workout.numberOfTabatas.toString()} ${workout.numberOfTabatas > 1 ? 'Tabatas' : 'Tabata'}`}</Text>}
+                                        leftElement={<Text fontSize="xl">{`${modalWorkout.numberOfTabatas.toString()} ${modalWorkout.numberOfTabatas > 1 ? 'Tabatas' : 'Tabata'}`}</Text>}
                                         size="xl"
-                                        onValueChange={(itemValue): void => handleNumberTabatasChange(
+                                        onValueChange={(itemValue): void => handleDurationChange(
                                             parseInt(itemValue, 10) || 0,
                                         )}
                                     >
-                                        {[...Array(99).keys()].map((val, i) => (
+                                        {[...Array(24).keys()].map((val, i) => (
                                             <Select.Item key={val} label={`${(i + 1).toString()} ${i > 0 ? 'Tabatas' : 'Tabata'}`} value={(i + 1).toString()} />
                                         ))}
                                     </Select>
@@ -436,13 +443,10 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                             _pressed: {
                                                 bg: 'gray.800',
                                             },
-                                            startIcon: <Icon as={Ionicons} name="barbell-outline" size="sm" />,
                                         }}
                                         _selectedItem={{
                                             bg: 'gray.700',
                                             color: 'white',
-                                            startIcon: <Icon as={Ionicons} name="barbell-outline" size="sm" />,
-
                                         }}
                                         backgroundColor="transparent"
                                         borderColor="transparent"
@@ -452,8 +456,8 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                         size="xl"
                                         onValueChange={(itemValue): void => handleDifficultyChange(itemValue)}
                                     >
-                                        {[Difficulty.Easy, Difficulty.Medium, Difficulty.Hard].map((val) => (
-                                            <Select.Item key={val} label={val} startIcon={<Icon as={Ionicons} name="barbell-outline" size="sm" />} value={val} />
+                                        {[Difficulty.Basic, Difficulty.Intermediate, Difficulty.Advanced].map((val) => (
+                                            <Select.Item key={val} label={val} value={val} />
                                         ))}
                                     </Select>
                                 </HStack>

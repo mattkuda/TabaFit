@@ -5,7 +5,7 @@ import {
 
 const featuredWorkout1: TabataWorkoutWithUserInfo = {
     _id: `tabafit-1`,
-    name: `Easy Alpha Release`,
+    name: `Basic Alpha Release`,
     description: 'TODO refine and add more of these.',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -47,7 +47,7 @@ const featuredWorkout1: TabataWorkoutWithUserInfo = {
 
 const featuredWorkout2: TabataWorkoutWithUserInfo = {
     _id: `tabafit-2`,
-    name: `Medium Alpha Release`,
+    name: `Intermediate Alpha Release`,
     description: 'TODO refine and add more of these.',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

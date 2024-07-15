@@ -9,16 +9,16 @@ export interface TabataExercise {
     types: TabataExerciseType[];
     equipment: TabataEquipmentType[];
     description: string;
-    difficulty: 'Easy' | 'Medium' | 'Hard';
+    difficulty: 'Basic' | 'Intermediate' | 'Advanced';
     videoLink: string;
 }
 
 export type TabataCircuit = (TabataExercise | null)[];
 
 export enum Difficulty {
-    Easy = 'Easy',
-    Medium = 'Medium',
-    Hard = 'Hard',
+    Basic = 'Basic',
+    Intermediate = 'Intermediate',
+    Advanced = 'Advanced',
 }
 export interface WorkoutEquipmentSettings {
     useKettlebell: boolean,
