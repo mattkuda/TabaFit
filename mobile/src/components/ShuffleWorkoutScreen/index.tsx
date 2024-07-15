@@ -338,11 +338,19 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                 size="full"
                 onClose={handleModalCancel}
             >
-                <BlurView intensity={20} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} tint="dark">
+                <BlurView
+                    intensity={20}
+                    style={{
+                        width: '100%', flex: 1, justifyContent: 'center', alignItems: 'center',
+                    }}
+                    tint="dark"
+                >
                     <Modal.Content
                         backgroundColor="gray.900"
                         borderColor="gray.600"
                         borderWidth={2}
+                        style={{ margin: 'auto' }}
+                        width="85%"
                     >
                         <Modal.Body
                             backgroundColor="gray.900"
@@ -474,7 +482,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                             value="Kettlebells"
                                             onChange={(): void => handleWorkoutEquipmentChange('useKettlebell', !modalWorkout.equipment.useKettlebell)}
                                         >
-                                            <Text pl="2">Kettlebells</Text>
+                                            <Text>Kettlebells</Text>
                                         </Checkbox>
                                     </HStack>
                                     <HStack flex={1}>
@@ -487,7 +495,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                             value="Dumbells"
                                             onChange={(): void => handleWorkoutEquipmentChange('useDumbells', !modalWorkout.equipment.useDumbells)}
                                         >
-                                            <Text pl="2">Dumbells</Text>
+                                            <Text>Dumbells</Text>
                                         </Checkbox>
                                     </HStack>
                                 </HStack>
@@ -502,7 +510,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                             value="HangingBar"
                                             onChange={(): void => handleWorkoutEquipmentChange('useHangingBar', !modalWorkout.equipment.useHangingBar)}
                                         >
-                                            <Text pl="2">Hanging Bar</Text>
+                                            <Text>Hanging Bar</Text>
                                         </Checkbox>
                                     </HStack>
                                     <HStack flex={1}>
@@ -515,7 +523,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                             value="YogaBall"
                                             onChange={(): void => handleWorkoutEquipmentChange('useYogaBall', !modalWorkout.equipment.useYogaBall)}
                                         >
-                                            <Text pl="2">Yoga Ball</Text>
+                                            <Text>Yoga Ball</Text>
                                         </Checkbox>
                                     </HStack>
                                 </HStack>
@@ -530,7 +538,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                             value="WorkoutBand"
                                             onChange={(): void => handleWorkoutEquipmentChange('useWorkoutBand', !modalWorkout.equipment.useWorkoutBand)}
                                         >
-                                            <Text pl="2">Workout Band</Text>
+                                            <Text>Workout Band</Text>
                                         </Checkbox>
                                     </HStack>
                                     <HStack flex={1}>
@@ -543,7 +551,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                             value="BoxPlatform"
                                             onChange={(): void => handleWorkoutEquipmentChange('useBoxPlatform', !modalWorkout.equipment.useBoxPlatform)}
                                         >
-                                            <Text pl="2">Box Platform</Text>
+                                            <Text>Box Platform</Text>
                                         </Checkbox>
                                     </HStack>
                                 </HStack>
