@@ -144,13 +144,8 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                 ...prev,
                 tabatas: shuffledTabatas,
             }));
-            console.log('Shuffle complete');
         }
     };
-
-    // useEffect(() => {
-    //     triggerShuffle();
-    // }, []);
 
     useEffect(() => {
         triggerShuffle();

@@ -273,6 +273,7 @@ export const buildNewTabataInitialState: TabataWorkout = {
     exercisesPerTabata: 8,
     intermisionDuration: 60,
     cooldownDuration: 0,
+    difficulty: Difficulty.Basic,
     equipment: {
         useKettlebell: false,
         useBoxPlatform: false,
