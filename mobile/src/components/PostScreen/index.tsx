@@ -58,27 +58,27 @@ export const PostScreen = (): JSX.Element => {
 
     if (isLoading) {
         return (
-            <VStack
+            <GradientVStack
                 backgroundColor="gray9"
                 flex={1}
                 space={4}
                 width="100%"
             >
                 <Center flex={1}><Spinner /></Center>
-            </VStack>
+            </GradientVStack>
         );
     }
 
     if (isError || !post) {
         return (
-            <VStack
+            <GradientVStack
                 backgroundColor="gray9"
                 flex={1}
                 space={4}
                 width="100%"
             >
                 <Text>Error loading post</Text>
-            </VStack>
+            </GradientVStack>
         );
     }
     const userFound = post?.user?.username;

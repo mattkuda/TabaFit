@@ -204,10 +204,8 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         setModalWorkout(workout);
     };
 
-    const handleNumberTabatasChange = (itemValue: number): void => {
-        if (itemValue < 1) return;
-
-        setWorkout((prevWorkout) => {
+    const handleDurationChange = (itemValue): void => {
+        setModalWorkout((prevWorkout) => {
             const newTabatas = itemValue > prevWorkout.tabatas.length
                 ? [...prevWorkout.tabatas, ...Array.from(
                     { length: itemValue - prevWorkout.tabatas.length },
@@ -222,6 +220,25 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             };
         });
     };
+
+    // const handleNumberTabatasChange = (itemValue: number): void => {
+    //     if (itemValue < 1) return;
+
+    //     setWorkout((prevWorkout) => {
+    //         const newTabatas = itemValue > prevWorkout.tabatas.length
+    //             ? [...prevWorkout.tabatas, ...Array.from(
+    //                 { length: itemValue - prevWorkout.tabatas.length },
+    //                 () => emptyTabata,
+    //             )]
+    //             : prevWorkout.tabatas.slice(0, itemValue);
+
+    //         return {
+    //             ...prevWorkout,
+    //             tabatas: newTabatas,
+    //             numberOfTabatas: newTabatas.length, // Update numberOfTabatas to reflect new length
+    //         };
+    //     });
+    // };
 
     const handleWorkoutSettingChange = (name, value): void => {
         setModalWorkout((prevWorkout) => ({
@@ -240,13 +257,6 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 ...prev.equipment,
                 [name]: value,
             },
-        }));
-    };
-
-    const handleDurationChange = (itemValue): void => {
-        setModalWorkout((prevWorkout) => ({
-            ...prevWorkout,
-            numberOfTabatas: itemValue,
         }));
     };
 

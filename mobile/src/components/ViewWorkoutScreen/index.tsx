@@ -132,27 +132,27 @@ export const ViewWorkoutScreen = (): JSX.Element => {
 
     if (isLoading) {
         return (
-            <VStack
+            <GradientVStack
                 backgroundColor="gray9"
                 flex={1}
                 space={4}
                 width="100%"
             >
                 <Center flex={1}><Spinner color="white" /></Center>
-            </VStack>
+            </GradientVStack>
         );
     }
 
     if (isError || !workout) {
         return (
-            <VStack
+            <GradientVStack
                 backgroundColor="gray9"
                 flex={1}
                 space={4}
                 width="100%"
             >
                 <Center flex={1}><Text>Error loading workout or workout not found</Text></Center>
-            </VStack>
+            </GradientVStack>
         );
     }
 
