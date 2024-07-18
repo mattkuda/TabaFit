@@ -62,7 +62,7 @@ export const SelectExerciseScreen = (): JSX.Element => {
                 ListEmptyComponent={<Text alignSelf="center" fontSize="md">No exercises found</Text>}
                 renderItem={({ item }): JSX.Element => (
                     <Pressable borderColor="gray7" p="4" px="4" onPress={(): void => handleSelectExercise(item)}>
-                        <HStack space="2">
+                        <HStack alignItems="center" space="2">
                             {/* <Text fontSize="md" pr="2">{exerciseIconDictionary[item?.types[0]]}</Text> */}
                             <Image
                                 alt={`${item?.types[0]} icon`}
@@ -72,7 +72,9 @@ export const SelectExerciseScreen = (): JSX.Element => {
                                     height: 24, width: 24, tintColor: 'white', paddingHorizontal: 2,
                                 }}
                             />
-                            <Text fontSize="md">{item.name}</Text>
+                            <Text flex={1} fontSize="md">{item.name}</Text>
+                            {/* TODO: Make these open a modal with more information about the exercise */}
+                            <Icon as={Ionicons} color="gray.400" name="information-circle" size="lg" />
                         </HStack>
                     </Pressable>
                 )}
