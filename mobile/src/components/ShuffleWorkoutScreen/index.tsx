@@ -3,6 +3,7 @@ import {
     VStack, IconButton, Icon, HStack, Text,
     Modal, Button, Checkbox, Box,
     Select, Image,
+    Switch,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
@@ -27,6 +28,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
     const [modalWorkout, setModalWorkout] = useState<TabataWorkout>(workout);
     const [showSettingsModal, setShowSettingsModal] = useState<boolean>(true);
     const [showHelpDialog, setShowHelpDialog] = useState<boolean>(false);
+    const [equipmentEnabled, setEquipmentEnabled] = useState<boolean>(false);
 
     const handleAddTabata = (): void => {
         const {
@@ -124,16 +126,17 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
         });
     };
 
-    const triggerShuffle = (): void => {
-        if (workout.includeSettings) {
-            console.log('triggerShuffle');
+    const triggerShuffle = (workoutParam?: TabataWorkout): void => {
+        const shuffledWorkout = workoutParam || workout;
+
+        if (shuffledWorkout.includeSettings) {
             const {
                 includeUpper, includeLower, includeAbs, includeCardio,
-            } = workout.includeSettings;
-            const selectedEquipment = workout.equipment;
+            } = shuffledWorkout.includeSettings;
+            const selectedEquipment = shuffledWorkout.equipment;
 
             const shuffledTabatas = shuffleExercises(
-                workout.numberOfTabatas,
+                shuffledWorkout.numberOfTabatas,
                 selectedEquipment,
                 includeUpper,
                 includeLower,
@@ -149,15 +152,15 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
         }
     };
 
-    useEffect(() => {
-        triggerShuffle();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [workout.numberOfTabatas]);
+    // useEffect(() => {
+    //     triggerShuffle();
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [workout.numberOfTabatas]);
 
     const handleModalDone = (): void => {
         setShowSettingsModal(false);
         setWorkout(modalWorkout);
-        triggerShuffle();
+        triggerShuffle(modalWorkout);
     };
 
     const handleModalCancel = (): void => {
@@ -173,11 +176,35 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
     };
 
     const handleWorkoutSettingChange = (name: string, value: boolean): void => {
-        setModalWorkout((prevWorkout) => ({
-            ...prevWorkout,
-            includeSettings: {
+        setModalWorkout((prevWorkout) => {
+            const updatedSettings = {
                 ...prevWorkout.includeSettings,
                 [name]: value,
+            };
+
+            // Ensure that at least one setting remains true
+            if (Object.values(updatedSettings).every((setting) => !setting)) {
+                updatedSettings[name] = true;
+            }
+            return {
+                ...prevWorkout,
+                includeSettings: updatedSettings,
+            };
+        });
+    };
+
+    const toggleEquipment = (): void => {
+        setEquipmentEnabled(!equipmentEnabled);
+        setModalWorkout((prev) => ({
+            ...prev,
+            equipment: {
+                useNone: true,
+                useKettlebell: false,
+                useDumbells: false,
+                useHangingBar: false,
+                useYogaBall: false,
+                useWorkoutBand: false,
+                useBoxPlatform: false,
             },
         }));
     };
@@ -596,6 +623,37 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                 </HStack>
                             </Box>
                             {/* Equipment Row */}
+                            <Box
+                                flexDirection="row"
+                                justifyContent="center"
+                                width="100%"
+                            >
+                                <HStack alignItems="center" background="transparent" justifyContent="space-between" width="100%">
+                                    <HStack alignItems="center" justifyContent="flex-start">
+                                        <Icon as={Ionicons} mr={2} name="body-outline" size="md" />
+                                        <Text
+                                            fontSize="xl"
+                                            numberOfLines={2}
+                                            style={{
+                                                fontWeight: 'bold',
+                                            }}
+                                        >
+                                            Equipment:
+                                        </Text>
+                                    </HStack>
+                                    <Switch
+                                        isChecked={equipmentEnabled}
+                                        offThumbColor="gray.200"
+                                        offTrackColor="gray.700"
+                                        size="md"
+                                        onThumbColor="gray.200"
+                                        onToggle={toggleEquipment}
+                                        onTrackColor="flame.500"
+                                    />
+                                </HStack>
+                            </Box>
+                            {/* Equipment Checkboxes Row */}
+                            {equipmentEnabled && (
                             <VStack maxWidth={335} minWidth={335} space={2}>
                                 <HStack width="100%">
                                     <HStack flex={1}>
@@ -682,6 +740,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                     </HStack>
                                 </HStack>
                             </VStack>
+                            )}
                             <Box
                                 flexDirection="row"
                                 justifyContent="center"

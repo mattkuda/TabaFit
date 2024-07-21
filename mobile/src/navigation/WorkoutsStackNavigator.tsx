@@ -59,6 +59,7 @@ export const WorkoutsStackNavigator = (): JSX.Element => {
                 name="SelectExerciseScreen"
                 options={{
                     headerTitle: 'Select Exercise',
+                    headerBackTitle: 'Back',
                 }}
             />
             <Stack.Screen
