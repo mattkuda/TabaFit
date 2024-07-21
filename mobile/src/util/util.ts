@@ -7,6 +7,8 @@ import upperBodyIcon from '../../assets/exercise-icons/upper-body.png';
 import absIcon from '../../assets/exercise-icons/abs.png';
 // @ts-ignore
 import cardioIcon from '../../assets/exercise-icons/cardio.png';
+// @ts-ignore
+import kettlebell from '../../assets/exercise-icons/kettlebell.png';
 // import glutesIcon from '../assets/exercise-icons/glutes.png';
 // import spicyIcon from '../assets/exercise-icons/spicy.png';
 
@@ -53,6 +55,18 @@ export const exerciseIconDictionary: Record<string, any> = {
     Cardio: cardioIcon,
     Glutes: cardioIcon,
     Spicy: cardioIcon,
+};
+
+// TODO: Update this dictionary with the correct icons
+// https://www.flaticon.com/free-icon/kettlebell_8915448?term=kettlebell&page=1&position=2&origin=search&related_id=8915448
+export const equipmentIconDictionary: Record<string, any> = {
+    Kettlebell: kettlebell,
+    'Box Platform': kettlebell,
+    'Yoga Ball': kettlebell,
+    'Workout Band': kettlebell,
+    Dumbells: kettlebell,
+    'Hanging Bar': kettlebell,
+    None: kettlebell,
 };
 
 export const workoutDifficultyGradients = {

@@ -20,7 +20,7 @@ import {
 } from '../../types/workouts';
 import { GradientVStack } from '../common/GradientVStack';
 import { TabataItem } from '../BuildWorkoutScreen/TabataItem';
-import { exerciseIconDictionary } from '../../util/util';
+import { equipmentIconDictionary, exerciseIconDictionary } from '../../util/util';
 
 export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> = (): JSX.Element => {
     const navigation = useNavigation<ShuffleWorkoutScreenNavigationProp>();
@@ -630,7 +630,16 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                             >
                                 <HStack alignItems="center" background="transparent" justifyContent="space-between" width="100%">
                                     <HStack alignItems="center" justifyContent="flex-start">
-                                        <Icon as={Ionicons} mr={2} name="body-outline" size="md" />
+                                        <Image
+                                            alt="KB icon"
+                                            mr={2}
+                                            source={equipmentIconDictionary.Kettlebell}
+                                            style={{
+                                                height: 24,
+                                                width: 24,
+                                                tintColor: 'white',
+                                            }}
+                                        />
                                         <Text
                                             fontSize="xl"
                                             numberOfLines={2}
