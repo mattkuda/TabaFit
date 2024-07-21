@@ -10,7 +10,7 @@ export interface TabataExercise {
     equipment: TabataEquipmentType[];
     description: string;
     difficulty: 'Basic' | 'Intermediate' | 'Advanced';
-    videoLink: string;
+    videoLink?: string;
 }
 
 export type TabataCircuit = (TabataExercise | null)[];

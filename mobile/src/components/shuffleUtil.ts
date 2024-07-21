@@ -1,6 +1,4 @@
-import {
-    lowerBodyExercises, upperBodyExercises, absExercises, cardioExercises,
-} from '../util/constants';
+import { exerciseDict } from '../util/constants';
 import {
     Difficulty,
     TabataCircuit, TabataExercise, TabataExerciseType, TabataWorkout, WorkoutEquipmentSettings,
@@ -46,11 +44,13 @@ export const shuffleExercises = (
     };
 
     const getShuffledExercises = (): (type: TabataExerciseType) => TabataExercise[] => {
+        const exercises = Object.values(exerciseDict);
+
         const shuffledExercises = {
-            'Lower Body': shuffleArray(Object.values(lowerBodyExercises)),
-            'Upper Body': shuffleArray(Object.values(upperBodyExercises)),
-            Abs: shuffleArray(Object.values(absExercises)),
-            Cardio: shuffleArray(Object.values(cardioExercises)),
+            'Lower Body': exercises.filter((e) => e.types.includes('Lower Body')),
+            'Upper Body': exercises.filter((e) => e.types.includes('Upper Body')),
+            Abs: exercises.filter((e) => e.types.includes('Abs')),
+            Cardio: exercises.filter((e) => e.types.includes('Cardio')),
         };
 
         return (type: TabataExerciseType): TabataExercise[] => shuffledExercises[type];

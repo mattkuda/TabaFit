@@ -1,5 +1,4 @@
 import { extendTheme, theme as baseTheme } from 'native-base';
-import { border } from 'native-base/lib/typescript/theme/styled-system';
 
 // const customFontFamily = '';
 

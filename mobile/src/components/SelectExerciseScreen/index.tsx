@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
     FlatList, Pressable, Text, Input, Icon, HStack, Image,
 } from 'native-base';
@@ -6,10 +6,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import {
-    lowerBodyExercises,
-    upperBodyExercises,
-    absExercises,
-    cardioExercises,
+    exerciseDict,
 } from '../../util/constants';
 import { OldWorkoutsStackParamList } from '../../navigation/navigationTypes';
 import { TabataExercise } from '../../types/workouts';
@@ -18,15 +15,6 @@ import { GradientVStack } from '../common/GradientVStack';
 
 type SelectExerciseScreenNavigationProp = StackNavigationProp<OldWorkoutsStackParamList, 'SelectExerciseScreen'>;
 type OldSelectExerciseScreenRouteProp = RouteProp<OldWorkoutsStackParamList, 'SelectExerciseScreen'>;
-
-const exercises = [
-    ...Object.values(lowerBodyExercises),
-    ...Object.values(upperBodyExercises),
-    ...Object.values(absExercises),
-    ...Object.values(cardioExercises)]
-    .sort(
-        (a, b) => a.name.localeCompare(b.name),
-    );
 
 export const SelectExerciseScreen = (): JSX.Element => {
     const navigation = useNavigation<SelectExerciseScreenNavigationProp>();
@@ -39,6 +27,10 @@ export const SelectExerciseScreen = (): JSX.Element => {
         navigation.goBack();
     };
     const [search, setSearch] = useState<string>('');
+    const sortedExercises = useMemo(
+        () => Object.values(exerciseDict).sort((a, b) => a.name.localeCompare(b.name)),
+        [],
+    );
 
     return (
         <GradientVStack
@@ -57,7 +49,7 @@ export const SelectExerciseScreen = (): JSX.Element => {
 
             />
             <FlatList
-                data={exercises.filter((e) => e.name.toLowerCase().includes(search.toLowerCase()))}
+                data={sortedExercises.filter((e) => e.name.toLowerCase().includes(search.toLowerCase()))}
                 keyExtractor={(item): string => item._id}
                 ListEmptyComponent={<Text alignSelf="center" fontSize="md">No exercises found</Text>}
                 renderItem={({ item }): JSX.Element => (

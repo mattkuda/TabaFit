@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { TabataExercise } from '../types/workouts';
 
 export enum Intervals {
@@ -8,158 +9,149 @@ export enum Intervals {
     Cooldown = 'Cooldown',
 }
 
-export const lowerBodyExercises: Record<string, TabataExercise> = {
-    Squats: {
-        _id: 'lb1', name: 'Squats', types: ['Lower Body'], description: 'Standard squats.', difficulty: 'Basic', videoLink: '', equipment: ['None'],
+export const exerciseDict: Record<string, TabataExercise> = {
+    squats: {
+        _id: 'squats', name: 'Squats', types: ['Lower Body'], description: 'Standard squats.', difficulty: 'Basic', equipment: ['None'],
     },
-    Lunges: {
-        _id: 'lb2', name: 'Lunges', types: ['Lower Body'], description: 'Alternating lunges.', difficulty: 'Basic', videoLink: '', equipment: ['None'],
+    lunges: {
+        _id: 'lunges', name: 'Lunges', types: ['Lower Body'], description: 'Alternating lunges.', difficulty: 'Basic', equipment: ['None'],
     },
-    'Glute Bridges': {
-        _id: 'lb3', name: 'Glute Bridges', types: ['Lower Body'], description: 'Hip lifts for glute strength.', difficulty: 'Basic', videoLink: '', equipment: ['None'],
+    'glute-bridges': {
+        _id: 'glute-bridges', name: 'Glute Bridges', types: ['Lower Body'], description: 'Hip lifts for glute strength.', difficulty: 'Basic', equipment: ['None'],
     },
-    'Step-Ups': {
-        _id: 'lb4', name: 'Step-Ups', types: ['Lower Body'], description: 'Step onto a raised platform.', difficulty: 'Intermediate', videoLink: '', equipment: ['None'],
+    'step-ups': {
+        _id: 'step-ups', name: 'Step-Ups', types: ['Lower Body'], description: 'Step onto a raised platform.', difficulty: 'Intermediate', equipment: ['Box Platform'],
     },
-    'Calf Raises': {
-        _id: 'lb5', name: 'Calf Raises', types: ['Lower Body'], description: 'Raise heels standing on toes.', difficulty: 'Basic', videoLink: '', equipment: ['None'],
+    'calf-raises': {
+        _id: 'calf-raises', name: 'Calf Raises', types: ['Lower Body'], description: 'Raise heels standing on toes.', difficulty: 'Basic', equipment: ['None'],
     },
-    'Side Lunges': {
-        _id: 'lb6', name: 'Side Lunges', types: ['Lower Body'], description: 'Lunge to the side.', difficulty: 'Intermediate', videoLink: '', equipment: ['None'],
+    'side-lunges': {
+        _id: 'side-lunges', name: 'Side Lunges', types: ['Lower Body'], description: 'Lunge to the side.', difficulty: 'Intermediate', equipment: ['None'],
     },
-    'Dumbbell Romanian Deadlift': {
-        _id: 'lb9', name: 'Dumbbell Romanian Deadlift', types: ['Lower Body'], description: 'Deadlift with dumbells in each hand.', difficulty: 'Advanced', videoLink: '', equipment: ['None'],
+    'dumbbell-romanian-deadlift': {
+        _id: 'dumbbell-romanian-deadlift', name: 'Dumbbell Romanian Deadlift', types: ['Lower Body'], description: 'Deadlift with dumbells in each hand.', difficulty: 'Advanced', equipment: ['None'],
     },
-    'Jump Squats': {
-        _id: 'lb10', name: 'Jump Squats', types: ['Lower Body'], description: 'Squat followed by a jump.', difficulty: 'Advanced', videoLink: '', equipment: ['None'],
+    'jump-squats': {
+        _id: 'jump-squats', name: 'Jump Squats', types: ['Lower Body'], description: 'Squat followed by a jump.', difficulty: 'Advanced', equipment: ['None'],
     },
-    'Box Jumps': {
-        _id: 'lb11', name: 'Box Jumps', types: ['Lower Body'], equipment: ['Box Platform'], description: 'Jump onto a raised platform and back down.', difficulty: 'Intermediate', videoLink: '',
+    'box-jumps': {
+        _id: 'box-jumps', name: 'Box Jumps', types: ['Lower Body'], description: 'Jump onto a raised platform and back down.', difficulty: 'Intermediate', equipment: ['Box Platform'],
     },
-    'Kettlebell Swings': {
-        _id: 'lb12', name: 'Kettlebell Swings', types: ['Lower Body'], equipment: ['Kettlebell'], description: 'Swing a kettlebell up and down.', difficulty: 'Intermediate', videoLink: '',
+    'kettlebell-swings': {
+        _id: 'kettlebell-swings', name: 'Kettlebell Swings', types: ['Lower Body'], description: 'Swing a kettlebell up and down.', difficulty: 'Intermediate', equipment: ['Kettlebell'],
     },
-    'Kettlebell Deadlift': {
-        _id: 'lb999', name: 'Kettlebell Deadlift', types: ['Lower Body'], equipment: ['Workout Band'], description: 'Deadlift with a kettlebell.', difficulty: 'Intermediate', videoLink: '',
+    'kettlebell-deadlift': {
+        _id: 'kettlebell-deadlift', name: 'Kettlebell Deadlift', types: ['Lower Body'], description: 'Deadlift with a kettlebell.', difficulty: 'Intermediate', equipment: ['Workout Band'],
     },
-    'Yoga Ball Squats': {
-        _id: 'lb14', name: 'Yoga Ball Squats', types: ['Lower Body'], equipment: ['Yoga Ball'], description: 'Squats against a yoga ball placed on a wall.', difficulty: 'Basic', videoLink: '',
+    'yoga-ball-squats': {
+        _id: 'yoga-ball-squats', name: 'Yoga Ball Squats', types: ['Lower Body'], description: 'Squats against a yoga ball placed on a wall.', difficulty: 'Basic', equipment: ['Yoga Ball'],
     },
-    'Alternating Jump Lunges': {
-        _id: 'lb13', name: 'Alternating Jump Lunges', types: ['Lower Body'], description: 'Jump lunges alternating legs.', difficulty: 'Advanced', videoLink: '', equipment: ['None'],
+    'alternating-jump-lunges': {
+        _id: 'alternating-jump-lunges', name: 'Alternating Jump Lunges', types: ['Lower Body'], description: 'Jump lunges alternating legs.', difficulty: 'Advanced', equipment: ['None'],
     },
-    'Single-Leg Glute Bridge': {
-        _id: 'lb15', name: 'Single-Leg Glute Bridge', types: ['Lower Body'], description: 'Bridge with one leg lifted.', difficulty: 'Intermediate', videoLink: '', equipment: ['None'],
+    'single-leg-glute-bridge': {
+        _id: 'single-leg-glute-bridge', name: 'Single-Leg Glute Bridge', types: ['Lower Body'], description: 'Bridge with one leg lifted.', difficulty: 'Intermediate', equipment: ['None'],
     },
-};
-
-export const upperBodyExercises: Record<string, TabataExercise> = {
-    'Push-Ups': {
-        _id: 'ub1', name: 'Push-Ups', types: ['Upper Body'], description: 'Standard push-ups.', difficulty: 'Basic', videoLink: '', equipment: ['None'],
+    'push-ups': {
+        _id: 'push-ups', name: 'Push-Ups', types: ['Upper Body'], description: 'Standard push-ups.', difficulty: 'Basic', equipment: ['None'],
     },
-    'Box Dips': {
-        _id: 'ub10', name: 'Box Dips', types: ['Upper Body'], description: 'Dips on a box or sturdy surface.', difficulty: 'Intermediate', videoLink: '', equipment: ['None'],
+    'box-dips': {
+        _id: 'box-dips', name: 'Box Dips', types: ['Upper Body'], description: 'Dips on a box or sturdy surface.', difficulty: 'Intermediate', equipment: ['None'],
     },
-    'Kettlebell Shoulder Press': {
-        _id: 'ub11', name: 'Kettlebell Shoulder Press', types: ['Upper Body'], equipment: ['Kettlebell'], description: 'Press a kettlebell overhead.', difficulty: 'Intermediate', videoLink: '',
+    'kettlebell-shoulder-press': {
+        _id: 'kettlebell-shoulder-press', name: 'Kettlebell Shoulder Press', types: ['Upper Body'], description: 'Press a kettlebell overhead.', difficulty: 'Intermediate', equipment: ['Kettlebell'],
     },
-    'Kettlebell Tricep Press': {
-        _id: 'ub101', name: 'Kettlebell Tricep Press', types: ['Upper Body'], equipment: ['Kettlebell'], description: 'Press a kettlebell behind your head extending your triceps.', difficulty: 'Intermediate', videoLink: '',
+    'kettlebell-tricep-press': {
+        _id: 'kettlebell-tricep-press', name: 'Kettlebell Tricep Press', types: ['Upper Body'], description: 'Press a kettlebell behind your head extending your triceps.', difficulty: 'Intermediate', equipment: ['Kettlebell'],
     },
-    'Dumbbell Flyes': {
-        _id: 'ub12', name: 'Dumbbell Flyes', types: ['Upper Body'], equipment: ['Dumbells'], description: 'Extend arms with dumbbells in a flying motion.', difficulty: 'Intermediate', videoLink: '',
+    'dumbbell-flyes': {
+        _id: 'dumbbell-flyes', name: 'Dumbbell Flyes', types: ['Upper Body'], description: 'Extend arms with dumbbells in a flying motion.', difficulty: 'Intermediate', equipment: ['Dumbells'],
     },
-    'Pull ups': {
-        _id: 'ub14', name: 'Pull ups', types: ['Upper Body'], equipment: ['Hanging Bar'], description: 'Pull up to the bar.', difficulty: 'Advanced', videoLink: '',
+    'pull-ups': {
+        _id: 'pull-ups', name: 'Pull ups', types: ['Upper Body'], description: 'Pull up to the bar.', difficulty: 'Advanced', equipment: ['Hanging Bar'],
     },
-    'Dumbbell Shoulder Press': {
-        _id: 'ub15', name: 'Dumbbell Shoulder Press', types: ['Upper Body'], equipment: ['Dumbells'], description: 'Press dumbbells overhead.', difficulty: 'Intermediate', videoLink: '',
+    'dumbbell-shoulder-press': {
+        _id: 'dumbbell-shoulder-press', name: 'Dumbbell Shoulder Press', types: ['Upper Body'], description: 'Press dumbbells overhead.', difficulty: 'Intermediate', equipment: ['Dumbells'],
     },
-    'Dumbbell Bicep Curls': {
-        _id: 'ub16', name: 'Dumbbell Bicep Curls', types: ['Upper Body'], equipment: ['Dumbells'], description: 'Curl dumbbells towards your shoulders.', difficulty: 'Basic', videoLink: '',
+    'dumbbell-bicep-curls': {
+        _id: 'dumbbell-bicep-curls', name: 'Dumbbell Bicep Curls', types: ['Upper Body'], description: 'Curl dumbbells towards your shoulders.', difficulty: 'Basic', equipment: ['Dumbells'],
     },
-    'Dumbbell Delt Flyes': {
-        _id: 'ub17', name: 'Dumbbell Delt Flyes', types: ['Upper Body'], equipment: ['Dumbells'], description: 'Extend arms out to the sides with dumbbells.', difficulty: 'Intermediate', videoLink: '',
+    'dumbbell-delt-flyes': {
+        _id: 'dumbbell-delt-flyes', name: 'Dumbbell Delt Flyes', types: ['Upper Body'], description: 'Extend arms out to the sides with dumbbells.', difficulty: 'Intermediate', equipment: ['Dumbells'],
     },
-    'Dumbbell Lying Chest Press': {
-        _id: 'ub18', name: 'Dumbbell Lying Chest Press', types: ['Upper Body'], equipment: ['Dumbells'], description: 'Press dumbbells while lying on a bench.', difficulty: 'Intermediate', videoLink: '',
+    'dumbbell-lying-chest-press': {
+        _id: 'dumbbell-lying-chest-press', name: 'Dumbbell Lying Chest Press', types: ['Upper Body'], description: 'Press dumbbells while lying on a bench.', difficulty: 'Intermediate', equipment: ['Dumbells'],
     },
-};
-
-export const absExercises: Record<string, TabataExercise> = {
-    Crunches: {
-        _id: 'abs1', name: 'Crunches', types: ['Abs'], description: 'Basic crunches for core.', difficulty: 'Basic', videoLink: '', equipment: ['None'],
+    crunches: {
+        _id: 'crunches', name: 'Crunches', types: ['Abs'], description: 'Basic crunches for core.', difficulty: 'Basic', equipment: ['None'],
     },
-    'Lying Leg Raises': {
-        _id: 'abs2', name: 'Lying Leg Raises', types: ['Abs'], description: 'Lift legs for lower abs.', difficulty: 'Intermediate', videoLink: '', equipment: ['None'],
+    'lying-leg-raises': {
+        _id: 'lying-leg-raises', name: 'Lying Leg Raises', types: ['Abs'], description: 'Lift legs for lower abs.', difficulty: 'Basic', equipment: ['None'],
     },
-    Planks: {
-        _id: 'abs3', name: 'Planks', types: ['Abs'], description: 'Hold a plank position for core strength.', difficulty: 'Intermediate', videoLink: '', equipment: ['None'],
+    planks: {
+        _id: 'planks', name: 'Planks', types: ['Abs'], description: 'Hold a plank position for core strength.', difficulty: 'Basic', equipment: ['None'],
     },
-    'Russian Twists': {
-        _id: 'abs4', name: 'Russian Twists', types: ['Abs'], description: 'Twist torso with feet off the ground.', difficulty: 'Intermediate', videoLink: '', equipment: ['None'],
+    'russian-twists': {
+        _id: 'russian-twists', name: 'Russian Twists', types: ['Abs'], description: 'Twist torso with feet off the ground.', difficulty: 'Basic', equipment: ['None'],
     },
-    'Bicycle Crunches': {
-        _id: 'abs5', name: 'Bicycle Crunches', types: ['Abs'], description: 'Alternate elbow to knee in a cycling motion.', difficulty: 'Intermediate', videoLink: '', equipment: ['None'],
+    'bicycle-crunches': {
+        _id: 'bicycle-crunches', name: 'Bicycle Crunches', types: ['Abs'], description: 'Alternate elbow to knee in a cycling motion.', difficulty: 'Basic', equipment: ['None'],
     },
-    'Mountain Climbers': {
-        _id: 'abs6', name: 'Mountain Climbers', types: ['Abs'], description: 'Drive knees in towards chest.', difficulty: 'Intermediate', videoLink: '', equipment: ['None'],
+    'mountain-climbers': {
+        _id: 'mountain-climbers', name: 'Mountain Climbers', types: ['Abs'], description: 'Drive knees in towards chest.', difficulty: 'Intermediate', equipment: ['None'],
     },
-    'V-Ups': {
-        _id: 'abs7', name: 'V-Ups', types: ['Abs'], description: 'Lift legs and torso to form a V shape.', difficulty: 'Advanced', videoLink: '', equipment: ['None'],
+    'v-ups': {
+        _id: 'v-ups', name: 'V-Ups', types: ['Abs'], description: 'Lift legs and torso to form a V shape.', difficulty: 'Advanced', equipment: ['None'],
     },
-    'Flutter Kicks': {
-        _id: 'abs8', name: 'Flutter Kicks', types: ['Abs'], description: 'Kick legs up and down in a small range.', difficulty: 'Intermediate', videoLink: '', equipment: ['None'],
+    'flutter-kicks': {
+        _id: 'flutter-kicks', name: 'Flutter Kicks', types: ['Abs'], description: 'Kick legs up and down in a small range.', difficulty: 'Intermediate', equipment: ['None'],
     },
-    'Plank Jacks': {
-        _id: 'abs10', name: 'Plank Jacks', types: ['Abs'], description: 'Jump feet in and out while in plank position.', difficulty: 'Intermediate', videoLink: '', equipment: ['None'],
+    'plank-jacks': {
+        _id: 'plank-jacks', name: 'Plank Jacks', types: ['Abs'], description: 'Jump feet in and out while in plank position.', difficulty: 'Intermediate', equipment: ['None'],
     },
-    'Around the Worlds': {
-        _id: 'abs11', name: 'Around the Worlds', types: ['Abs'], equipment: ['Kettlebell'], description: 'Swing the kettlebell around your body.', difficulty: 'Intermediate', videoLink: '',
+    'around-the-worlds': {
+        _id: 'around-the-worlds', name: 'Around the Worlds', types: ['Abs'], description: 'Swing the kettlebell around your body.', difficulty: 'Intermediate', equipment: ['Kettlebell'],
     },
-    'Dumbbell Side Bends': {
-        _id: 'abs12', name: 'Dumbbell Side Bends', types: ['Abs'], equipment: ['Dumbells'], description: 'Bend to each side holding a dumbbell.', difficulty: 'Intermediate', videoLink: '',
+    'dumbbell-side-bends': {
+        _id: 'dumbbell-side-bends', name: 'Dumbbell Side Bends', types: ['Abs'], description: 'Bend to each side holding a dumbbell.', difficulty: 'Intermediate', equipment: ['Dumbells'],
     },
-    'Yoga Ball Crunches': {
-        _id: 'abs13', name: 'Yoga Ball Crunches', types: ['Abs'], equipment: ['Yoga Ball'], description: 'Crunches on a yoga ball.', difficulty: 'Basic', videoLink: '',
+    'yoga-ball-crunches': {
+        _id: 'yoga-ball-crunches', name: 'Yoga Ball Crunches', types: ['Abs'], description: 'Crunches on a yoga ball.', difficulty: 'Basic', equipment: ['Yoga Ball'],
     },
-    'Windshield Wipers': {
-        _id: 'abs15', name: 'Windshield Wipers', types: ['Abs'], description: 'Rotate legs side to side in a controlled motion.', difficulty: 'Advanced', videoLink: '', equipment: ['None'],
+    'windshield-wipers': {
+        _id: 'windshield-wipers', name: 'Windshield Wipers', types: ['Abs'], description: 'Rotate legs side to side in a controlled motion.', difficulty: 'Advanced', equipment: ['None'],
     },
-    'Hollow Rocks': {
-        _id: 'abs14', name: 'Hollow Rocks', types: ['Abs'], description: 'Rock forward and back in a strong hollow position.', difficulty: 'Advanced', videoLink: '', equipment: ['None'],
+    'hollow-rocks': {
+        _id: 'hollow-rocks', name: 'Hollow Rocks', types: ['Abs'], description: 'Rock forward and back in a strong hollow position.', difficulty: 'Advanced', equipment: ['None'],
     },
-    Inchworm: {
-        _id: 'abs77', name: 'Inchworm', types: ['Upper Body'], description: 'Walk hands forward from a standing position.', difficulty: 'Intermediate', videoLink: '', equipment: ['None'],
+    inchworm: {
+        _id: 'inchworm', name: 'Inchworm', types: ['Upper Body'], description: 'Walk hands forward from a standing position.', difficulty: 'Intermediate', equipment: ['None'],
     },
-};
-
-export const cardioExercises: Record<string, TabataExercise> = {
-    'High Knees': {
-        _id: 'cardio1', name: 'High Knees', types: ['Cardio'], description: 'Run in place with high knees.', difficulty: 'Intermediate', videoLink: '', equipment: ['None'],
+    'high-knees': {
+        _id: 'high-knees', name: 'High Knees', types: ['Cardio'], description: 'Run in place with high knees.', difficulty: 'Intermediate', equipment: ['None'],
     },
-    Burpees: {
-        _id: 'cardio2', name: 'Burpees', types: ['Cardio', 'Abs'], description: 'Full body exercise with a jump.', difficulty: 'Advanced', videoLink: '', equipment: ['None'],
+    burpees: {
+        _id: 'burpees', name: 'Burpees', types: ['Cardio', 'Abs'], description: 'Full body exercise with a jump.', difficulty: 'Intermediate', equipment: ['None'],
     },
-    'Jumping Jacks': {
-        _id: 'cardio4', name: 'Jumping Jacks', types: ['Cardio'], description: 'Jump with spread legs and clapping hands overhead.', difficulty: 'Basic', videoLink: '', equipment: ['None'],
+    'jumping-jacks': {
+        _id: 'jumping-jacks', name: 'Jumping Jacks', types: ['Cardio'], description: 'Jump with spread legs and clapping hands overhead.', difficulty: 'Basic', equipment: ['None'],
     },
-    Skaters: {
-        _id: 'cardio5', name: 'Skaters', types: ['Cardio'], description: 'Leap side to side in a skating motion.', difficulty: 'Intermediate', videoLink: '', equipment: ['None'],
+    skaters: {
+        _id: 'skaters', name: 'Skaters', types: ['Cardio'], description: 'Leap side to side in a skating motion.', difficulty: 'Intermediate', equipment: ['None'],
     },
-    'Butt Kicks': {
-        _id: 'cardio6', name: 'Butt Kicks', types: ['Cardio'], description: 'Run in place kicking heels to glutes.', difficulty: 'Basic', videoLink: '', equipment: ['None'],
+    'butt-kicks': {
+        _id: 'butt-kicks', name: 'Butt Kicks', types: ['Cardio'], description: 'Run in place kicking heels to glutes.', difficulty: 'Basic', equipment: ['None'],
     },
-    'Speed Skaters': {
-        _id: 'cardio9', name: 'Speed Skaters', types: ['Cardio'], description: 'Side-to-side leaping with a slight squat.', difficulty: 'Intermediate', videoLink: '', equipment: ['None'],
+    'speed-skaters': {
+        _id: 'speed-skaters', name: 'Speed Skaters', types: ['Cardio'], description: 'Side-to-side leaping with a slight squat.', difficulty: 'Intermediate', equipment: ['None'],
     },
-    'Fast Feet': {
-        _id: 'cardio10', name: 'Fast Feet', types: ['Cardio'], description: 'Quickly shuffle feet in place.', difficulty: 'Basic', videoLink: '', equipment: ['None'],
+    'fast-feet': {
+        _id: 'fast-feet', name: 'Fast Feet', types: ['Cardio'], description: 'Quickly shuffle feet in place.', difficulty: 'Basic', equipment: ['None'],
     },
-    Sprints: {
-        _id: 'cardio15', name: 'Sprints', types: ['Cardio'], description: 'Run at full speed.', difficulty: 'Advanced', videoLink: '', equipment: ['None'],
+    sprints: {
+        _id: 'sprints', name: 'Sprints', types: ['Cardio'], description: 'Run at full speed.', difficulty: 'Advanced', equipment: ['None'],
     },
-    'Bear Crawl': {
-        _id: 'cardio16', name: 'Bear Crawl', types: ['Upper Body'], description: 'Crawl on all fours, keeping your knees off the ground.', difficulty: 'Intermediate', videoLink: '', equipment: ['None'],
+    'bear-crawl': {
+        _id: 'bear-crawl', name: 'Bear Crawl', types: ['Upper Body'], description: 'Crawl on all fours, keeping your knees off the ground.', difficulty: 'Intermediate', equipment: ['None'],
     },
 };

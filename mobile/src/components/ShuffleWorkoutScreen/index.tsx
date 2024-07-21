@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
     VStack, IconButton, Icon, HStack, Text,
     Modal, Button, Checkbox, Box,
-    Select,
+    Select, Image,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
@@ -19,6 +19,7 @@ import {
 } from '../../types/workouts';
 import { GradientVStack } from '../common/GradientVStack';
 import { TabataItem } from '../BuildWorkoutScreen/TabataItem';
+import { exerciseIconDictionary } from '../../util/util';
 
 export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> = (): JSX.Element => {
     const navigation = useNavigation<ShuffleWorkoutScreenNavigationProp>();
@@ -30,7 +31,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
     const handleAddTabata = (): void => {
         const {
             includeUpper, includeLower, includeAbs, includeCardio,
-        } = workout.includeSettings;
+        } = workout.includeSettings!;
         const selectedEquipment = workout.equipment;
 
         const newlyShuffledTabata = shuffleExercises(
@@ -125,6 +126,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
 
     const triggerShuffle = (): void => {
         if (workout.includeSettings) {
+            console.log('triggerShuffle');
             const {
                 includeUpper, includeLower, includeAbs, includeCardio,
             } = workout.includeSettings;
@@ -163,32 +165,31 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
         setModalWorkout(workout);
     };
 
-    // const handleNumberTabatasChange = (itemValue): void => {
-    //     setWorkout((prevWorkout) => ({
-    //         ...prevWorkout,
-    //         numberOfTabatas: itemValue,
-    //     }));
-    // };
-
-    const handleDurationChange = (itemValue): void => {
+    const handleDurationChange = (itemValue: number): void => {
         setModalWorkout((prevWorkout) => ({
             ...prevWorkout,
             numberOfTabatas: itemValue,
         }));
     };
 
-    const handleWorkoutSettingChange = (name, value): void => {
+    const handleWorkoutSettingChange = (name: string, value: boolean): void => {
         setModalWorkout((prevWorkout) => ({
             ...prevWorkout,
-            [name]: value,
+            includeSettings: {
+                ...prevWorkout.includeSettings,
+                [name]: value,
+            },
         }));
     };
 
-    const handleDifficultyChange = (itemValue): void => {
-        handleWorkoutSettingChange('difficulty', itemValue);
+    const handleDifficultyChange = (itemValue: Difficulty): void => {
+        setModalWorkout((prevWorkout) => ({
+            ...prevWorkout,
+            difficulty: itemValue,
+        }));
     };
 
-    const handleWorkoutEquipmentChange = (name, value): void => {
+    const handleWorkoutEquipmentChange = (name: string, value: boolean): void => {
         setModalWorkout((prev) => ({
             ...prev,
             equipment: {
@@ -465,6 +466,136 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                     </Select>
                                 </HStack>
                             </Box>
+                            {/* Focus Row */}
+                            <Box
+                                flexDirection="row"
+                                justifyContent="center"
+                                width="100%"
+                            >
+                                <HStack alignItems="center" background="transparent" justifyContent="space-between" width="100%">
+                                    <HStack alignItems="center" justifyContent="flex-start" space={4}>
+                                        <Text
+                                            fontSize="xl"
+                                            numberOfLines={2}
+                                            style={{
+                                                fontWeight: 'bold',
+                                            }}
+                                        >
+                                            Focus:
+                                        </Text>
+                                        <Box>
+                                            <TouchableOpacity onPress={(): void => handleWorkoutSettingChange('includeUpper', !modalWorkout.includeSettings?.includeUpper)}>
+                                                <Box
+                                                    bg={modalWorkout.includeSettings?.includeUpper ? {
+                                                        linearGradient: {
+                                                            colors: ['flame.500', 'cherry.500'],
+                                                            start: [0, 1],
+                                                            end: [1, 0],
+                                                        },
+                                                    } : 'gray.900'}
+                                                    bgColor={modalWorkout.includeSettings?.includeUpper ? 'flame.500' : 'gray.900'}
+                                                    borderColor="gray.100"
+                                                    borderRadius="md"
+                                                    borderWidth={1}
+                                                    p={2}
+                                                >
+                                                    <Image
+                                                        alt="Upper Body icon"
+                                                        source={exerciseIconDictionary['Upper Body']}
+                                                        style={{
+                                                            height: 24,
+                                                            width: 24,
+                                                            tintColor: 'white',
+                                                        }}
+                                                    />
+                                                </Box>
+                                            </TouchableOpacity>
+                                        </Box>
+                                        <Box>
+                                            <TouchableOpacity onPress={(): void => handleWorkoutSettingChange('includeLower', !modalWorkout.includeSettings?.includeLower)}>
+                                                <Box
+                                                    bg={modalWorkout.includeSettings?.includeLower ? {
+                                                        linearGradient: {
+                                                            colors: ['flame.500', 'cherry.500'],
+                                                            start: [0, 1],
+                                                            end: [1, 0],
+                                                        },
+                                                    } : 'gray.900'}
+                                                    borderColor="gray.100"
+                                                    borderRadius="md"
+                                                    borderWidth={1}
+                                                    p={2}
+                                                >
+                                                    <Image
+                                                        alt="Lower Body icon"
+                                                        source={exerciseIconDictionary['Lower Body']}
+                                                        style={{
+                                                            height: 24,
+                                                            width: 24,
+                                                            tintColor: 'white',
+                                                        }}
+                                                    />
+                                                </Box>
+                                            </TouchableOpacity>
+                                        </Box>
+                                        <Box>
+                                            <TouchableOpacity onPress={(): void => handleWorkoutSettingChange('includeAbs', !modalWorkout.includeSettings?.includeAbs)}>
+                                                <Box
+                                                    bg={modalWorkout.includeSettings?.includeAbs ? {
+                                                        linearGradient: {
+                                                            colors: ['flame.500', 'cherry.500'],
+                                                            start: [0, 1],
+                                                            end: [1, 0],
+                                                        },
+                                                    } : 'gray.900'}
+                                                    borderColor="gray.100"
+                                                    borderRadius="md"
+                                                    borderWidth={1}
+                                                    p={2}
+                                                >
+                                                    <Image
+                                                        alt="Abs icon"
+                                                        source={exerciseIconDictionary.Abs}
+                                                        style={{
+                                                            height: 24,
+                                                            width: 24,
+                                                            tintColor: 'white',
+                                                        }}
+                                                    />
+                                                </Box>
+                                            </TouchableOpacity>
+                                        </Box>
+                                        <Box>
+                                            <TouchableOpacity onPress={(): void => handleWorkoutSettingChange('includeCardio', !modalWorkout.includeSettings?.includeCardio)}>
+                                                <Box
+                                                    bg={modalWorkout.includeSettings?.includeCardio ? {
+                                                        linearGradient: {
+                                                            colors: ['flame.500', 'cherry.500'],
+                                                            start: [0, 1],
+                                                            end: [1, 0],
+                                                        },
+                                                    } : 'gray.900'}
+                                                    borderColor="gray.100"
+                                                    borderRadius="md"
+                                                    borderWidth={1}
+                                                    p={2}
+                                                >
+                                                    <Image
+                                                        alt="Cardio icon"
+                                                        source={exerciseIconDictionary.Cardio}
+                                                        style={{
+                                                            height: 24,
+                                                            width: 24,
+                                                            tintColor: 'white',
+                                                        }}
+                                                    />
+                                                </Box>
+                                            </TouchableOpacity>
+                                        </Box>
+                                    </HStack>
+                                </HStack>
+                            </Box>
+                            {/* Equipment Row */}
                             <VStack maxWidth={335} minWidth={335} space={2}>
                                 <HStack width="100%">
                                     <HStack flex={1}>
