@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
     VStack, Text, Button, HStack, Icon, IconButton, Spinner,
     Flex,
+    Box,
 } from 'native-base';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { format } from 'date-fns';
@@ -114,7 +115,7 @@ export const ProfilePage = (): JSX.Element => {
                         size="xl"
                         user={userInfo}
                     />
-                    <VStack>
+                    <VStack flex={1}>
                         <Text>
                             <Text bold fontSize="lg">{formatName(userInfo.firstName, userInfo.lastName)}</Text>
                             {'  '}
@@ -122,9 +123,11 @@ export const ProfilePage = (): JSX.Element => {
                                 {`@${userInfo.username}`}
                             </Text>
                         </Text>
-                        <Text fontSize="sm">
-                            {userInfo.bio}
-                        </Text>
+                        <Box flex={1}>
+                            <Text flex={1} fontSize="sm">
+                                {userInfo.bio}
+                            </Text>
+                        </Box>
                         <Text italic fontSize="sm">
                             Joined
                             {' '}

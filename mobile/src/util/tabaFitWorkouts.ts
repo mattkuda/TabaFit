@@ -30,7 +30,6 @@ const featuredWorkout1: TabataWorkoutWithUserInfo = {
         useWorkoutBand: false,
         useDumbells: false,
         useHangingBar: false,
-        useNone: true,
     },
     includeSettings: {
         includeUpper: true,
@@ -90,7 +89,6 @@ const featuredWorkout2: TabataWorkoutWithUserInfo = {
         useWorkoutBand: false,
         useDumbells: false,
         useHangingBar: false,
-        useNone: true,
     },
     includeSettings: {
         includeUpper: true,

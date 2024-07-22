@@ -32,7 +32,7 @@ export const shuffleExercises = (
             return false;
         }
 
-        if (exercise.equipment.includes('None') && selectedEquipment.useNone) {
+        if (!exercise.equipment?.length) {
             return true;
         }
         return exercise.equipment.some((equip) => (equip === 'Kettlebell' && selectedEquipment.useKettlebell)
@@ -122,7 +122,6 @@ export const defaultTabataWorkout: TabataWorkout = {
         useWorkoutBand: false,
         useDumbells: false,
         useHangingBar: false,
-        useNone: true,
     },
 };
 
@@ -148,7 +147,6 @@ export const shuffleWorkoutTemplate: TabataWorkout = {
         useWorkoutBand: false,
         useDumbells: false,
         useHangingBar: false,
-        useNone: true,
     },
     includeSettings: {
         includeUpper: true,
@@ -181,7 +179,6 @@ export const shuffleWorkoutZeroState: TabataWorkout = {
         useWorkoutBand: false,
         useDumbells: false,
         useHangingBar: false,
-        useNone: true,
     },
     includeSettings: {
         includeUpper: true,
@@ -214,7 +211,6 @@ export const soundTestingWorkout: TabataWorkout = {
         useWorkoutBand: false,
         useDumbells: false,
         useHangingBar: false,
-        useNone: true,
     },
     includeSettings: {
         includeUpper: true,
@@ -246,7 +242,6 @@ export const defaultShuffleTabataWorkout: TabataWorkout = {
         useWorkoutBand: false,
         useDumbells: false,
         useHangingBar: false,
-        useNone: true,
     },
     includeSettings: {
         includeUpper: true,
@@ -281,7 +276,6 @@ export const buildNewTabataInitialState: TabataWorkout = {
         useWorkoutBand: false,
         useDumbells: false,
         useHangingBar: false,
-        useNone: true,
     },
     includeSettings: {
         includeAbs: true,
