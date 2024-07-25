@@ -1,8 +1,9 @@
-import { TabataWorkoutWithUserInfo } from '../types/workouts';
+import mongoose from 'mongoose';
+import { Difficulty, TabataWorkoutWithUserInfo } from '../types/workouts';
 import { exerciseDict } from './constants';
 
 const featuredWorkout1: TabataWorkoutWithUserInfo = {
-    _id: `tabafit-1`,
+    _id: new mongoose.Types.ObjectId(`tabafit-1`),
     name: `Basic Alpha Release`,
     description: 'TODO refine and add more of these.',
     createdAt: new Date().toISOString(),
@@ -23,6 +24,7 @@ const featuredWorkout1: TabataWorkoutWithUserInfo = {
     exercisesPerTabata: 8,
     intermisionDuration: 60,
     cooldownDuration: 0,
+    difficulty: Difficulty.Basic,
     equipment: {
         useKettlebell: false,
         useBoxPlatform: false,
@@ -43,7 +45,7 @@ const featuredWorkout1: TabataWorkoutWithUserInfo = {
 };
 
 const featuredWorkout2: TabataWorkoutWithUserInfo = {
-    _id: `tabafit-2`,
+    _id: new mongoose.Types.ObjectId(`tabafit-2`),
     name: `Intermediate Alpha Release`,
     description: 'TODO refine and add more of these.',
     createdAt: new Date().toISOString(),
@@ -77,6 +79,7 @@ const featuredWorkout2: TabataWorkoutWithUserInfo = {
         ],
     ],
     restDuration: 10,
+    difficulty: Difficulty.Basic,
     exerciseDuration: 20,
     numberOfTabatas: 1,
     exercisesPerTabata: 8,

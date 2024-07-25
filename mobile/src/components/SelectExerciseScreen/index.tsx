@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import {
-    FlatList, Pressable, Text, Input, Icon, HStack, Image, Modal, Button,
+    FlatList, Pressable, Text, Input, Icon, HStack, Image, Modal,
     Box,
 } from 'native-base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -71,7 +71,8 @@ const ExerciseInfoModal: React.FC<{
 );
 
 const ExerciseItem: React.FC<{
-    item: TabataExercise, onSelect: (exercise: TabataExercise) => void, onInfo: (exercise: TabataExercise) => void }> = ({ item, onSelect, onInfo }) => (
+    item: TabataExercise, onSelect: (exercise: TabataExercise) => void,
+    onInfo: (exercise: TabataExercise) => void }> = ({ item, onSelect, onInfo }) => (
         <Pressable borderColor="gray7" p="4" px="4" onPress={(): void => onSelect(item)}>
             <HStack alignItems="center" space="2">
                 <Image
@@ -88,7 +89,7 @@ const ExerciseItem: React.FC<{
                     color="gray.400"
                     name="information-circle"
                     size="lg"
-                    onPress={() => onInfo(item)}
+                    onPress={(): void => onInfo(item)}
                 />
             </HStack>
         </Pressable>
