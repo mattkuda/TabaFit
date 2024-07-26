@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import { exerciseDict } from '../util/constants';
 import {
     Difficulty,
@@ -102,7 +101,7 @@ export const shuffleExercises = (
 };
 
 export const defaultTabataWorkout: TabataWorkout = {
-    _id: new mongoose.Types.ObjectId('workout-shuffle'),
+    _id: 'workout-shuffle',
     name: `Tabata Shuffle`,
     description: 'A shuffled Tabata workout based on user preferences.',
     createdAt: new Date().toISOString(),
@@ -128,7 +127,7 @@ export const defaultTabataWorkout: TabataWorkout = {
 };
 
 export const shuffleWorkoutTemplate: TabataWorkout = {
-    _id: new mongoose.Types.ObjectId('workout-shuffle-template'),
+    _id: 'workout-shuffle-template',
     name: `Tabata Shuffle`,
     description: 'A shuffled Tabata workout based on user preferences.',
     createdAt: new Date().toISOString(),
@@ -160,7 +159,7 @@ export const shuffleWorkoutTemplate: TabataWorkout = {
 };
 
 export const shuffleWorkoutZeroState: TabataWorkout = {
-    _id: new mongoose.Types.ObjectId('workout-shuffle-zero'),
+    _id: 'workout-shuffle-zero',
     name: `Tabata Shuffle`,
     description: 'A shuffled Tabata workout based on user preferences.',
     createdAt: new Date().toISOString(),
@@ -192,7 +191,7 @@ export const shuffleWorkoutZeroState: TabataWorkout = {
 };
 
 export const soundTestingWorkout: TabataWorkout = {
-    _id: new mongoose.Types.ObjectId('sound-shuffle-custom'),
+    _id: 'sound-shuffle-custom',
     name: `Sound Testing Shuffle`,
     difficulty: Difficulty.Basic,
     description: 'A sound test Tabata workout based on user preferences.',
@@ -224,7 +223,7 @@ export const soundTestingWorkout: TabataWorkout = {
 };
 
 export const defaultShuffleTabataWorkout: TabataWorkout = {
-    _id: new mongoose.Types.ObjectId('workout-shuffle'),
+    _id: 'workout-shuffle',
     name: `Tabata Shuffle`,
     difficulty: Difficulty.Basic,
     description: 'A shuffled Tabata workout based on user preferences.',
@@ -258,7 +257,7 @@ export const defaultShuffleTabataWorkout: TabataWorkout = {
 export const emptyTabata: TabataCircuit = [null, null, null, null];
 
 export const buildNewTabataInitialState: TabataWorkout = {
-    _id: new mongoose.Types.ObjectId('workout-custom'),
+    _id: 'workout-custom',
     name: '',
     description: '',
     createdAt: new Date().toISOString(),

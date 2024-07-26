@@ -27,7 +27,6 @@ export interface WorkoutEquipmentSettings {
     useWorkoutBand: boolean,
     useDumbells: boolean,
     useHangingBar: boolean,
-    useNone: boolean,
 }
 
 export interface WorkoutIncludeSettings {

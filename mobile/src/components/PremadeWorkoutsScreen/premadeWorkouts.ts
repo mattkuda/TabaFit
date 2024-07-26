@@ -1,8 +1,7 @@
-import mongoose from 'mongoose';
 import { Difficulty, TabataWorkout } from '../../types/workouts';
 
 export const premadeWorkout1: TabataWorkout = {
-    _id: new mongoose.Types.ObjectId('premadeWorkout1'),
+    _id: 'premadeWorkout1',
     name: `premadeWorkout1`,
     description: 'premadeWorkout1. todo update.',
     createdAt: new Date().toISOString(),

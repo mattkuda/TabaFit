@@ -1,9 +1,8 @@
-import mongoose from 'mongoose';
 import { Difficulty, TabataWorkoutWithUserInfo } from '../types/workouts';
 import { exerciseDict } from './constants';
 
 const featuredWorkout1: TabataWorkoutWithUserInfo = {
-    _id: new mongoose.Types.ObjectId(`tabafit-1`),
+    _id: `tabafit-1`,
     name: `Basic Alpha Release`,
     description: 'TODO refine and add more of these.',
     createdAt: new Date().toISOString(),
@@ -45,7 +44,7 @@ const featuredWorkout1: TabataWorkoutWithUserInfo = {
 };
 
 const featuredWorkout2: TabataWorkoutWithUserInfo = {
-    _id: new mongoose.Types.ObjectId(`tabafit-2`),
+    _id: `tabafit-2`,
     name: `Intermediate Alpha Release`,
     description: 'TODO refine and add more of these.',
     createdAt: new Date().toISOString(),
