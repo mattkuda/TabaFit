@@ -1,4 +1,4 @@
-import { WorkoutIncludeSettings } from '../types/workouts';
+import { Difficulty, WorkoutIncludeSettings } from '../types/workouts';
 // @ts-ignore
 import lowerBodyIcon from '../../assets/exercise-icons/lower-body.png';
 // @ts-ignore
@@ -76,18 +76,18 @@ export const workoutDifficultyGradients = {
     extreme: ['flameCherry.900', 'cherry.600'],
 };
 
-export const getWorkoutDifficultyGradient = (numberOfTabatas: number): string[] => {
+export const getWorkoutDifficultyGradient = (difficulty: Difficulty): string[] => {
     let difficultyColor;
 
-    switch (true) {
-        case numberOfTabatas > 9:
-            difficultyColor = workoutDifficultyGradients.extreme;
+    switch (difficulty) {
+        case Difficulty.Basic:
+            difficultyColor = workoutDifficultyGradients.easy;
             break;
-        case numberOfTabatas > 6:
-            difficultyColor = workoutDifficultyGradients.hard;
-            break;
-        case numberOfTabatas > 3:
+        case Difficulty.Intermediate:
             difficultyColor = workoutDifficultyGradients.medium;
+            break;
+        case Difficulty.Advanced:
+            difficultyColor = workoutDifficultyGradients.hard;
             break;
         default:
             difficultyColor = workoutDifficultyGradients.easy;
@@ -96,3 +96,24 @@ export const getWorkoutDifficultyGradient = (numberOfTabatas: number): string[] 
 
     return difficultyColor;
 };
+
+// export const getOldWorkoutDifficultyGradient = (numberOfTabatas: number): string[] => {
+//     let difficultyColor;
+
+//     switch (true) {
+//         case numberOfTabatas > 9:
+//             difficultyColor = workoutDifficultyGradients.extreme;
+//             break;
+//         case numberOfTabatas > 6:
+//             difficultyColor = workoutDifficultyGradients.hard;
+//             break;
+//         case numberOfTabatas > 3:
+//             difficultyColor = workoutDifficultyGradients.medium;
+//             break;
+//         default:
+//             difficultyColor = workoutDifficultyGradients.easy;
+//             break;
+//     }
+
+//     return difficultyColor;
+// };
