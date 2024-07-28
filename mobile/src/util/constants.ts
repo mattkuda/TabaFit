@@ -11,28 +11,28 @@ export enum Intervals {
 
 export const exerciseDict: Record<string, TabataExercise> = {
     squats: {
-        _id: 'squats', name: 'Squats', types: ['Lower Body'], description: 'Standard squats.', difficulty: 'Basic', equipment: ['None'],
+        _id: 'squats', name: 'Squats', types: ['Lower Body'], description: 'Standard squats.', difficulty: 'Basic', equipment: [],
     },
     lunges: {
-        _id: 'lunges', name: 'Lunges', types: ['Lower Body'], description: 'Alternating lunges.', difficulty: 'Basic', equipment: ['None'],
+        _id: 'lunges', name: 'Lunges', types: ['Lower Body'], description: 'Alternating lunges.', difficulty: 'Basic', equipment: [],
     },
     'glute-bridges': {
-        _id: 'glute-bridges', name: 'Glute Bridges', types: ['Lower Body'], description: 'Hip lifts for glute strength.', difficulty: 'Basic', equipment: ['None'],
+        _id: 'glute-bridges', name: 'Glute Bridges', types: ['Lower Body'], description: 'Hip lifts for glute strength.', difficulty: 'Basic', equipment: [],
     },
     'step-ups': {
         _id: 'step-ups', name: 'Step-Ups', types: ['Lower Body'], description: 'Step onto a raised platform.', difficulty: 'Intermediate', equipment: ['Box Platform'],
     },
     'calf-raises': {
-        _id: 'calf-raises', name: 'Calf Raises', types: ['Lower Body'], description: 'Raise heels standing on toes.', difficulty: 'Basic', equipment: ['None'],
+        _id: 'calf-raises', name: 'Calf Raises', types: ['Lower Body'], description: 'Raise heels standing on toes.', difficulty: 'Basic', equipment: [],
     },
     'side-lunges': {
-        _id: 'side-lunges', name: 'Side Lunges', types: ['Lower Body'], description: 'Lunge to the side.', difficulty: 'Intermediate', equipment: ['None'],
+        _id: 'side-lunges', name: 'Side Lunges', types: ['Lower Body'], description: 'Lunge to the side.', difficulty: 'Intermediate', equipment: [],
     },
     'dumbbell-romanian-deadlift': {
-        _id: 'dumbbell-romanian-deadlift', name: 'Dumbbell Romanian Deadlift', types: ['Lower Body'], description: 'Deadlift with dumbells in each hand.', difficulty: 'Advanced', equipment: ['None'],
+        _id: 'dumbbell-romanian-deadlift', name: 'Dumbbell Romanian Deadlift', types: ['Lower Body'], description: 'Deadlift with dumbells in each hand.', difficulty: 'Advanced', equipment: [],
     },
     'jump-squats': {
-        _id: 'jump-squats', name: 'Jump Squats', types: ['Lower Body'], description: 'Squat followed by a jump.', difficulty: 'Advanced', equipment: ['None'],
+        _id: 'jump-squats', name: 'Jump Squats', types: ['Lower Body'], description: 'Squat followed by a jump.', difficulty: 'Advanced', equipment: [],
     },
     'box-jumps': {
         _id: 'box-jumps', name: 'Box Jumps', types: ['Lower Body'], description: 'Jump onto a raised platform and back down.', difficulty: 'Intermediate', equipment: ['Box Platform'],
@@ -47,16 +47,16 @@ export const exerciseDict: Record<string, TabataExercise> = {
         _id: 'yoga-ball-squats', name: 'Yoga Ball Squats', types: ['Lower Body'], description: 'Squats against a yoga ball placed on a wall.', difficulty: 'Basic', equipment: ['Yoga Ball'],
     },
     'alternating-jump-lunges': {
-        _id: 'alternating-jump-lunges', name: 'Alternating Jump Lunges', types: ['Lower Body'], description: 'Jump lunges alternating legs.', difficulty: 'Advanced', equipment: ['None'],
+        _id: 'alternating-jump-lunges', name: 'Alternating Jump Lunges', types: ['Lower Body'], description: 'Jump lunges alternating legs.', difficulty: 'Advanced', equipment: [],
     },
     'single-leg-glute-bridge': {
-        _id: 'single-leg-glute-bridge', name: 'Single-Leg Glute Bridge', types: ['Lower Body'], description: 'Bridge with one leg lifted.', difficulty: 'Intermediate', equipment: ['None'],
+        _id: 'single-leg-glute-bridge', name: 'Single-Leg Glute Bridge', types: ['Lower Body'], description: 'Bridge with one leg lifted.', difficulty: 'Intermediate', equipment: [],
     },
     'push-ups': {
-        _id: 'push-ups', name: 'Push-Ups', types: ['Upper Body'], description: 'Standard push-ups.', difficulty: 'Basic', equipment: ['None'],
+        _id: 'push-ups', name: 'Push-Ups', types: ['Upper Body'], description: 'Standard push-ups.', difficulty: 'Basic', equipment: [],
     },
     'box-dips': {
-        _id: 'box-dips', name: 'Box Dips', types: ['Upper Body'], description: 'Dips on a box or sturdy surface.', difficulty: 'Intermediate', equipment: ['None'],
+        _id: 'box-dips', name: 'Box Dips', types: ['Upper Body'], description: 'Dips on a box or sturdy surface.', difficulty: 'Intermediate', equipment: [],
     },
     'kettlebell-shoulder-press': {
         _id: 'kettlebell-shoulder-press', name: 'Kettlebell Shoulder Press', types: ['Upper Body'], description: 'Press a kettlebell overhead.', difficulty: 'Intermediate', equipment: ['Kettlebell'],
@@ -83,31 +83,31 @@ export const exerciseDict: Record<string, TabataExercise> = {
         _id: 'dumbbell-lying-chest-press', name: 'Dumbbell Lying Chest Press', types: ['Upper Body'], description: 'Press dumbbells while lying on a bench.', difficulty: 'Intermediate', equipment: ['Dumbells'],
     },
     crunches: {
-        _id: 'crunches', name: 'Crunches', types: ['Abs'], description: 'Basic crunches for core.', difficulty: 'Basic', equipment: ['None'],
+        _id: 'crunches', name: 'Crunches', types: ['Abs'], description: 'Basic crunches for core.', difficulty: 'Basic', equipment: [],
     },
     'lying-leg-raises': {
-        _id: 'lying-leg-raises', name: 'Lying Leg Raises', types: ['Abs'], description: 'Lift legs for lower abs.', difficulty: 'Basic', equipment: ['None'],
+        _id: 'lying-leg-raises', name: 'Lying Leg Raises', types: ['Abs'], description: 'Lift legs for lower abs.', difficulty: 'Basic', equipment: [],
     },
     planks: {
-        _id: 'planks', name: 'Planks', types: ['Abs'], description: 'Hold a plank position for core strength.', difficulty: 'Basic', equipment: ['None'],
+        _id: 'planks', name: 'Planks', types: ['Abs'], description: 'Hold a plank position for core strength.', difficulty: 'Basic', equipment: [],
     },
     'russian-twists': {
-        _id: 'russian-twists', name: 'Russian Twists', types: ['Abs'], description: 'Twist torso with feet off the ground.', difficulty: 'Basic', equipment: ['None'],
+        _id: 'russian-twists', name: 'Russian Twists', types: ['Abs'], description: 'Twist torso with feet off the ground.', difficulty: 'Basic', equipment: [],
     },
     'bicycle-crunches': {
-        _id: 'bicycle-crunches', name: 'Bicycle Crunches', types: ['Abs'], description: 'Alternate elbow to knee in a cycling motion.', difficulty: 'Basic', equipment: ['None'],
+        _id: 'bicycle-crunches', name: 'Bicycle Crunches', types: ['Abs'], description: 'Alternate elbow to knee in a cycling motion.', difficulty: 'Basic', equipment: [],
     },
     'mountain-climbers': {
-        _id: 'mountain-climbers', name: 'Mountain Climbers', types: ['Abs'], description: 'Drive knees in towards chest.', difficulty: 'Intermediate', equipment: ['None'],
+        _id: 'mountain-climbers', name: 'Mountain Climbers', types: ['Abs'], description: 'Drive knees in towards chest.', difficulty: 'Intermediate', equipment: [],
     },
     'v-ups': {
-        _id: 'v-ups', name: 'V-Ups', types: ['Abs'], description: 'Lift legs and torso to form a V shape.', difficulty: 'Advanced', equipment: ['None'],
+        _id: 'v-ups', name: 'V-Ups', types: ['Abs'], description: 'Lift legs and torso to form a V shape.', difficulty: 'Advanced', equipment: [],
     },
     'flutter-kicks': {
-        _id: 'flutter-kicks', name: 'Flutter Kicks', types: ['Abs'], description: 'Kick legs up and down in a small range.', difficulty: 'Intermediate', equipment: ['None'],
+        _id: 'flutter-kicks', name: 'Flutter Kicks', types: ['Abs'], description: 'Kick legs up and down in a small range.', difficulty: 'Intermediate', equipment: [],
     },
     'plank-jacks': {
-        _id: 'plank-jacks', name: 'Plank Jacks', types: ['Abs'], description: 'Jump feet in and out while in plank position.', difficulty: 'Intermediate', equipment: ['None'],
+        _id: 'plank-jacks', name: 'Plank Jacks', types: ['Abs'], description: 'Jump feet in and out while in plank position.', difficulty: 'Intermediate', equipment: [],
     },
     'around-the-worlds': {
         _id: 'around-the-worlds', name: 'Around the Worlds', types: ['Abs'], description: 'Swing the kettlebell around your body.', difficulty: 'Intermediate', equipment: ['Kettlebell'],
@@ -119,39 +119,39 @@ export const exerciseDict: Record<string, TabataExercise> = {
         _id: 'yoga-ball-crunches', name: 'Yoga Ball Crunches', types: ['Abs'], description: 'Crunches on a yoga ball.', difficulty: 'Basic', equipment: ['Yoga Ball'],
     },
     'windshield-wipers': {
-        _id: 'windshield-wipers', name: 'Windshield Wipers', types: ['Abs'], description: 'Rotate legs side to side in a controlled motion.', difficulty: 'Advanced', equipment: ['None'],
+        _id: 'windshield-wipers', name: 'Windshield Wipers', types: ['Abs'], description: 'Rotate legs side to side in a controlled motion.', difficulty: 'Advanced', equipment: [],
     },
     'hollow-rocks': {
-        _id: 'hollow-rocks', name: 'Hollow Rocks', types: ['Abs'], description: 'Rock forward and back in a strong hollow position.', difficulty: 'Advanced', equipment: ['None'],
+        _id: 'hollow-rocks', name: 'Hollow Rocks', types: ['Abs'], description: 'Rock forward and back in a strong hollow position.', difficulty: 'Advanced', equipment: [],
     },
     inchworm: {
-        _id: 'inchworm', name: 'Inchworm', types: ['Upper Body'], description: 'Walk hands forward from a standing position.', difficulty: 'Intermediate', equipment: ['None'],
+        _id: 'inchworm', name: 'Inchworm', types: ['Upper Body'], description: 'Walk hands forward from a standing position.', difficulty: 'Intermediate', equipment: [],
     },
     'high-knees': {
-        _id: 'high-knees', name: 'High Knees', types: ['Cardio'], description: 'Run in place with high knees.', difficulty: 'Intermediate', equipment: ['None'],
+        _id: 'high-knees', name: 'High Knees', types: ['Cardio'], description: 'Run in place with high knees.', difficulty: 'Intermediate', equipment: [],
     },
     burpees: {
-        _id: 'burpees', name: 'Burpees', types: ['Cardio', 'Abs'], description: 'Full body exercise with a jump.', difficulty: 'Intermediate', equipment: ['None'],
+        _id: 'burpees', name: 'Burpees', types: ['Cardio', 'Abs'], description: 'Full body exercise with a jump.', difficulty: 'Intermediate', equipment: [],
     },
     'jumping-jacks': {
-        _id: 'jumping-jacks', name: 'Jumping Jacks', types: ['Cardio'], description: 'Jump with spread legs and clapping hands overhead.', difficulty: 'Basic', equipment: ['None'],
+        _id: 'jumping-jacks', name: 'Jumping Jacks', types: ['Cardio'], description: 'Jump with spread legs and clapping hands overhead.', difficulty: 'Basic', equipment: [],
     },
     skaters: {
-        _id: 'skaters', name: 'Skaters', types: ['Cardio'], description: 'Leap side to side in a skating motion.', difficulty: 'Intermediate', equipment: ['None'],
+        _id: 'skaters', name: 'Skaters', types: ['Cardio'], description: 'Leap side to side in a skating motion.', difficulty: 'Intermediate', equipment: [],
     },
     'butt-kicks': {
-        _id: 'butt-kicks', name: 'Butt Kicks', types: ['Cardio'], description: 'Run in place kicking heels to glutes.', difficulty: 'Basic', equipment: ['None'],
+        _id: 'butt-kicks', name: 'Butt Kicks', types: ['Cardio'], description: 'Run in place kicking heels to glutes.', difficulty: 'Basic', equipment: [],
     },
     'speed-skaters': {
-        _id: 'speed-skaters', name: 'Speed Skaters', types: ['Cardio'], description: 'Side-to-side leaping with a slight squat.', difficulty: 'Intermediate', equipment: ['None'],
+        _id: 'speed-skaters', name: 'Speed Skaters', types: ['Cardio'], description: 'Side-to-side leaping with a slight squat.', difficulty: 'Intermediate', equipment: [],
     },
     'fast-feet': {
-        _id: 'fast-feet', name: 'Fast Feet', types: ['Cardio'], description: 'Quickly shuffle feet in place.', difficulty: 'Basic', equipment: ['None'],
+        _id: 'fast-feet', name: 'Fast Feet', types: ['Cardio'], description: 'Quickly shuffle feet in place.', difficulty: 'Basic', equipment: [],
     },
     sprints: {
-        _id: 'sprints', name: 'Sprints', types: ['Cardio'], description: 'Run at full speed.', difficulty: 'Advanced', equipment: ['None'],
+        _id: 'sprints', name: 'Sprints', types: ['Cardio'], description: 'Run at full speed.', difficulty: 'Advanced', equipment: [],
     },
     'bear-crawl': {
-        _id: 'bear-crawl', name: 'Bear Crawl', types: ['Upper Body'], description: 'Crawl on all fours, keeping your knees off the ground.', difficulty: 'Intermediate', equipment: ['None'],
+        _id: 'bear-crawl', name: 'Bear Crawl', types: ['Upper Body'], description: 'Crawl on all fours, keeping your knees off the ground.', difficulty: 'Intermediate', equipment: [],
     },
 };
