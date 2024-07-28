@@ -28,7 +28,7 @@ export const shuffleExercises = (
     };
 
     const equipmentFilter = (exercise: TabataExercise): boolean => {
-        if (!exercise.difficulty.includes(difficulty)) {
+        if (exercise.difficulty !== difficulty) {
             return false;
         }
 
