@@ -727,15 +727,15 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                     <HStack width="100%">
                                         <HStack flex={1}>
                                             <Checkbox
-                                                bgColor={modalWorkout.equipment.useHangingBar ? 'primary' : 'gray.900'}
-                                                isChecked={modalWorkout.equipment.useHangingBar}
-                                                key="HangingBar-checkbox"
+                                                bgColor={modalWorkout.equipment.useBoxPlatform ? 'primary' : 'gray.900'}
+                                                isChecked={modalWorkout.equipment.useBoxPlatform}
+                                                key="BoxPlatform-checkbox"
                                                 mb="2"
                                                 size="lg"
-                                                value="HangingBar"
-                                                onChange={(): void => handleWorkoutEquipmentChange('useHangingBar', !modalWorkout.equipment.useHangingBar)}
+                                                value="BoxPlatform"
+                                                onChange={(): void => handleWorkoutEquipmentChange('useBoxPlatform', !modalWorkout.equipment.useBoxPlatform)}
                                             >
-                                                <Text>Hanging Bar</Text>
+                                                <Text>Box Platform</Text>
                                             </Checkbox>
                                         </HStack>
                                         <HStack flex={1}>
@@ -749,34 +749,6 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                                 onChange={(): void => handleWorkoutEquipmentChange('useYogaBall', !modalWorkout.equipment.useYogaBall)}
                                             >
                                                 <Text>Yoga Ball</Text>
-                                            </Checkbox>
-                                        </HStack>
-                                    </HStack>
-                                    <HStack width="100%">
-                                        <HStack flex={1}>
-                                            <Checkbox
-                                                bgColor={modalWorkout.equipment.useWorkoutBand ? 'primary' : 'gray.900'}
-                                                isChecked={modalWorkout.equipment.useWorkoutBand}
-                                                key="WorkoutBand-checkbox"
-                                                mb="2"
-                                                size="lg"
-                                                value="WorkoutBand"
-                                                onChange={(): void => handleWorkoutEquipmentChange('useWorkoutBand', !modalWorkout.equipment.useWorkoutBand)}
-                                            >
-                                                <Text>Workout Band</Text>
-                                            </Checkbox>
-                                        </HStack>
-                                        <HStack flex={1}>
-                                            <Checkbox
-                                                bgColor={modalWorkout.equipment.useBoxPlatform ? 'primary' : 'gray.900'}
-                                                isChecked={modalWorkout.equipment.useBoxPlatform}
-                                                key="BoxPlatform-checkbox"
-                                                mb="2"
-                                                size="lg"
-                                                value="BoxPlatform"
-                                                onChange={(): void => handleWorkoutEquipmentChange('useBoxPlatform', !modalWorkout.equipment.useBoxPlatform)}
-                                            >
-                                                <Text>Box Platform</Text>
                                             </Checkbox>
                                         </HStack>
                                     </HStack>
