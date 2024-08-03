@@ -1,6 +1,8 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { useTheme } from 'native-base';
+import { StackNavigationProp, createStackNavigator } from '@react-navigation/stack';
+import { Icon, IconButton, useTheme } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 import { WorkoutsStackParamList } from './navigationTypes';
 import { BuildWorkoutScreen } from '../components/BuildWorkoutScreen';
 import { SelectExerciseScreen } from '../components/SelectExerciseScreen';
@@ -13,8 +15,26 @@ import { DiscoverWorkoutsScreen } from '../components/DiscoverWorkoutsScreen';
 import { PremadeWorkoutsScreen } from '../components/PremadeWorkoutsScreen';
 import { ShuffleWorkoutScreen } from '../components/ShuffleWorkoutScreen';
 import { MyCreatedWorkoutsScreen } from '../components/MyCreatedWorkoutsScreen';
+import { ManualWorkoutScreen } from '../components/ManualWorkoutScreen';
+import { TabNavigatorParamList } from '../types/navigationTypes';
+
+type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, 'WorkoutsScreen'>;
 
 const Stack = createStackNavigator<WorkoutsStackParamList>();
+const ManualWorkoutButtonComponent = (): JSX.Element => {
+    const navigation = useNavigation<WorkoutsScreenNavigationProp>();
+
+    return (
+        <IconButton
+            _icon={{
+                color: 'white',
+            }}
+            borderRadius="full"
+            icon={<Icon as={Ionicons} name="add-circle-outline" size="lg" />}
+            onPress={(): void => navigation.navigate('ManualWorkoutScreen')}
+        />
+    );
+};
 
 export const WorkoutsStackNavigator = (): JSX.Element => {
     const { colors } = useTheme();
@@ -30,6 +50,7 @@ export const WorkoutsStackNavigator = (): JSX.Element => {
                 headerTintColor: "white",
                 headerTitleStyle: { color: 'white' },
                 headerShadowVisible: false,
+                headerRight: ManualWorkoutButtonComponent,
             }}
         >
             <Stack.Screen
@@ -109,6 +130,13 @@ export const WorkoutsStackNavigator = (): JSX.Element => {
                 name="PremadeWorkoutsScreen"
                 options={{
                     headerTitle: 'TabaFit Workouts',
+                }}
+            />
+            <Stack.Screen
+                component={ManualWorkoutScreen}
+                name="ManualWorkoutScreen"
+                options={{
+                    headerTitle: 'Add Manual Workout',
                 }}
             />
         </Stack.Navigator>
