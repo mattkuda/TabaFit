@@ -18,7 +18,7 @@ import { useCreateWorkout } from '../../mutations/workoutMutations';
 import { GradientVStack } from '../common/GradientVStack';
 import { useWorkoutOwnership } from '../../hooks/useUserInfo';
 
-export const ShareWorkoutScreen = (): JSX.Element => {
+export const ManualWorkoutScreen = (): JSX.Element => {
     const route = useRoute<ShareWorkoutScreenRouteProp>();
     const { workout, completedAt } = route.params;
     const [workoutTitle, setWorkoutTitle] = useState('');
