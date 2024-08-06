@@ -1,4 +1,6 @@
-import React, { useRef, useState } from 'react';
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useRef, useState } from 'react';
 import {
     ScrollView,
 } from 'react-native';
@@ -7,8 +9,13 @@ import {
     VStack, HStack, Text, Input, Divider,
     Center,
     Spinner,
+    Icon,
+    IconButton,
+    Menu,
 } from 'native-base';
 import { formatDistanceToNow } from 'date-fns';
+import { Ionicons } from '@expo/vector-icons';
+import { useQueryClient } from 'react-query';
 import { useAuth } from '../../context/AuthContext';
 import { useMutateAddComment, useMutateDeleteComment } from '../../mutations/commentMutations';
 import { PostScreenRouteProp } from '../../navigation/navigationTypes';
@@ -20,6 +27,8 @@ import { LikeCommentButtons } from '../common/LikeCommentButtons';
 import { WorkoutPostDisplay } from '../common/WorkoutPostDisplay';
 import { ProfilePicture } from '../ProfilePicture';
 import { GradientVStack } from '../common/GradientVStack';
+import { WorkoutPostManualDisplay } from '../common/WorkoutPostManualDisplay';
+import { useDeletePost } from '../../mutations/useMutateSharePost';
 
 export const PostScreen = (): JSX.Element => {
     const route = useRoute<PostScreenRouteProp>();
@@ -29,11 +38,23 @@ export const PostScreen = (): JSX.Element => {
     } = useQueryPost(postId);
     const addCommentMutation = useMutateAddComment();
     const deleteCommentMutation = useMutateDeleteComment();
+    const deletePostMutation = useDeletePost();
     const [commentBody, setCommentBody] = useState('');
     const { authState } = useAuth();
     const userId = authState?.userId;
     const navigation = useNavigation<PostScreenNavigationProp>();
     const commentInputRef = useRef<HTMLInputElement>(null);
+    const queryClient = useQueryClient();
+
+    const handleDeletePost = (): void => {
+        deletePostMutation.mutate({ postId }, {
+            onSuccess: () => {
+                queryClient.invalidateQueries(['userInfo', userId]);
+                queryClient.invalidateQueries('following-posts');
+                navigation.goBack(); // Navigate back after deletion
+            },
+        });
+    };
 
     const handleAddComment = (): void => {
         addCommentMutation.mutate({ postId, userId, body: commentBody }, {
@@ -55,6 +76,32 @@ export const PostScreen = (): JSX.Element => {
     const handlePressUser = (): void => {
         navigation.navigate('Profile', { userId: post.userId });
     };
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: (): JSX.Element => (
+                <Menu
+                    shadow={2}
+                    trigger={(triggerProps): JSX.Element => (
+                        <IconButton
+                            {...triggerProps}
+                            _icon={{
+                                color: 'white',
+                                size: 'md',
+                            }}
+                            borderRadius="full"
+                            color="primary"
+                            icon={<Icon as={Ionicons} name="ellipsis-horizontal-outline" size="lg" />}
+                        />
+                    )}
+                >
+                    <Menu.Item onPress={handleDeletePost}>
+                        <Text color="red.500">Delete Post</Text>
+                    </Menu.Item>
+                </Menu>
+            ),
+        });
+    }, [navigation]);
 
     if (isLoading) {
         return (
@@ -110,7 +157,9 @@ export const PostScreen = (): JSX.Element => {
                         {post.description}
                     </Text>
                 )}
-                <WorkoutPostDisplay workout={post.workout} />
+                {post.workout
+                    ? <WorkoutPostDisplay workout={post.workout} />
+                    : <WorkoutPostManualDisplay manualTabatas={post.manualTabatas} />}
                 <LikeCommentButtons post={post} />
                 <Divider backgroundColor="gray6" />
                 <Input
@@ -132,7 +181,6 @@ export const PostScreen = (): JSX.Element => {
                     type="text"
                     value={commentBody}
                     onChangeText={setCommentBody}
-
                 />
                 {/* @ts-expect-errors */}
                 <VStack gap={4} mt={2}>
@@ -146,6 +194,5 @@ export const PostScreen = (): JSX.Element => {
                 </VStack>
             </ScrollView>
         </GradientVStack>
-
     );
 };

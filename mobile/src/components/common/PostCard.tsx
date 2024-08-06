@@ -11,6 +11,7 @@ import { formatName } from '../../util/util';
 import { LikeCommentButtons } from './LikeCommentButtons';
 import { WorkoutPostDisplay } from './WorkoutPostDisplay';
 import { ProfilePicture } from '../ProfilePicture';
+import { WorkoutPostManualDisplay } from './WorkoutPostManualDisplay';
 
 type PostCardProps = {
     post: PostModel;
@@ -79,7 +80,9 @@ export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
                         {post.description}
                     </Text>
                 )}
-                <WorkoutPostDisplay workout={post.workout} />
+                {post.workout
+                    ? <WorkoutPostDisplay workout={post.workout} />
+                    : <WorkoutPostManualDisplay manualTabatas={post.manualTabatas} />}
                 <LikeCommentButtons handleCommentPress={handlePress} post={post} />
             </VStack>
         </TouchableOpacity>

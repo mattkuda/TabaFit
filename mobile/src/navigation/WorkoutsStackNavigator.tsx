@@ -137,6 +137,7 @@ export const WorkoutsStackNavigator = (): JSX.Element => {
                 name="ManualWorkoutScreen"
                 options={{
                     headerTitle: 'Add Manual Workout',
+                    headerBackTitle: 'Back',
                 }}
             />
         </Stack.Navigator>

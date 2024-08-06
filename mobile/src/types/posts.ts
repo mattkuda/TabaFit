@@ -18,6 +18,7 @@ export interface PostSchema {
     description: string;
     likes: mongoose.Types.ObjectId[];
     comments: PostComment[];
+    manualTabatas?: number;
 }
 
 export interface UserPostInfo {
@@ -44,6 +45,7 @@ export interface PostModel {
     updatedAt: string;
     title: string;
     description: string;
+    manualTabatas?: number;
     likes: mongoose.Types.ObjectId[];
     comments: PostCommentModel[];
 }

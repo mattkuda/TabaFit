@@ -19,3 +19,11 @@ export const useMutateShareWorkout = (): UseMutationResult<void, AxiosError, Sha
         userId, workout, title, description, manualTabatas,
     }),
 );
+
+interface DeletePostVariables {
+    postId: string;
+}
+
+export const useDeletePost = (): UseMutationResult<void, AxiosError, DeletePostVariables> => useMutation<void, AxiosError, DeletePostVariables>(
+    ({ postId }) => axios.delete(`${apiUrl}/posts/${postId}`),
+);

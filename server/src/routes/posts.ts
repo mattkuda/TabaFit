@@ -174,9 +174,39 @@ router.get('/post/:postId', async (req: Request, res: Response) => {
   }
 });
 
+router.delete('/:postId', authenticate, async (req: AuthRequest, res) => {
+  const { postId } = req.params;
+  const { userId } = req; // Authenticated user's ID from the authentication middleware
+
+  try {
+    // First, find the post to get the comment
+    const post = await postsCollection.findOne({ _id: new ObjectId(postId) });
+    if (!post) {
+      res.status(404).send({ message: 'Post not found' });
+      return;
+    }
+
+    // Check if the authenticated user is the owner of the post
+    if (post.userId.toString() !== userId) {
+      res.status(403).send({ message: 'Not authorized to delete this post' });
+      return;
+    }
+
+    // If the check passes, proceed to delete the Post
+    await postsCollection.deleteOne(
+      { _id: new ObjectId(postId) },
+    );
+
+    res.status(200).send({ message: 'Post deleted successfully' });
+  } catch (err) {
+    console.error('Failed to delete Post', err);
+    res.status(500).send({ message: 'Failed to delete Post' });
+  }
+});
+
 router.post('/share', authenticate, async (req: AuthRequest, res: Response) => {
   const {
-    workout, title, description,
+    workout, title, description, manualTabatas,
   } = req.body;
   const { userId } = req;
 
@@ -188,6 +218,7 @@ router.post('/share', authenticate, async (req: AuthRequest, res: Response) => {
       updatedAt: new Date().toISOString(),
       title,
       description,
+      manualTabatas,
       likes: [],
       comments: [],
     };

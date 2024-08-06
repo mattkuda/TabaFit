@@ -48,3 +48,17 @@ export const getFormattedTimeForTabataWorkout = (workout: TabataWorkout): string
 
     return formatTime(totalSeconds);
 };
+
+export const getFormattedTimeForManualWorkout = (numberOfTabatas: number): string => {
+    const totalSeconds = calculateTotalWorkoutTime(
+        0,
+        20,
+        10,
+        numberOfTabatas,
+        8,
+        60,
+        0,
+    );
+
+    return formatTime(totalSeconds);
+};

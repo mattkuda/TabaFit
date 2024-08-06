@@ -26,7 +26,6 @@ export const ManualWorkoutScreen = (): JSX.Element => {
     const userId = authState?.userId;
     const navigation = useNavigation<ShareWorkoutScreenNavigationProp>();
     const queryClient = useQueryClient();
-    // const [isSavingComplete, setIsSavingComplete] = useState(false);
 
     const handleReturnHome = (): void => {
         navigation.reset({
@@ -68,21 +67,6 @@ export const ManualWorkoutScreen = (): JSX.Element => {
             ),
         });
     }, [handleShareWorkout, navigation]);
-
-    useEffect(() => {
-        navigation.setOptions({
-            headerLeft: (): JSX.Element => (
-                <Button
-                    colorScheme="dull"
-                    size="lg"
-                    variant="ghost"
-                    onPress={handleReturnHome}
-                >
-                    Exit
-                </Button>
-            ),
-        });
-    }, [handleReturnHome, navigation]);
 
     const handleDurationChange = (itemValue: number): void => {
         setNumberOfTabatas(itemValue);
