@@ -97,6 +97,15 @@ export const getWorkoutDifficultyGradient = (difficulty: Difficulty): string[] =
     return difficultyColor;
 };
 
+export const getTimeOfDay = (date: Date): string => {
+    const hour = date.getHours();
+
+    if (hour >= 4 && hour < 11) return 'Morning';
+    if (hour >= 11 && hour < 14) return 'Lunch';
+    if (hour >= 14 && hour <= 17) return 'Afternoon';
+    return 'Evening';
+};
+
 // export const getOldWorkoutDifficultyGradient = (numberOfTabatas: number): string[] => {
 //     let difficultyColor;
 

@@ -4,55 +4,29 @@ import React, { useEffect, useState } from 'react';
 import {
     Text, Button, Input, TextArea,
     HStack,
-    Checkbox,
     Icon,
+    Select,
+    Box,
 } from 'native-base';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from 'react-query';
 import { Ionicons } from '@expo/vector-icons';
 import { ShareWorkoutScreenNavigationProp } from '../../types/navigationTypes';
 import { useAuth } from '../../context/AuthContext';
 import { useMutateShareWorkout } from '../../mutations/useMutateSharePost';
-import { ShareWorkoutScreenRouteProp } from '../../navigation/navigationTypes';
-import { useCreateWorkout } from '../../mutations/workoutMutations';
 import { GradientVStack } from '../common/GradientVStack';
-import { useWorkoutOwnership } from '../../hooks/useUserInfo';
+import { getTimeOfDay } from '../../util/util';
 
 export const ManualWorkoutScreen = (): JSX.Element => {
-    const route = useRoute<ShareWorkoutScreenRouteProp>();
-    const { workout, completedAt } = route.params;
-    const [workoutTitle, setWorkoutTitle] = useState('');
+    const [workoutTitle, setWorkoutTitle] = useState(`${getTimeOfDay(new Date())} Tabata`);
     const [workoutDescription, setWorkoutDescription] = useState('');
+    const [numberOfTabatas, setNumberOfTabatas] = useState(1); // Added state for number of tabatas
     const shareWorkoutMutation = useMutateShareWorkout();
     const { authState } = useAuth();
     const userId = authState?.userId;
     const navigation = useNavigation<ShareWorkoutScreenNavigationProp>();
-    const saveWorkoutMutation = useCreateWorkout();
-    const { isWorkoutCreatedByUser, isWorkoutSavedByUser } = useWorkoutOwnership(workout?._id.toString());
-    const isSaved = isWorkoutCreatedByUser || isWorkoutSavedByUser;
-    const [saveWorkoutSwitch, setSaveWorkoutSwitch] = useState(isSaved);
     const queryClient = useQueryClient();
-    const [isSavingComplete, setIsSavingComplete] = useState(false);
-
-    const handleSaveWorkout = (): Promise<void> => new Promise((resolve, reject) => {
-        if (authState?.userId && workout) {
-            saveWorkoutMutation.mutate({
-                workout: {
-                    ...workout,
-                    userId,
-                },
-            }, {
-                onSuccess: () => {
-                    resolve();
-                },
-                onError: () => {
-                    reject();
-                },
-            });
-        } else {
-            resolve();
-        }
-    });
+    // const [isSavingComplete, setIsSavingComplete] = useState(false);
 
     const handleReturnHome = (): void => {
         navigation.reset({
@@ -63,50 +37,22 @@ export const ManualWorkoutScreen = (): JSX.Element => {
     };
 
     const handleShareWorkout = (): void => {
-        setIsSavingComplete(false); // Reset saving complete state
-        if (saveWorkoutSwitch && !isSaved) {
-            handleSaveWorkout().finally(() => {
-                shareWorkoutMutation.mutate({
-                    userId,
-                    workout,
-                    title: workoutTitle,
-                    description: workoutDescription,
-                }, {
-                    onSuccess: () => {
-                        queryClient.invalidateQueries('following-posts');
-                        handleReturnHome();
-                    },
-                });
-            });
-        } else {
-            shareWorkoutMutation.mutate({
+        shareWorkoutMutation.mutate(
+            {
                 userId,
-                workout,
                 title: workoutTitle,
                 description: workoutDescription,
-            }, {
+                manualTabatas: numberOfTabatas,
+                workout: undefined,
+            },
+            {
                 onSuccess: () => {
                     queryClient.invalidateQueries('following-posts');
                     handleReturnHome();
                 },
-            });
-        }
+            },
+        );
     };
-
-    const getTimeOfDay = (date: Date): string => {
-        const hour = date.getHours();
-
-        if (hour >= 4 && hour < 11) return 'Morning';
-        if (hour >= 11 && hour < 14) return 'Lunch';
-        if (hour >= 14 && hour <= 17) return 'Afternoon';
-        return 'Evening';
-    };
-
-    useEffect(() => {
-        const timeOfDay = getTimeOfDay(completedAt);
-
-        setWorkoutTitle(`${timeOfDay} Tabata`);
-    }, [completedAt]);
 
     useEffect(() => {
         navigation.setOptions({
@@ -138,6 +84,10 @@ export const ManualWorkoutScreen = (): JSX.Element => {
         });
     }, [handleReturnHome, navigation]);
 
+    const handleDurationChange = (itemValue: number): void => {
+        setNumberOfTabatas(itemValue);
+    };
+
     return (
         <GradientVStack flex={1} p={4} space={4}>
             <Input
@@ -147,6 +97,59 @@ export const ManualWorkoutScreen = (): JSX.Element => {
                 value={workoutTitle}
                 onChangeText={setWorkoutTitle}
             />
+
+            {/* Number of Tabatas Row */}
+            <Box
+                flexDirection="row"
+                justifyContent="center"
+                width="100%"
+            >
+                <HStack alignItems="center" background="transparent" justifyContent="space-between" width="100%">
+                    <HStack alignItems="center" justifyContent="flex-start">
+                        <Icon as={Ionicons} mr={2} name="body-outline" size="md" />
+                        <Text
+                            fontSize="xl"
+                            numberOfLines={2}
+                            style={{
+                                fontWeight: 'bold',
+                            }}
+                        >
+                            Duration:
+                        </Text>
+                    </HStack>
+                    <Select
+                        _actionSheetContent={{
+                            bg: 'gray.900',
+                        }}
+                        _item={{
+                            bg: 'gray.900',
+                            color: 'white',
+                            _text: {
+                                color: 'white',
+                            },
+                            _pressed: {
+                                bg: 'gray.800',
+                            },
+                        }}
+                        _selectedItem={{
+                            bg: 'gray.700',
+                            color: 'white',
+                        }}
+                        backgroundColor="transparent"
+                        borderColor="transparent"
+                                        // @ts-expect-error
+                        leftElement={<Text fontSize="xl">{`${numberOfTabatas.toString()} ${numberOfTabatas > 1 ? 'Tabatas' : 'Tabata'}`}</Text>}
+                        size="xl"
+                        onValueChange={(itemValue): void => handleDurationChange(
+                            parseInt(itemValue, 10) || 0,
+                        )}
+                    >
+                        {[...Array(24).keys()].map((val, i) => (
+                            <Select.Item key={val} label={`${(i + 1).toString()} ${i > 0 ? 'Tabatas' : 'Tabata'}`} value={(i + 1).toString()} />
+                        ))}
+                    </Select>
+                </HStack>
+            </Box>
             <TextArea
                 autoCompleteType={undefined}
                 backgroundColor="gray.900"
@@ -156,22 +159,6 @@ export const ManualWorkoutScreen = (): JSX.Element => {
                 value={workoutDescription}
                 onChangeText={setWorkoutDescription}
             />
-            <HStack alignItems="center" space={4}>
-                <Text>
-                    {!isSaved && !isSavingComplete ? 'Save workout to library when sharing?' : 'Workout saved to library'}
-                </Text>
-                <Checkbox
-                    bgColor={saveWorkoutSwitch ? 'primary' : 'gray.900'}
-                    borderColor="gray.600"
-                    borderWidth={1}
-                    isChecked={isSaved || saveWorkoutSwitch}
-                    isDisabled={isSaved}
-                    key="save-workout-switch"
-                    size="lg"
-                    value="save-workout-switch"
-                    onChange={(): void => setSaveWorkoutSwitch(!saveWorkoutSwitch)}
-                />
-            </HStack>
         </GradientVStack>
     );
 };
