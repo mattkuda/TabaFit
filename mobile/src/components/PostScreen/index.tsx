@@ -78,29 +78,31 @@ export const PostScreen = (): JSX.Element => {
     };
 
     useEffect(() => {
-        navigation.setOptions({
-            headerRight: (): JSX.Element => (
-                <Menu
-                    shadow={2}
-                    trigger={(triggerProps): JSX.Element => (
-                        <IconButton
-                            {...triggerProps}
-                            _icon={{
-                                color: 'white',
-                                size: 'md',
-                            }}
-                            borderRadius="full"
-                            color="primary"
-                            icon={<Icon as={Ionicons} name="ellipsis-horizontal-outline" size="lg" />}
-                        />
-                    )}
-                >
-                    <Menu.Item onPress={handleDeletePost}>
-                        <Text color="red.500">Delete Post</Text>
-                    </Menu.Item>
-                </Menu>
-            ),
-        });
+        if (post?.userId === userId) {
+            navigation.setOptions({
+                headerRight: (): JSX.Element => (
+                    <Menu
+                        shadow={2}
+                        trigger={(triggerProps): JSX.Element => (
+                            <IconButton
+                                {...triggerProps}
+                                _icon={{
+                                    color: 'white',
+                                    size: 'md',
+                                }}
+                                borderRadius="full"
+                                color="primary"
+                                icon={<Icon as={Ionicons} name="ellipsis-horizontal-outline" size="lg" />}
+                            />
+                        )}
+                    >
+                        <Menu.Item onPress={handleDeletePost}>
+                            <Text color="red.500">Delete Post</Text>
+                        </Menu.Item>
+                    </Menu>
+                ),
+            });
+        }
     }, [navigation]);
 
     if (isLoading) {

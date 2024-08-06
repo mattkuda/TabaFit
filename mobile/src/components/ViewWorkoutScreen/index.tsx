@@ -169,7 +169,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                     width="100%"
                 >
                     <HStack alignItems="center">
-                        <Icon as={Ionicons} color={getWorkoutDifficultyGradient(workout.tabatas.length)} mr={2} name="barbell-outline" size="md" />
+                        <Icon as={Ionicons} color={getWorkoutDifficultyGradient(workout.difficulty)} mr={2} name="barbell-outline" size="md" />
                         <Text bold flex={1} fontSize="xl">{workout.name}</Text>
                     </HStack>
                     <Box alignItems="center" flexDirection="row" justifyContent="space-between">
