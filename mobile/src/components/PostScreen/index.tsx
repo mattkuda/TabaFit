@@ -103,7 +103,7 @@ export const PostScreen = (): JSX.Element => {
                 ),
             });
         }
-    }, [navigation]);
+    }, [navigation, post?.userId]);
 
     if (isLoading) {
         return (
