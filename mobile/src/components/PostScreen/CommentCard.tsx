@@ -18,7 +18,7 @@ type CommentCardProps = {
 
 const MenuTrigger = ({ triggerProps }): JSX.Element => (
     <Pressable accessibilityLabel="More options menu" {...triggerProps}>
-        <Icon as={Ionicons} name="ellipsis-vertical-outline" size="md" />
+        <Icon as={Ionicons} name="ellipsis-horizontal-outline" size="md" />
     </Pressable>
 );
 

@@ -92,7 +92,7 @@ export const ManualWorkoutScreen = (): JSX.Element => {
                     <HStack alignItems="center" justifyContent="flex-start">
                         <Icon as={Ionicons} mr={2} name="body-outline" size="md" />
                         <Text
-                            fontSize="xl"
+                            fontSize="lg"
                             numberOfLines={2}
                             style={{
                                 fontWeight: 'bold',
@@ -121,9 +121,9 @@ export const ManualWorkoutScreen = (): JSX.Element => {
                         }}
                         backgroundColor="transparent"
                         borderColor="transparent"
-                                        // @ts-expect-error
-                        leftElement={<Text fontSize="xl">{`${numberOfTabatas.toString()} ${numberOfTabatas > 1 ? 'Tabatas' : 'Tabata'}`}</Text>}
-                        size="xl"
+                        // @ts-expect-error
+                        leftElement={<Text fontSize="lg">{`${numberOfTabatas.toString()} ${numberOfTabatas > 1 ? 'Tabatas' : 'Tabata'}`}</Text>}
+                        size="lg"
                         onValueChange={(itemValue): void => handleDurationChange(
                             parseInt(itemValue, 10) || 0,
                         )}

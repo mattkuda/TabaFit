@@ -82,6 +82,7 @@ export const PostScreen = (): JSX.Element => {
             navigation.setOptions({
                 headerRight: (): JSX.Element => (
                     <Menu
+                        backgroundColor="gray.900"
                         shadow={2}
                         trigger={(triggerProps): JSX.Element => (
                             <IconButton
