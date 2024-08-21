@@ -64,7 +64,7 @@ export const equipmentIconDictionary: Record<string, any> = {
     'Box Platform': kettlebell,
     'Yoga Ball': kettlebell,
     'Workout Band': kettlebell,
-    Dumbells: kettlebell,
+    Dumbbells: kettlebell,
     'Hanging Bar': kettlebell,
     None: kettlebell,
 };

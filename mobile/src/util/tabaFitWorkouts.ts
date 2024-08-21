@@ -29,7 +29,7 @@ const featuredWorkout1: TabataWorkoutWithUserInfo = {
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
     },
     includeSettings: {
@@ -89,7 +89,7 @@ const featuredWorkout2: TabataWorkoutWithUserInfo = {
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
     },
     includeSettings: {

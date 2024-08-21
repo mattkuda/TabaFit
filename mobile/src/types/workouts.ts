@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 export type TabataExerciseType = 'Lower Body' | 'Upper Body' | 'Abs' | 'Cardio' | 'Glutes' | 'Spicy'
-export type TabataEquipmentType = 'Kettlebell' | 'Box Platform' | 'Yoga Ball' | 'Workout Band' | 'Dumbells' | 'Hanging Bar' | 'None';
+export type TabataEquipmentType = 'Kettlebell' | 'Box Platform' | 'Yoga Ball' | 'Workout Band' | 'Dumbbells' | 'Hanging Bar' | 'None';
 
 export interface TabataExercise {
     _id: string;
@@ -25,7 +25,7 @@ export interface WorkoutEquipmentSettings {
     useBoxPlatform: boolean,
     useYogaBall: boolean,
     useWorkoutBand: boolean,
-    useDumbells: boolean,
+    useDumbbells: boolean,
     useHangingBar: boolean,
 }
 

@@ -21,7 +21,7 @@ export const premadeWorkout1: TabataWorkout = {
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
     },
 };

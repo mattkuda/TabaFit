@@ -29,7 +29,7 @@ export const exerciseDictOld: Record<string, TabataExercise> = {
         _id: 'side-lunges', name: 'Side Lunges', types: ['Lower Body'], description: 'Lunge to the side.', difficulty: 'Intermediate', equipment: [],
     },
     'dumbbell-romanian-deadlift': {
-        _id: 'dumbbell-romanian-deadlift', name: 'Dumbbell Romanian Deadlift', types: ['Lower Body'], description: 'Deadlift with dumbells in each hand.', difficulty: 'Advanced', equipment: [],
+        _id: 'dumbbell-romanian-deadlift', name: 'Dumbbell Romanian Deadlift', types: ['Lower Body'], description: 'Deadlift with dumbbells in each hand.', difficulty: 'Advanced', equipment: [],
     },
     'jump-squats': {
         _id: 'jump-squats', name: 'Jump Squats', types: ['Lower Body'], description: 'Squat followed by a jump.', difficulty: 'Advanced', equipment: [],
@@ -65,22 +65,22 @@ export const exerciseDictOld: Record<string, TabataExercise> = {
         _id: 'kettlebell-tricep-press', name: 'Kettlebell Tricep Press', types: ['Upper Body'], description: 'Press a kettlebell behind your head extending your triceps.', difficulty: 'Intermediate', equipment: ['Kettlebell'],
     },
     'dumbbell-flyes': {
-        _id: 'dumbbell-flyes', name: 'Dumbbell Flyes', types: ['Upper Body'], description: 'Extend arms with dumbbells in a flying motion.', difficulty: 'Intermediate', equipment: ['Dumbells'],
+        _id: 'dumbbell-flyes', name: 'Dumbbell Flyes', types: ['Upper Body'], description: 'Extend arms with dumbbells in a flying motion.', difficulty: 'Intermediate', equipment: ['Dumbbells'],
     },
     'pull-ups': {
         _id: 'pull-ups', name: 'Pull ups', types: ['Upper Body'], description: 'Pull up to the bar.', difficulty: 'Advanced', equipment: ['Hanging Bar'],
     },
     'dumbbell-shoulder-press': {
-        _id: 'dumbbell-shoulder-press', name: 'Dumbbell Shoulder Press', types: ['Upper Body'], description: 'Press dumbbells overhead.', difficulty: 'Intermediate', equipment: ['Dumbells'],
+        _id: 'dumbbell-shoulder-press', name: 'Dumbbell Shoulder Press', types: ['Upper Body'], description: 'Press dumbbells overhead.', difficulty: 'Intermediate', equipment: ['Dumbbells'],
     },
     'dumbbell-bicep-curls': {
-        _id: 'dumbbell-bicep-curls', name: 'Dumbbell Bicep Curls', types: ['Upper Body'], description: 'Curl dumbbells towards your shoulders.', difficulty: 'Basic', equipment: ['Dumbells'],
+        _id: 'dumbbell-bicep-curls', name: 'Dumbbell Bicep Curls', types: ['Upper Body'], description: 'Curl dumbbells towards your shoulders.', difficulty: 'Basic', equipment: ['Dumbbells'],
     },
     'dumbbell-delt-flyes': {
-        _id: 'dumbbell-delt-flyes', name: 'Dumbbell Delt Flyes', types: ['Upper Body'], description: 'Extend arms out to the sides with dumbbells.', difficulty: 'Intermediate', equipment: ['Dumbells'],
+        _id: 'dumbbell-delt-flyes', name: 'Dumbbell Delt Flyes', types: ['Upper Body'], description: 'Extend arms out to the sides with dumbbells.', difficulty: 'Intermediate', equipment: ['Dumbbells'],
     },
     'dumbbell-lying-chest-press': {
-        _id: 'dumbbell-lying-chest-press', name: 'Dumbbell Lying Chest Press', types: ['Upper Body'], description: 'Press dumbbells while lying on a bench.', difficulty: 'Intermediate', equipment: ['Dumbells'],
+        _id: 'dumbbell-lying-chest-press', name: 'Dumbbell Lying Chest Press', types: ['Upper Body'], description: 'Press dumbbells while lying on a bench.', difficulty: 'Intermediate', equipment: ['Dumbbells'],
     },
     crunches: {
         _id: 'crunches', name: 'Crunches', types: ['Abs'], description: 'Basic crunches for core.', difficulty: 'Basic', equipment: [],
@@ -113,7 +113,7 @@ export const exerciseDictOld: Record<string, TabataExercise> = {
         _id: 'around-the-worlds', name: 'Around the Worlds', types: ['Abs'], description: 'Swing the kettlebell around your body.', difficulty: 'Intermediate', equipment: ['Kettlebell'],
     },
     'dumbbell-side-bends': {
-        _id: 'dumbbell-side-bends', name: 'Dumbbell Side Bends', types: ['Abs'], description: 'Bend to each side holding a dumbbell.', difficulty: 'Intermediate', equipment: ['Dumbells'],
+        _id: 'dumbbell-side-bends', name: 'Dumbbell Side Bends', types: ['Abs'], description: 'Bend to each side holding a dumbbell.', difficulty: 'Intermediate', equipment: ['Dumbbells'],
     },
     'yoga-ball-crunches': {
         _id: 'yoga-ball-crunches', name: 'Yoga Ball Crunches', types: ['Abs'], description: 'Crunches on a yoga ball.', difficulty: 'Basic', equipment: ['Yoga Ball'],

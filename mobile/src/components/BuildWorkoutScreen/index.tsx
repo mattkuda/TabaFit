@@ -294,7 +294,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
             ...prev,
             equipment: {
                 useKettlebell: false,
-                useDumbells: false,
+                useDumbbells: false,
                 useHangingBar: false,
                 useYogaBall: false,
                 useWorkoutBand: false,
@@ -712,15 +712,15 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                         </HStack>
                                         <HStack flex={1}>
                                             <Checkbox
-                                                bgColor={modalWorkout.equipment.useDumbells ? 'primary' : 'gray.900'}
-                                                isChecked={modalWorkout.equipment.useDumbells}
-                                                key="Dumbells-checkbox"
+                                                bgColor={modalWorkout.equipment.useDumbbells ? 'primary' : 'gray.900'}
+                                                isChecked={modalWorkout.equipment.useDumbbells}
+                                                key="Dumbbells-checkbox"
                                                 mb="2"
                                                 size="lg"
-                                                value="Dumbells"
-                                                onChange={(): void => handleWorkoutEquipmentChange('useDumbells', !modalWorkout.equipment.useDumbells)}
+                                                value="Dumbbells"
+                                                onChange={(): void => handleWorkoutEquipmentChange('useDumbbells', !modalWorkout.equipment.useDumbbells)}
                                             >
-                                                <Text>Dumbells</Text>
+                                                <Text>Dumbbells</Text>
                                             </Checkbox>
                                         </HStack>
                                     </HStack>

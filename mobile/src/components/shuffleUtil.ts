@@ -39,7 +39,7 @@ export const shuffleExercises = (
             || (equip === 'Box Platform' && selectedEquipment.useBoxPlatform)
             || (equip === 'Yoga Ball' && selectedEquipment.useYogaBall)
             || (equip === 'Workout Band' && selectedEquipment.useWorkoutBand)
-            || (equip === 'Dumbells' && selectedEquipment.useDumbells)
+            || (equip === 'Dumbbells' && selectedEquipment.useDumbbells)
             || (equip === 'Hanging Bar' && selectedEquipment.useHangingBar));
     };
 
@@ -121,7 +121,7 @@ export const defaultTabataWorkout: TabataWorkout = {
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
     },
 };
@@ -146,7 +146,7 @@ export const shuffleWorkoutTemplate: TabataWorkout = {
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
     },
     includeSettings: {
@@ -178,7 +178,7 @@ export const shuffleWorkoutZeroState: TabataWorkout = {
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
     },
     includeSettings: {
@@ -211,7 +211,7 @@ export const soundTestingWorkout: TabataWorkout = {
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
     },
     includeSettings: {
@@ -243,7 +243,7 @@ export const defaultShuffleTabataWorkout: TabataWorkout = {
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
     },
     includeSettings: {
@@ -277,7 +277,7 @@ export const buildNewTabataInitialState: TabataWorkout = {
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
     },
     includeSettings: {
