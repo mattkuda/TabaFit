@@ -58,7 +58,9 @@ export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
                 width="100%"
             >
                 <HStack justifyContent="space-between" space={2}>
-                    <ProfilePicture size="48px" user={post.user} />
+                    <TouchableOpacity onPress={userFound && handlePressUser}>
+                        <ProfilePicture size="48px" user={post.user} />
+                    </TouchableOpacity>
                     <VStack flex={1} justifyContent="flex-start">
                         <Text onPress={userFound && handlePressUser}>
                             <Text bold fontSize="md">{userFound ? `${formatName(post.user.firstName, post.user.lastName)}` : 'Unknown User'}</Text>

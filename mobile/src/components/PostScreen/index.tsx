@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
     ScrollView,
+    TouchableOpacity,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
@@ -137,7 +138,9 @@ export const PostScreen = (): JSX.Element => {
         <GradientVStack backgroundColor="gray9" borderColor="gray.200" flex={1} p={4} space={2}>
             <ScrollView>
                 <HStack justifyContent="space-between" space={2}>
-                    <ProfilePicture borderColor="primary" size="48px" user={post.user} />
+                    <TouchableOpacity onPress={userFound && handlePressUser}>
+                        <ProfilePicture borderColor="primary" size="48px" user={post.user} />
+                    </TouchableOpacity>
                     <VStack flex={1}>
                         <HStack>
                             <Text bold fontSize="md" onPress={userFound && handlePressUser}>
