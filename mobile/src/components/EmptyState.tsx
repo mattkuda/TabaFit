@@ -3,7 +3,13 @@ import {
     Box, VStack, Icon, Text,
 } from 'native-base';
 
-export const EmptyState: React.FC = (): JSX.Element => (
+type EmptyStateProps = {
+    text?: string;
+};
+
+export const EmptyState: React.FC<EmptyStateProps> = ({
+    text = 'Hmm, nothing here yet',
+}): JSX.Element => (
     <Box
         alignItems="center"
         bg="transparent"
@@ -23,7 +29,7 @@ export const EmptyState: React.FC = (): JSX.Element => (
         <VStack alignItems="center">
             <Icon as={Ionicons} color="gray.400" name="alert-circle-outline" size="lg" />
             <Text color="gray.400" fontSize="md" mt="2">
-                Hmm, nothing here yet
+                {text}
             </Text>
         </VStack>
     </Box>

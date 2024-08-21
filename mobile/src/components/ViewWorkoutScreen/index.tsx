@@ -168,9 +168,14 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                     space={4}
                     width="100%"
                 >
-                    <HStack alignItems="center">
-                        <Icon as={Ionicons} color={getWorkoutDifficultyGradient(workout.difficulty)} mr={2} name="barbell-outline" size="md" />
-                        <Text bold flex={1} fontSize="xl">{workout.name}</Text>
+                    <HStack
+                        alignItems="center"
+                        flexDirection="row"
+                        justifyContent="center"
+                        w="100%"
+                    >
+                        <Icon as={Ionicons} color={getWorkoutDifficultyGradient(workout.difficulty)} mr={2} name="barbell-outline" size="xl" />
+                        <Text bold flex={1} fontSize="2xl">{workout.name}</Text>
                     </HStack>
                     <Box alignItems="center" flexDirection="row" justifyContent="space-between">
                         <PictureWithName isTabaFitAdmin={workout.isPremade} user={workout.user} />
@@ -201,7 +206,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                             p={4}
                             space={2}
                         >
-                            <Text bold fontSize="md">
+                            <Text bold fontSize="lg">
                                 Tabata
                                 {' '}
                                 {index + 1}

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    HStack, VStack, Text, Icon, IconButton,
+    HStack, VStack, Text, Icon,
     Menu,
     Pressable,
 } from 'native-base';
