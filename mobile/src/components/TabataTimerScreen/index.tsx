@@ -12,6 +12,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { useSetRecoilState } from 'recoil';
+import * as Speech from 'expo-speech';
 import { Audio } from 'expo-av';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TabataTimerScreenRouteProp } from '../../navigation/navigationTypes';
@@ -24,14 +25,6 @@ import { GradientVStack } from '../common/GradientVStack';
 
 const sounds = {
     beep: require('../../../assets/sounds/beep.wav'),
-    exercise: require('../../../assets/sounds/exercise.wav'),
-    rest: require('../../../assets/sounds/rest.wav'),
-    burpees: require('../../../assets/sounds/burpees.wav'),
-    nextup: require('../../../assets/sounds/nextup.wav'),
-    minuterest: require('../../../assets/sounds/minuterest.wav'),
-    starting: require('../../../assets/sounds/starting.wav'),
-    // ... TODO: other specific exercises
-    // Use "Nancy" voice from https://www.naturalreaders.com/online/
 };
 
 export const TabataTimerScreen = (): JSX.Element => {
@@ -55,14 +48,14 @@ export const TabataTimerScreen = (): JSX.Element => {
     const [currentExercise, setCurrentExercise] = useState<TabataExercise | null>(null);
     const currentTabata = tabatas[circuitsDone];
     const setShowFooter = useSetRecoilState(showFooterState);
-    const [sound, setSound] = useState<Audio.Sound>();
     const [hasStartPlayed, setHasStartPlayed] = useState(false);
     const insets = useSafeAreaInsets();
+    const [sound, setSound] = useState<Audio.Sound>();
 
     useKeepAwake();
 
     async function playSound(name: string): Promise<void> {
-        const soundToPlay = sounds[name.toLowerCase()] || sounds.exercise;
+        const soundToPlay = sounds[name.toLowerCase()];
         const { sound: newSound } = await Audio.Sound.createAsync(soundToPlay, { shouldPlay: true });
 
         setSound(newSound);
@@ -70,20 +63,26 @@ export const TabataTimerScreen = (): JSX.Element => {
         await newSound.playAsync();
     }
 
+    const speak = (text: string): void => {
+        Speech.speak(text, {
+            language: 'en-US',
+            pitch: 1.0,
+            rate: 1.0,
+        });
+    };
+
     useEffect(() => {
         if (!hasStartPlayed) {
-            playSound('starting');
+            Speech.speak('Starting your tabata workout');
             setHasStartPlayed(true);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [hasStartPlayed]);
 
     useEffect(() => (sound
         ? (): void => {
             sound.unloadAsync();
         }
         : undefined), [sound]);
-
     useFocusEffect(
         useCallback(() => {
             setShowFooter(false);
@@ -197,8 +196,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                         case Intervals.Cooldown:
                             setIsActive(false);
                             clearInterval(interval);
-                            // TODO: ADD SOUND FOR WORKOUT COMPLETE
-                            playSound('workoutcomplete');
+                            speak('Workout complete');
                             navigateToSharePostScreen();
                             return;
                         default:
@@ -206,34 +204,26 @@ export const TabataTimerScreen = (): JSX.Element => {
                     }
                 }
 
-                // Update this to play sound for the next exercise
                 if (nextSeconds === 3 || nextSeconds === 2 || nextSeconds === 1) {
                     playSound('beep');
                 } else if (nextInterval === Intervals.Exercise) {
                     if (nextSeconds === exerciseDuration) {
-                        // const exerciseName = currentTabata[nextExercisesDone]?.name;
-
-                        playSound(nextExercise.name);
+                        speak(nextExercise?.name ?? 'Exercise');
                     }
                 } else if (nextInterval === Intervals.Rest && nextSeconds === restDuration) {
-                    playSound('rest');
-                }
-                // Disbaling next up logic for now until we have the sounds for all exercises
-                else if (nextSeconds === 6 && (currentInterval === Intervals.Rest
+                    speak('Rest');
+                } else if (nextSeconds === 6 && (currentInterval === Intervals.Rest
                     || currentInterval === Intervals.Intermission
                     || currentInterval === Intervals.Warmup)) {
-                    playSound('nextup');
+                    speak('Next up');
                 } else if (nextSeconds === 5 && (currentInterval === Intervals.Rest
                     || currentInterval === Intervals.Intermission
                     || currentInterval === Intervals.Warmup)) {
                     const exerciseName = currentTabata[nextExercisesDone]?.name
-                        || (exercisesDone === exercisesPerTabata ? 'minuterest' : currentTabata[0]?.name);
+                        || (exercisesDone === exercisesPerTabata ? 'minute rest' : currentTabata[0]?.name);
 
-                    playSound(exerciseName);
+                    speak(exerciseName);
                 }
-                // else if (nextSeconds === 9 && currentInterval === Intervals.Warmup) {
-                //     playSound('starting');
-                // }
 
                 setCurrentInterval(nextInterval);
                 setSeconds(nextSeconds);
@@ -297,7 +287,7 @@ export const TabataTimerScreen = (): JSX.Element => {
             [nextExercise] = currentTabata;
         } else if (currentInterval === Intervals.Cooldown) {
             setIsActive(false);
-            playSound('workoutcomplete');
+            speak('Workout complete');
             navigateToSharePostScreen();
             return;
         }
