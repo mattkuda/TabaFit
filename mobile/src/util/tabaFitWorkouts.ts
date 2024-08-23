@@ -8,7 +8,7 @@ const featuredWorkout1: TabataWorkoutWithUserInfo = {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     userId: 'tabafit',
-    warmupDuration: 5,
+    warmupDuration: 10,
     tabatas: [
         [
             exerciseDict.burpees,
@@ -50,7 +50,7 @@ const featuredWorkout2: TabataWorkoutWithUserInfo = {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     userId: 'tabafit',
-    warmupDuration: 5,
+    warmupDuration: 10,
     tabatas: [
         [
             exerciseDict.burpees,

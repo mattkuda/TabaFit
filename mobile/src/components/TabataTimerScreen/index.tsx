@@ -29,6 +29,7 @@ const sounds = {
     burpees: require('../../../assets/sounds/burpees.wav'),
     nextup: require('../../../assets/sounds/nextup.wav'),
     minuterest: require('../../../assets/sounds/minuterest.wav'),
+    starting: require('../../../assets/sounds/starting.wav'),
     // ... TODO: other specific exercises
     // Use "Nancy" voice from https://www.naturalreaders.com/online/
 };
@@ -55,6 +56,7 @@ export const TabataTimerScreen = (): JSX.Element => {
     const currentTabata = tabatas[circuitsDone];
     const setShowFooter = useSetRecoilState(showFooterState);
     const [sound, setSound] = useState<Audio.Sound>();
+    const [hasStartPlayed, setHasStartPlayed] = useState(false);
     const insets = useSafeAreaInsets();
 
     useKeepAwake();
@@ -67,6 +69,14 @@ export const TabataTimerScreen = (): JSX.Element => {
 
         await newSound.playAsync();
     }
+
+    useEffect(() => {
+        if (!hasStartPlayed) {
+            playSound('starting');
+            setHasStartPlayed(true);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => (sound
         ? (): void => {
@@ -209,17 +219,20 @@ export const TabataTimerScreen = (): JSX.Element => {
                     playSound('rest');
                 }
                 // Disbaling next up logic for now until we have the sounds for all exercises
-                // else if (nextSeconds === 6 && (currentInterval === Intervals.Rest
-                //     || currentInterval === Intervals.Intermission
-                //     || currentInterval === Intervals.Warmup)) {
-                //     playSound('nextup');
-                // } else if (nextSeconds === 5 && (currentInterval === Intervals.Rest
-                //     || currentInterval === Intervals.Intermission
-                //     || currentInterval === Intervals.Warmup)) {
-                //     const exerciseName = currentTabata[nextExercisesDone]?.name
-                //         || (exercisesDone === exercisesPerTabata ? 'minuterest' : currentTabata[0]?.name);
+                else if (nextSeconds === 6 && (currentInterval === Intervals.Rest
+                    || currentInterval === Intervals.Intermission
+                    || currentInterval === Intervals.Warmup)) {
+                    playSound('nextup');
+                } else if (nextSeconds === 5 && (currentInterval === Intervals.Rest
+                    || currentInterval === Intervals.Intermission
+                    || currentInterval === Intervals.Warmup)) {
+                    const exerciseName = currentTabata[nextExercisesDone]?.name
+                        || (exercisesDone === exercisesPerTabata ? 'minuterest' : currentTabata[0]?.name);
 
-                //     playSound(exerciseName);
+                    playSound(exerciseName);
+                }
+                // else if (nextSeconds === 9 && currentInterval === Intervals.Warmup) {
+                //     playSound('starting');
                 // }
 
                 setCurrentInterval(nextInterval);
@@ -393,9 +406,9 @@ export const TabataTimerScreen = (): JSX.Element => {
                     color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Cooldown ? 'flame.500' : 'yellow.500'}
                     style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}
                 >
-                    {currentExercise ? currentExercise.name.toUpperCase() : currentInterval.toUpperCase()}
+                    {currentExercise ? currentExercise.name.toUpperCase() : (currentInterval === Intervals.Warmup
+                        ? 'GET READY!' : currentInterval.toUpperCase())}
                 </Text>
-                <Text>{currentInterval}</Text>
                 <Box alignItems="center" flex={1} justifyContent="center">
                     {nextExerciseText && (
                         <Text bold color="gray.300" style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}>
