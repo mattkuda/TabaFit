@@ -68,7 +68,10 @@ export const ShareWorkoutScreen = (): JSX.Element => {
             handleSaveWorkout().finally(() => {
                 shareWorkoutMutation.mutate({
                     userId,
-                    workout,
+                    workout: {
+                        ...workout,
+                        _id: undefined, // Ensure the backend generates the ID
+                    },
                     title: workoutTitle,
                     description: workoutDescription,
                 }, {

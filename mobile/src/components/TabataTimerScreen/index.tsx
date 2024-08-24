@@ -27,6 +27,39 @@ const sounds = {
     beep: require('../../../assets/sounds/beep.wav'),
 };
 
+const getNextUpText = (
+    currentInterval: Intervals,
+    exercisesDone: number,
+    exercisesPerTabata: number,
+    currentTabata: TabataExercise[],
+    // circuitsDone: number,
+): string => {
+    if (currentInterval === Intervals.Warmup) {
+        return currentTabata[0].name;
+    }
+    if (currentInterval === Intervals.Rest && exercisesDone < exercisesPerTabata - 1) {
+        return currentTabata[exercisesDone >= 3 ? exercisesDone - 3 : exercisesDone + 1].name;
+    }
+    if (currentInterval === Intervals.Intermission) {
+        return currentTabata[0].name;
+    }
+    if (currentInterval === Intervals.Rest) {
+        return currentTabata[exercisesDone]?.name || '';
+    }
+    return '';
+};
+
+// const nextExerciseText: string = ((): string => {
+//     if (currentInterval === Intervals.Warmup) {
+//         return currentTabata[0].name;
+//     } if (currentInterval === Intervals.Rest && exercisesDone < exercisesPerTabata - 1) {
+//         return currentTabata[exercisesDone >= 3 ? exercisesDone - 3 : exercisesDone + 1].name;
+//     } if (currentInterval === Intervals.Intermission) {
+//         return currentTabata[0].name;
+//     }
+//     return '';
+// })();
+
 export const TabataTimerScreen = (): JSX.Element => {
     const route = useRoute<TabataTimerScreenRouteProp>();
     const {
@@ -215,8 +248,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                 } else if (nextSeconds === 6 && (currentInterval === Intervals.Rest
                     || currentInterval === Intervals.Intermission
                     || currentInterval === Intervals.Warmup)) {
-                    const exerciseName = currentTabata[nextExercisesDone]?.name
-                        || (exercisesDone === exercisesPerTabata ? 'minute rest' : currentTabata[0]?.name);
+                    const exerciseName = getNextUpText(currentInterval, exercisesDone, exercisesPerTabata, currentTabata);
 
                     speak(`Next up: ${exerciseName}`);
                 }
@@ -303,16 +335,7 @@ export const TabataTimerScreen = (): JSX.Element => {
         return { minutes, secs };
     };
 
-    const nextExerciseText: string = ((): string => {
-        if (currentInterval === Intervals.Warmup) {
-            return currentTabata[0].name;
-        } if (currentInterval === Intervals.Rest && exercisesDone < exercisesPerTabata - 1) {
-            return currentTabata[exercisesDone >= 3 ? exercisesDone - 3 : exercisesDone + 1].name;
-        } if (currentInterval === Intervals.Intermission) {
-            return currentTabata[0].name;
-        }
-        return '';
-    })();
+    const nextExerciseText = getNextUpText(currentInterval, exercisesDone, exercisesPerTabata, currentTabata);
 
     return (
         <GradientVStack
@@ -347,7 +370,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                     <Text fontSize="xl">{formatTime(remainingTime)}</Text>
                 </VStack>
             </Flex>
-            {/* This is very hacky codee to replicate a monospaced font */}
+            {/* This is very hacky code to replicate a monospaced font */}
             <Flex alignItems="flex-end" direction="row" flex={1}>
                 <Text
                     color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Cooldown ? 'flame.500' : 'yellow.500'}

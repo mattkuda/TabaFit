@@ -48,6 +48,7 @@ export const PostScreen = (): JSX.Element => {
     const queryClient = useQueryClient();
 
     const handleDeletePost = (): void => {
+        console.log('delete post:', postId);
         deletePostMutation.mutate({ postId }, {
             onSuccess: () => {
                 queryClient.invalidateQueries(['userInfo', userId]);

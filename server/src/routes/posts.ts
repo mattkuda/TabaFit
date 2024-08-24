@@ -210,6 +210,21 @@ router.post('/share', authenticate, async (req: AuthRequest, res: Response) => {
   } = req.body;
   const { userId } = req;
 
+  // Check if the workout ID is "placeholder" and generate a new ObjectId if so
+  if (workout._id === 'placeholder') {
+    workout._id = new ObjectId();
+  } else if (!ObjectId.isValid(workout._id)) {
+    // Handle any other invalid IDs appropriately
+    workout._id = new ObjectId();
+  } else {
+    workout._id = new ObjectId(workout._id); // Convert to ObjectId if valid string
+  }
+
+  // Check if we need to set the userId
+  if (!workout.userId || !ObjectId.isValid(workout.userId)) {
+    workout.userId = new ObjectId(userId);
+  }
+
   try {
     const newPost = {
       userId: new ObjectId(userId),

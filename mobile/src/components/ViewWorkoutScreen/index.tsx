@@ -26,10 +26,10 @@ type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, '
 export const ViewWorkoutScreen = (): JSX.Element => {
     const route = useRoute<ViewWorkoutScreenRouteProp>();
     const { workoutId } = route.params;
-    const customWorkout = route.params?.workout as TabataWorkoutWithUserInfo | undefined;
-    const { data: queriedWorkout, isLoading, isError } = useQueryWorkoutById(workoutId);
+    const routeWorkout = route.params?.workout as TabataWorkoutWithUserInfo | undefined;
+    const { data: queriedWorkout, isLoading, isError } = useQueryWorkoutById(!routeWorkout ? workoutId : undefined);
     const { isWorkoutCreatedByUser, isWorkoutSavedByUser } = useWorkoutOwnership(workoutId);
-    const workout = customWorkout ?? queriedWorkout;
+    const workout = routeWorkout ?? queriedWorkout;
     const { authState } = useAuth();
     const queryClient = useQueryClient();
     const navigation = useNavigation<WorkoutsScreenNavigationProp>();
@@ -151,7 +151,13 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                 space={4}
                 width="100%"
             >
-                <Center flex={1}><Text>Error loading workout or workout not found</Text></Center>
+                <Center flex={1}>
+                    <Text>Error loading workout or workout not found</Text>
+                    <Text>
+                        Workout ID:
+                        {workoutId}
+                    </Text>
+                </Center>
             </GradientVStack>
         );
     }
