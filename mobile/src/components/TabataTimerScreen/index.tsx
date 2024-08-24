@@ -215,14 +215,10 @@ export const TabataTimerScreen = (): JSX.Element => {
                 } else if (nextSeconds === 6 && (currentInterval === Intervals.Rest
                     || currentInterval === Intervals.Intermission
                     || currentInterval === Intervals.Warmup)) {
-                    speak('Next up');
-                } else if (nextSeconds === 5 && (currentInterval === Intervals.Rest
-                    || currentInterval === Intervals.Intermission
-                    || currentInterval === Intervals.Warmup)) {
                     const exerciseName = currentTabata[nextExercisesDone]?.name
                         || (exercisesDone === exercisesPerTabata ? 'minute rest' : currentTabata[0]?.name);
 
-                    speak(exerciseName);
+                    speak(`Next up: ${exerciseName}`);
                 }
 
                 setCurrentInterval(nextInterval);

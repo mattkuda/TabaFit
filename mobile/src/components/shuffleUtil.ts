@@ -101,6 +101,7 @@ export const shuffleExercises = (
 };
 
 export const defaultTabataWorkout: TabataWorkout = {
+    // @ts-expect-error
     _id: 'workout-shuffle',
     name: `Tabata Shuffle`,
     description: 'A shuffled Tabata workout based on user preferences.',
@@ -127,6 +128,7 @@ export const defaultTabataWorkout: TabataWorkout = {
 };
 
 export const shuffleWorkoutTemplate: TabataWorkout = {
+    // @ts-expect-error
     _id: 'workout-shuffle-template',
     name: `Tabata Shuffle`,
     description: 'A shuffled Tabata workout based on user preferences.',
@@ -159,6 +161,7 @@ export const shuffleWorkoutTemplate: TabataWorkout = {
 };
 
 export const shuffleWorkoutZeroState: TabataWorkout = {
+    // @ts-expect-error
     _id: 'workout-shuffle-zero',
     name: `Tabata Shuffle`,
     description: 'A shuffled Tabata workout based on user preferences.',
@@ -191,6 +194,7 @@ export const shuffleWorkoutZeroState: TabataWorkout = {
 };
 
 export const soundTestingWorkout: TabataWorkout = {
+    // @ts-expect-error
     _id: 'sound-shuffle-custom',
     name: `Sound Testing Shuffle`,
     difficulty: Difficulty.Basic,
@@ -223,6 +227,7 @@ export const soundTestingWorkout: TabataWorkout = {
 };
 
 export const defaultShuffleTabataWorkout: TabataWorkout = {
+    // @ts-expect-error
     _id: 'workout-shuffle',
     name: `Tabata Shuffle`,
     difficulty: Difficulty.Basic,
@@ -257,6 +262,7 @@ export const defaultShuffleTabataWorkout: TabataWorkout = {
 export const emptyTabata: TabataCircuit = [null, null, null, null];
 
 export const buildNewTabataInitialState: TabataWorkout = {
+    // @ts-expect-error
     _id: 'workout-custom',
     name: '',
     description: '',
