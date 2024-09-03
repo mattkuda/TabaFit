@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import { MongoClient, Collection, ObjectId } from 'mongodb';
 // eslint-disable-next-line import/no-relative-packages
+import { TabataWorkout, TabataWorkoutSchema } from '../../../mobile/src/types/workouts';
+// eslint-disable-next-line import/no-relative-packages
 import { PostComment, PostSchema } from '../../../mobile/src/types/posts';
 // eslint-disable-next-line import/no-relative-packages
 import { User } from '../../../mobile/src/types/users';
@@ -18,6 +20,7 @@ if (!connectionString) {
 const client = new MongoClient(connectionString);
 
 let postsCollection: Collection<PostSchema>;
+let workoutsCollection: Collection<TabataWorkoutSchema>;
 let notificationsCollection: Collection<NotificationSchema>;
 let followsCollection: Collection;
 
@@ -25,6 +28,7 @@ let followsCollection: Collection;
   try {
     await client.connect();
     postsCollection = client.db('AbcountableDB').collection<PostSchema>('posts');
+    workoutsCollection = client.db('AbcountableDB').collection<TabataWorkoutSchema>('workouts');
     followsCollection = client.db('AbcountableDB').collection('follows');
     notificationsCollection = client.db('AbcountableDB').collection('notifications');
   } catch (err) {
@@ -47,6 +51,18 @@ const addUserInfoToPosts = async (posts: PostSchema[]) => Promise.all(posts.map(
   };
 }));
 
+// Generic function to add workout info to posts
+const addWorkoutInfoToPosts = async (posts: PostSchema[]) => Promise.all(posts.map(async (post) => {
+  const workout = await workoutsCollection.findOne({ _id: new ObjectId(post.workoutId) });
+
+  // console.log("omg here's the post.workoutId", post.workoutId);
+  // console.log("omg here's the workout", workout);
+  return {
+    ...post,
+    workout, // Add the full workout data here
+  };
+}));
+
 const addUserInfoToComments = async (comments: PostComment[]) => Promise.all(
   comments.map(async (comment) => {
     const user = await client.db('AbcountableDB').collection<User>('users').findOne({ _id: new ObjectId(comment.userId) });
@@ -62,6 +78,19 @@ const addUserInfoToComments = async (comments: PostComment[]) => Promise.all(
   }),
 );
 
+// Helper function to create a new workout
+async function createNewWorkout(workout: TabataWorkout, userId: string): Promise<ObjectId> {
+  const workoutToSave = {
+    ...workout,
+    userId: new ObjectId(userId),
+    _id: new ObjectId(),
+    createdAt: new Date().toISOString(),
+  };
+
+  const result = await workoutsCollection.insertOne(workoutToSave);
+  return result.insertedId;
+}
+
 router.get('/global', async (req: Request, res: Response) => {
   try {
     const offset = parseInt(req.query.offset as string, 10) || 0; // Set a default value for offset
@@ -74,7 +103,8 @@ router.get('/global', async (req: Request, res: Response) => {
       .toArray();
 
     const transformedPosts = await addUserInfoToPosts(posts as PostSchema[]);
-    res.send(transformedPosts);
+    const postsWithWorkout = await addWorkoutInfoToPosts(transformedPosts);
+    res.send(postsWithWorkout);
   } catch (err) {
     console.error('Failed to fetch global posts', err);
     res.status(500).send({ message: 'Failed to fetch global posts' });
@@ -83,7 +113,6 @@ router.get('/global', async (req: Request, res: Response) => {
 
 router.get('/user-posts/:userId', authenticate, async (req: AuthRequest, res: Response) => {
   const requestedUserId = req.params.userId;
-  // const requestingUserId = req.userId;
   const offset = parseInt(req.query.offset as string, 10) || 0; // Set a default value for offset
   const limit = parseInt(req.query.limit as string, 10) || 10; // Set a default value for limit
 
@@ -102,7 +131,8 @@ router.get('/user-posts/:userId', authenticate, async (req: AuthRequest, res: Re
       .toArray();
 
     const transformedPosts = await addUserInfoToPosts(userPosts as PostSchema[]);
-    res.send(transformedPosts);
+    const postsWithWorkout = await addWorkoutInfoToPosts(transformedPosts);
+    res.send(postsWithWorkout);
   } catch (err) {
     console.error('Failed to fetch user posts', err);
     res.status(500).send({ message: 'Failed to fetch user posts' });
@@ -138,7 +168,8 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
     ]).toArray();
 
     const transformedPosts = await addUserInfoToPosts(posts as PostSchema[]);
-    res.send(transformedPosts);
+    const postsWithWorkout = await addWorkoutInfoToPosts(transformedPosts);
+    res.send(postsWithWorkout);
   } catch (err) {
     console.error('Failed to fetch following posts', err);
     res.status(500).send({ message: 'Failed to fetch following posts' });
@@ -162,12 +193,13 @@ router.get('/post/:postId', async (req: Request, res: Response) => {
     }
 
     const transformedPosts = await addUserInfoToPosts([post] as PostSchema[]);
+    const postsWithWorkout = await addWorkoutInfoToPosts(transformedPosts);
 
-    const enrichedComments = await addUserInfoToComments(transformedPosts[0].comments);
+    const enrichedComments = await addUserInfoToComments(postsWithWorkout[0].comments);
 
-    const result = { ...transformedPosts[0], comments: enrichedComments };
+    const result = { ...postsWithWorkout[0], comments: enrichedComments };
 
-    res.send(transformedPosts.length ? result : null);
+    res.send(postsWithWorkout.length ? result : null);
   } catch (err) {
     console.error('Failed to fetch post', err);
     res.status(500).send({ message: 'Failed to fetch post' });
@@ -210,25 +242,38 @@ router.post('/share', authenticate, async (req: AuthRequest, res: Response) => {
   } = req.body;
   const { userId } = req;
 
-  // Check if the workout ID is "placeholder" and generate a new ObjectId if so
-  if (workout._id === 'placeholder') {
-    workout._id = new ObjectId();
-  } else if (!ObjectId.isValid(workout._id)) {
-    // Handle any other invalid IDs appropriately
-    workout._id = new ObjectId();
-  } else {
-    workout._id = new ObjectId(workout._id); // Convert to ObjectId if valid string
+  if (!userId) {
+    res.status(400).send({ message: 'User ID is required' });
+    return;
   }
-
-  // Check if we need to set the userId
-  if (!workout.userId || !ObjectId.isValid(workout.userId)) {
-    workout.userId = new ObjectId(userId);
-  }
+  let workoutId: ObjectId;
 
   try {
-    const newPost = {
+    if (manualTabatas) {
+      // Handle manual tabatas logic here if necessary
+    }
+
+    // Determine if the workout needs to be created or already exists
+    if (!workout._id || !ObjectId.isValid(workout._id)) {
+      // Create a new workout if no valid ID is provided
+      workoutId = await createNewWorkout(workout, userId);
+    } else {
+      // Check if the workout already exists in the database
+      const existingWorkout = await workoutsCollection.findOne({ _id: new ObjectId(workout._id) });
+
+      if (existingWorkout) {
+        workoutId = existingWorkout._id;
+      } else {
+        // Create a new workout if the provided ID does not exist in the database
+        workoutId = await createNewWorkout(workout, userId);
+      }
+    }
+
+    // Create and insert the new post
+    const newPost: PostSchema = {
+      _id: new ObjectId(),
       userId: new ObjectId(userId),
-      workout,
+      workoutId,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       title,
@@ -238,13 +283,11 @@ router.post('/share', authenticate, async (req: AuthRequest, res: Response) => {
       comments: [],
     };
 
-    // @ts-expect-error Todo at partial type
     await postsCollection.insertOne(newPost);
-
-    res.status(201).send({ message: 'Workout shared successfully' });
+    res.status(201).send({ message: 'Post shared successfully' });
   } catch (err) {
-    console.error('Failed to share workout', err);
-    res.status(500).send({ message: 'Failed to share workout' });
+    console.error('Failed to share post', err);
+    res.status(500).send({ message: 'Failed to share post' });
   }
 });
 

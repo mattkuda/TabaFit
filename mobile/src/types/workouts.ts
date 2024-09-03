@@ -58,6 +58,8 @@ export interface TabataWorkout {
     isPremade?: boolean;
 }
 
+export interface TabataWorkoutSchema extends Omit<TabataWorkout, 'userId'> { userId: mongoose.Types.ObjectId | string; }
+
 export interface UserInfo {
     username: string;
     firstName?: string;
