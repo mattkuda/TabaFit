@@ -27,9 +27,10 @@ export const ViewWorkoutScreen = (): JSX.Element => {
     const route = useRoute<ViewWorkoutScreenRouteProp>();
     const { workoutId } = route.params;
     const routeWorkout = route.params?.workout as TabataWorkoutWithUserInfo | undefined;
-    const { data: queriedWorkout, isLoading, isError } = useQueryWorkoutById(!routeWorkout ? workoutId : undefined);
+    const { data: queriedWorkout, isLoading, isError } = useQueryWorkoutById(routeWorkout?._id.toString() ?? workoutId);
     const { isWorkoutCreatedByUser, isWorkoutSavedByUser } = useWorkoutOwnership(workoutId);
-    const workout = routeWorkout ?? queriedWorkout;
+    // Todo: Consider including user info in the route workout so we don't have to query it
+    const workout = queriedWorkout;
     const { authState } = useAuth();
     const queryClient = useQueryClient();
     const navigation = useNavigation<WorkoutsScreenNavigationProp>();
