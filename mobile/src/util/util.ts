@@ -1,4 +1,4 @@
-import { Difficulty, WorkoutIncludeSettings } from '../types/workouts';
+import { Difficulty, WorkoutEquipmentSettings, WorkoutIncludeSettings } from '../types/workouts';
 // @ts-ignore
 import lowerBodyIcon from '../../assets/exercise-icons/lower-body.png';
 // @ts-ignore
@@ -48,6 +48,32 @@ export const formatBodyParts = (includeSettings: WorkoutIncludeSettings): string
     }
     return bodyParts.join(', ');
 };
+
+export const formatEquipmentSettings = (equipmentSettings: WorkoutEquipmentSettings): string => {
+    const bodyParts = [];
+
+    if (equipmentSettings.useKettlebell) {
+        bodyParts.push('Kettlebells');
+    }
+    if (equipmentSettings?.useBoxPlatform) {
+        bodyParts.push('Box Platform');
+    }
+    if (equipmentSettings?.useYogaBall) {
+        bodyParts.push('Yoga Ball');
+    }
+    if (equipmentSettings?.useWorkoutBand) {
+        bodyParts.push('Workout Band');
+    }
+    if (equipmentSettings?.useDumbbells) {
+        bodyParts.push('Dumbbells');
+    }
+    if (equipmentSettings?.useHangingBar) {
+        bodyParts.push('Hanging Bar');
+    }
+
+    return bodyParts.length ? bodyParts.join(', ') : 'None';
+};
+
 export const exerciseIconDictionary: Record<string, any> = {
     'Lower Body': lowerBodyIcon,
     'Upper Body': upperBodyIcon,
