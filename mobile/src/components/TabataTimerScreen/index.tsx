@@ -25,7 +25,10 @@ import { GradientVStack } from '../common/GradientVStack';
 
 const sounds = {
     beep: require('../../../assets/sounds/beep.wav'),
+    victory: require('../../../assets/sounds/victory-horns.wav'),
 };
+
+const WARMUP_DURATION = 10;
 
 const getNextUpText = (
     currentInterval: Intervals,
@@ -63,9 +66,9 @@ const getNextUpText = (
 export const TabataTimerScreen = (): JSX.Element => {
     const route = useRoute<TabataTimerScreenRouteProp>();
     const {
-        warmupDuration, exerciseDuration, restDuration,
+        exerciseDuration, restDuration,
         tabatas, exercisesPerTabata, numberOfTabatas,
-        intermisionDuration, cooldownDuration,
+        intermisionDuration,
     } = route.params.workout;
     const { isInMyWorkouts } = route.params;
 
@@ -73,7 +76,7 @@ export const TabataTimerScreen = (): JSX.Element => {
     const [currentInterval, setCurrentInterval] = useState<Intervals>(Intervals.Warmup);
     const [exercisesDone, setExercisesDone] = useState(0);
     const [circuitsDone, setCircuitsDone] = useState(0);
-    const [seconds, setSeconds] = useState(warmupDuration);
+    const [seconds, setSeconds] = useState(WARMUP_DURATION);
     const [isActive, setIsActive] = useState(true);
     const [isReset, setIsReset] = useState(false);
     const [totalWorkoutTime, setTotalWorkoutTime] = useState(0);
@@ -134,7 +137,7 @@ export const TabataTimerScreen = (): JSX.Element => {
         setCurrentInterval(Intervals.Warmup);
         setExercisesDone(0);
         setCircuitsDone(0);
-        setSeconds(warmupDuration);
+        setSeconds(WARMUP_DURATION);
         setRemainingTime(totalWorkoutTime);
         setCurrentExercise(null);
     };
@@ -146,6 +149,20 @@ export const TabataTimerScreen = (): JSX.Element => {
             completedAt: new Date(),
             isInMyWorkouts,
         });
+    };
+
+    const handleWorkoutComplete = (): void => {
+        // Play victory sound (async call)
+        setIsActive(false);
+        // clearInterval(interval);
+        playSound('victory');
+        // Speak completion message (async call)
+        const message = `Workout complete. You completed ${tabatas.length} ${tabatas.length === 1 ? 'Tabata' : 'Tabatas'} and exercised for ${totalWorkoutTime / 60} minutes.`;
+
+        setTimeout(() => {
+            speak(message);
+        }, 2000);
+        navigateToSharePostScreen();
     };
 
     const mockFinish = (): void => {
@@ -160,19 +177,17 @@ export const TabataTimerScreen = (): JSX.Element => {
 
     useEffect(() => {
         const calculatedTotal = calculateTotalWorkoutTime(
-            warmupDuration,
             exerciseDuration,
             restDuration,
             numberOfTabatas,
             exercisesPerTabata,
             intermisionDuration,
-            cooldownDuration,
         );
 
         setTotalWorkoutTime(calculatedTotal);
         setRemainingTime(calculatedTotal);
-    }, [warmupDuration, exerciseDuration, restDuration, numberOfTabatas,
-        exercisesPerTabata, intermisionDuration, cooldownDuration]);
+    }, [exerciseDuration, restDuration, numberOfTabatas,
+        exercisesPerTabata, intermisionDuration]);
 
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null;
@@ -212,9 +227,8 @@ export const TabataTimerScreen = (): JSX.Element => {
                                     nextInterval = Intervals.Intermission;
                                     nextSeconds = intermisionDuration;
                                 } else {
-                                    // If it was the last circuit, go to Cooldown
-                                    nextInterval = Intervals.Cooldown;
-                                    nextSeconds = cooldownDuration;
+                                    handleWorkoutComplete();
+                                    return;
                                 }
                                 nextExercise = null;
                                 nextCircuitsDone = circuitsDone + 1;
@@ -270,8 +284,8 @@ export const TabataTimerScreen = (): JSX.Element => {
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isActive, isReset, seconds, remainingTime, currentInterval, exercisesDone, circuitsDone,
-        warmupDuration, exerciseDuration, restDuration, exercisesPerTabata, numberOfTabatas,
-        intermisionDuration, cooldownDuration, currentTabata, currentExercise]);
+        exerciseDuration, restDuration, exercisesPerTabata, numberOfTabatas,
+        intermisionDuration, currentTabata, currentExercise]);
 
     const handleSkip = (): void => {
         let nextInterval = currentInterval;
@@ -302,8 +316,8 @@ export const TabataTimerScreen = (): JSX.Element => {
                     nextInterval = Intervals.Intermission;
                     nextSeconds = intermisionDuration;
                 } else {
-                    nextInterval = Intervals.Cooldown;
-                    nextSeconds = cooldownDuration;
+                    handleWorkoutComplete();
+                    return;
                 }
                 nextExercise = null;
                 nextCircuitsDone = circuitsDone + 1;
@@ -314,9 +328,7 @@ export const TabataTimerScreen = (): JSX.Element => {
             nextExercisesDone = 0;
             [nextExercise] = currentTabata;
         } else if (currentInterval === Intervals.Cooldown) {
-            setIsActive(false);
-            speak('Workout complete');
-            navigateToSharePostScreen();
+            handleWorkoutComplete();
             return;
         }
 
@@ -360,7 +372,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                     <Text color="gray.200" fontSize="lg">Tabatas</Text>
                     <Text fontSize="xl">
                         {currentInterval === Intervals.Intermission && `0/${numberOfTabatas}`}
-                        {currentInterval === Intervals.Exercise || currentInterval === Intervals.Rest || currentInterval === Intervals.Cooldown
+                        {currentInterval === Intervals.Exercise || currentInterval === Intervals.Rest
                             ? `${circuitsDone + 1}/${numberOfTabatas}`
                             : `${circuitsDone}/${numberOfTabatas}`}
                     </Text>
@@ -373,7 +385,7 @@ export const TabataTimerScreen = (): JSX.Element => {
             {/* This is very hacky code to replicate a monospaced font */}
             <Flex alignItems="flex-end" direction="row" flex={1}>
                 <Text
-                    color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Cooldown ? 'flame.500' : 'yellow.500'}
+                    color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Intermission ? 'flame.500' : 'yellow.500'}
                     flex={1}
                     style={{
                         fontSize: 150,
@@ -385,7 +397,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                     {formatSplitTime(seconds).minutes}
                 </Text>
                 <Text
-                    color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Cooldown ? 'flame.500' : 'yellow.500'}
+                    color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Intermission ? 'flame.500' : 'yellow.500'}
                     style={{
                         fontSize: 150,
                         textAlign: 'center',
@@ -396,7 +408,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                     :
                 </Text>
                 <Text
-                    color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Cooldown ? 'flame.500' : 'yellow.500'}
+                    color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Intermission ? 'flame.500' : 'yellow.500'}
                     flex={1}
                     style={{
                         fontSize: 150,
@@ -412,7 +424,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                 <Text
                     bold
                     // eslint-disable-next-line no-nested-ternary
-                    color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Cooldown ? 'flame.500' : 'yellow.500'}
+                    color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Intermission ? 'flame.500' : 'yellow.500'}
                     style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}
                 >
                     {currentExercise ? currentExercise.name.toUpperCase() : (currentInterval === Intervals.Warmup

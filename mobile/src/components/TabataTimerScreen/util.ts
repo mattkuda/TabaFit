@@ -2,13 +2,11 @@ import { TabataWorkout } from '../../types/workouts';
 
 // Utility function to calculate total workout time
 export const calculateTotalWorkoutTime = (
-    warmupDuration: number,
     exerciseDuration: number,
     restDuration: number,
     numberOfTabatas: number,
     exercisesPerTabata: number,
     intermisionDuration: number,
-    cooldownDuration: number,
 ): number => {
     // Total time for one circuit
     const timePerCircuit = exercisesPerTabata * (exerciseDuration + restDuration);
@@ -20,7 +18,7 @@ export const calculateTotalWorkoutTime = (
     const totalIntermisionTime = (numberOfTabatas - 1) * intermisionDuration;
 
     // Total workout time
-    return warmupDuration + totalCircuitTime + totalIntermisionTime + cooldownDuration;
+    return totalCircuitTime + totalIntermisionTime;
 };
 
 export const formatTime = (time: number): string => {
@@ -37,13 +35,11 @@ export const formatTime = (time: number): string => {
 
 export const getFormattedTimeForTabataWorkout = (workout: TabataWorkout): string => {
     const totalSeconds = calculateTotalWorkoutTime(
-        workout.warmupDuration,
         workout.exerciseDuration,
         workout.restDuration,
         workout.tabatas.length,
         workout.exercisesPerTabata,
         workout.intermisionDuration,
-        workout.cooldownDuration,
     );
 
     return formatTime(totalSeconds);
@@ -51,13 +47,11 @@ export const getFormattedTimeForTabataWorkout = (workout: TabataWorkout): string
 
 export const getFormattedTimeForManualWorkout = (numberOfTabatas: number): string => {
     const totalSeconds = calculateTotalWorkoutTime(
-        0,
         20,
         10,
         numberOfTabatas,
         8,
         60,
-        0,
     );
 
     return formatTime(totalSeconds);

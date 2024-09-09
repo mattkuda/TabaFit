@@ -97,9 +97,7 @@ router.get('/workout/:workoutId', async (req: Request, res: Response) => {
       return;
     }
 
-    console.log('workout.userId', workout.userId);
     const workoutWithUserInfo = await addUserInfoToWorkouts([workout]);
-    console.log('workoutWithUserInfo', workoutWithUserInfo);
     res.send(workoutWithUserInfo[0]);
   } catch (err) {
     console.error('Failed to fetch workout', err);
