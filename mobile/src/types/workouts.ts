@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 export type TabataExerciseType = 'Lower Body' | 'Upper Body' | 'Abs' | 'Cardio' | 'Glutes' | 'Spicy'
-export type TabataEquipmentType = 'Kettlebell' | 'Box Platform' | 'Yoga Ball' | 'Workout Band' | 'Dumbells' | 'Hanging Bar' | 'None';
+export type TabataEquipmentType = 'Kettlebell' | 'Box Platform' | 'Yoga Ball' | 'Workout Band' | 'Dumbbells' | 'Hanging Bar' | 'None';
 
 export interface TabataExercise {
     _id: string;
@@ -9,20 +9,24 @@ export interface TabataExercise {
     types: TabataExerciseType[];
     equipment: TabataEquipmentType[];
     description: string;
-    difficulty: 'Easy' | 'Medium' | 'Hard';
-    videoLink: string;
+    difficulty: 'Basic' | 'Intermediate' | 'Advanced';
+    videoLink?: string;
 }
 
 export type TabataCircuit = (TabataExercise | null)[];
 
+export enum Difficulty {
+    Basic = 'Basic',
+    Intermediate = 'Intermediate',
+    Advanced = 'Advanced',
+}
 export interface WorkoutEquipmentSettings {
     useKettlebell: boolean,
     useBoxPlatform: boolean,
     useYogaBall: boolean,
     useWorkoutBand: boolean,
-    useDumbells: boolean,
+    useDumbbells: boolean,
     useHangingBar: boolean,
-    useNone: boolean,
 }
 
 export interface WorkoutIncludeSettings {
@@ -49,9 +53,12 @@ export interface TabataWorkout {
     intermisionDuration: number;
     cooldownDuration: number;
     includeSettings?: WorkoutIncludeSettings;
+    difficulty: Difficulty;
     isDiscoverable?: boolean;
     isPremade?: boolean;
 }
+
+export interface TabataWorkoutSchema extends Omit<TabataWorkout, 'userId'> { userId: mongoose.Types.ObjectId | string; }
 
 export interface UserInfo {
     username: string;

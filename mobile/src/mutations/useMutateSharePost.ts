@@ -9,12 +9,21 @@ interface ShareWorkoutVariables {
     workout: TabataWorkout;
     title: string;
     description: string;
+    manualTabatas?: number;
 }
 
 export const useMutateShareWorkout = (): UseMutationResult<void, AxiosError, ShareWorkoutVariables> => useMutation<void, AxiosError, ShareWorkoutVariables>(
     ({
-        userId, workout, title, description,
+        userId, workout, title, description, manualTabatas,
     }) => axios.post(`${apiUrl}/posts/share`, {
-        userId, workout, title, description,
+        userId, workout, title, description, manualTabatas,
     }),
+);
+
+interface DeletePostVariables {
+    postId: string;
+}
+
+export const useDeletePost = (): UseMutationResult<void, AxiosError, DeletePostVariables> => useMutation<void, AxiosError, DeletePostVariables>(
+    ({ postId }) => axios.delete(`${apiUrl}/posts/${postId}`),
 );

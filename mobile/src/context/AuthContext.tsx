@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import * as SplashScreen from 'expo-splash-screen';
 
 const apiUrl = process.env.EXPO_PUBLIC_EAS_API_BASE_URL || 'http://localhost:3000';
 const tokenKey = process.env.EXPO_PUBLIC_TOKEN_KEY;
@@ -22,6 +23,7 @@ interface AuthProps {
     string, lastName: string, username: string) => Promise<any>;
     onLogin?: (emailOrUsername: string, password: string) => Promise<any>;
     onLogout?: () => Promise<any>;
+    loading?: boolean;
 }
 
 const AuthContext = createContext<AuthProps>({});
@@ -39,23 +41,33 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
         userId: null,
     });
     const [hasSeenTutorial, setHasSeenTutorial] = useState<boolean | null>(null);
+    const [loading, setLoading] = useState<boolean>(true); // Add loading state
 
     useEffect(() => {
         const loadToken = async (): Promise<void> => {
-            const token = await SecureStore.getItemAsync(tokenKey);
-            const userId = await SecureStore.getItemAsync('userId');
-            const tutorialStatus = await SecureStore.getItemAsync(TUTORIAL_STATUS_KEY);
+            try {
+                await SplashScreen.preventAutoHideAsync(); // Prevent the splash screen from auto-hiding
+                setLoading(true); // Add loading state
 
-            if (token) {
-                axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-                setAuthState({
-                    token,
-                    authenticated: true,
-                    userId,
-                });
+                const token = await SecureStore.getItemAsync(tokenKey);
+                const userId = await SecureStore.getItemAsync('userId');
+                const tutorialStatus = await SecureStore.getItemAsync(TUTORIAL_STATUS_KEY);
+
+                if (token) {
+                    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+                    setAuthState({
+                        token,
+                        authenticated: true,
+                        userId,
+                    });
+                }
+
+                setHasSeenTutorial(tutorialStatus === 'true');
+            } finally {
+                setLoading(false); // Add loading state
+
+                await SplashScreen.hideAsync(); // Hide the splash screen once the auth check is done
             }
-
-            setHasSeenTutorial(tutorialStatus === 'true');
         };
 
         loadToken();
@@ -147,6 +159,7 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
         onRegister,
         onLogin,
         onLogout,
+        loading,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

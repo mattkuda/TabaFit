@@ -11,6 +11,7 @@ import { formatName } from '../../util/util';
 import { LikeCommentButtons } from './LikeCommentButtons';
 import { WorkoutPostDisplay } from './WorkoutPostDisplay';
 import { ProfilePicture } from '../ProfilePicture';
+import { WorkoutPostManualDisplay } from './WorkoutPostManualDisplay';
 
 type PostCardProps = {
     post: PostModel;
@@ -57,7 +58,9 @@ export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
                 width="100%"
             >
                 <HStack justifyContent="space-between" space={2}>
-                    <ProfilePicture size="48px" user={post.user} />
+                    <TouchableOpacity onPress={userFound && handlePressUser}>
+                        <ProfilePicture size="48px" user={post.user} />
+                    </TouchableOpacity>
                     <VStack flex={1} justifyContent="flex-start">
                         <Text onPress={userFound && handlePressUser}>
                             <Text bold fontSize="md">{userFound ? `${formatName(post.user.firstName, post.user.lastName)}` : 'Unknown User'}</Text>
@@ -79,7 +82,9 @@ export const PostCard: React.FC<PostCardProps> = React.memo(({ post }) => {
                         {post.description}
                     </Text>
                 )}
-                <WorkoutPostDisplay workout={post.workout} />
+                {post.workout
+                    ? <WorkoutPostDisplay workout={post.workout} />
+                    : <WorkoutPostManualDisplay manualTabatas={post.manualTabatas} />}
                 <LikeCommentButtons handleCommentPress={handlePress} post={post} />
             </VStack>
         </TouchableOpacity>

@@ -1,14 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
     VStack, IconButton, Icon, HStack, Text, Input,
-    Toast, Modal, Button, Checkbox, FormControl, Box,
-    Select,
+    Toast, Modal, Button, Checkbox, Box,
+    Select, Image,
+    Switch,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { NestableScrollContainer } from 'react-native-draggable-flatlist';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQueryClient } from 'react-query';
-import { Animated } from 'react-native';
+import { Animated, TouchableOpacity } from 'react-native';
+import { BlurView } from 'expo-blur';
 import { WorkoutsStackParamList } from '../../navigation/navigationTypes';
 import { useCreateWorkout, useUpdateWorkout } from '../../mutations/workoutMutations';
 import {
@@ -18,10 +20,12 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { BuildWorkoutScreenNavigationProp } from '../../types/navigationTypes';
 import {
+    Difficulty,
     TabataExercise, TabataWorkout,
 } from '../../types/workouts';
 import { GradientVStack } from '../common/GradientVStack';
 import { TabataItem } from './TabataItem';
+import { exerciseIconDictionary, equipmentIconDictionary } from '../../util/util';
 
 type BuildWorkoutScreenRouteProp = RouteProp<WorkoutsStackParamList, 'BuildWorkoutScreen'>;
 
@@ -38,6 +42,8 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     const [modalWorkout, setModalWorkout] = useState<TabataWorkout>(workout);
     const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
     const [showHelpDialog, setShowHelpDialog] = useState<boolean>(false);
+    const [equipmentEnabled, setEquipmentEnabled] = useState<boolean>(!Object.values(workout.equipment)
+        .every((setting) => setting === false));
 
     const hanldeAddTabata = (): void => {
         setWorkout((currentWorkout) => ({
@@ -194,7 +200,29 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
 
     const handleModalDone = (): void => {
         setShowSettingsModal(false);
-        setWorkout(modalWorkout);
+        setEquipmentEnabled(!Object.values(modalWorkout.equipment)
+            .every((setting) => setting === false));
+        setWorkout((currentWorkout) => {
+            const updatedEquipment = { ...modalWorkout.equipment };
+            const updatedDifficulty = modalWorkout.difficulty;
+            const updatedNumberOfTabatas = modalWorkout.numberOfTabatas;
+            const updatedBodyFocus = { ...modalWorkout.includeSettings };
+
+            const newTabatas = updatedNumberOfTabatas > currentWorkout.tabatas.length
+                ? [...currentWorkout.tabatas, ...Array.from(
+                    { length: updatedNumberOfTabatas - currentWorkout.tabatas.length },
+                    () => emptyTabata,
+                )] : currentWorkout.tabatas.slice(0, updatedNumberOfTabatas);
+
+            return {
+                ...currentWorkout,
+                equipment: updatedEquipment,
+                difficulty: updatedDifficulty,
+                numberOfTabatas: newTabatas.length,
+                includeSettings: updatedBodyFocus,
+                tabatas: newTabatas,
+            };
+        });
     };
 
     const handleModalCancel = (): void => {
@@ -202,10 +230,8 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         setModalWorkout(workout);
     };
 
-    const handleNumberTabatasChange = (itemValue: number): void => {
-        if (itemValue < 1) return;
-
-        setWorkout((prevWorkout) => {
+    const handleDurationChange = (itemValue): void => {
+        setModalWorkout((prevWorkout) => {
             const newTabatas = itemValue > prevWorkout.tabatas.length
                 ? [...prevWorkout.tabatas, ...Array.from(
                     { length: itemValue - prevWorkout.tabatas.length },
@@ -221,10 +247,59 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         });
     };
 
-    const handleWorkoutSettingChange = (name, value): void => {
-        setModalWorkout((prevWorkout) => ({
-            ...prevWorkout,
-            [name]: value,
+    // const handleNumberTabatasChange = (itemValue: number): void => {
+    //     if (itemValue < 1) return;
+
+    //     setWorkout((prevWorkout) => {
+    //         const newTabatas = itemValue > prevWorkout.tabatas.length
+    //             ? [...prevWorkout.tabatas, ...Array.from(
+    //                 { length: itemValue - prevWorkout.tabatas.length },
+    //                 () => emptyTabata,
+    //             )]
+    //             : prevWorkout.tabatas.slice(0, itemValue);
+
+    //         return {
+    //             ...prevWorkout,
+    //             tabatas: newTabatas,
+    //             numberOfTabatas: newTabatas.length, // Update numberOfTabatas to reflect new length
+    //         };
+    //     });
+    // };
+
+    const handleWorkoutSettingChange = (name: string, value: boolean): void => {
+        setModalWorkout((prevWorkout) => {
+            const updatedSettings = {
+                ...prevWorkout.includeSettings,
+                [name]: value,
+            };
+
+            // Ensure that at least one setting remains true
+            if (Object.values(updatedSettings).every((setting) => !setting)) {
+                updatedSettings[name] = true;
+            }
+            return {
+                ...prevWorkout,
+                includeSettings: updatedSettings,
+            };
+        });
+    };
+
+    const handleDifficultyChange = (itemValue): void => {
+        handleWorkoutSettingChange('difficulty', itemValue);
+    };
+
+    const toggleEquipment = (): void => {
+        setEquipmentEnabled(!equipmentEnabled);
+        setModalWorkout((prev) => ({
+            ...prev,
+            equipment: {
+                useKettlebell: false,
+                useDumbbells: false,
+                useHangingBar: false,
+                useYogaBall: false,
+                useWorkoutBand: false,
+                useBoxPlatform: false,
+            },
         }));
     };
 
@@ -258,78 +333,31 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
     return (
         <GradientVStack
             flex={1}
+            p={4}
             space={2}
             width="100%"
         >
-            <Input
-                fontSize="lg"
-                mb={0}
-                mt={4}
-                mx={4}
-                placeholder="Enter Workout Name"
-                value={workoutName}
-                onChangeText={handleNameChange}
-            />
-            <HStack alignItems="center" background="transparent" justifyContent="space-between" space={4} width="100%">
-                <Box alignItems="flex-start" flex={1}>
-                    <Select
-                        _actionSheetContent={{
-                            bg: 'gray.900',
-                        }}
-                        _item={{
-                            bg: 'gray.900',
-                            color: 'white',
-                            _text: {
-                                color: 'white',
-                            },
-                            _pressed: {
-                                bg: 'gray.800',
-                            },
-                        }}
-                        _selectedItem={{
-                            bg: 'gray.700',
-                            color: 'white',
-                        }}
-                        backgroundColor="transparent"
-                        borderColor="transparent"
-                        dropdownIcon={(
-                            <HStack alignItems="center" space={2}>
-                                <Text fontSize="md">{`${workout.tabatas.length} ${workout.tabatas.length > 1 ? 'Tabatas' : 'Tabata'}`}</Text>
-                                <Icon as={Ionicons} color="gray.400" ml={0} mr={4} name="chevron-down" pl={0} size="xs" />
-                            </HStack>
-    )}
-                        minWidth="125"
-                        ml={-2}
-                        selectedValue={workout.tabatas.length.toString()}
-                        size="lg"
-                        onValueChange={(itemValue): void => handleNumberTabatasChange(parseInt(itemValue, 10) || 0)}
-                    >
-                        {[...Array(99).keys()].map((val) => (
-                            <Select.Item
-                                key={val + 1}
-                                label={`${(val + 1)} ${val + 1 > 1 ? 'Tabatas' : 'Tabata'}`}
-                                // @ts-expect-error
-                                value={(val + 1)}
-                            />
-                        ))}
-                    </Select>
-                </Box>
-                <Box
-                    alignItems="flex-end"
+            <HStack alignItems="center" background="transparent" space={4} width="100%">
+                <Input
                     flex={1}
-                >
-                    <IconButton
-                        borderColor="white"
-                        borderRadius="full"
-                        borderWidth={1}
-                        color="flame.500"
-                        icon={<Icon as={Ionicons} color="white" name="settings" />}
-                        mr={4}
-                        onPress={(): void => setShowSettingsModal(true)}
-                    />
-                </Box>
+                    fontSize="lg"
+                    mb={0}
+                    placeholder="Enter Workout Name"
+                    value={workoutName}
+                    onChangeText={handleNameChange}
+                />
+                <IconButton
+                    borderColor="white"
+                    borderRadius="full"
+                    borderWidth={1}
+                    color="flame.500"
+                    h={42}
+                    icon={<Icon as={Ionicons} color="white" name="settings" />}
+                    w={42}
+                    onPress={(): void => setShowSettingsModal(true)}
+                />
             </HStack>
-            <NestableScrollContainer style={{ paddingHorizontal: 16 }}>
+            <NestableScrollContainer>
                 {workout.tabatas.map((tabataCircuit, index) => (
                     <TabataItem
                         changeExercise={handleSelectExercise}
@@ -357,157 +385,411 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 </Button>
             </NestableScrollContainer>
             {/* Settings Modal */}
-            {/* TDOD: Move to its own component */}
-            <Modal isOpen={showSettingsModal} size="full" onClose={(): void => setShowSettingsModal(false)}>
-                <Modal.Content backgroundColor="gray.900">
-                    <Modal.CloseButton />
-                    <Modal.Header backgroundColor="gray.900" borderBottomWidth={0}>
-                        <Text bold fontSize="lg">
-                            Settings
-                        </Text>
-                    </Modal.Header>
-                    <Modal.Body backgroundColor="gray.900">
-                        <VStack space={2}>
-                            <HStack width="100%">
-                                <HStack flex={1}>
-                                    <Checkbox
-                                        bgColor={modalWorkout.equipment.useKettlebell ? 'primary' : 'gray.900'}
-                                        isChecked={modalWorkout.equipment.useKettlebell}
-                                        key="Kettlebell-checkbox"
-                                        mb="2"
-                                        size="lg"
-                                        value="Kettlebells"
-                                        onChange={(): void => handleWorkoutEquipmentChange('useKettlebell', !modalWorkout.equipment.useKettlebell)}
+            <Modal
+                borderColor="gray.600"
+                isOpen={showSettingsModal}
+                size="full"
+                onClose={handleModalCancel}
+            >
+                <BlurView
+                    intensity={20}
+                    style={{
+                        width: '100%', flex: 1, justifyContent: 'center', alignItems: 'center',
+                    }}
+                    tint="dark"
+                >
+                    <Modal.Content
+                        backgroundColor="gray.900"
+                        borderColor="gray.600"
+                        borderWidth={2}
+                        style={{ margin: 'auto' }}
+                        width="85%"
+                    >
+                        <Modal.CloseButton />
+                        <Modal.Body
+                            backgroundColor="gray.900"
+                            // @ts-expect-error
+                            gap={8}
+                            px={8}
+                        >
+                            <Box
+                                flexDirection="row"
+                                justifyContent="center"
+                                width="100%"
+                            >
+                                <Text bold fontSize="xl">
+                                    Choose Your Settings
+                                </Text>
+                            </Box>
+                            {/* Number of Tabatas Row */}
+                            <Box
+                                flexDirection="row"
+                                justifyContent="center"
+                                width="100%"
+                            >
+                                <HStack alignItems="center" background="transparent" justifyContent="space-between" width="100%">
+                                    <HStack alignItems="center" justifyContent="flex-start">
+                                        <Icon as={Ionicons} mr={2} name="body-outline" size="md" />
+                                        <Text
+                                            fontSize="xl"
+                                            numberOfLines={2}
+                                            style={{
+                                                fontWeight: 'bold',
+                                            }}
+                                        >
+                                            Duration:
+                                        </Text>
+                                    </HStack>
+                                    <Select
+                                        _actionSheetContent={{
+                                            bg: 'gray.900',
+                                        }}
+                                        _item={{
+                                            bg: 'gray.900',
+                                            color: 'white',
+                                            _text: {
+                                                color: 'white',
+                                            },
+                                            _pressed: {
+                                                bg: 'gray.800',
+                                            },
+                                        }}
+                                        _selectedItem={{
+                                            bg: 'gray.700',
+                                            color: 'white',
+                                        }}
+                                        backgroundColor="transparent"
+                                        borderColor="transparent"
+                                        // @ts-expect-error
+                                        leftElement={<Text fontSize="xl">{`${modalWorkout.numberOfTabatas.toString()} ${modalWorkout.numberOfTabatas > 1 ? 'Tabatas' : 'Tabata'}`}</Text>}
+                                        size="xl"
+                                        onValueChange={(itemValue): void => handleDurationChange(
+                                            parseInt(itemValue, 10) || 0,
+                                        )}
                                     >
-                                        <Text pl="2">Kettlebells</Text>
-                                    </Checkbox>
+                                        {[...Array(24).keys()].map((val, i) => (
+                                            <Select.Item key={val} label={`${(i + 1).toString()} ${i > 0 ? 'Tabatas' : 'Tabata'}`} value={(i + 1).toString()} />
+                                        ))}
+                                    </Select>
                                 </HStack>
-                                <HStack flex={1}>
-                                    <Checkbox
-                                        bgColor={modalWorkout.equipment.useDumbells ? 'primary' : 'gray.900'}
-                                        isChecked={modalWorkout.equipment.useDumbells}
-                                        key="Dumbells-checkbox"
-                                        mb="2"
-                                        size="lg"
-                                        value="Dumbells"
-                                        onChange={(): void => handleWorkoutEquipmentChange('useDumbells', !modalWorkout.equipment.useDumbells)}
+                            </Box>
+                            {/* Difficulty Row */}
+                            <Box
+                                flexDirection="row"
+                                justifyContent="center"
+                                width="100%"
+                            >
+                                <HStack alignItems="center" background="transparent" justifyContent="space-between" width="100%">
+                                    <HStack alignItems="center" justifyContent="flex-start">
+                                        <Icon as={Ionicons} mr={2} name="barbell-outline" size="md" />
+                                        <Text
+                                            fontSize="xl"
+                                            numberOfLines={2}
+                                            style={{
+                                                fontWeight: 'bold',
+                                            }}
+                                        >
+                                            Difficulty:
+                                        </Text>
+                                    </HStack>
+                                    <Select
+                                        _actionSheetContent={{
+                                            bg: 'gray.900',
+                                        }}
+                                        _item={{
+                                            bg: 'gray.900',
+                                            color: 'white',
+                                            _text: {
+                                                color: 'white',
+                                            },
+                                            _pressed: {
+                                                bg: 'gray.800',
+                                            },
+                                        }}
+                                        _selectedItem={{
+                                            bg: 'gray.700',
+                                            color: 'white',
+                                        }}
+                                        backgroundColor="transparent"
+                                        borderColor="transparent"
+                                        // @ts-expect-error
+                                        leftElement={<Text fontSize="xl" pl={2}>{modalWorkout.difficulty}</Text>}
+                                        selectedValue={modalWorkout.difficulty}
+                                        size="xl"
+                                        onValueChange={(itemValue): void => handleDifficultyChange(itemValue)}
                                     >
-                                        <Text pl="2">Dumbells</Text>
-                                    </Checkbox>
+                                        {[Difficulty.Basic, Difficulty.Intermediate, Difficulty.Advanced].map((val) => (
+                                            <Select.Item key={val} label={val} value={val} />
+                                        ))}
+                                    </Select>
                                 </HStack>
-                            </HStack>
-                            <HStack width="100%">
-                                <HStack flex={1}>
-                                    <Checkbox
-                                        bgColor={modalWorkout.equipment.useHangingBar ? 'primary' : 'gray.900'}
-                                        isChecked={modalWorkout.equipment.useHangingBar}
-                                        key="HangingBar-checkbox"
-                                        mb="2"
-                                        size="lg"
-                                        value="HangingBar"
-                                        onChange={(): void => handleWorkoutEquipmentChange('useHangingBar', !modalWorkout.equipment.useHangingBar)}
+                            </Box>
+                            {/* Focus Row */}
+                            <Box
+                                flexDirection="row"
+                                justifyContent="center"
+                                width="100%"
+                            >
+                                <HStack alignItems="center" background="transparent" justifyContent="space-between" width="100%">
+                                    <HStack alignItems="center" justifyContent="flex-start" space={4}>
+                                        <Text
+                                            fontSize="xl"
+                                            numberOfLines={2}
+                                            style={{
+                                                fontWeight: 'bold',
+                                            }}
+                                        >
+                                            Focus:
+                                        </Text>
+                                        <Box>
+                                            <TouchableOpacity onPress={(): void => handleWorkoutSettingChange('includeUpper', !modalWorkout.includeSettings?.includeUpper)}>
+                                                <Box
+                                                    bg={modalWorkout.includeSettings?.includeUpper ? {
+                                                        linearGradient: {
+                                                            colors: ['flame.500', 'cherry.500'],
+                                                            start: [0, 1],
+                                                            end: [1, 0],
+                                                        },
+                                                    } : 'gray.900'}
+                                                    bgColor={modalWorkout.includeSettings?.includeUpper ? 'flame.500' : 'gray.900'}
+                                                    borderColor="gray.100"
+                                                    borderRadius="md"
+                                                    borderWidth={1}
+                                                    p={2}
+                                                >
+                                                    <Image
+                                                        alt="Upper Body icon"
+                                                        source={exerciseIconDictionary['Upper Body']}
+                                                        style={{
+                                                            height: 24,
+                                                            width: 24,
+                                                            tintColor: 'white',
+                                                        }}
+                                                    />
+                                                </Box>
+                                            </TouchableOpacity>
+                                        </Box>
+                                        <Box>
+                                            <TouchableOpacity onPress={(): void => handleWorkoutSettingChange('includeLower', !modalWorkout.includeSettings?.includeLower)}>
+                                                <Box
+                                                    bg={modalWorkout.includeSettings?.includeLower ? {
+                                                        linearGradient: {
+                                                            colors: ['flame.500', 'cherry.500'],
+                                                            start: [0, 1],
+                                                            end: [1, 0],
+                                                        },
+                                                    } : 'gray.900'}
+                                                    borderColor="gray.100"
+                                                    borderRadius="md"
+                                                    borderWidth={1}
+                                                    p={2}
+                                                >
+                                                    <Image
+                                                        alt="Lower Body icon"
+                                                        source={exerciseIconDictionary['Lower Body']}
+                                                        style={{
+                                                            height: 24,
+                                                            width: 24,
+                                                            tintColor: 'white',
+                                                        }}
+                                                    />
+                                                </Box>
+                                            </TouchableOpacity>
+                                        </Box>
+                                        <Box>
+                                            <TouchableOpacity onPress={(): void => handleWorkoutSettingChange('includeAbs', !modalWorkout.includeSettings?.includeAbs)}>
+                                                <Box
+                                                    bg={modalWorkout.includeSettings?.includeAbs ? {
+                                                        linearGradient: {
+                                                            colors: ['flame.500', 'cherry.500'],
+                                                            start: [0, 1],
+                                                            end: [1, 0],
+                                                        },
+                                                    } : 'gray.900'}
+                                                    borderColor="gray.100"
+                                                    borderRadius="md"
+                                                    borderWidth={1}
+                                                    p={2}
+                                                >
+                                                    <Image
+                                                        alt="Abs icon"
+                                                        source={exerciseIconDictionary.Abs}
+                                                        style={{
+                                                            height: 24,
+                                                            width: 24,
+                                                            tintColor: 'white',
+                                                        }}
+                                                    />
+                                                </Box>
+                                            </TouchableOpacity>
+                                        </Box>
+                                        <Box>
+                                            <TouchableOpacity onPress={(): void => handleWorkoutSettingChange('includeCardio', !modalWorkout.includeSettings?.includeCardio)}>
+                                                <Box
+                                                    bg={modalWorkout.includeSettings?.includeCardio ? {
+                                                        linearGradient: {
+                                                            colors: ['flame.500', 'cherry.500'],
+                                                            start: [0, 1],
+                                                            end: [1, 0],
+                                                        },
+                                                    } : 'gray.900'}
+                                                    borderColor="gray.100"
+                                                    borderRadius="md"
+                                                    borderWidth={1}
+                                                    p={2}
+                                                >
+                                                    <Image
+                                                        alt="Cardio icon"
+                                                        source={exerciseIconDictionary.Cardio}
+                                                        style={{
+                                                            height: 24,
+                                                            width: 24,
+                                                            tintColor: 'white',
+                                                        }}
+                                                    />
+                                                </Box>
+                                            </TouchableOpacity>
+                                        </Box>
+                                    </HStack>
+                                </HStack>
+                            </Box>
+                            {/* Equipment Area */}
+                            <VStack space={4}>
+                                <Box
+                                    flexDirection="row"
+                                    justifyContent="center"
+                                    width="100%"
+                                >
+                                    <HStack alignItems="center" background="transparent" justifyContent="space-between" width="100%">
+                                        <HStack alignItems="center" justifyContent="flex-start">
+                                            <Image
+                                                alt="KB icon"
+                                                mr={2}
+                                                source={equipmentIconDictionary.Kettlebell}
+                                                style={{
+                                                    height: 24,
+                                                    width: 24,
+                                                    tintColor: 'white',
+                                                }}
+                                            />
+                                            <Text
+                                                fontSize="xl"
+                                                numberOfLines={2}
+                                                style={{
+                                                    fontWeight: 'bold',
+                                                }}
+                                            >
+                                                Equipment:
+                                            </Text>
+                                        </HStack>
+                                        <Switch
+                                            isChecked={equipmentEnabled}
+                                            offThumbColor="gray.200"
+                                            offTrackColor="gray.700"
+                                            size="md"
+                                            onThumbColor="gray.200"
+                                            onToggle={toggleEquipment}
+                                            onTrackColor="flame.500"
+                                        />
+                                    </HStack>
+                                </Box>
+                                {/* Equipment Checkboxes Row */}
+                                {equipmentEnabled && (
+                                <VStack maxWidth={335} minWidth={335} space={2}>
+                                    <HStack width="100%">
+                                        <HStack flex={1}>
+                                            <Checkbox
+                                                bgColor={modalWorkout.equipment.useKettlebell ? 'primary' : 'gray.900'}
+                                                isChecked={modalWorkout.equipment.useKettlebell}
+                                                key="Kettlebell-checkbox"
+                                                mb="2"
+                                                size="lg"
+                                                value="Kettlebells"
+                                                onChange={(): void => handleWorkoutEquipmentChange('useKettlebell', !modalWorkout.equipment.useKettlebell)}
+                                            >
+                                                <Text>Kettlebells</Text>
+                                            </Checkbox>
+                                        </HStack>
+                                        <HStack flex={1}>
+                                            <Checkbox
+                                                bgColor={modalWorkout.equipment.useDumbbells ? 'primary' : 'gray.900'}
+                                                isChecked={modalWorkout.equipment.useDumbbells}
+                                                key="Dumbbells-checkbox"
+                                                mb="2"
+                                                size="lg"
+                                                value="Dumbbells"
+                                                onChange={(): void => handleWorkoutEquipmentChange('useDumbbells', !modalWorkout.equipment.useDumbbells)}
+                                            >
+                                                <Text>Dumbbells</Text>
+                                            </Checkbox>
+                                        </HStack>
+                                    </HStack>
+                                    <HStack width="100%">
+                                        <HStack flex={1}>
+                                            <Checkbox
+                                                bgColor={modalWorkout.equipment.useBoxPlatform ? 'primary' : 'gray.900'}
+                                                isChecked={modalWorkout.equipment.useBoxPlatform}
+                                                key="BoxPlatform-checkbox"
+                                                mb="2"
+                                                size="lg"
+                                                value="BoxPlatform"
+                                                onChange={(): void => handleWorkoutEquipmentChange('useBoxPlatform', !modalWorkout.equipment.useBoxPlatform)}
+                                            >
+                                                <Text>Box Platform</Text>
+                                            </Checkbox>
+                                        </HStack>
+                                        <HStack flex={1}>
+                                            <Checkbox
+                                                bgColor={modalWorkout.equipment.useYogaBall ? 'primary' : 'gray.900'}
+                                                isChecked={modalWorkout.equipment.useYogaBall}
+                                                key="YogaBall-checkbox"
+                                                mb="2"
+                                                size="lg"
+                                                value="YogaBall"
+                                                onChange={(): void => handleWorkoutEquipmentChange('useYogaBall', !modalWorkout.equipment.useYogaBall)}
+                                            >
+                                                <Text>Yoga Ball</Text>
+                                            </Checkbox>
+                                        </HStack>
+                                    </HStack>
+                                </VStack>
+                                )}
+                            </VStack>
+                            <Box
+                                flexDirection="row"
+                                justifyContent="center"
+                                width="100%"
+                            >
+                                <TouchableOpacity onPress={handleModalDone}>
+                                    <Box
+                                        alignItems="center"
+                                        bg={{
+                                            linearGradient: {
+                                                colors: ['flame.500', 'cherry.500'],
+                                                start: [0, 1],
+                                                end: [1, 0],
+                                            },
+                                        }}
+                                        borderRadius="full"
+                                        flexDirection="row"
+                                    // @ts-ignore
+                                        gap={2}
+                                        justifyContent="center"
+                                        mx="4"
+                                        p="2"
+                                        px={4}
+                                        width="120"
                                     >
-                                        <Text pl="2">Hanging Bar</Text>
-                                    </Checkbox>
-                                </HStack>
-                                <HStack flex={1}>
-                                    <Checkbox
-                                        bgColor={modalWorkout.equipment.useYogaBall ? 'primary' : 'gray.900'}
-                                        isChecked={modalWorkout.equipment.useYogaBall}
-                                        key="YogaBall-checkbox"
-                                        mb="2"
-                                        size="lg"
-                                        value="YogaBall"
-                                        onChange={(): void => handleWorkoutEquipmentChange('useYogaBall', !modalWorkout.equipment.useYogaBall)}
-                                    >
-                                        <Text pl="2">Yoga Ball</Text>
-                                    </Checkbox>
-                                </HStack>
-                            </HStack>
-                            <HStack width="100%">
-                                <HStack flex={1}>
-                                    <Checkbox
-                                        bgColor={modalWorkout.equipment.useWorkoutBand ? 'primary' : 'gray.900'}
-                                        isChecked={modalWorkout.equipment.useWorkoutBand}
-                                        key="WorkoutBand-checkbox"
-                                        mb="2"
-                                        size="lg"
-                                        value="WorkoutBand"
-                                        onChange={(): void => handleWorkoutEquipmentChange('useWorkoutBand', !modalWorkout.equipment.useWorkoutBand)}
-                                    >
-                                        <Text pl="2">Workout Band</Text>
-                                    </Checkbox>
-                                </HStack>
-                                <HStack flex={1}>
-                                    <Checkbox
-                                        bgColor={modalWorkout.equipment.useBoxPlatform ? 'primary' : 'gray.900'}
-                                        isChecked={modalWorkout.equipment.useBoxPlatform}
-                                        key="BoxPlatform-checkbox"
-                                        mb="2"
-                                        size="lg"
-                                        value="BoxPlatform"
-                                        onChange={(): void => handleWorkoutEquipmentChange('useBoxPlatform', !modalWorkout.equipment.useBoxPlatform)}
-                                    >
-                                        <Text pl="2">Box Platform</Text>
-                                    </Checkbox>
-                                </HStack>
-                            </HStack>
-                        </VStack>
-                        <FormControl.Label>Number of Tabatas</FormControl.Label>
-                        <Input
-                            keyboardType="numeric"
-                            placeholder="Number of Tabatas"
-                            value={modalWorkout?.numberOfTabatas.toString()}
-                            onChangeText={(text): void => handleWorkoutSettingChange('numberOfTabatas', parseInt(text, 10) || 0)}
-                        />
-                        <FormControl.Label>Warmup</FormControl.Label>
-                        <Input
-                            keyboardType="numeric"
-                            placeholder="Warmup Duration (seconds)"
-                            value={modalWorkout?.warmupDuration.toString()}
-                            onChangeText={(text): void => handleWorkoutSettingChange('warmupDuration', parseInt(text, 10) || 0)}
-                        />
-                        <FormControl.Label>Exercise Duration</FormControl.Label>
-                        <Input
-                            keyboardType="numeric"
-                            placeholder="Exercise Duration (seconds)"
-                            value={modalWorkout?.exerciseDuration.toString()}
-                            onChangeText={(text): void => handleWorkoutSettingChange('exerciseDuration', parseInt(text, 10) || 0)}
-                        />
-                        <FormControl.Label>Rest Duration</FormControl.Label>
-                        <Input
-                            keyboardType="numeric"
-                            placeholder="Rest Duration (seconds)"
-                            value={modalWorkout?.restDuration.toString()}
-                            onChangeText={(text): void => handleWorkoutSettingChange('restDuration', parseInt(text, 10) || 0)}
-                        />
-                        <FormControl.Label>Exercises Per Tabata</FormControl.Label>
-                        <Input
-                            keyboardType="numeric"
-                            placeholder="Exercises Per Tabata"
-                            value={modalWorkout?.exercisesPerTabata.toString()}
-                            onChangeText={(text): void => handleWorkoutSettingChange('exercisesPerTabata', parseInt(text, 10) || 0)}
-                        />
-                        <FormControl.Label>Intermission Duration</FormControl.Label>
-                        <Input
-                            keyboardType="numeric"
-                            placeholder="Intermission Duration (seconds)"
-                            value={modalWorkout?.intermisionDuration.toString()}
-                            onChangeText={(text): void => handleWorkoutSettingChange('intermisionDuration', parseInt(text, 10) || 0)}
-                        />
-                        <FormControl.Label>Coooldown Duration</FormControl.Label>
-                        <Input
-                            keyboardType="numeric"
-                            placeholder="Cooldown Duration (seconds)"
-                            value={modalWorkout?.cooldownDuration.toString()}
-                            onChangeText={(text): void => handleWorkoutSettingChange('cooldownDuration', parseInt(text, 10) || 0)}
-                        />
-                    </Modal.Body>
-                    <Modal.Footer backgroundColor="gray.900" borderTopWidth={0}>
-                        <Button onPress={handleModalDone}>Done</Button>
-                        <Button variant="ghost" onPress={handleModalCancel}>Cancel</Button>
-                    </Modal.Footer>
-                </Modal.Content>
+                                        <Icon as={Ionicons} name="checkmark" size="lg" />
+                                        <Text fontSize="md" fontWeight="semibold">
+                                            Done
+                                        </Text>
+                                    </Box>
+                                </TouchableOpacity>
+                            </Box>
+                        </Modal.Body>
+                    </Modal.Content>
+                </BlurView>
             </Modal>
             {/* Help Dialog */}
             <Modal isOpen={showHelpDialog} size="full" onClose={(): void => setShowHelpDialog(false)}>

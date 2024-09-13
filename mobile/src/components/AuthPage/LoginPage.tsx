@@ -112,7 +112,7 @@ export const LoginScreen = (): JSX.Element => {
                         />
                         <Input
                             autoCapitalize="none"
-                            placeholder="Email or username"
+                            placeholder="Username or email"
                             value={emailOrUsername}
                             width="80%"
                             onChangeText={setEmailOrUsername}

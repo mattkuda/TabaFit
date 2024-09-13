@@ -2,10 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import {
-    Text, Button, Input, TextArea,
-    HStack,
-    Checkbox,
-    Icon,
+    Text, Button, Input, TextArea, HStack, Checkbox, Icon, Divider, VStack,
 } from 'native-base';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useQueryClient } from 'react-query';
@@ -17,6 +14,8 @@ import { ShareWorkoutScreenRouteProp } from '../../navigation/navigationTypes';
 import { useCreateWorkout } from '../../mutations/workoutMutations';
 import { GradientVStack } from '../common/GradientVStack';
 import { useWorkoutOwnership } from '../../hooks/useUserInfo';
+import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
+import { formatBodyParts, formatEquipmentSettings } from '../../util/util';
 
 export const ShareWorkoutScreen = (): JSX.Element => {
     const route = useRoute<ShareWorkoutScreenRouteProp>();
@@ -68,7 +67,10 @@ export const ShareWorkoutScreen = (): JSX.Element => {
             handleSaveWorkout().finally(() => {
                 shareWorkoutMutation.mutate({
                     userId,
-                    workout,
+                    workout: {
+                        ...workout,
+                        _id: undefined, // Ensure the backend generates the ID
+                    },
                     title: workoutTitle,
                     description: workoutDescription,
                 }, {
@@ -123,6 +125,8 @@ export const ShareWorkoutScreen = (): JSX.Element => {
         });
     }, [handleShareWorkout, navigation]);
 
+    const formattedTotalWorkoutTime = getFormattedTimeForTabataWorkout(workout);
+
     useEffect(() => {
         navigation.setOptions({
             headerLeft: (): JSX.Element => (
@@ -172,6 +176,51 @@ export const ShareWorkoutScreen = (): JSX.Element => {
                     onChange={(): void => setSaveWorkoutSwitch(!saveWorkoutSwitch)}
                 />
             </HStack>
+            <Divider backgroundColor="gray6" />
+            <VStack space={4}>
+                <Text fontSize="lg" justifyContent="center">
+                    Stats:
+                </Text>
+                {/* <WorkoutPostDisplay workout={workout} />
+
+                <HStack justifyContent="space-between" mt={2}>
+                    <VStack alignItems="center" flex={1} space={0}>
+                        <Icon as={Ionicons} name="body-outline" size="lg" />
+                        <Text>
+                            {`${workout.tabatas.length} ${workout.tabatas.length === 1 ? 'Tabata' : 'Tabatas'}`}
+                        </Text>
+                    </VStack>
+                    <VStack alignItems="center" flex={1} space={0}>
+                        <Icon as={Ionicons} name="time-outline" size="lg" />
+                        <Text>{formattedTotalWorkoutTime}</Text>
+                    </VStack>
+                </HStack>
+                <HStack justifyContent="space-between" mt={2}>
+                    <VStack alignItems="center" flex={1} space={0}>
+                        <Icon as={Ionicons} name="body-outline" size="lg" />
+                        <Text>
+                            {`${workout.tabatas.length} ${workout.tabatas.length === 1 ? 'Tabata' : 'Tabatas'}`}
+                        </Text>
+                    </VStack>
+                    <VStack alignItems="center" flex={1} space={0}>
+                        <Icon as={Ionicons} name="time-outline" size="lg" />
+                        <Text>{formattedTotalWorkoutTime}</Text>
+                    </VStack>
+                </HStack> */}
+
+                <Text>
+                    {`Tabatas: ${workout.tabatas.length}`}
+                </Text>
+                <Text>
+                    {`Duration: ${formattedTotalWorkoutTime}`}
+                </Text>
+                <Text>
+                    {`Focus: ${formatBodyParts(workout.includeSettings)}`}
+                </Text>
+                <Text>
+                    {`Equipment: ${formatEquipmentSettings(workout.equipment)}`}
+                </Text>
+            </VStack>
         </GradientVStack>
     );
 };

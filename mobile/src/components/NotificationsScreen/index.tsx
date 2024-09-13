@@ -11,13 +11,13 @@ import { RefreshableScrollView } from '../RefreshableScrollView';
 import { GradientVStack } from '../common/GradientVStack';
 
 export const NotificationsScreen = (): JSX.Element => {
+    const queryClient = useQueryClient();
     const {
         data: notifications, isLoading, isError, refetch,
     } = useQueryNotifications();
     const { mutate: markNotificationsRead } = useMutateNotificationsRead();
     const { authState } = useAuth();
     const userId = authState?.userId;
-    const queryClient = useQueryClient();
 
     useEffect(() => {
         if (notifications?.length > 0) {

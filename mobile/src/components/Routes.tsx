@@ -1,6 +1,6 @@
 import React from 'react';
-import { ViewStyle } from 'react-native';
-import { useTheme } from 'native-base';
+import { View, ViewStyle } from 'react-native';
+import { Spinner, useTheme } from 'native-base';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -42,9 +42,19 @@ const ProfileTabIcon = ({ focused, color, size }): JSX.Element => {
 
 export const Routes = (): JSX.Element => {
     const showFooter = useRecoilValue(showFooterState);
-    const { authState, hasSeenTutorial } = useAuth();
+    const { authState, hasSeenTutorial, loading } = useAuth();
     const { colors } = useTheme();
 
+    if (loading) {
+        return (
+            <View style={{
+                flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.gray[900],
+            }}
+            >
+                <Spinner accessibilityLabel="Loading authentication status" color="white" />
+            </View>
+        );
+    }
     if (!authState.authenticated) {
         return (
             <NavigationContainer theme={{

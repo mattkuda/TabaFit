@@ -3,29 +3,16 @@ import {
     HStack, VStack, Text, Icon, Box,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native';
-import { HomeScreenNavigationProp } from '../../types/navigationTypes';
-import { formatBodyParts, getWorkoutDifficultyGradient } from '../../util/util';
-import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
-import { TabataWorkout } from '../../types/workouts';
+import { getFormattedTimeForManualWorkout } from '../TabataTimerScreen/util';
 
 type PostCardProps = {
-    workout: TabataWorkout;
+    manualTabatas: number;
 };
 
-export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
+export const WorkoutPostManualDisplay: React.FC<PostCardProps> = ({ manualTabatas }) => {
     // Make this its own prop
-    const navigation = useNavigation<HomeScreenNavigationProp>();
-    const formattedTotalWorkoutTime = getFormattedTimeForTabataWorkout(workout);
-
-    const handleWorkoutNamePress = (): void => {
-        if (workout._id) {
-            navigation.navigate('ViewWorkoutScreen', { workout, workoutId: workout._id.toString() });
-        }
-    };
-
-    const workoutGradient = getWorkoutDifficultyGradient(workout.difficulty);
+    const formattedTotalWorkoutTime = getFormattedTimeForManualWorkout(manualTabatas);
 
     return (
         <TouchableOpacity
@@ -37,11 +24,10 @@ export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
                 shadowRadius: 3.84,
                 elevation: 5,
             }}
-            onPress={handleWorkoutNamePress}
         >
             <Box
                 backgroundColor="workoutDisplayGray"
-                borderColor={workoutGradient[0]}
+                borderColor="white"
                 borderRadius="md"
                 borderWidth={1}
                 mt={2}
@@ -71,20 +57,20 @@ export const WorkoutPostDisplay: React.FC<PostCardProps> = ({ workout }) => {
                         alignItems="center"
                         space={2}
                     >
-                        <Icon as={Ionicons} color={workoutGradient[0]} name="barbell-outline" size="sm" />
-                        <Text bold fontSize="md" onPress={handleWorkoutNamePress}>
-                            {workout.name}
+                        <Icon as={Ionicons} color="white" name="barbell-outline" size="sm" />
+                        <Text bold italic fontSize="md">
+                            Manual Workout
                         </Text>
                     </HStack>
                 </HStack>
-                <Text italic fontSize="sm" pl={8}>
+                {/* <Text italic fontSize="sm" pl={8}>
                     {formatBodyParts(workout.includeSettings)}
-                </Text>
+                </Text> */}
                 <HStack justifyContent="space-between" mt={2}>
                     <VStack alignItems="center" flex={1} space={0}>
                         <Icon as={Ionicons} name="body-outline" size="md" />
                         <Text fontSize="sm">
-                            {`${workout.tabatas.length} ${workout.tabatas.length === 1 ? 'Tabata' : 'Tabatas'}`}
+                            {`${manualTabatas} ${manualTabatas === 1 ? 'Tabata' : 'Tabatas'}`}
                         </Text>
                     </VStack>
                     <VStack alignItems="center" flex={1} space={0}>

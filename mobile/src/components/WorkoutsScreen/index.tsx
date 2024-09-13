@@ -49,8 +49,6 @@ export const WorkoutsScreen = (): JSX.Element => {
 
     const handlePressBuildWorkout = (): void => {
         navigation.navigate('BuildWorkoutScreen', {
-            isShuffle: false,
-            shouldUpdate: false,
         } as BuildWorkoutScreenProps);
     };
 
@@ -226,7 +224,6 @@ export const WorkoutsScreen = (): JSX.Element => {
                         workouts={premadeWorkouts ?? []}
                         onPressWorkout={handlePressViewWorkout}
                     />
-
                     {/* /* My Workouts */ }
                     <HStack alignItems="center" justifyContent="space-between">
                         <HStack alignItems="center" space={2}>

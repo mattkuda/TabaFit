@@ -1,14 +1,22 @@
-import React, { useRef, useState } from 'react';
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useRef, useState } from 'react';
 import {
     ScrollView,
+    TouchableOpacity,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
     VStack, HStack, Text, Input, Divider,
     Center,
     Spinner,
+    Icon,
+    IconButton,
+    Menu,
 } from 'native-base';
 import { formatDistanceToNow } from 'date-fns';
+import { Ionicons } from '@expo/vector-icons';
+import { useQueryClient } from 'react-query';
 import { useAuth } from '../../context/AuthContext';
 import { useMutateAddComment, useMutateDeleteComment } from '../../mutations/commentMutations';
 import { PostScreenRouteProp } from '../../navigation/navigationTypes';
@@ -20,6 +28,8 @@ import { LikeCommentButtons } from '../common/LikeCommentButtons';
 import { WorkoutPostDisplay } from '../common/WorkoutPostDisplay';
 import { ProfilePicture } from '../ProfilePicture';
 import { GradientVStack } from '../common/GradientVStack';
+import { WorkoutPostManualDisplay } from '../common/WorkoutPostManualDisplay';
+import { useDeletePost } from '../../mutations/useMutateSharePost';
 
 export const PostScreen = (): JSX.Element => {
     const route = useRoute<PostScreenRouteProp>();
@@ -29,11 +39,23 @@ export const PostScreen = (): JSX.Element => {
     } = useQueryPost(postId);
     const addCommentMutation = useMutateAddComment();
     const deleteCommentMutation = useMutateDeleteComment();
+    const deletePostMutation = useDeletePost();
     const [commentBody, setCommentBody] = useState('');
     const { authState } = useAuth();
     const userId = authState?.userId;
     const navigation = useNavigation<PostScreenNavigationProp>();
     const commentInputRef = useRef<HTMLInputElement>(null);
+    const queryClient = useQueryClient();
+
+    const handleDeletePost = (): void => {
+        deletePostMutation.mutate({ postId }, {
+            onSuccess: () => {
+                queryClient.invalidateQueries(['userInfo', userId]);
+                queryClient.invalidateQueries('following-posts');
+                navigation.goBack(); // Navigate back after deletion
+            },
+        });
+    };
 
     const handleAddComment = (): void => {
         addCommentMutation.mutate({ postId, userId, body: commentBody }, {
@@ -56,29 +78,58 @@ export const PostScreen = (): JSX.Element => {
         navigation.navigate('Profile', { userId: post.userId });
     };
 
+    useEffect(() => {
+        if (post?.userId === userId) {
+            navigation.setOptions({
+                headerRight: (): JSX.Element => (
+                    <Menu
+                        backgroundColor="gray.900"
+                        shadow={2}
+                        trigger={(triggerProps): JSX.Element => (
+                            <IconButton
+                                {...triggerProps}
+                                _icon={{
+                                    color: 'white',
+                                    size: 'md',
+                                }}
+                                borderRadius="full"
+                                color="primary"
+                                icon={<Icon as={Ionicons} name="ellipsis-horizontal-outline" size="lg" />}
+                            />
+                        )}
+                    >
+                        <Menu.Item onPress={handleDeletePost}>
+                            <Text color="red.500">Delete Post</Text>
+                        </Menu.Item>
+                    </Menu>
+                ),
+            });
+        }
+    }, [navigation, post?.userId]);
+
     if (isLoading) {
         return (
-            <VStack
+            <GradientVStack
                 backgroundColor="gray9"
                 flex={1}
                 space={4}
                 width="100%"
             >
                 <Center flex={1}><Spinner /></Center>
-            </VStack>
+            </GradientVStack>
         );
     }
 
     if (isError || !post) {
         return (
-            <VStack
+            <GradientVStack
                 backgroundColor="gray9"
                 flex={1}
                 space={4}
                 width="100%"
             >
                 <Text>Error loading post</Text>
-            </VStack>
+            </GradientVStack>
         );
     }
     const userFound = post?.user?.username;
@@ -87,7 +138,9 @@ export const PostScreen = (): JSX.Element => {
         <GradientVStack backgroundColor="gray9" borderColor="gray.200" flex={1} p={4} space={2}>
             <ScrollView>
                 <HStack justifyContent="space-between" space={2}>
-                    <ProfilePicture borderColor="primary" size="48px" user={post.user} />
+                    <TouchableOpacity onPress={userFound && handlePressUser}>
+                        <ProfilePicture borderColor="primary" size="48px" user={post.user} />
+                    </TouchableOpacity>
                     <VStack flex={1}>
                         <HStack>
                             <Text bold fontSize="md" onPress={userFound && handlePressUser}>
@@ -110,7 +163,9 @@ export const PostScreen = (): JSX.Element => {
                         {post.description}
                     </Text>
                 )}
-                <WorkoutPostDisplay workout={post.workout} />
+                {post.workout
+                    ? <WorkoutPostDisplay workout={post.workout} />
+                    : <WorkoutPostManualDisplay manualTabatas={post.manualTabatas} />}
                 <LikeCommentButtons post={post} />
                 <Divider backgroundColor="gray6" />
                 <Input
@@ -132,7 +187,6 @@ export const PostScreen = (): JSX.Element => {
                     type="text"
                     value={commentBody}
                     onChangeText={setCommentBody}
-
                 />
                 {/* @ts-expect-errors */}
                 <VStack gap={4} mt={2}>
@@ -146,6 +200,5 @@ export const PostScreen = (): JSX.Element => {
                 </VStack>
             </ScrollView>
         </GradientVStack>
-
     );
 };

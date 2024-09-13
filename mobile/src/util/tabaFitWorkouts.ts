@@ -1,22 +1,20 @@
-import { TabataWorkoutWithUserInfo } from '../types/workouts';
-import {
-    lowerBodyExercises, upperBodyExercises, absExercises, cardioExercises,
-} from './constants';
+import { Difficulty, TabataWorkoutWithUserInfo } from '../types/workouts';
+import { exerciseDict } from './constants';
 
 const featuredWorkout1: TabataWorkoutWithUserInfo = {
     _id: `tabafit-1`,
-    name: `Easy Alpha Release`,
+    name: `Basic Alpha Release`,
     description: 'TODO refine and add more of these.',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     userId: 'tabafit',
-    warmupDuration: 5,
+    warmupDuration: 10,
     tabatas: [
         [
-            cardioExercises.Burpees,
-            absExercises.Crunches,
-            lowerBodyExercises['Jump Squats'],
-            cardioExercises['Jumping Jacks'],
+            exerciseDict.burpees,
+            exerciseDict.crunches,
+            exerciseDict['jump-squats'],
+            exerciseDict['jumping-jacks'],
         ],
     ],
     restDuration: 10,
@@ -25,14 +23,14 @@ const featuredWorkout1: TabataWorkoutWithUserInfo = {
     exercisesPerTabata: 8,
     intermisionDuration: 60,
     cooldownDuration: 0,
+    difficulty: Difficulty.Basic,
     equipment: {
         useKettlebell: false,
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
-        useNone: true,
     },
     includeSettings: {
         includeUpper: true,
@@ -47,39 +45,40 @@ const featuredWorkout1: TabataWorkoutWithUserInfo = {
 
 const featuredWorkout2: TabataWorkoutWithUserInfo = {
     _id: `tabafit-2`,
-    name: `Medium Alpha Release`,
+    name: `Intermediate Alpha Release`,
     description: 'TODO refine and add more of these.',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     userId: 'tabafit',
-    warmupDuration: 5,
+    warmupDuration: 10,
     tabatas: [
         [
-            cardioExercises.Burpees,
-            absExercises['Bicycle Crunches'],
-            lowerBodyExercises['Jump Squats'],
-            absExercises['Mountain Climbers'],
+            exerciseDict.burpees,
+            exerciseDict['bicycle-crunches'],
+            exerciseDict['jump-squats'],
+            exerciseDict['mountain-climbers'],
         ],
         [
-            cardioExercises.Burpees,
-            absExercises['Lying Leg Raises'],
-            lowerBodyExercises['Alternating Jump Lunges'],
-            cardioExercises['Jumping Jacks'],
+            exerciseDict.burpees,
+            exerciseDict['lying-leg-raises'],
+            exerciseDict['alternatin-jump-lunges'],
+            exerciseDict['jumping-jacks'],
         ],
         [
-            cardioExercises.Burpees,
-            absExercises['V-Ups'],
-            lowerBodyExercises['Jump Squats'],
-            cardioExercises['Fast Feet'],
+            exerciseDict.burpees,
+            exerciseDict['v-ups'],
+            exerciseDict['jump-squats'],
+            exerciseDict['fast-feet'],
         ],
         [
-            cardioExercises.Burpees,
-            absExercises['Russian Twists'],
-            lowerBodyExercises['Glute Bridges'],
-            upperBodyExercises['Push-Ups'],
+            exerciseDict.burpees,
+            exerciseDict['russian-twists'],
+            exerciseDict['glute-bridges'],
+            exerciseDict['push-ups'],
         ],
     ],
     restDuration: 10,
+    difficulty: Difficulty.Basic,
     exerciseDuration: 20,
     numberOfTabatas: 1,
     exercisesPerTabata: 8,
@@ -90,9 +89,8 @@ const featuredWorkout2: TabataWorkoutWithUserInfo = {
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
-        useNone: true,
     },
     includeSettings: {
         includeUpper: true,

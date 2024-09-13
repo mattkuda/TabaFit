@@ -1,17 +1,31 @@
-import React, { useState } from 'react';
+/* eslint-disable no-nested-ternary */
+import React, { useState, useEffect } from 'react';
 import {
-    Input, FlatList, Text, Icon, Spinner, Box,
+    Input, FlatList, Icon, Spinner, Box,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
-import { useSearchUsers } from '../../hooks/useSearchUsers'; // Make sure to create this hook
+import { useSearchUsers } from '../../hooks/useSearchUsers';
 import { User } from '../../types/users';
 import { ConnectionCard } from '../ConnectionsScreen/ConnectionCard';
 import { GradientVStack } from '../common/GradientVStack';
+import { EmptyState } from '../EmptyState';
 
 export const SearchPage = (): JSX.Element => {
     const [searchQuery, setSearchQuery] = useState('');
-    const { data: users, isLoading } = useSearchUsers(searchQuery);
-    // const navigation = useNavigation<ProfilePageScreenNavigationProp>(); // Use the hook to get the navigation object
+    const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
+    const { data: users, isLoading } = useSearchUsers(debouncedQuery);
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedQuery(searchQuery);
+        }, 500); // 500ms delay
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [searchQuery]);
+
+    const shouldShowNoUsers = !isLoading && debouncedQuery.length > 0 && users?.length === 0;
 
     return (
         <GradientVStack
@@ -33,14 +47,16 @@ export const SearchPage = (): JSX.Element => {
                     <Spinner accessibilityLabel="Loading more items" color="white" />
                 </Box>
             ) : (
-                <FlatList
-                    data={users}
-                    keyExtractor={(item: User): string => item._id.toString()}
-                    ListEmptyComponent={searchQuery.length && <Text alignSelf="center" fontSize="md">No users found</Text>}
-                    renderItem={({ item }): JSX.Element => (
-                        <ConnectionCard user={item} />
-                    )}
-                />
+                !shouldShowNoUsers ? <EmptyState /> : (
+                    <FlatList
+                        data={users}
+                        keyExtractor={(item: User): string => item._id.toString()}
+                        ListEmptyComponent={searchQuery.length && <EmptyState text="No users found" />}
+                        renderItem={({ item }): JSX.Element => (
+                            <ConnectionCard user={item} />
+                        )}
+                    />
+                )
             )}
         </GradientVStack>
     );

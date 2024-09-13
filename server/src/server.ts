@@ -6,14 +6,23 @@ dotenv.config();
 
 import express, { Request, Response } from 'express';
 import { MongoClient } from 'mongodb';
+import cors from 'cors';
 import workoutRoutes from './routes/workouts';
 import postRoutes from './routes/posts';
 import userAuthRoutes from './routes/userAuth';
 import usersRoutes from './routes/users';
 import followsRoutes from './routes/follows';
 import notificationsRoutes from './routes/notifications';
+import waitlistRoutes from './routes/waitlist';
 
 const app = express();
+
+// Allow requests from your frontend domain
+app.use(cors({
+  origin: ['http://localhost:3001', 'https://www.tabafit.com'],
+  methods: ['GET', 'POST'], // Specify allowed methods
+  allowedHeaders: ['Content-Type'], // Specify allowed headers
+}));
 const port = process.env.PORT || 3000;
 
 // eslint-disable-next-line import/no-relative-packages
@@ -45,6 +54,7 @@ app.use('/posts', postRoutes);
 app.use('/users', usersRoutes);
 app.use('/follows', followsRoutes);
 app.use('/notifications', notificationsRoutes);
+app.use('/waitlist', waitlistRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');

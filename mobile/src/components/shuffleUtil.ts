@@ -1,7 +1,6 @@
+import { exerciseDict } from '../util/constants';
 import {
-    lowerBodyExercises, upperBodyExercises, absExercises, cardioExercises,
-} from '../util/constants';
-import {
+    Difficulty,
     TabataCircuit, TabataExercise, TabataExerciseType, TabataWorkout, WorkoutEquipmentSettings,
 } from '../types/workouts';
 
@@ -12,6 +11,7 @@ export const shuffleExercises = (
     includeLower: boolean,
     includeAbs: boolean,
     includeCardio: boolean,
+    difficulty: Difficulty,
 ): TabataCircuit[] => {
     const shuffleArray = <T, >(array: T[]): T[] => {
         let currentIndex = array.length;
@@ -28,23 +28,29 @@ export const shuffleExercises = (
     };
 
     const equipmentFilter = (exercise: TabataExercise): boolean => {
-        if (exercise.equipment.includes('None') && selectedEquipment.useNone) {
+        if (exercise.difficulty !== difficulty) {
+            return false;
+        }
+
+        if (!exercise.equipment?.length) {
             return true;
         }
         return exercise.equipment.some((equip) => (equip === 'Kettlebell' && selectedEquipment.useKettlebell)
             || (equip === 'Box Platform' && selectedEquipment.useBoxPlatform)
             || (equip === 'Yoga Ball' && selectedEquipment.useYogaBall)
             || (equip === 'Workout Band' && selectedEquipment.useWorkoutBand)
-            || (equip === 'Dumbells' && selectedEquipment.useDumbells)
+            || (equip === 'Dumbbells' && selectedEquipment.useDumbbells)
             || (equip === 'Hanging Bar' && selectedEquipment.useHangingBar));
     };
 
     const getShuffledExercises = (): (type: TabataExerciseType) => TabataExercise[] => {
+        const exercises = Object.values(exerciseDict);
+
         const shuffledExercises = {
-            'Lower Body': shuffleArray(Object.values(lowerBodyExercises)),
-            'Upper Body': shuffleArray(Object.values(upperBodyExercises)),
-            Abs: shuffleArray(Object.values(absExercises)),
-            Cardio: shuffleArray(Object.values(cardioExercises)),
+            'Lower Body': exercises.filter((e) => e.types.includes('Lower Body')),
+            'Upper Body': exercises.filter((e) => e.types.includes('Upper Body')),
+            Abs: exercises.filter((e) => e.types.includes('Abs')),
+            Cardio: exercises.filter((e) => e.types.includes('Cardio')),
         };
 
         return (type: TabataExerciseType): TabataExercise[] => shuffledExercises[type];
@@ -95,7 +101,8 @@ export const shuffleExercises = (
 };
 
 export const defaultTabataWorkout: TabataWorkout = {
-    _id: `workout-shuffle`,
+    // @ts-expect-error
+    _id: 'workout-shuffle',
     name: `Tabata Shuffle`,
     description: 'A shuffled Tabata workout based on user preferences.',
     createdAt: new Date().toISOString(),
@@ -109,25 +116,26 @@ export const defaultTabataWorkout: TabataWorkout = {
     exercisesPerTabata: 8,
     intermisionDuration: 1,
     cooldownDuration: 0,
+    difficulty: Difficulty.Basic,
     equipment: {
         useKettlebell: false,
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
-        useNone: true,
     },
 };
 
 export const shuffleWorkoutTemplate: TabataWorkout = {
-    _id: `workout-shuffle-template`,
+    // @ts-expect-error
+    _id: 'workout-shuffle-template',
     name: `Tabata Shuffle`,
     description: 'A shuffled Tabata workout based on user preferences.',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     userId: null,
-    warmupDuration: 5,
+    warmupDuration: 10,
     tabatas: [],
     restDuration: 10,
     exerciseDuration: 20,
@@ -140,9 +148,8 @@ export const shuffleWorkoutTemplate: TabataWorkout = {
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
-        useNone: true,
     },
     includeSettings: {
         includeUpper: true,
@@ -150,16 +157,52 @@ export const shuffleWorkoutTemplate: TabataWorkout = {
         includeCardio: true,
         includeLower: true,
     },
+    difficulty: Difficulty.Basic,
+};
+
+export const shuffleWorkoutZeroState: TabataWorkout = {
+    // @ts-expect-error
+    _id: 'workout-shuffle-zero',
+    name: `Tabata Shuffle`,
+    description: 'A shuffled Tabata workout based on user preferences.',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    userId: null,
+    warmupDuration: 10,
+    tabatas: [],
+    restDuration: 10,
+    exerciseDuration: 20,
+    numberOfTabatas: 4,
+    exercisesPerTabata: 8,
+    intermisionDuration: 60,
+    cooldownDuration: 0,
+    equipment: {
+        useKettlebell: false,
+        useBoxPlatform: false,
+        useYogaBall: false,
+        useWorkoutBand: false,
+        useDumbbells: false,
+        useHangingBar: false,
+    },
+    includeSettings: {
+        includeUpper: true,
+        includeAbs: true,
+        includeCardio: true,
+        includeLower: true,
+    },
+    difficulty: Difficulty.Basic,
 };
 
 export const soundTestingWorkout: TabataWorkout = {
-    _id: `sound-shuffle`,
+    // @ts-expect-error
+    _id: 'sound-shuffle-custom',
     name: `Sound Testing Shuffle`,
+    difficulty: Difficulty.Basic,
     description: 'A sound test Tabata workout based on user preferences.',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     userId: null,
-    warmupDuration: 5,
+    warmupDuration: 10,
     tabatas: [],
     restDuration: 5,
     exerciseDuration: 5,
@@ -172,9 +215,8 @@ export const soundTestingWorkout: TabataWorkout = {
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
-        useNone: true,
     },
     includeSettings: {
         includeUpper: true,
@@ -185,8 +227,10 @@ export const soundTestingWorkout: TabataWorkout = {
 };
 
 export const defaultShuffleTabataWorkout: TabataWorkout = {
-    _id: `workout-shuffle`,
+    // @ts-expect-error
+    _id: 'workout-shuffle',
     name: `Tabata Shuffle`,
+    difficulty: Difficulty.Basic,
     description: 'A shuffled Tabata workout based on user preferences.',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -204,9 +248,8 @@ export const defaultShuffleTabataWorkout: TabataWorkout = {
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
-        useNone: true,
     },
     includeSettings: {
         includeUpper: true,
@@ -219,13 +262,14 @@ export const defaultShuffleTabataWorkout: TabataWorkout = {
 export const emptyTabata: TabataCircuit = [null, null, null, null];
 
 export const buildNewTabataInitialState: TabataWorkout = {
-    _id: `workout-custom`,
+    // @ts-expect-error
+    _id: 'workout-custom',
     name: '',
     description: '',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     userId: null,
-    warmupDuration: 5,
+    warmupDuration: 10,
     tabatas: [emptyTabata],
     restDuration: 10,
     exerciseDuration: 20,
@@ -233,14 +277,14 @@ export const buildNewTabataInitialState: TabataWorkout = {
     exercisesPerTabata: 8,
     intermisionDuration: 60,
     cooldownDuration: 0,
+    difficulty: Difficulty.Basic,
     equipment: {
         useKettlebell: false,
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
-        useNone: true,
     },
     includeSettings: {
         includeAbs: true,

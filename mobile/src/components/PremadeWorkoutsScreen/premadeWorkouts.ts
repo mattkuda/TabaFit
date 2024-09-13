@@ -1,7 +1,7 @@
-import { TabataWorkout } from '../../types/workouts';
+import { Difficulty, TabataWorkout } from '../../types/workouts';
 
 export const premadeWorkout1: TabataWorkout = {
-    _id: `premadeWorkout1`,
+    _id: 'premadeWorkout1',
     name: `premadeWorkout1`,
     description: 'premadeWorkout1. todo update.',
     createdAt: new Date().toISOString(),
@@ -15,14 +15,14 @@ export const premadeWorkout1: TabataWorkout = {
     exercisesPerTabata: 8,
     intermisionDuration: 1,
     cooldownDuration: 0,
+    difficulty: Difficulty.Basic,
     equipment: {
         useKettlebell: false,
         useBoxPlatform: false,
         useYogaBall: false,
         useWorkoutBand: false,
-        useDumbells: false,
+        useDumbbells: false,
         useHangingBar: false,
-        useNone: true,
     },
 };
 

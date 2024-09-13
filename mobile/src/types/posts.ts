@@ -11,13 +11,14 @@ export interface PostComment {
 export interface PostSchema {
     _id: mongoose.Types.ObjectId | string;
     userId: mongoose.Types.ObjectId | string;
-    workout: TabataWorkout;
+    workoutId: mongoose.Types.ObjectId | string; // Reference to workout ID
     createdAt: string;
     updatedAt: string;
     title: string;
     description: string;
     likes: mongoose.Types.ObjectId[];
     comments: PostComment[];
+    manualTabatas?: number;
 }
 
 export interface UserPostInfo {
@@ -32,7 +33,7 @@ export interface PostCommentModel {
     userId: string;
     body: string;
     createdAt: Date;
-    user: UserPostInfo
+    user: UserPostInfo;
 }
 
 export interface PostModel {
@@ -44,6 +45,7 @@ export interface PostModel {
     updatedAt: string;
     title: string;
     description: string;
+    manualTabatas?: number;
     likes: mongoose.Types.ObjectId[];
     comments: PostCommentModel[];
 }

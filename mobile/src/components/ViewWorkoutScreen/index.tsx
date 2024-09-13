@@ -26,10 +26,11 @@ type WorkoutsScreenNavigationProp = StackNavigationProp<TabNavigatorParamList, '
 export const ViewWorkoutScreen = (): JSX.Element => {
     const route = useRoute<ViewWorkoutScreenRouteProp>();
     const { workoutId } = route.params;
-    const customWorkout = route.params?.workout as TabataWorkoutWithUserInfo | undefined;
-    const { data: queriedWorkout, isLoading, isError } = useQueryWorkoutById(workoutId);
+    const routeWorkout = route.params?.workout as TabataWorkoutWithUserInfo | undefined;
+    const { data: queriedWorkout, isLoading, isError } = useQueryWorkoutById(routeWorkout?._id.toString() ?? workoutId);
     const { isWorkoutCreatedByUser, isWorkoutSavedByUser } = useWorkoutOwnership(workoutId);
-    const workout = customWorkout ?? queriedWorkout;
+    // Todo: Consider including user info in the route workout so we don't have to query it
+    const workout = queriedWorkout;
     const { authState } = useAuth();
     const queryClient = useQueryClient();
     const navigation = useNavigation<WorkoutsScreenNavigationProp>();
@@ -132,27 +133,33 @@ export const ViewWorkoutScreen = (): JSX.Element => {
 
     if (isLoading) {
         return (
-            <VStack
+            <GradientVStack
                 backgroundColor="gray9"
                 flex={1}
                 space={4}
                 width="100%"
             >
                 <Center flex={1}><Spinner color="white" /></Center>
-            </VStack>
+            </GradientVStack>
         );
     }
 
     if (isError || !workout) {
         return (
-            <VStack
+            <GradientVStack
                 backgroundColor="gray9"
                 flex={1}
                 space={4}
                 width="100%"
             >
-                <Center flex={1}><Text>Error loading workout or workout not found</Text></Center>
-            </VStack>
+                <Center flex={1}>
+                    <Text>Error loading workout or workout not found</Text>
+                    <Text>
+                        Workout ID:
+                        {workoutId}
+                    </Text>
+                </Center>
+            </GradientVStack>
         );
     }
 
@@ -168,9 +175,14 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                     space={4}
                     width="100%"
                 >
-                    <HStack alignItems="center">
-                        <Icon as={Ionicons} color={getWorkoutDifficultyGradient(workout.tabatas.length)} mr={2} name="barbell-outline" size="md" />
-                        <Text bold flex={1} fontSize="xl">{workout.name}</Text>
+                    <HStack
+                        alignItems="center"
+                        flexDirection="row"
+                        justifyContent="center"
+                        w="100%"
+                    >
+                        <Icon as={Ionicons} color={getWorkoutDifficultyGradient(workout.difficulty)} mr={2} name="barbell-outline" size="xl" />
+                        <Text bold flex={1} fontSize="2xl">{workout.name}</Text>
                     </HStack>
                     <Box alignItems="center" flexDirection="row" justifyContent="space-between">
                         <PictureWithName isTabaFitAdmin={workout.isPremade} user={workout.user} />
@@ -201,7 +213,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                             p={4}
                             space={2}
                         >
-                            <Text bold fontSize="md">
+                            <Text bold fontSize="lg">
                                 Tabata
                                 {' '}
                                 {index + 1}

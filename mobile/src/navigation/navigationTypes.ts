@@ -93,6 +93,7 @@ export type WorkoutsStackParamList = {
     ShareWorkoutScreen: {workout: TabataWorkout, completedAt: Date};
     DiscoverWorkoutsScreen;
     PremadeWorkoutsScreen;
+    ManualWorkoutScreen;
 }
 export type BuildWorkoutScreenRouteProp = StackNavigationProp<WorkoutsStackParamList, 'BuildWorkoutScreen'>;
 export type ShuffleWorkoutScreenRouteProp = StackNavigationProp<WorkoutsStackParamList, 'ShuffleWorkoutScreen'>;
@@ -101,6 +102,7 @@ export type ShareWorkoutScreenNavigationProp = StackNavigationProp<WorkoutsStack
 export type ViewWorkoutScreenRouteProp = RouteProp<WorkoutsStackParamList, 'ViewWorkoutScreen'>;
 export type DiscoverWorkoutsScreenRouteProp = RouteProp<WorkoutsStackParamList, 'DiscoverWorkoutsScreen'>;
 export type PremadeWorkoutsScreenRouteProp = RouteProp<WorkoutsStackParamList, 'PremadeWorkoutsScreen'>;
+export type ManualWorkoutScreenRouteProp = RouteProp<WorkoutsStackParamList, 'ManualWorkoutScreen'>;
 
 // Auth Stack
 export type AuthStackParamList = {
