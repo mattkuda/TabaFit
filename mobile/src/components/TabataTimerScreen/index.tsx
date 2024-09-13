@@ -3,18 +3,20 @@
 /* eslint-disable global-require */
 import React, {
     useState, useEffect, useCallback,
+    useRef,
 } from 'react';
 import { useKeepAwake } from 'expo-keep-awake';
 import {
-    VStack, Text, IconButton, Icon,
-    Box, Flex,
+    VStack, Text, IconButton, Icon, Box, Flex, Image,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { useSetRecoilState } from 'recoil';
+import { Audio, ResizeMode, Video } from 'expo-av';
 import * as Speech from 'expo-speech';
-import { Audio } from 'expo-av';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Animated } from 'react-native';
 import { TabataTimerScreenRouteProp } from '../../navigation/navigationTypes';
 import { TabataExercise } from '../../types/workouts';
 import { Intervals } from '../../util/constants';
@@ -22,34 +24,43 @@ import { TimerScreenNavigationProp } from '../../types/navigationTypes';
 import { showFooterState } from '../../atoms/showFooterAtom';
 import { calculateTotalWorkoutTime, formatTime } from './util';
 import { GradientVStack } from '../common/GradientVStack';
+import { exerciseIconDictionary } from '../../util/util';
 
+const WARMUP_DURATION = 10;
 const sounds = {
     beep: require('../../../assets/sounds/beep.wav'),
     victory: require('../../../assets/sounds/victory-horns.wav'),
 };
 
-const WARMUP_DURATION = 10;
+const videoAssets = {
+    default: require('../../../assets/videos/test.mp4'),
+    // 'push-ups': require('../../../assets/videos/push-ups.mp4'),
+    // 'sit-ups': require('../../../assets/videos/sit-ups.mp4'),
+    // Add more videos here
+};
 
-const getNextUpText = (
+const getVideoSource = (exerciseId: string): any => videoAssets[exerciseId] || videoAssets.default;
+
+const getNextUpExercise = (
     currentInterval: Intervals,
     exercisesDone: number,
     exercisesPerTabata: number,
     currentTabata: TabataExercise[],
     // circuitsDone: number,
-): string => {
+): TabataExercise | null => {
     if (currentInterval === Intervals.Warmup) {
-        return currentTabata[0].name;
+        return currentTabata[0];
     }
     if (currentInterval === Intervals.Rest && exercisesDone < exercisesPerTabata - 1) {
-        return currentTabata[exercisesDone >= 3 ? exercisesDone - 3 : exercisesDone + 1].name;
+        return currentTabata[exercisesDone >= 3 ? exercisesDone - 3 : exercisesDone + 1];
     }
     if (currentInterval === Intervals.Intermission) {
-        return currentTabata[0].name;
+        return currentTabata[0];
     }
     if (currentInterval === Intervals.Rest) {
-        return currentTabata[exercisesDone]?.name || '';
+        return currentTabata[exercisesDone] || null;
     }
-    return '';
+    return null;
 };
 
 // const nextExerciseText: string = ((): string => {
@@ -71,7 +82,13 @@ export const TabataTimerScreen = (): JSX.Element => {
         intermisionDuration,
     } = route.params.workout;
     const { isInMyWorkouts } = route.params;
+    const ref = useRef(null);
 
+    // const player = useVideoPlayer(testVideo, (player2) => {
+    //     // eslint-disable-next-line no-param-reassign
+    //     player2.loop = true;
+    //     player2.play();
+    // });
     const navigation = useNavigation<TimerScreenNavigationProp>();
     const [currentInterval, setCurrentInterval] = useState<Intervals>(Intervals.Warmup);
     const [exercisesDone, setExercisesDone] = useState(0);
@@ -138,7 +155,7 @@ export const TabataTimerScreen = (): JSX.Element => {
         setExercisesDone(0);
         setCircuitsDone(0);
         setSeconds(WARMUP_DURATION);
-        setRemainingTime(totalWorkoutTime);
+        setRemainingTime(totalWorkoutTime + WARMUP_DURATION);
         setCurrentExercise(null);
     };
 
@@ -185,7 +202,7 @@ export const TabataTimerScreen = (): JSX.Element => {
         );
 
         setTotalWorkoutTime(calculatedTotal);
-        setRemainingTime(calculatedTotal);
+        setRemainingTime(calculatedTotal + WARMUP_DURATION);
     }, [exerciseDuration, restDuration, numberOfTabatas,
         exercisesPerTabata, intermisionDuration]);
 
@@ -262,7 +279,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                 } else if (nextSeconds === 6 && (currentInterval === Intervals.Rest
                     || currentInterval === Intervals.Intermission
                     || currentInterval === Intervals.Warmup)) {
-                    const exerciseName = getNextUpText(currentInterval, exercisesDone, exercisesPerTabata, currentTabata);
+                    const exerciseName = getNextUpExercise(currentInterval, exercisesDone, exercisesPerTabata, currentTabata)?.name;
 
                     speak(`Next up: ${exerciseName}`);
                 }
@@ -282,7 +299,7 @@ export const TabataTimerScreen = (): JSX.Element => {
         return () => {
             if (interval) clearInterval(interval);
         };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isActive, isReset, seconds, remainingTime, currentInterval, exercisesDone, circuitsDone,
         exerciseDuration, restDuration, exercisesPerTabata, numberOfTabatas,
         intermisionDuration, currentTabata, currentExercise]);
@@ -347,7 +364,23 @@ export const TabataTimerScreen = (): JSX.Element => {
         return { minutes, secs };
     };
 
-    const nextExerciseText = getNextUpText(currentInterval, exercisesDone, exercisesPerTabata, currentTabata);
+    const nextExerciseText = getNextUpExercise(currentInterval, exercisesDone, exercisesPerTabata, currentTabata)?.name;
+    const scaleAnimation = new Animated.Value(1);
+
+    Animated.loop(
+        Animated.sequence([
+            Animated.timing(scaleAnimation, {
+                toValue: 1.1,
+                duration: 500,
+                useNativeDriver: true,
+            }),
+            Animated.timing(scaleAnimation, {
+                toValue: 1,
+                duration: 500,
+                useNativeDriver: true,
+            }),
+        ]),
+    ).start();
 
     return (
         <GradientVStack
@@ -382,7 +415,70 @@ export const TabataTimerScreen = (): JSX.Element => {
                     <Text fontSize="xl">{formatTime(remainingTime)}</Text>
                 </VStack>
             </Flex>
-            {/* This is very hacky code to replicate a monospaced font */}
+            {
+                <VStack
+                    alignItems="center"
+                    h="50%"
+                    justifyContent="center" // Center content vertically within the VStack
+                    w="100%"
+                >
+                    {currentExercise ? (
+                        <Video
+                            isLooping
+                            ref={ref}
+                            resizeMode={ResizeMode.COVER}
+                            shouldPlay={isActive}
+                            source={getVideoSource(currentExercise._id || 'default')}
+                            style={{
+                                width: '100%',
+                                aspectRatio: 16 / 9,
+                            }}
+                        />
+                    )
+                        : (
+                            <Flex
+                                alignItems="center"
+                                justifyContent="center"
+                                style={{
+                                    width: '100%',
+                                    aspectRatio: 16 / 9,
+                                }}
+                            >
+                                <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>
+                                    {currentInterval !== Intervals.Warmup
+                                        ? (
+                                            <MaterialIcons
+                                                color="white"
+                                                name="health-and-safety"
+                                                size={200}
+                                            />
+                                        )
+                                        : (
+                                            <Image
+                                                alt="Cardio icon"
+                                                source={exerciseIconDictionary.Cardio}
+                                                style={{
+                                                    height: 200,
+                                                    width: 200,
+                                                    tintColor: 'white',
+                                                }}
+                                            />
+                                        )}
+                                </Animated.View>
+                            </Flex>
+                        )}
+                    <Text
+                        bold
+                        // eslint-disable-next-line no-nested-ternary
+                        color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Intermission ? 'flame.500' : 'yellow.500'}
+                        style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}
+                    >
+                        {currentExercise ? currentExercise.name.toUpperCase() : (currentInterval === Intervals.Warmup
+                            ? 'GET READY!' : currentInterval.toUpperCase())}
+                    </Text>
+                </VStack>
+            }
+            {/* This is very hacky codee to replicate a monospaced font */}
             <Flex alignItems="flex-end" direction="row" flex={1}>
                 <Text
                     color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Intermission ? 'flame.500' : 'yellow.500'}
@@ -421,7 +517,8 @@ export const TabataTimerScreen = (): JSX.Element => {
                 </Text>
             </Flex>
             <VStack alignItems="center" flex={1} justifyContent="flex-start" space={2}>
-                <Text
+                {/* Keep this comment */}
+                {/* <Text
                     bold
                     // eslint-disable-next-line no-nested-ternary
                     color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Intermission ? 'flame.500' : 'yellow.500'}
@@ -429,10 +526,10 @@ export const TabataTimerScreen = (): JSX.Element => {
                 >
                     {currentExercise ? currentExercise.name.toUpperCase() : (currentInterval === Intervals.Warmup
                         ? 'GET READY!' : currentInterval.toUpperCase())}
-                </Text>
+                </Text> */}
                 <Box alignItems="center" flex={1} justifyContent="center">
                     {nextExerciseText && (
-                        <Text bold color="gray.300" style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}>
+                        <Text bold color="gray.300" style={{ fontSize: 30, textAlign: 'center', lineHeight: 50 }}>
                             {`NEXT UP: ${nextExerciseText.toUpperCase()}`}
                         </Text>
                     )}
@@ -489,7 +586,6 @@ export const TabataTimerScreen = (): JSX.Element => {
                             onPress={handleSkip}
                         />
                     </Box>
-
                 </Flex>
             </Box>
         </GradientVStack>
