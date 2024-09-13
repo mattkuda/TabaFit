@@ -32,7 +32,7 @@ const sounds = {
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const testVideo = require('../../../assets/videos/test.mp4');
 
-const videoSource = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+// const videoSource = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 const WARMUP_DURATION = 10;
 
 const getNextUpText = (
@@ -512,8 +512,8 @@ export const TabataTimerScreen = (): JSX.Element => {
                             onPress={handleSkip}
                         />
                     </Box>
-                </Flex >
-            </Box >
-        </GradientVStack >
+                </Flex>
+            </Box>
+        </GradientVStack>
     );
 };
