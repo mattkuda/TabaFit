@@ -9,6 +9,8 @@ import absIcon from '../../assets/exercise-icons/abs.png';
 import cardioIcon from '../../assets/exercise-icons/cardio.png';
 // @ts-ignore
 import kettlebell from '../../assets/exercise-icons/kettlebell.png';
+// @ts-ignore
+import getReadyIcon from '../../assets/exercise-icons/get-ready.png';
 // import glutesIcon from '../assets/exercise-icons/glutes.png';
 // import spicyIcon from '../assets/exercise-icons/spicy.png';
 
@@ -81,6 +83,7 @@ export const exerciseIconDictionary: Record<string, any> = {
     Cardio: cardioIcon,
     Glutes: cardioIcon,
     Spicy: cardioIcon,
+    GetReady: getReadyIcon,
 };
 
 // TODO: Update this dictionary with the correct icons

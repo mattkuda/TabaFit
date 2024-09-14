@@ -8,6 +8,7 @@ import React, {
 import { useKeepAwake } from 'expo-keep-awake';
 import {
     VStack, Text, IconButton, Icon, Box, Flex, Image,
+    useTheme,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
@@ -104,6 +105,7 @@ export const TabataTimerScreen = (): JSX.Element => {
     const [hasStartPlayed, setHasStartPlayed] = useState(false);
     const insets = useSafeAreaInsets();
     const [sound, setSound] = useState<Audio.Sound>();
+    const { colors } = useTheme(); // Get the theme colors
 
     useKeepAwake();
 
@@ -281,7 +283,9 @@ export const TabataTimerScreen = (): JSX.Element => {
                     || currentInterval === Intervals.Warmup)) {
                     const exerciseName = getNextUpExercise(currentInterval, exercisesDone, exercisesPerTabata, currentTabata)?.name;
 
-                    speak(`Next up: ${exerciseName}`);
+                    if (exerciseName?.length) {
+                        speak(`Next up: ${exerciseName}`);
+                    }
                 }
 
                 setCurrentInterval(nextInterval);
@@ -365,22 +369,45 @@ export const TabataTimerScreen = (): JSX.Element => {
     };
 
     const nextExerciseText = getNextUpExercise(currentInterval, exercisesDone, exercisesPerTabata, currentTabata)?.name;
-    const scaleAnimation = new Animated.Value(1);
+    const scaleAnimation = useRef(new Animated.Value(1)).current;
+    const animationRef = useRef(null);
 
-    Animated.loop(
-        Animated.sequence([
-            Animated.timing(scaleAnimation, {
-                toValue: 1.1,
-                duration: 500,
-                useNativeDriver: true,
-            }),
-            Animated.timing(scaleAnimation, {
-                toValue: 1,
-                duration: 500,
-                useNativeDriver: true,
-            }),
-        ]),
-    ).start();
+    useEffect(() => {
+        if (isActive && !currentExercise) {
+            animationRef.current = Animated.loop(
+                Animated.sequence([
+                    Animated.timing(scaleAnimation, {
+                        toValue: 1.1,
+                        duration: 500,
+                        useNativeDriver: true,
+                    }),
+                    Animated.timing(scaleAnimation, {
+                        toValue: 1,
+                        duration: 500,
+                        useNativeDriver: true,
+                    }),
+                ]),
+            );
+            animationRef.current.start();
+        } else if (animationRef.current) {
+            animationRef.current.stop();
+        }
+
+        return () => {
+            if (animationRef.current) {
+                animationRef.current.stop();
+            }
+        };
+    }, [isActive, currentExercise, scaleAnimation]);
+
+    // Define the color logic with the hex values from the theme
+    const iconColor = currentInterval === Intervals.Exercise
+        // @ts-ignore
+        ? colors.easyGreen // Access the 'easyGreen' color's hex value
+        : currentInterval === Intervals.Intermission
+            // @ts-ignore
+            ? colors.flame[500]
+            : colors.yellow[500];
 
     return (
         <GradientVStack
@@ -404,7 +431,6 @@ export const TabataTimerScreen = (): JSX.Element => {
                 <VStack alignItems="center" space={2}>
                     <Text color="gray.200" fontSize="lg">Tabatas</Text>
                     <Text fontSize="xl">
-                        {currentInterval === Intervals.Intermission && `0/${numberOfTabatas}`}
                         {currentInterval === Intervals.Exercise || currentInterval === Intervals.Rest
                             ? `${circuitsDone + 1}/${numberOfTabatas}`
                             : `${circuitsDone}/${numberOfTabatas}`}
@@ -447,8 +473,9 @@ export const TabataTimerScreen = (): JSX.Element => {
                                 <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>
                                     {currentInterval !== Intervals.Warmup
                                         ? (
-                                            <MaterialIcons
-                                                color="white"
+                                            <Icon
+                                                as={MaterialIcons}
+                                                color={iconColor}
                                                 name="health-and-safety"
                                                 size={200}
                                             />
@@ -456,11 +483,11 @@ export const TabataTimerScreen = (): JSX.Element => {
                                         : (
                                             <Image
                                                 alt="Cardio icon"
-                                                source={exerciseIconDictionary.Cardio}
+                                                source={exerciseIconDictionary.GetReady}
                                                 style={{
                                                     height: 200,
                                                     width: 200,
-                                                    tintColor: 'white',
+                                                    tintColor: iconColor,
                                                 }}
                                             />
                                         )}
@@ -469,8 +496,8 @@ export const TabataTimerScreen = (): JSX.Element => {
                         )}
                     <Text
                         bold
-                        // eslint-disable-next-line no-nested-ternary
                         color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Intermission ? 'flame.500' : 'yellow.500'}
+                        mt={8}
                         style={{ fontSize: 40, textAlign: 'center', lineHeight: 50 }}
                     >
                         {currentExercise ? currentExercise.name.toUpperCase() : (currentInterval === Intervals.Warmup
