@@ -9,6 +9,7 @@ import {
     Box,
     Icon,
     Button,
+    Spinner,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
@@ -48,8 +49,11 @@ export const LoginScreen = (): JSX.Element => {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const setUser = useSetRecoilState(userState);
     const { onLogin } = useAuth();
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSignIn = async (): Promise<void> => {
+        setIsLoading(true);
+
         try {
             const data = await onLogin(emailOrUsername, password);
 
@@ -71,6 +75,8 @@ export const LoginScreen = (): JSX.Element => {
             } else {
                 setErrorMessage('An error occurred. Please try again.');
             }
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -125,6 +131,7 @@ export const LoginScreen = (): JSX.Element => {
                             onChangeText={setPassword}
                         />
                         <TouchableOpacity
+                            disabled={isLoading}
                             style={{ width: '80%' }}
                             onPress={handleSignIn}
                         >
@@ -149,7 +156,11 @@ export const LoginScreen = (): JSX.Element => {
                                 >
                                     Login
                                 </Text>
-                                <Icon as={Ionicons} color="white" name="chevron-forward" size="sm" />
+                                {isLoading ? (
+                                    <Spinner color="white" size="sm" />
+                                ) : (
+                                    <Icon as={Ionicons} color="white" name="chevron-forward" size="sm" />
+                                )}
                             </Box>
                         </TouchableOpacity>
                         {process.env.EXPO_PUBLIC_ENVIRONMENT !== 'production' && (

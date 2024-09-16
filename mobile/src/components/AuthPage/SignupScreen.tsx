@@ -8,6 +8,7 @@ import {
     Input, VStack, Button, Text, ScrollView,
     Box,
     Icon,
+    Spinner,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { userState } from '../../atoms/userStateAtom';
@@ -35,8 +36,10 @@ export const SignupScreen = (): JSX.Element => {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const setUser = useSetRecoilState(userState);
     const { onRegister } = useAuth();
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSignUp = async (): Promise<void> => {
+        setIsLoading(true);
         try {
             const data = await onRegister(email, password, firstName, lastName, username);
 
@@ -51,6 +54,8 @@ export const SignupScreen = (): JSX.Element => {
             }
         } catch (error) {
             setErrorMessage(error.message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -147,7 +152,11 @@ export const SignupScreen = (): JSX.Element => {
                                 <Text color="white">
                                     Sign Up
                                 </Text>
-                                <Icon as={Ionicons} color="white" name="chevron-forward" size="sm" />
+                                {isLoading ? (
+                                    <Spinner color="white" size="sm" />
+                                ) : (
+                                    <Icon as={Ionicons} color="white" name="chevron-forward" size="sm" />
+                                )}
                             </Box>
                         </TouchableOpacity>
                         {process.env.EXPO_PUBLIC_ENVIRONMENT !== 'production' && (
