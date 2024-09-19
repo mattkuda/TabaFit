@@ -42,7 +42,7 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
         navigation.navigate('ViewWorkoutScreen', { workoutId: workout._id.toString() });
     };
 
-    const workoutDifficultyColor = getWorkoutDifficultyGradient(workout.tabatas.length);
+    const workoutDifficultyColor = getWorkoutDifficultyGradient(workout.difficulty);
 
     return (
         <TouchableOpacity
@@ -61,18 +61,10 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                 my={2}
                 p="4"
                 rounded="lg"
-                // bg={{
-                //     linearGradient: {
-                //         colors: ['workoutDisplayGray', getWorkoutDifficultyGradient(workout.tabatas.length)[0]],
-                //         start: [0.5, 0.5],
-                //         end: [1.3, 1.3],
-
-                //     },
-                // }}
             >
                 <VStack space={4}>
                     <HStack alignItems="center" justifyContent="flex-start">
-                        <Icon as={Ionicons} color={getWorkoutDifficultyGradient(workout.tabatas.length)} mr={2} name="barbell-outline" size="md" />
+                        <Icon as={Ionicons} color={getWorkoutDifficultyGradient(workout.difficulty)} mr={2} name="barbell-outline" size="md" />
                         <Text
                             ellipsizeMode="tail"
                             fontSize="lg"
@@ -83,21 +75,6 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                         >
                             {workout.name}
                         </Text>
-                        {/* <Menu
-                            shadow={2}
-                            // eslint-disable-next-line react/no-unstable-nested-components
-                            trigger={(triggerProps): JSX.Element => <MenuTrigger triggerProps={triggerProps} />}
-                            w="190"
-                        >
-                            <Menu.Item>Arial</Menu.Item>
-                            <Menu.Item>Nunito Sans</Menu.Item>
-                            <Menu.Item>Roboto</Menu.Item>
-                            <Menu.Item>Poppins</Menu.Item>
-                            <Menu.Item>SF Pasdfro</Menu.Item>
-                            <Menu.Item>Helvetica</Menu.Item>
-                            <Menu.Item isDisabled>Sofia</Menu.Item>
-                            <Menu.Item>Cookie</Menu.Item>
-                        </Menu> */}
                     </HStack>
                     <Box alignItems="center" flexDirection="row" justifyContent="space-between">
                         <Box alignItems="center" flexDirection="row">
@@ -111,7 +88,7 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                                 {workout?.isPremade ? 'TabaFit' : `${workout?.user?.firstName} ${workout?.user?.lastName}`}
                             </Text>
                         </Box>
-                        {!workout.isPremade && <Text>{ formattedDate }</Text>}
+                        {!workout.isPremade && <Text>{formattedDate}</Text>}
                     </Box>
                 </VStack>
                 <HStack justifyContent="space-between">

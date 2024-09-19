@@ -1,6 +1,8 @@
 import React from 'react';
 import { StackNavigationProp, createStackNavigator } from '@react-navigation/stack';
-import { Icon, IconButton, useTheme } from 'native-base';
+import {
+    Icon, IconButton, Menu, useTheme, Text,
+} from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { WorkoutsStackParamList } from './navigationTypes';
@@ -25,14 +27,26 @@ const ManualWorkoutButtonComponent = (): JSX.Element => {
     const navigation = useNavigation<WorkoutsScreenNavigationProp>();
 
     return (
-        <IconButton
-            _icon={{
-                color: 'white',
-            }}
-            borderRadius="full"
-            icon={<Icon as={Ionicons} name="add-circle-outline" size="lg" />}
-            onPress={(): void => navigation.navigate('ManualWorkoutScreen')}
-        />
+        <Menu
+            backgroundColor="gray.900"
+            shadow={2}
+            // eslint-disable-next-line react/no-unstable-nested-components
+            trigger={(triggerProps): JSX.Element => (
+                <IconButton
+                    {...triggerProps}
+                    _icon={{
+                        color: 'white',
+                    }}
+                    borderRadius="full"
+                    icon={<Icon as={Ionicons} name="ellipsis-horizontal-outline" size="lg" />}
+                />
+            )}
+        >
+            <Menu.Item onPress={(): void => navigation.navigate('ManualWorkoutScreen')}>
+                <Icon as={Ionicons} color="white" name="add-circle-outline" size="sm" />
+                <Text color="white">Share Manual Workout</Text>
+            </Menu.Item>
+        </Menu>
     );
 };
 
@@ -50,7 +64,7 @@ export const WorkoutsStackNavigator = (): JSX.Element => {
                 headerTintColor: "white",
                 headerTitleStyle: { color: 'white' },
                 headerShadowVisible: false,
-                headerRight: ManualWorkoutButtonComponent,
+                // headerRight: ManualWorkoutButtonComponent,
             }}
         >
             <Stack.Screen
@@ -58,6 +72,7 @@ export const WorkoutsStackNavigator = (): JSX.Element => {
                 name="WorkoutsScreen"
                 options={{
                     headerTitle: 'Workouts',
+                    headerRight: ManualWorkoutButtonComponent,
                 }}
             />
             <Stack.Screen
