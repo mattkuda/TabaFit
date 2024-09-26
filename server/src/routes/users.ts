@@ -331,4 +331,58 @@ router.delete('/:userId', authenticate, async (req: AuthRequest, res: Response) 
   }
 });
 
+// Add this new route
+router.put('/:userId/preferences', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { userId } = req;
+    const { userId: userIdToUpdate } = req.params;
+    const newPreferences = req.body; // Get the new preferences from the request body
+
+    // Check if the authenticated user is the same as the user being updated
+    if (userIdToUpdate !== userId) {
+      res.status(403).send({ message: 'Forbidden: You cannot update other users\' preferences.' });
+      return;
+    }
+
+    await usersCollection.updateOne(
+      { _id: new mongoose.Types.ObjectId(userId) },
+      { $set: { preferences: newPreferences } },
+    );
+
+    res.status(200).send({ message: 'User preferences updated successfully' });
+  } catch (err) {
+    console.error('Failed to update user preferences', err);
+    res.status(500).send({ message: 'Failed to update user preferences' });
+  }
+});
+
+// Add this new route
+router.get('/:userId/preferences', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { userId } = req;
+    const { userId: userIdToFetch } = req.params;
+
+    // Check if the authenticated user is the same as the user being fetched
+    if (userIdToFetch !== userId) {
+      res.status(403).send({ message: 'Forbidden: You cannot fetch other users\' preferences.' });
+      return;
+    }
+
+    const user = await usersCollection.findOne(
+      { _id: new mongoose.Types.ObjectId(userId) },
+      { projection: { preferences: 1 } },
+    );
+
+    if (!user) {
+      res.status(404).send({ message: 'User not found' });
+      return;
+    }
+
+    res.status(200).send(user.preferences || {});
+  } catch (err) {
+    console.error('Failed to fetch user preferences', err);
+    res.status(500).send({ message: 'Failed to fetch user preferences' });
+  }
+});
+
 export default router;

@@ -8,6 +8,7 @@ import { ConnectionsScreen } from '../components/ConnectionsScreen';
 import { SettingsScreen } from '../components/SettingsScreen';
 import { PostScreen } from '../components/PostScreen';
 import { AboutScreen } from '../components/AboutScreen';
+import { PreferencesScreen } from '../components/PreferencesScreen';
 
 const Stack = createStackNavigator<ProfileStackParamList>();
 
@@ -64,6 +65,7 @@ export const ProfileStackNavigator = (): JSX.Element => {
                     headerTitle: 'Post Details',
                 }}
             />
+            <Stack.Screen component={PreferencesScreen} name="PreferencesScreen" />
         </Stack.Navigator>
     );
 };

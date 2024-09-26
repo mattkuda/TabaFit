@@ -56,6 +56,10 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
         Linking.openURL('https://forms.gle/q6caxGtoJNtAYX5JA');
     };
 
+    const handlePreferences = (): void => {
+        navigation.navigate('PreferencesScreen');
+    };
+
     return (
         <GradientVStack height="100%" justifyContent="flex-start" style={{ padding: 20, gap: 8 }}>
             {/* Disbale for now. Consider keeping here vs on main profile page.  */}
@@ -69,6 +73,18 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
                 <Text color="primary" textAlign="left">Edit Profile</Text>
                 <Icon as={Ionicons} color="primary" name="chevron-forward" />
             </TouchableOpacity> */}
+            <TouchableOpacity
+                style={{
+                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                }}
+                onPress={handlePreferences}
+            >
+                <HStack alignItems="center" space="2">
+                    <Icon as={Ionicons} color="primary" name="options" />
+                    <Text color="primary" textAlign="left">Preferences</Text>
+                </HStack>
+                <Icon as={Ionicons} color="primary" name="chevron-forward" />
+            </TouchableOpacity>
             <TouchableOpacity
                 style={{
                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
@@ -160,6 +176,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
                     </Modal.Footer>
                 </Modal.Content>
             </Modal>
+
         </GradientVStack>
     );
 };

@@ -4,8 +4,9 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import createSecretToken from '../util/createSecretToken';
-import { IUser } from '../models/UserModel';
 import { validateUsername } from '../util/util';
+// eslint-disable-next-line import/no-relative-packages
+import { User } from '../../../mobile/src/types/users';
 
 const router = express.Router();
 const connectionString = process.env.MONGODB_URI;
@@ -17,12 +18,12 @@ if (!connectionString) {
 // Connect to MongoDB
 const client = new MongoClient(connectionString);
 
-let usersCollection: Collection<IUser>;
+let usersCollection: Collection<User>;
 
 (async () => {
   try {
     await client.connect();
-    usersCollection = client.db('AbcountableDB').collection<IUser>('users');
+    usersCollection = client.db('AbcountableDB').collection<User>('users');
   } catch (err) {
     console.error('Failed to connect to MongoDB', err);
     process.exit(1);
@@ -54,20 +55,31 @@ router.post('/signup', async (req: Request, res: Response) => {
     }
     const hashedPassword = await bcrypt.hash(password, 12);
     const createdAt = new Date();
-    const result = await usersCollection.insertOne({
+
+    // Create a new user object without specifying _id
+    const newUser: Omit<User, '_id'> = {
       email: email.trim(),
       password: hashedPassword,
       username: trimmedUsername,
       firstName: firstName.trim(),
       lastName: lastName.trim(),
-      createdAt,
-    } as IUser);
-    const token = createSecretToken(result.insertedId.toString());
+      preferences: {
+        exerciseVideosEnabled: true,
+      },
+      createdAt: createdAt.toISOString(),
+      updatedAt: createdAt.toISOString(),
+    };
+    // Insert the new user
+    const result = await usersCollection.insertOne(newUser as User);
+    const { insertedId } = result;
 
-    const user = await usersCollection.findOne({ _id: result.insertedId });
+    const token = createSecretToken(insertedId.toString());
+
+    // Fetch the inserted user
+    const user = await usersCollection.findOne({ _id: insertedId });
 
     return res.status(201).json({
-      message: 'User signed in successfully',
+      message: 'User signed up successfully',
       success: true,
       token,
       user,
@@ -131,7 +143,7 @@ router.post('/verify', async (req: Request, res: Response) => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const data: any = await new Promise((resolve, reject) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       jwt.verify(token, process.env.TOKEN_KEY as string, (err: any, decodedData: unknown) => {
         if (err) {
           reject(err);
