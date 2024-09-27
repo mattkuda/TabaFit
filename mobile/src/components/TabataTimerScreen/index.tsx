@@ -34,6 +34,7 @@ const sounds = {
 };
 
 const videoAssets = {
+    'jumping-jacks': require('../../../assets/videos/jumping-jacks.mp4'),
     default: require('../../../assets/videos/test.mp4'),
     // 'push-ups': require('../../../assets/videos/push-ups.mp4'),
     // 'sit-ups': require('../../../assets/videos/sit-ups.mp4'),
