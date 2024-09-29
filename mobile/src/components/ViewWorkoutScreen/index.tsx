@@ -61,7 +61,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
         }, {
             onSuccess: onSuccessCallback,
         });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [workout, authState.userId, queryClient, navigation, saveWorkoutMutation]);
 
     const handleUnsaveWorkout = useCallback((): void => {
@@ -77,11 +77,14 @@ export const ViewWorkoutScreen = (): JSX.Element => {
         }, {
             onSuccess: onSuccessCallback,
         });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [workout, authState.userId, queryClient, navigation, saveWorkoutMutation]);
 
     const handleStartWorkout = (): void => {
-        navigation.navigate('TabataTimerScreen', { workout });
+        navigation.navigate('WorkoutsStackNavigator', {
+            screen: 'TabataTimerScreen',
+            params: { workout },
+        });
     };
 
     const scaleAnimation = new Animated.Value(1);
@@ -186,7 +189,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                     </HStack>
                     <Box alignItems="center" flexDirection="row" justifyContent="space-between">
                         <PictureWithName isTabaFitAdmin={workout.isPremade} user={workout.user} />
-                        {!workout.isPremade && <Text>{ formattedDate }</Text>}
+                        {!workout.isPremade && <Text>{formattedDate}</Text>}
                     </Box>
                     <Text italic fontSize="sm">
                         {formatBodyParts(workout.includeSettings)}

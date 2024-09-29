@@ -17,13 +17,13 @@ export const exerciseDict: Record<string, TabataExercise> = {
         _id: 'inch-worms', name: 'Inchworm', types: ['Upper Body'], description: 'Walk hands forward from a standing position.', difficulty: 'Intermediate', equipment: [],
     },
     burpees: {
-        _id: 'burpees', name: 'Burpees', types: ['Cardio', 'Abs'], description: 'Full body exercise with a jump.', difficulty: 'Intermediate', equipment: [],
+        _id: 'burpees', name: 'Burpees', types: ['Cardio', 'Abs'], description: 'Full body exercise with a jump.', difficulty: 'Basic', equipment: [],
     },
     'jumping-jacks': {
         _id: 'jumping-jacks', name: 'Jumping Jacks', types: ['Cardio'], description: 'Jump with spread legs and clapping hands overhead.', difficulty: 'Basic', equipment: [],
     },
     skaters: {
-        _id: 'skaters', name: 'Skaters', types: ['Cardio'], description: 'Leap side to side in a skating motion.', difficulty: 'Intermediate', equipment: [],
+        _id: 'skaters', name: 'Skaters', types: ['Cardio'], description: 'Leap side to side in a skating motion.', difficulty: 'Basic', equipment: [],
     },
     'butt-kicks': {
         _id: 'butt-kicks', name: 'Butt Kicks', types: ['Cardio'], description: 'Run in place kicking heels to glutes.', difficulty: 'Basic', equipment: [],
@@ -46,11 +46,8 @@ export const exerciseDict: Record<string, TabataExercise> = {
     'yoga-ball-squats': {
         _id: 'yoga-ball-squats', name: 'Yoga Ball Squats', types: ['Lower Body'], description: 'Squats against a yoga ball placed on a wall.', difficulty: 'Basic', equipment: ['Yoga Ball'],
     },
-    'calf-raises': {
-        _id: 'calf-raises', name: 'Calf Raises', types: ['Lower Body'], description: 'Raise heels standing on toes.', difficulty: 'Basic', equipment: [],
-    },
     'side-lunges': {
-        _id: 'side-lunges', name: 'Side Lunges', types: ['Lower Body'], description: 'Lunge to the side.', difficulty: 'Intermediate', equipment: [],
+        _id: 'side-lunges', name: 'Side Lunges', types: ['Lower Body'], description: 'Lunge to the side.', difficulty: 'Basic', equipment: [],
     },
     'curtsey-lunges': {
         _id: 'curtsey-lunges', name: 'Curtsey Lunges', types: ['Lower Body'], description: 'Step one leg behind the other into a lunge.', difficulty: 'Basic', equipment: [],
@@ -59,7 +56,7 @@ export const exerciseDict: Record<string, TabataExercise> = {
         _id: 'jump-squats', name: 'Jump Squats', types: ['Lower Body'], description: 'Squat followed by a jump.', difficulty: 'Intermediate', equipment: [],
     },
     'reverse-lunge-knee-drive': {
-        _id: 'reverse-lunge-knee-drive', name: 'Reverse Lunge to Knee Drive', types: ['Lower Body'], description: 'Step back into a lunge, then drive the knee up.', difficulty: 'Intermediate', equipment: [],
+        _id: 'reverse-lunge-knee-drive', name: 'Reverse Lunge to Knee Drive', types: ['Lower Body'], description: 'Step back into a lunge, then drive the knee up.', difficulty: 'Basic', equipment: [],
     },
     'dumbbell-romanian-deadlift': {
         _id: 'dumbbell-romanian-deadlift', name: 'Dumbbell Romanian Deadlift', types: ['Lower Body'], description: 'Deadlift with dumbbells in each hand.', difficulty: 'Basic', equipment: ['Dumbbells'],
@@ -98,7 +95,7 @@ export const exerciseDict: Record<string, TabataExercise> = {
         _id: 'wide-push-ups', name: 'Wide Push-Ups', types: ['Upper Body'], description: 'Push-ups with hands spread at a wide distance.', difficulty: 'Basic', equipment: [],
     },
     'diamond-push-ups': {
-        _id: 'diamond-push-ups', name: 'Diamond Push-Ups', types: ['Upper Body'], description: 'Push-ups with hands close together to target triceps.', difficulty: 'Intermediate', equipment: [],
+        _id: 'diamond-push-ups', name: 'Diamond Push-Ups', types: ['Upper Body'], description: 'Push-ups with hands close together to target triceps.', difficulty: 'Basic', equipment: [],
     },
     'spiderman-push-ups': {
         _id: 'spiderman-push-ups', name: 'Spiderman Push-Ups', types: ['Upper Body'], description: 'Bring one knee towards the elbow as you lower in a push-up.', difficulty: 'Intermediate', equipment: [],
@@ -167,7 +164,7 @@ export const exerciseDict: Record<string, TabataExercise> = {
         _id: 'plank-hip-dips', name: 'Plank Hip Dips', types: ['Abs'], description: 'Rotate hips from side to side while in plank position.', difficulty: 'Basic', equipment: [],
     },
     'mountain-climbers': {
-        _id: 'mountain-climbers', name: 'Mountain Climbers', types: ['Abs'], description: 'Drive knees in towards chest.', difficulty: 'Intermediate', equipment: [],
+        _id: 'mountain-climbers', name: 'Mountain Climbers', types: ['Abs'], description: 'Drive knees in towards chest.', difficulty: 'Basic', equipment: [],
     },
     'plank-jacks': {
         _id: 'plank-jacks', name: 'Plank Jacks', types: ['Abs'], description: 'Jump feet in and out while in plank position.', difficulty: 'Intermediate', equipment: [],
@@ -228,6 +225,6 @@ export const exerciseDict: Record<string, TabataExercise> = {
         _id: 'broad-jumps', name: 'Broad Jumps', types: ['Cardio'], description: 'Jump forward with both feet as far as possible.', difficulty: 'Intermediate', equipment: [],
     },
     punches: {
-        _id: 'punches', name: 'Punches', types: ['Upper Body'], description: 'Punches in the air for upper body workout.', difficulty: 'Intermediate', equipment: [],
+        _id: 'punches', name: 'Punches', types: ['Upper Body'], description: 'Punches in the air for upper body workout.', difficulty: 'Basic', equipment: [],
     },
 };

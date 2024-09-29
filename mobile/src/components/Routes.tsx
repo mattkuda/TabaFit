@@ -118,7 +118,7 @@ export const Routes = (): JSX.Element => {
                 />
                 <Tab.Screen
                     component={WorkoutsStackNavigator}
-                    name="Workouts"
+                    name="WorkoutsStackNavigator"
                     options={{
                         tabBarIcon: TimerIcon,
                         tabBarStyle: !showFooter ? tabBarStyleNoFooter : tabBarStyle,

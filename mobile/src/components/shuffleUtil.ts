@@ -13,7 +13,7 @@ export const shuffleExercises = (
     includeCardio: boolean,
     difficulty: Difficulty,
 ): TabataCircuit[] => {
-    const shuffleArray = <T, >(array: T[]): T[] => {
+    const shuffleArray = <T>(array: T[]): T[] => {
         let currentIndex = array.length;
         let randomIndex;
 
@@ -61,7 +61,7 @@ export const shuffleExercises = (
         const filteredExercises = exercises.filter(equipmentFilter);
 
         return filteredExercises.length > 0
-            ? filteredExercises[0]
+            ? filteredExercises[Math.floor(Math.random() * filteredExercises.length)]
             : null;
     };
 

@@ -617,15 +617,17 @@ export const TabataTimerScreen = (): JSX.Element => {
                 >
                     {isActive ? (
                         <Box alignItems="center" flexDirection="row" justifyContent="flex-end" width="70px">
-                            <IconButton
-                                alignSelf="right"
-                                borderColor="gray.300"
-                                borderRadius="full"
-                                borderWidth="1"
-                                icon={<Icon as={Ionicons} color="white" name="flag" size="lg" />}
-                                w="46px"
-                                onPress={mockFinish}
-                            />
+                            {process.env.EXPO_PUBLIC_ENVIRONMENT !== 'production' && (
+                                <IconButton
+                                    alignSelf="right"
+                                    borderColor="gray.300"
+                                    borderRadius="full"
+                                    borderWidth="1"
+                                    icon={<Icon as={Ionicons} color="white" name="flag" size="lg" />}
+                                    w="46px"
+                                    onPress={mockFinish}
+                                />
+                            )}
                         </Box>
                     ) : (
                         <Box alignItems="center" flexDirection="row" justifyContent="flex-end" width="70px">
