@@ -2,7 +2,7 @@
   "expo": {
     "name": "TabaFit",
     "slug": "Abcountable",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "orientation": "portrait",
     "icon": "./assets/tabafit-ios-icon.png",
     "userInterfaceStyle": "light",
