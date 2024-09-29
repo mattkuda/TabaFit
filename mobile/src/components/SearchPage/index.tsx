@@ -47,16 +47,14 @@ export const SearchPage = (): JSX.Element => {
                     <Spinner accessibilityLabel="Loading more items" color="white" />
                 </Box>
             ) : (
-                !shouldShowNoUsers ? <EmptyState /> : (
-                    <FlatList
-                        data={users}
-                        keyExtractor={(item: User): string => item._id.toString()}
-                        ListEmptyComponent={searchQuery.length && <EmptyState text="No users found" />}
-                        renderItem={({ item }): JSX.Element => (
-                            <ConnectionCard user={item} />
-                        )}
-                    />
-                )
+                <FlatList
+                    data={users}
+                    keyExtractor={(item: User): string => item._id.toString()}
+                    ListEmptyComponent={shouldShowNoUsers ? <EmptyState text="No users found" /> : null}
+                    renderItem={({ item }): JSX.Element => (
+                        <ConnectionCard user={item} />
+                    )}
+                />
             )}
         </GradientVStack>
     );

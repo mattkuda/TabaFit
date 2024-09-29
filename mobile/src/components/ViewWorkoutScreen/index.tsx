@@ -81,7 +81,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
     }, [workout, authState.userId, queryClient, navigation, saveWorkoutMutation]);
 
     const handleStartWorkout = (): void => {
-        navigation.navigate('WorkoutsStackNavigator', {
+        navigation.navigate('Workouts', {
             screen: 'TabataTimerScreen',
             params: { workout },
         });
