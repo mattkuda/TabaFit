@@ -6,7 +6,7 @@ import { UserPreferences } from '../types/users';
 
 const apiUrl = process.env.EXPO_PUBLIC_EAS_API_BASE_URL || 'http://localhost:3000';
 
-const fetchUserPreferences = async (userId: string): Promise<UserPreferences> => {
+export const fetchUserPreferences = async (userId: string): Promise<UserPreferences> => {
     const response = await axios.get<UserPreferences>(`${apiUrl}/users/${userId}/preferences`);
 
     return response.data;

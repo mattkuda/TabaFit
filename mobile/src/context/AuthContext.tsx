@@ -4,6 +4,8 @@ import React, {
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import * as SplashScreen from 'expo-splash-screen';
+import { QueryClient } from 'react-query';
+import { fetchUserPreferences } from '../hooks/usePreferences';
 
 const apiUrl = process.env.EXPO_PUBLIC_EAS_API_BASE_URL || 'http://localhost:3000';
 const tokenKey = process.env.EXPO_PUBLIC_TOKEN_KEY;
@@ -19,8 +21,8 @@ interface AuthProps {
     hasSeenTutorial?: boolean | null;
     completeTutorial?: () => Promise<void>;
     resetTutorial?: () => Promise<void>;
-    onRegister?: (email: string, password: string, firstName:
-    string, lastName: string, username: string) => Promise<any>;
+    onRegister?: (email: string, password: string, firstName: string,
+        lastName: string, username: string) => Promise<any>;
     onLogin?: (emailOrUsername: string, password: string) => Promise<any>;
     onLogout?: () => Promise<any>;
     loading?: boolean;
@@ -104,6 +106,10 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
         try {
             const response = await axios.post(`${apiUrl}/login`, { emailOrUsername, password });
             const { token, user } = response.data;
+            // Fetch user preferences
+            const queryClient = new QueryClient();
+
+            queryClient.prefetchQuery(['preferences', user._id], () => fetchUserPreferences(user._id));
 
             setAuthState({
                 token,
