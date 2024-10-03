@@ -189,11 +189,13 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                     <Input
                         fontSize="md"
                         placeholder="First Name"
+                        returnKeyType="done"
                         value={firstName}
                         onChangeText={setFirstName}
 
                     />
                     {/* <Input
+                            returnKeyType="done"
                         fontSize="md"
                         InputLeftElement={<Icon as={Ionicons} ml={4} name="search-outline" size="sm" />}
                         m="4"
@@ -203,6 +205,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                     /> */}
                     <Input
                         placeholder="Last Name"
+                        returnKeyType="done"
                         value={lastName}
                         onChangeText={setLastName}
                     />
@@ -210,18 +213,21 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
             </HStack>
             <Input
                 placeholder="Bio"
+                returnKeyType="done"
                 value={bio}
                 w="100%"
                 onChangeText={setBio}
             />
             <Input
                 placeholder="City"
+                returnKeyType="done"
                 value={city}
                 w="100%"
                 onChangeText={setCity}
             />
             <Input
                 placeholder="State"
+                returnKeyType="done"
                 value={state}
                 w="100%"
                 onChangeText={setState}
@@ -231,6 +237,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                 keyboardType="numeric"
                 leftElement={<Text pl={2}>Birthday</Text>}
                 placeholder="(MM/DD/YYYY)"
+                returnKeyType="done"
                 value={birthday}
                 w="100%"
                 onChangeText={handleBirthdayChange}
@@ -246,8 +253,8 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                 <Select.Item label="Prefer not to say" value="not-specified" />
             </Select>
             <Input
-                keyboardType="numeric"
                 leftElement={<Text pl={2}>Weight (lbs)</Text>}
+                returnKeyType="done"
                 value={weight ? weight.toString() : ''}
                 w="100%"
                 onChangeText={(text): void => setWeight(parseInt(text, 10))} // conver to number

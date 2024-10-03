@@ -78,6 +78,7 @@ export const ManualWorkoutScreen = (): JSX.Element => {
                 backgroundColor="gray.900"
                 fontSize="md"
                 placeholder="Enter Post Name"
+                returnKeyType="done"
                 value={workoutTitle}
                 onChangeText={setWorkoutTitle}
             />
@@ -140,6 +141,7 @@ export const ManualWorkoutScreen = (): JSX.Element => {
                 fontSize="md"
                 h={40}
                 placeholder="Describe your workout"
+                returnKeyType="done"
                 value={workoutDescription}
                 onChangeText={setWorkoutDescription}
             />

@@ -169,7 +169,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                 </HStack>
             ),
         });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigation, handleSaveOrUpdateWorkout]);
 
     const updateExercisesOrder = (tabataIndex: number, newExercisesOrder: TabataExercise[]): void => {
@@ -343,6 +343,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                     fontSize="lg"
                     mb={0}
                     placeholder="Enter Workout Name"
+                    returnKeyType="done"
                     value={workoutName}
                     onChangeText={handleNameChange}
                 />
@@ -695,64 +696,64 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                 </Box>
                                 {/* Equipment Checkboxes Row */}
                                 {equipmentEnabled && (
-                                <VStack maxWidth={335} minWidth={335} space={2}>
-                                    <HStack width="100%">
-                                        <HStack flex={1}>
-                                            <Checkbox
-                                                bgColor={modalWorkout.equipment.useKettlebell ? 'primary' : 'gray.900'}
-                                                isChecked={modalWorkout.equipment.useKettlebell}
-                                                key="Kettlebell-checkbox"
-                                                mb="2"
-                                                size="lg"
-                                                value="Kettlebells"
-                                                onChange={(): void => handleWorkoutEquipmentChange('useKettlebell', !modalWorkout.equipment.useKettlebell)}
-                                            >
-                                                <Text>Kettlebells</Text>
-                                            </Checkbox>
+                                    <VStack maxWidth={335} minWidth={335} space={2}>
+                                        <HStack width="100%">
+                                            <HStack flex={1}>
+                                                <Checkbox
+                                                    bgColor={modalWorkout.equipment.useKettlebell ? 'primary' : 'gray.900'}
+                                                    isChecked={modalWorkout.equipment.useKettlebell}
+                                                    key="Kettlebell-checkbox"
+                                                    mb="2"
+                                                    size="lg"
+                                                    value="Kettlebells"
+                                                    onChange={(): void => handleWorkoutEquipmentChange('useKettlebell', !modalWorkout.equipment.useKettlebell)}
+                                                >
+                                                    <Text>Kettlebells</Text>
+                                                </Checkbox>
+                                            </HStack>
+                                            <HStack flex={1}>
+                                                <Checkbox
+                                                    bgColor={modalWorkout.equipment.useDumbbells ? 'primary' : 'gray.900'}
+                                                    isChecked={modalWorkout.equipment.useDumbbells}
+                                                    key="Dumbbells-checkbox"
+                                                    mb="2"
+                                                    size="lg"
+                                                    value="Dumbbells"
+                                                    onChange={(): void => handleWorkoutEquipmentChange('useDumbbells', !modalWorkout.equipment.useDumbbells)}
+                                                >
+                                                    <Text>Dumbbells</Text>
+                                                </Checkbox>
+                                            </HStack>
                                         </HStack>
-                                        <HStack flex={1}>
-                                            <Checkbox
-                                                bgColor={modalWorkout.equipment.useDumbbells ? 'primary' : 'gray.900'}
-                                                isChecked={modalWorkout.equipment.useDumbbells}
-                                                key="Dumbbells-checkbox"
-                                                mb="2"
-                                                size="lg"
-                                                value="Dumbbells"
-                                                onChange={(): void => handleWorkoutEquipmentChange('useDumbbells', !modalWorkout.equipment.useDumbbells)}
-                                            >
-                                                <Text>Dumbbells</Text>
-                                            </Checkbox>
+                                        <HStack width="100%">
+                                            <HStack flex={1}>
+                                                <Checkbox
+                                                    bgColor={modalWorkout.equipment.useBoxPlatform ? 'primary' : 'gray.900'}
+                                                    isChecked={modalWorkout.equipment.useBoxPlatform}
+                                                    key="BoxPlatform-checkbox"
+                                                    mb="2"
+                                                    size="lg"
+                                                    value="BoxPlatform"
+                                                    onChange={(): void => handleWorkoutEquipmentChange('useBoxPlatform', !modalWorkout.equipment.useBoxPlatform)}
+                                                >
+                                                    <Text>Box Platform</Text>
+                                                </Checkbox>
+                                            </HStack>
+                                            <HStack flex={1}>
+                                                <Checkbox
+                                                    bgColor={modalWorkout.equipment.useYogaBall ? 'primary' : 'gray.900'}
+                                                    isChecked={modalWorkout.equipment.useYogaBall}
+                                                    key="YogaBall-checkbox"
+                                                    mb="2"
+                                                    size="lg"
+                                                    value="YogaBall"
+                                                    onChange={(): void => handleWorkoutEquipmentChange('useYogaBall', !modalWorkout.equipment.useYogaBall)}
+                                                >
+                                                    <Text>Yoga Ball</Text>
+                                                </Checkbox>
+                                            </HStack>
                                         </HStack>
-                                    </HStack>
-                                    <HStack width="100%">
-                                        <HStack flex={1}>
-                                            <Checkbox
-                                                bgColor={modalWorkout.equipment.useBoxPlatform ? 'primary' : 'gray.900'}
-                                                isChecked={modalWorkout.equipment.useBoxPlatform}
-                                                key="BoxPlatform-checkbox"
-                                                mb="2"
-                                                size="lg"
-                                                value="BoxPlatform"
-                                                onChange={(): void => handleWorkoutEquipmentChange('useBoxPlatform', !modalWorkout.equipment.useBoxPlatform)}
-                                            >
-                                                <Text>Box Platform</Text>
-                                            </Checkbox>
-                                        </HStack>
-                                        <HStack flex={1}>
-                                            <Checkbox
-                                                bgColor={modalWorkout.equipment.useYogaBall ? 'primary' : 'gray.900'}
-                                                isChecked={modalWorkout.equipment.useYogaBall}
-                                                key="YogaBall-checkbox"
-                                                mb="2"
-                                                size="lg"
-                                                value="YogaBall"
-                                                onChange={(): void => handleWorkoutEquipmentChange('useYogaBall', !modalWorkout.equipment.useYogaBall)}
-                                            >
-                                                <Text>Yoga Ball</Text>
-                                            </Checkbox>
-                                        </HStack>
-                                    </HStack>
-                                </VStack>
+                                    </VStack>
                                 )}
                             </VStack>
                             <Box
@@ -772,7 +773,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                         }}
                                         borderRadius="full"
                                         flexDirection="row"
-                                    // @ts-ignore
+                                        // @ts-ignore
                                         gap={2}
                                         justifyContent="center"
                                         mx="4"

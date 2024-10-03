@@ -98,6 +98,7 @@ export const SignupScreen = (): JSX.Element => {
                         <Input
                             autoCapitalize="none"
                             placeholder="Email"
+                            returnKeyType="done"
                             value={email}
                             width="80%"
                             onChangeText={setEmail}
@@ -105,18 +106,21 @@ export const SignupScreen = (): JSX.Element => {
                         <Input
                             secureTextEntry
                             placeholder="Password"
+                            returnKeyType="done"
                             value={password}
                             width="80%"
                             onChangeText={setPassword}
                         />
                         <Input
                             placeholder="First Name"
+                            returnKeyType="done"
                             value={firstName}
                             width="80%"
                             onChangeText={setFirstName}
                         />
                         <Input
                             placeholder="Last Name"
+                            returnKeyType="done"
                             value={lastName}
                             width="80%"
                             onChangeText={setLastName}
@@ -124,9 +128,11 @@ export const SignupScreen = (): JSX.Element => {
                         <Input
                             autoCapitalize="none"
                             placeholder="Username"
+                            returnKeyType="go"
                             value={username}
                             width="80%"
                             onChangeText={setUsername}
+                            onSubmitEditing={handleSignUp}
                         />
                         <TouchableOpacity
                             disabled={isFormIncomplete}

@@ -146,6 +146,7 @@ export const SelectExerciseScreen = (): JSX.Element => {
                 InputLeftElement={<Icon as={Ionicons} ml={4} name="search-outline" size="sm" />}
                 m="4"
                 placeholder="Search for an exercise"
+                returnKeyType="done"
                 value={search}
                 onChangeText={setSearch}
             />

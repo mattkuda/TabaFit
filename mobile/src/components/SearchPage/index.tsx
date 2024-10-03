@@ -39,6 +39,7 @@ export const SearchPage = (): JSX.Element => {
                 InputLeftElement={<Icon as={Ionicons} ml={4} name="search-outline" size="sm" />}
                 m="4"
                 placeholder="Search for users"
+                returnKeyType="done"
                 value={searchQuery}
                 onChangeText={setSearchQuery}
             />

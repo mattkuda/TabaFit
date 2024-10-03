@@ -119,6 +119,7 @@ export const LoginScreen = (): JSX.Element => {
                         <Input
                             autoCapitalize="none"
                             placeholder="Username or email"
+                            returnKeyType="go"
                             value={emailOrUsername}
                             width="80%"
                             onChangeText={setEmailOrUsername}
@@ -126,9 +127,11 @@ export const LoginScreen = (): JSX.Element => {
                         <Input
                             secureTextEntry
                             placeholder="Password"
+                            returnKeyType="go"
                             value={password}
                             width="80%"
                             onChangeText={setPassword}
+                            onSubmitEditing={handleSignIn}
                         />
                         <TouchableOpacity
                             disabled={isLoading}

@@ -184,9 +184,11 @@ export const PostScreen = (): JSX.Element => {
                     mt={4}
                     placeholder="Write a comment..."
                     ref={commentInputRef}
+                    returnKeyType="go"
                     type="text"
                     value={commentBody}
                     onChangeText={setCommentBody}
+                    onSubmitEditing={handleAddComment}
                 />
                 {/* @ts-expect-errors */}
                 <VStack gap={4} mt={2}>
