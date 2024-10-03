@@ -49,8 +49,8 @@ export const exerciseDict: Record<string, TabataExercise> = {
     'side-lunges': {
         _id: 'side-lunges', name: 'Side Lunges', types: ['Lower Body'], description: 'Lunge to the side.', difficulty: 'Basic', equipment: [],
     },
-    'curtsey-lunges': {
-        _id: 'curtsey-lunges', name: 'Curtsey Lunges', types: ['Lower Body'], description: 'Step one leg behind the other into a lunge.', difficulty: 'Basic', equipment: [],
+    'curtsy-lunges': {
+        _id: 'curtsy-lunges', name: 'Curtsy Lunges', types: ['Lower Body'], description: 'Step one leg behind the other into a lunge.', difficulty: 'Basic', equipment: [],
     },
     'jump-squats': {
         _id: 'jump-squats', name: 'Jump Squats', types: ['Lower Body'], description: 'Squat followed by a jump.', difficulty: 'Intermediate', equipment: [],

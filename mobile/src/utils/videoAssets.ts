@@ -30,7 +30,6 @@ export const videoAssets = {
     'reverse-lunge-knee-drive': require('../../assets/videos/reverse-lunge-knee-drive.mp4'),
     'inch-worms': require('../../assets/videos/inch-worms.mp4'),
     'bear-crawl': require('../../assets/videos/bear-crawl.mp4'),
-    'courtsey-lunges': require('../../assets/videos/courtsey-lunges.mp4'),
     'punch-cross-jab': require('../../assets/videos/punch-cross-jab.mp4'),
     punches: require('../../assets/videos/punches.mp4'),
     'side-lunges': require('../../assets/videos/side-lunges.mp4'),
@@ -48,4 +47,5 @@ export const videoAssets = {
     'fast-feet': require('../../assets/videos/fast-feet.mp4'),
     'butt-kicks': require('../../assets/videos/butt-kicks.mp4'),
     'jumping-jacks': require('../../assets/videos/jumping-jacks.mp4'),
+    'curtsy-lunges': require('../../assets/videos/curtsy-lunges.mp4'),
 };

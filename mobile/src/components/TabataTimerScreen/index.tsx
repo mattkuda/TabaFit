@@ -106,6 +106,8 @@ export const TabataTimerScreen = (): JSX.Element => {
     const { authState } = useAuth();
     const userId = authState?.userId;
     const { data: preferences } = useGetPreferences(userId);
+    const [nextVideoSource, setNextVideoSource] = useState(null);
+    const nextVideoRef = useRef(null);
 
     useKeepAwake();
 
@@ -410,6 +412,32 @@ export const TabataTimerScreen = (): JSX.Element => {
             ? colors.flame[500]
             : colors.yellow[500];
 
+    const preloadNextVideo = useCallback(() => {
+        const nextExercise = getNextUpExercise(currentInterval, exercisesDone, exercisesPerTabata, currentTabata);
+
+        if (nextExercise) {
+            const newVideoSource = getVideoSource(nextExercise._id || 'default');
+
+            setNextVideoSource(newVideoSource);
+        }
+    }, [currentInterval, exercisesDone, exercisesPerTabata, currentTabata]);
+
+    useEffect(() => {
+        if (
+            (currentInterval === Intervals.Rest && seconds <= 4)
+            || (currentInterval === Intervals.Warmup && seconds <= 4)
+            || currentInterval === Intervals.Intermission
+        ) {
+            preloadNextVideo();
+        }
+    }, [currentInterval, seconds, preloadNextVideo]);
+
+    useEffect(() => {
+        if (nextVideoSource && nextVideoRef.current) {
+            nextVideoRef.current.loadAsync(nextVideoSource);
+        }
+    }, [nextVideoSource]);
+
     useEffect(() => {
         const nextExercise = getNextUpExercise(currentInterval, exercisesDone, exercisesPerTabata, currentTabata);
         const newVideoSource = getVideoSource((currentExercise || nextExercise)?._id || 'default');
@@ -421,6 +449,9 @@ export const TabataTimerScreen = (): JSX.Element => {
                 useNativeDriver: true,
             }).start(() => {
                 setVideoSource(newVideoSource);
+                if (ref.current) {
+                    ref.current.loadAsync(newVideoSource);
+                }
                 Animated.timing(fadeAnim, {
                     toValue: 1,
                     duration: 300,
@@ -428,9 +459,7 @@ export const TabataTimerScreen = (): JSX.Element => {
                 }).start();
             });
         }
-    }, [currentExercise, currentInterval,
-        exercisesDone, exercisesPerTabata, currentTabata,
-        fadeAnim, videoSource]);
+    }, [currentExercise, currentInterval, exercisesDone, exercisesPerTabata, currentTabata, fadeAnim, videoSource]);
 
     return (
         <GradientVStack
@@ -471,51 +500,59 @@ export const TabataTimerScreen = (): JSX.Element => {
                 w="100%"
             >
                 {videoSource && (currentExercise || shouldShowNextExerciseVideo(currentInterval, seconds, exercisesDone, exercisesPerTabata, circuitsDone, numberOfTabatas)) ? (
-                    preferences?.exerciseVideosEnabled
-                        ? (
-                            <Animated.View style={{
-                                opacity: fadeAnim,
+                    preferences?.exerciseVideosEnabled ? (
+                        <Animated.View style={{
+                            opacity: fadeAnim,
+                            width: '100%',
+                            aspectRatio: 16 / 11,
+                        }}
+                        >
+                            <Video
+                                isLooping
+                                isMuted
+                                ref={ref}
+                                resizeMode={ResizeMode.COVER}
+                                shouldPlay={isActive}
+                                source={videoSource}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                            />
+                            {/* Hidden preloading video */}
+                            <Video
+                                isMuted
+                                isLooping={false}
+                                ref={nextVideoRef}
+                                resizeMode={ResizeMode.COVER}
+                                shouldPlay={false}
+                                source={nextVideoSource}
+                                style={{ width: 1, height: 1, opacity: 0 }}
+                            />
+                        </Animated.View>
+                    ) : (
+                        <Flex
+                            alignItems="center"
+                            justifyContent="center"
+                            style={{
                                 width: '100%',
                                 aspectRatio: 16 / 11,
                             }}
-                            >
-                                <Video
-                                    isLooping
-                                    isMuted
-                                    ref={ref}
-                                    resizeMode={ResizeMode.COVER}
-                                    shouldPlay={isActive}
-                                    source={videoSource}
+                        >
+                            <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>
+                                <Image
+                                    alt="Exercise icon"
+                                    source={exerciseIconDictionary[(currentExercise || getNextUpExercise(currentInterval, exercisesDone, exercisesPerTabata, currentTabata)
+                                    )?.types[0]]}
                                     style={{
-                                        width: '100%',
-                                        height: '100%',
+                                        height: 200,
+                                        width: 200,
+                                        tintColor: iconColor,
                                     }}
                                 />
                             </Animated.View>
-                        )
-                        : (
-                            <Flex
-                                alignItems="center"
-                                justifyContent="center"
-                                style={{
-                                    width: '100%',
-                                    aspectRatio: 16 / 11,
-                                }}
-                            >
-                                <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>
-                                    <Image
-                                        alt="Exercise icon"
-                                        source={exerciseIconDictionary[(currentExercise || getNextUpExercise(currentInterval, exercisesDone, exercisesPerTabata, currentTabata)
-                                        )?.types[0]]}
-                                        style={{
-                                            height: 200,
-                                            width: 200,
-                                            tintColor: iconColor,
-                                        }}
-                                    />
-                                </Animated.View>
-                            </Flex>
-                        )
+                        </Flex>
+                    )
                 ) : (
                     <Flex
                         alignItems="center"
