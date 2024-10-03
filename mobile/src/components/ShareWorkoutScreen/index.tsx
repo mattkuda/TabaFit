@@ -58,7 +58,7 @@ export const ShareWorkoutScreen = (): JSX.Element => {
             index: 0,
             routes: [{ name: 'WorkoutsScreen' }],
         });
-        navigation.navigate('HomePage');
+        navigation.navigate('HomePage', { scrollToTop: true });
     };
 
     const handleShareWorkout = (): void => {
@@ -71,8 +71,8 @@ export const ShareWorkoutScreen = (): JSX.Element => {
                         ...workout,
                         _id: undefined, // Ensure the backend generates the ID
                     },
-                    title: workoutTitle,
-                    description: workoutDescription,
+                    title: workoutTitle.trim(),
+                    description: workoutDescription.trim(),
                 }, {
                     onSuccess: () => {
                         queryClient.invalidateQueries('following-posts');
@@ -114,6 +114,7 @@ export const ShareWorkoutScreen = (): JSX.Element => {
         navigation.setOptions({
             headerRight: (): JSX.Element => (
                 <Button
+                    disabled={!workoutTitle || shareWorkoutMutation.isLoading}
                     rightIcon={<Icon as={Ionicons} color="flame.500" name="add" size="lg" />}
                     size="lg"
                     variant="ghost"
@@ -148,15 +149,18 @@ export const ShareWorkoutScreen = (): JSX.Element => {
                 backgroundColor="gray.900"
                 fontSize="md"
                 placeholder="Enter Post Name"
+                returnKeyType="done"
                 value={workoutTitle}
                 onChangeText={setWorkoutTitle}
             />
             <TextArea
+                blurOnSubmit
                 autoCompleteType={undefined}
                 backgroundColor="gray.900"
                 fontSize="md"
                 h={40}
                 placeholder="Describe your workout"
+                returnKeyType="done"
                 value={workoutDescription}
                 onChangeText={setWorkoutDescription}
             />
