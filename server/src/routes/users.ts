@@ -385,4 +385,21 @@ router.get('/:userId/preferences', authenticate, async (req: AuthRequest, res: R
   }
 });
 
+// router.post('/temp/enable-all-video-preferences', async (req: AuthRequest, res: Response) => {
+//   try {
+//     const result = await usersCollection.updateMany(
+//       {},
+//       { $set: { 'preferences.exerciseVideosEnabled': true } },
+//     );
+
+//     res.status(200).send({
+//       message: 'Video preferences enabled for all users',
+//       modifiedCount: result.modifiedCount,
+//     });
+//   } catch (err) {
+//     console.error('Failed to update video preferences for all users', err);
+//     res.status(500).send({ message: 'Failed to update video preferences for all users' });
+//   }
+// });
+
 export default router;

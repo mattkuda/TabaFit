@@ -15,7 +15,7 @@ export const validateUsername = (username: string): { isValid: boolean, errorMes
   ];
 
   if (username.length < 3) {
-    return { isValid: false, errorMessage: 'Username is too short. It must be at least 3 characters long.' };
+    return { isValid: false, errorMessage: 'Username must be at least 3 characters long.' };
   }
 
   if (!usernameRegex.test(username)) {
@@ -23,7 +23,7 @@ export const validateUsername = (username: string): { isValid: boolean, errorMes
   }
 
   if (reservedUsernames.includes(username.toLowerCase())) {
-    return { isValid: false, errorMessage: 'This username is reserved. Please choose another username.' };
+    return { isValid: false, errorMessage: 'Username already claimed.' };
   }
 
   return { isValid: true };

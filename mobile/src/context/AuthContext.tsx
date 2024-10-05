@@ -4,8 +4,6 @@ import React, {
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import * as SplashScreen from 'expo-splash-screen';
-import { QueryClient } from 'react-query';
-import { fetchUserPreferences } from '../hooks/usePreferences';
 
 const apiUrl = process.env.EXPO_PUBLIC_EAS_API_BASE_URL || 'http://localhost:3000';
 const tokenKey = process.env.EXPO_PUBLIC_TOKEN_KEY;
@@ -107,9 +105,9 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
             const response = await axios.post(`${apiUrl}/login`, { emailOrUsername, password });
             const { token, user } = response.data;
             // Fetch user preferences
-            const queryClient = new QueryClient();
+            // const queryClient = new QueryClient();
 
-            queryClient.prefetchQuery(['preferences', user._id], () => fetchUserPreferences(user._id));
+            // queryClient.prefetchQuery(['preferences', user._id], () => fetchUserPreferences(user._id));
 
             setAuthState({
                 token,
