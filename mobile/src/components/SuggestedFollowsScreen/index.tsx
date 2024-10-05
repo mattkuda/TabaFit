@@ -39,7 +39,7 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
     return (
         <Box backgroundColor="gray.900" borderColor="gray8" borderRadius="md" borderWidth="1" key={key} mt="2" p="4">
             <HStack alignItems="center" space={3}>
-                <ProfilePicture size="48px" user={user} />
+                <ProfilePicture size="md" user={user} />
                 <VStack flex={1}>
                     <Text bold fontSize="sm">
                         {`${user.firstName} ${user.lastName}`}

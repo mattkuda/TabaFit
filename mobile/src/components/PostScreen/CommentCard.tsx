@@ -43,7 +43,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment, onDeleteComme
             space={2}
         >
             <HStack alignItems="center" space={2}>
-                <ProfilePicture size="32px" user={comment?.user} />
+                <ProfilePicture size="sm" user={comment?.user} />
                 <VStack flex={1}>
                     <Text
                         fontSize="sm"

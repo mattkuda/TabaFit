@@ -31,7 +31,7 @@ export const NotificationCard: React.FC<NotificationCardProps> = ({ notification
         <TouchableOpacity onPress={navigateToPost}>
             <Box backgroundColor={backgroundColor} borderRadius="md" borderWidth="1" mt="2" p="4">
                 <HStack alignItems="center" space={3}>
-                    <ProfilePicture size="48px" user={notification?.initiatorUserInfo} />
+                    <ProfilePicture size="md" user={notification?.initiatorUserInfo} />
                     <VStack flex={1}>
                         <Text bold ellipsizeMode="tail" fontSize="sm" numberOfLines={2}>{notification.summaryText}</Text>
                         <Text color="gray.400" fontSize="xs">
