@@ -130,16 +130,18 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
             <Text color="white" textAlign="center">
                 {`Environment: ${process.env.EXPO_PUBLIC_ENVIRONMENT}`}
             </Text>
-            {/* <TouchableOpacity
-                disabled
+            <TouchableOpacity
                 style={{
                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
                 }}
                 onPress={(): void => setShowModal(true)}
             >
-                <Text color="primary" textAlign="left">Delete Account</Text>
-                <Icon as={Ionicons} color="primary" name="chevron-forward" />
-            </TouchableOpacity> */}
+                <HStack alignItems="center" space="2">
+                    <Icon as={Ionicons} color="red.500" name="trash" />
+                    <Text color="red.500" textAlign="left">Delete Account</Text>
+                </HStack>
+                <Icon as={Ionicons} color="red.500" name="chevron-forward" />
+            </TouchableOpacity>
             <Modal isOpen={showLogoutModal} size="xl" onClose={(): void => setShowLogoutModal(false)}>
                 <Modal.Content backgroundColor="gray9">
                     {/* @ts-expect-error */}
@@ -157,22 +159,20 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
                     </Modal.Footer>
                 </Modal.Content>
             </Modal>
-            <Modal isOpen={showModal}>
-                <Modal.Content>
-                    <Modal.CloseButton />
-                    <Modal.Header>Delete Account</Modal.Header>
-                    <Modal.Body>
-                        Are you sure you want to delete your account?
+            <Modal isOpen={showModal} size="xl" onClose={(): void => setShowModal(false)}>
+                <Modal.Content backgroundColor="gray9">
+                    {/* @ts-expect-error */}
+                    <Modal.Body backgroundColor="gray.900" gap="4" p="8">
+                        <Text bold fontSize="lg" justifyContent="center" textAlign="center">
+                            Delete Account?
+                        </Text>
+                        <Text textAlign="center">Are you sure you want to delete your account? This cannot be undone.</Text>
                     </Modal.Body>
-                    <Modal.Footer>
-                        <Button.Group space={2}>
-                            <Button colorScheme="blueGray" variant="ghost" onPress={(): void => setShowModal(false)}>
-                                Cancel
-                            </Button>
-                            <Button colorScheme="danger" onPress={handleDeleteAccount}>
-                                Delete
-                            </Button>
-                        </Button.Group>
+                    <Modal.Footer backgroundColor="gray.900" borderTopColor="gray.600" justifyContent="center" p={2}>
+                        <Button colorScheme="danger" variant="ghost" onPress={handleDeleteAccount}>Delete</Button>
+                    </Modal.Footer>
+                    <Modal.Footer backgroundColor="gray.900" borderTopColor="gray.600" justifyContent="center" p={2}>
+                        <Button colorScheme="secondary" variant="ghost" onPress={(): void => setShowModal(false)}>Cancel</Button>
                     </Modal.Footer>
                 </Modal.Content>
             </Modal>
