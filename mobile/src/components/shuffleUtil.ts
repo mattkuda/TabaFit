@@ -35,6 +35,7 @@ export const shuffleExercises = (
         if (!exercise.equipment?.length) {
             return true;
         }
+
         return exercise.equipment.some((equip) => (equip === 'Kettlebell' && selectedEquipment.useKettlebell)
             || (equip === 'Box Platform' && selectedEquipment.useBoxPlatform)
             || (equip === 'Yoga Ball' && selectedEquipment.useYogaBall)

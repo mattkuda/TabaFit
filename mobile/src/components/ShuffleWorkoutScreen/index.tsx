@@ -127,6 +127,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
     };
 
     const triggerShuffle = (workoutParam?: TabataWorkout): void => {
+        // console.log('workoutParam.difficulty.', workoutParam.difficulty);
         const shuffledWorkout = workoutParam || workout;
 
         if (shuffledWorkout.includeSettings) {
@@ -142,7 +143,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                 includeLower,
                 includeAbs,
                 includeCardio,
-                workout.difficulty,
+                shuffledWorkout.difficulty,
             );
 
             setWorkout((prev) => ({
@@ -251,9 +252,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
             <HStack alignItems="center" background="transparent" justifyContent="space-between" pt={2} space={4} width="100%">
                 <Box flex={1} width="42" />
                 <Box alignItems="center" flex={1} position="relative">
-                    <TouchableOpacity
-                        onPress={(): void => triggerShuffle()}
-                    >
+                    <TouchableOpacity onPress={(): void => triggerShuffle()}>
                         <Box
                             alignItems="center"
                             bg={{
@@ -501,15 +500,19 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                             >
                                 <HStack alignItems="center" background="transparent" justifyContent="space-between" width="100%">
                                     <HStack alignItems="center" justifyContent="flex-start" space={4}>
-                                        <Text
-                                            fontSize="xl"
-                                            numberOfLines={2}
-                                            style={{
-                                                fontWeight: 'bold',
-                                            }}
-                                        >
-                                            Focus:
-                                        </Text>
+                                        <Box>
+                                            <Text
+                                                fontSize="xl"
+                                                numberOfLines={2}
+                                                style={{ fontWeight: 'bold' }}
+                                            >
+                                                Focus:
+                                            </Text>
+                                            <Text fontSize="xs" textAlign="center">
+                                                {' '}
+                                            </Text>
+                                        </Box>
+
                                         <Box>
                                             <TouchableOpacity onPress={(): void => handleWorkoutSettingChange('includeUpper', !modalWorkout.includeSettings?.includeUpper)}>
                                                 <Box
@@ -536,6 +539,9 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                                         }}
                                                     />
                                                 </Box>
+                                                <Text fontSize="xs" textAlign="center">
+                                                    Upper
+                                                </Text>
                                             </TouchableOpacity>
                                         </Box>
                                         <Box>
@@ -563,6 +569,9 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                                         }}
                                                     />
                                                 </Box>
+                                                <Text fontSize="xs" textAlign="center">
+                                                    Lower
+                                                </Text>
                                             </TouchableOpacity>
                                         </Box>
                                         <Box>
@@ -589,7 +598,11 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                                             tintColor: 'white',
                                                         }}
                                                     />
+
                                                 </Box>
+                                                <Text fontSize="xs" textAlign="center">
+                                                    Abs
+                                                </Text>
                                             </TouchableOpacity>
                                         </Box>
                                         <Box>
@@ -617,6 +630,9 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                                         }}
                                                     />
                                                 </Box>
+                                                <Text fontSize="xs" textAlign="center">
+                                                    Cardio
+                                                </Text>
                                             </TouchableOpacity>
                                         </Box>
                                     </HStack>

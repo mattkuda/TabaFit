@@ -85,6 +85,14 @@ export const exerciseDict: Record<string, TabataExercise> = {
     'kettlebell-clean-press': {
         _id: 'kettlebell-clean-press', name: 'Kettlebell Clean and Press', types: ['Lower Body'], description: 'Clean and press a kettlebell.', difficulty: 'Advanced', equipment: ['Kettlebell'],
     },
+    'reverse-lunge-with-kick': {
+        _id: 'reverse-lunge-with-kick',
+        name: 'Reverse Lunge with Kick',
+        types: ['Lower Body'],
+        description: 'Step back into a lunge, then kick the back leg forward as you stand up.',
+        difficulty: 'Advanced',
+        equipment: [],
+    },
     'tuck-jumps': {
         _id: 'tuck-jumps', name: 'Tuck Jumps', types: ['Lower Body'], description: 'Jump and tuck knees to chest.', difficulty: 'Intermediate', equipment: [],
     },
