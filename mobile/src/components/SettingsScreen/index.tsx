@@ -176,7 +176,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
                     </Modal.Footer>
                 </Modal.Content>
             </Modal>
-
         </GradientVStack>
     );
 };

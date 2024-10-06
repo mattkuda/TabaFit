@@ -64,7 +64,7 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
 
 export const SuggestedFollowsScreen = (): JSX.Element => {
     const followAllMutation = useFollowAll();
-    const { authState, completeTutorial, hasSeenTutorial } = useAuth();
+    const { authState, completeTutorial } = useAuth();
     const { data: users } = useQuerySuggestedUsers();
     const [isAllFollowed, setIsAllFollowed] = useState(false);
     const [isAnyFollowed, setIsAnyFollowed] = useState(false);
@@ -116,9 +116,6 @@ export const SuggestedFollowsScreen = (): JSX.Element => {
                         </Text>
                         <Text fontSize="lg" mt="5" textAlign="center">
                             Follow some suggested users, or follow all current TabaFit users! (recommended)
-                        </Text>
-                        <Text fontSize="lg" mt="5" textAlign="center">
-                            {hasSeenTutorial?.toString()}
                         </Text>
                     </VStack>
                     <Center>

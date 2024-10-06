@@ -459,29 +459,50 @@ export const TabataTimerScreen = (): JSX.Element => {
                     <Text fontSize="xl">{formatTime(remainingTime)}</Text>
                 </VStack>
             </Flex>
-
             {/* Video/Icon Section */}
             <Box height="40%" mb={4} width="100%">
-                {videoSource && (currentExercise || shouldShowNextExerciseVideo(currentInterval, seconds, exercisesDone, exercisesPerTabata, circuitsDone, numberOfTabatas)) ? (
-                    <Animated.View style={{
-                        opacity: fadeAnim,
-                        width: '100%',
-                        height: '100%',
-                    }}
-                    >
-                        <Video
-                            isLooping
-                            isMuted
-                            ref={ref}
-                            resizeMode={ResizeMode.COVER}
-                            shouldPlay={isActive}
-                            source={videoSource}
+                {currentExercise || shouldShowNextExerciseVideo(currentInterval, seconds, exercisesDone, exercisesPerTabata, circuitsDone, numberOfTabatas) ? (
+                    videoSource ? (
+                        <Animated.View style={{
+                            opacity: fadeAnim,
+                            width: '100%',
+                            height: '100%',
+                        }}
+                        >
+                            <Video
+                                isLooping
+                                isMuted
+                                ref={ref}
+                                resizeMode={ResizeMode.COVER}
+                                shouldPlay={isActive}
+                                source={videoSource}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                            />
+                        </Animated.View>
+                    ) : (
+                        <Flex
+                            alignItems="center"
+                            justifyContent="center"
                             style={{
                                 width: '100%',
                                 height: '100%',
                             }}
-                        />
-                    </Animated.View>
+                        >
+                            <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>
+                                <Image
+                                    alt="Exercise Icon"
+                                    size="2xl"
+                                    source={exerciseIconDictionary[currentExercise?.types[0]]}
+                                    style={{
+                                        tintColor: iconColor,
+                                    }}
+                                />
+                            </Animated.View>
+                        </Flex>
+                    )
                 ) : (
                     <Flex
                         alignItems="center"
@@ -492,20 +513,31 @@ export const TabataTimerScreen = (): JSX.Element => {
                         }}
                     >
                         <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>
-                            <Image
-                                alt="Exercise icon"
-                                source={exerciseIconDictionary[(currentExercise || getNextUpExercise(currentInterval, exercisesDone, exercisesPerTabata, currentTabata))?.types[0] || 'GetReady']}
-                                style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    tintColor: iconColor,
-                                }}
-                            />
+                            {currentInterval !== Intervals.Warmup
+                                ? (
+                                    <Image
+                                        alt="Get ready icon"
+                                        size="2xl"
+                                        source={exerciseIconDictionary.Recovery}
+                                        style={{
+                                            tintColor: iconColor,
+                                        }}
+                                    />
+                                )
+                                : (
+                                    <Image
+                                        alt="Get ready icon"
+                                        size="2xl"
+                                        source={exerciseIconDictionary.GetReady}
+                                        style={{
+                                            tintColor: iconColor,
+                                        }}
+                                    />
+                                )}
                         </Animated.View>
                     </Flex>
                 )}
             </Box>
-
             {/* Interval Name and Timer Display */}
             <VStack alignItems="center" mb={4}>
                 <Text
