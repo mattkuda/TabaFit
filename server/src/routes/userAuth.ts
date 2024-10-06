@@ -30,7 +30,7 @@ let usersCollection: Collection<User>;
   }
 })();
 
-router.post('/signup', async (req: Request, res: Response) => {
+router.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const {
       email, password, username, firstName, lastName,
@@ -93,6 +93,8 @@ router.post('/signup', async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
+  } finally {
+    next();
   }
 });
 

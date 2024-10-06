@@ -11,6 +11,7 @@ import {
     Spinner,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
+import axios from 'axios';
 import { userState } from '../../atoms/userStateAtom';
 import { useAuth } from '../../context/AuthContext';
 // @ts-ignore
@@ -49,11 +50,17 @@ export const SignupScreen = (): JSX.Element => {
                     isAuthenticated: true,
                     user: data.user,
                 }));
-            } else {
-                setErrorMessage(data.message);
             }
         } catch (error) {
-            setErrorMessage(error.message);
+            if (axios.isAxiosError(error)) {
+                if (error.response) {
+                    setErrorMessage(error.response.data.message);
+                } else {
+                    setErrorMessage('An error occurred. Please try again.');
+                }
+            } else {
+                setErrorMessage('An error occurred. Please try again.');
+            }
         } finally {
             setIsLoading(false);
         }
@@ -142,11 +149,17 @@ export const SignupScreen = (): JSX.Element => {
                             <Box
                                 alignItems="center"
                                 bg={{
-                                    linearGradient: {
-                                        colors: ['flame.500', 'cherry.500'],
-                                        start: [0, 1],
-                                        end: [1, 0],
-                                    },
+                                    linearGradient: isFormIncomplete
+                                        ? {
+                                            colors: ['gray.400', 'gray.500'],
+                                            start: [0, 1],
+                                            end: [1, 0],
+                                        }
+                                        : {
+                                            colors: ['flame.500', 'cherry.500'],
+                                            start: [0, 1],
+                                            end: [1, 0],
+                                        },
                                 }}
                                 borderRadius="full"
                                 flexDirection="row"

@@ -623,107 +623,109 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                 </HStack>
                             </Box>
                             {/* Equipment Area */}
-                            <VStack space={4}>
-                                <Box
-                                    flexDirection="row"
-                                    justifyContent="center"
-                                    width="100%"
-                                >
-                                    <HStack alignItems="center" background="transparent" justifyContent="space-between" width="100%">
-                                        <HStack alignItems="center" justifyContent="flex-start">
-                                            <Image
-                                                alt="KB icon"
-                                                mr={2}
-                                                source={equipmentIconDictionary.Kettlebell}
-                                                style={{
-                                                    height: 24,
-                                                    width: 24,
-                                                    tintColor: 'white',
-                                                }}
+                            {false && (
+                                <VStack space={4}>
+                                    <Box
+                                        flexDirection="row"
+                                        justifyContent="center"
+                                        width="100%"
+                                    >
+                                        <HStack alignItems="center" background="transparent" justifyContent="space-between" width="100%">
+                                            <HStack alignItems="center" justifyContent="flex-start">
+                                                <Image
+                                                    alt="KB icon"
+                                                    mr={2}
+                                                    source={equipmentIconDictionary.Kettlebell}
+                                                    style={{
+                                                        height: 24,
+                                                        width: 24,
+                                                        tintColor: 'white',
+                                                    }}
+                                                />
+                                                <Text
+                                                    fontSize="xl"
+                                                    numberOfLines={2}
+                                                    style={{
+                                                        fontWeight: 'bold',
+                                                    }}
+                                                >
+                                                    Equipment:
+                                                </Text>
+                                            </HStack>
+                                            <Switch
+                                                isChecked={equipmentEnabled}
+                                                offThumbColor="gray.200"
+                                                offTrackColor="gray.700"
+                                                size="md"
+                                                onThumbColor="gray.200"
+                                                onToggle={toggleEquipment}
+                                                onTrackColor="flame.500"
                                             />
-                                            <Text
-                                                fontSize="xl"
-                                                numberOfLines={2}
-                                                style={{
-                                                    fontWeight: 'bold',
-                                                }}
-                                            >
-                                                Equipment:
-                                            </Text>
                                         </HStack>
-                                        <Switch
-                                            isChecked={equipmentEnabled}
-                                            offThumbColor="gray.200"
-                                            offTrackColor="gray.700"
-                                            size="md"
-                                            onThumbColor="gray.200"
-                                            onToggle={toggleEquipment}
-                                            onTrackColor="flame.500"
-                                        />
-                                    </HStack>
-                                </Box>
-                                {/* Equipment Checkboxes Row */}
-                                {equipmentEnabled && (
-                                    <VStack maxWidth={335} minWidth={335} space={2}>
-                                        <HStack width="100%">
-                                            <HStack flex={1}>
-                                                <Checkbox
-                                                    bgColor={modalWorkout.equipment.useKettlebell ? 'primary' : 'gray.900'}
-                                                    isChecked={modalWorkout.equipment.useKettlebell}
-                                                    key="Kettlebell-checkbox"
-                                                    mb="2"
-                                                    size="lg"
-                                                    value="Kettlebells"
-                                                    onChange={(): void => handleWorkoutEquipmentChange('useKettlebell', !modalWorkout.equipment.useKettlebell)}
-                                                >
-                                                    <Text>Kettlebells</Text>
-                                                </Checkbox>
+                                    </Box>
+                                    {/* Equipment Checkboxes Row */}
+                                    {equipmentEnabled && (
+                                        <VStack maxWidth={335} minWidth={335} space={2}>
+                                            <HStack width="100%">
+                                                <HStack flex={1}>
+                                                    <Checkbox
+                                                        bgColor={modalWorkout.equipment.useKettlebell ? 'primary' : 'gray.900'}
+                                                        isChecked={modalWorkout.equipment.useKettlebell}
+                                                        key="Kettlebell-checkbox"
+                                                        mb="2"
+                                                        size="lg"
+                                                        value="Kettlebells"
+                                                        onChange={(): void => handleWorkoutEquipmentChange('useKettlebell', !modalWorkout.equipment.useKettlebell)}
+                                                    >
+                                                        <Text>Kettlebells</Text>
+                                                    </Checkbox>
+                                                </HStack>
+                                                <HStack flex={1}>
+                                                    <Checkbox
+                                                        bgColor={modalWorkout.equipment.useDumbbells ? 'primary' : 'gray.900'}
+                                                        isChecked={modalWorkout.equipment.useDumbbells}
+                                                        key="Dumbbells-checkbox"
+                                                        mb="2"
+                                                        size="lg"
+                                                        value="Dumbbells"
+                                                        onChange={(): void => handleWorkoutEquipmentChange('useDumbbells', !modalWorkout.equipment.useDumbbells)}
+                                                    >
+                                                        <Text>Dumbbells</Text>
+                                                    </Checkbox>
+                                                </HStack>
                                             </HStack>
-                                            <HStack flex={1}>
-                                                <Checkbox
-                                                    bgColor={modalWorkout.equipment.useDumbbells ? 'primary' : 'gray.900'}
-                                                    isChecked={modalWorkout.equipment.useDumbbells}
-                                                    key="Dumbbells-checkbox"
-                                                    mb="2"
-                                                    size="lg"
-                                                    value="Dumbbells"
-                                                    onChange={(): void => handleWorkoutEquipmentChange('useDumbbells', !modalWorkout.equipment.useDumbbells)}
-                                                >
-                                                    <Text>Dumbbells</Text>
-                                                </Checkbox>
+                                            <HStack width="100%">
+                                                <HStack flex={1}>
+                                                    <Checkbox
+                                                        bgColor={modalWorkout.equipment.useBoxPlatform ? 'primary' : 'gray.900'}
+                                                        isChecked={modalWorkout.equipment.useBoxPlatform}
+                                                        key="BoxPlatform-checkbox"
+                                                        mb="2"
+                                                        size="lg"
+                                                        value="BoxPlatform"
+                                                        onChange={(): void => handleWorkoutEquipmentChange('useBoxPlatform', !modalWorkout.equipment.useBoxPlatform)}
+                                                    >
+                                                        <Text>Box Platform</Text>
+                                                    </Checkbox>
+                                                </HStack>
+                                                <HStack flex={1}>
+                                                    <Checkbox
+                                                        bgColor={modalWorkout.equipment.useYogaBall ? 'primary' : 'gray.900'}
+                                                        isChecked={modalWorkout.equipment.useYogaBall}
+                                                        key="YogaBall-checkbox"
+                                                        mb="2"
+                                                        size="lg"
+                                                        value="YogaBall"
+                                                        onChange={(): void => handleWorkoutEquipmentChange('useYogaBall', !modalWorkout.equipment.useYogaBall)}
+                                                    >
+                                                        <Text>Yoga Ball</Text>
+                                                    </Checkbox>
+                                                </HStack>
                                             </HStack>
-                                        </HStack>
-                                        <HStack width="100%">
-                                            <HStack flex={1}>
-                                                <Checkbox
-                                                    bgColor={modalWorkout.equipment.useBoxPlatform ? 'primary' : 'gray.900'}
-                                                    isChecked={modalWorkout.equipment.useBoxPlatform}
-                                                    key="BoxPlatform-checkbox"
-                                                    mb="2"
-                                                    size="lg"
-                                                    value="BoxPlatform"
-                                                    onChange={(): void => handleWorkoutEquipmentChange('useBoxPlatform', !modalWorkout.equipment.useBoxPlatform)}
-                                                >
-                                                    <Text>Box Platform</Text>
-                                                </Checkbox>
-                                            </HStack>
-                                            <HStack flex={1}>
-                                                <Checkbox
-                                                    bgColor={modalWorkout.equipment.useYogaBall ? 'primary' : 'gray.900'}
-                                                    isChecked={modalWorkout.equipment.useYogaBall}
-                                                    key="YogaBall-checkbox"
-                                                    mb="2"
-                                                    size="lg"
-                                                    value="YogaBall"
-                                                    onChange={(): void => handleWorkoutEquipmentChange('useYogaBall', !modalWorkout.equipment.useYogaBall)}
-                                                >
-                                                    <Text>Yoga Ball</Text>
-                                                </Checkbox>
-                                            </HStack>
-                                        </HStack>
-                                    </VStack>
-                                )}
-                            </VStack>
+                                        </VStack>
+                                    )}
+                                </VStack>
+                            )}
                             <Box
                                 flexDirection="row"
                                 justifyContent="center"

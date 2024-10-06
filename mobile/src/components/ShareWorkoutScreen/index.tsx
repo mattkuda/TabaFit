@@ -15,7 +15,7 @@ import { useCreateWorkout } from '../../mutations/workoutMutations';
 import { GradientVStack } from '../common/GradientVStack';
 import { useWorkoutOwnership } from '../../hooks/useUserInfo';
 import { getFormattedTimeForTabataWorkout } from '../TabataTimerScreen/util';
-import { formatBodyParts, formatEquipmentSettings } from '../../util/util';
+import { formatBodyParts } from '../../util/util';
 
 export const ShareWorkoutScreen = (): JSX.Element => {
     const route = useRoute<ShareWorkoutScreenRouteProp>();
@@ -221,9 +221,9 @@ export const ShareWorkoutScreen = (): JSX.Element => {
                 <Text>
                     {`Focus: ${formatBodyParts(workout.includeSettings)}`}
                 </Text>
-                <Text>
+                {/* <Text>
                     {`Equipment: ${formatEquipmentSettings(workout.equipment)}`}
-                </Text>
+                </Text> */}
             </VStack>
         </GradientVStack>
     );
