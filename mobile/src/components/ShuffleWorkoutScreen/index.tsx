@@ -428,7 +428,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                         backgroundColor="transparent"
                                         borderColor="transparent"
                                         // @ts-expect-error
-                                        leftElement={<Text fontSize="xl">{`${modalWorkout.numberOfTabatas.toString()} ${modalWorkout.numberOfTabatas > 1 ? 'Tabatas' : 'Tabata'}`}</Text>}
+                                        leftElement={<Text fontSize="xl" mr={-4}>{`${modalWorkout.numberOfTabatas.toString()} ${modalWorkout.numberOfTabatas > 1 ? 'Tabatas' : 'Tabata'}`}</Text>}
                                         size="xl"
                                         onValueChange={(itemValue): void => handleDurationChange(
                                             parseInt(itemValue, 10) || 0,
@@ -480,7 +480,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                         backgroundColor="transparent"
                                         borderColor="transparent"
                                         // @ts-expect-error
-                                        leftElement={<Text fontSize="xl" pl={2}>{modalWorkout.difficulty}</Text>}
+                                        leftElement={<Text fontSize="xl" mr={-4} pl={2}>{modalWorkout.difficulty}</Text>}
                                         selectedValue={modalWorkout.difficulty}
                                         size="xl"
                                         // @ts-expect-error
@@ -512,7 +512,6 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                                                 {' '}
                                             </Text>
                                         </Box>
-
                                         <Box>
                                             <TouchableOpacity onPress={(): void => handleWorkoutSettingChange('includeUpper', !modalWorkout.includeSettings?.includeUpper)}>
                                                 <Box

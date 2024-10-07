@@ -11,6 +11,7 @@ export const theme = extendTheme({
         cardGray: '#182329',
         // This is the gray from whoop
         workoutDisplayGray: '#31373c',
+        workoutDisplayGrayDark: '#22272a',
         displayGray: '#71777C',
         primary: '#ff9f27',
         // To make tints, use https://maketintsandshades.com/#ff2760

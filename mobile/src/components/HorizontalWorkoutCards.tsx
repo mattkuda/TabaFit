@@ -24,8 +24,14 @@ const SlideWorkoutCard: React.FC<SlideWorkoutCardProps> = ({ workout, onPress })
             //         end: [1.35, 1.05],
             //     },
             // }}
-            backgroundColor="workoutDisplayGray"
-            borderColor={getWorkoutDifficultyGradient(workout.tabatas.length)[0]}
+            bg={{
+                linearGradient: {
+                    colors: ['workoutDisplayGray', 'workoutDisplayGrayDark'],
+                    start: [0, 1],
+                    end: [1, 0],
+                },
+            }}
+            borderColor={getWorkoutDifficultyGradient(workout.difficulty)}
             borderRadius="md"
             borderWidth={1}
             height={150}

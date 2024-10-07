@@ -284,8 +284,11 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
         });
     };
 
-    const handleDifficultyChange = (itemValue): void => {
-        handleWorkoutSettingChange('difficulty', itemValue);
+    const handleDifficultyChange = (itemValue: Difficulty): void => {
+        setModalWorkout((prevWorkout) => ({
+            ...prevWorkout,
+            difficulty: itemValue,
+        }));
     };
 
     const toggleEquipment = (): void => {
@@ -462,7 +465,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                         backgroundColor="transparent"
                                         borderColor="transparent"
                                         // @ts-expect-error
-                                        leftElement={<Text fontSize="xl">{`${modalWorkout.numberOfTabatas.toString()} ${modalWorkout.numberOfTabatas > 1 ? 'Tabatas' : 'Tabata'}`}</Text>}
+                                        leftElement={<Text fontSize="xl" mr={-4}>{`${modalWorkout.numberOfTabatas.toString()} ${modalWorkout.numberOfTabatas > 1 ? 'Tabatas' : 'Tabata'}`}</Text>}
                                         size="xl"
                                         onValueChange={(itemValue): void => handleDurationChange(
                                             parseInt(itemValue, 10) || 0,
@@ -514,9 +517,10 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                         backgroundColor="transparent"
                                         borderColor="transparent"
                                         // @ts-expect-error
-                                        leftElement={<Text fontSize="xl" pl={2}>{modalWorkout.difficulty}</Text>}
+                                        leftElement={<Text fontSize="xl" mr={-4}>{modalWorkout.difficulty}</Text>}
                                         selectedValue={modalWorkout.difficulty}
                                         size="xl"
+                                        // @ts-expect-error
                                         onValueChange={(itemValue): void => handleDifficultyChange(itemValue)}
                                     >
                                         {[Difficulty.Basic, Difficulty.Intermediate, Difficulty.Advanced].map((val) => (
@@ -533,15 +537,21 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                             >
                                 <HStack alignItems="center" background="transparent" justifyContent="space-between" width="100%">
                                     <HStack alignItems="center" justifyContent="flex-start" space={4}>
-                                        <Text
-                                            fontSize="xl"
-                                            numberOfLines={2}
-                                            style={{
-                                                fontWeight: 'bold',
-                                            }}
-                                        >
-                                            Focus:
-                                        </Text>
+
+                                        <Box>
+                                            <Text
+                                                fontSize="xl"
+                                                numberOfLines={2}
+                                                style={{
+                                                    fontWeight: 'bold',
+                                                }}
+                                            >
+                                                Focus:
+                                            </Text>
+                                            <Text fontSize="xs" textAlign="center">
+                                                {' '}
+                                            </Text>
+                                        </Box>
                                         <Box>
                                             <TouchableOpacity onPress={(): void => handleWorkoutSettingChange('includeUpper', !modalWorkout.includeSettings?.includeUpper)}>
                                                 <Box
@@ -568,6 +578,9 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                                         }}
                                                     />
                                                 </Box>
+                                                <Text fontSize="xs" textAlign="center">
+                                                    Upper
+                                                </Text>
                                             </TouchableOpacity>
                                         </Box>
                                         <Box>
@@ -596,6 +609,9 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                                     />
                                                 </Box>
                                             </TouchableOpacity>
+                                            <Text fontSize="xs" textAlign="center">
+                                                Lower
+                                            </Text>
                                         </Box>
                                         <Box>
                                             <TouchableOpacity onPress={(): void => handleWorkoutSettingChange('includeAbs', !modalWorkout.includeSettings?.includeAbs)}>
@@ -623,6 +639,9 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                                     />
                                                 </Box>
                                             </TouchableOpacity>
+                                            <Text fontSize="xs" textAlign="center">
+                                                Abs
+                                            </Text>
                                         </Box>
                                         <Box>
                                             <TouchableOpacity onPress={(): void => handleWorkoutSettingChange('includeCardio', !modalWorkout.includeSettings?.includeCardio)}>
@@ -650,6 +669,9 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                                                     />
                                                 </Box>
                                             </TouchableOpacity>
+                                            <Text fontSize="xs" textAlign="center">
+                                                Cardio
+                                            </Text>
                                         </Box>
                                     </HStack>
                                 </HStack>

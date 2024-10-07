@@ -52,10 +52,17 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
             onPress={handleClickCard}
         >
             <Box
-                backgroundColor="workoutDisplayGray"
+                bg={{
+                    linearGradient: {
+                        colors: ['workoutDisplayGray', 'workoutDisplayGrayDark'],
+                        start: [0, 1],
+                        end: [1, 0],
+                    },
+                }}
                 borderColor={workoutDifficultyColor}
                 borderRadius="md"
-                borderWidth={1} // @ts-ignore
+                borderWidth={1}
+                // @ts-expect-error
                 gap={4}
                 justifyContent="space-between"
                 my={2}
@@ -135,7 +142,7 @@ export const WorkoutCard: FC<WorkoutCardProps> = ({
                             // @ts-expect-error
                             gap={2}
                             justifyContent="center"
-                            p="3"
+                            p="2"
                             px={4}
                             width={150}
                         >
