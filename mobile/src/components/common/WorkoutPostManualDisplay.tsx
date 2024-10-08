@@ -26,27 +26,33 @@ export const WorkoutPostManualDisplay: React.FC<PostCardProps> = ({ manualTabata
             }}
         >
             <Box
-                backgroundColor="workoutDisplayGray"
+                bg={{
+                    linearGradient: {
+                        colors: ['workoutDisplayGray', 'workoutDisplayGrayDark'],
+                        start: [0, 1],
+                        end: [1, 0],
+                    },
+                }}
                 borderColor="white"
                 borderRadius="md"
                 borderWidth={1}
                 mt={2}
                 p={2}
-                // bg={{
-                //     linearGradient: {
-                //         colors: getWorkoutDifficultyGradient(workout.numberOfTabatas),
-                //         start: [0, 1],
-                //         end: [1, 0],
-                //     },
-                // }}
-                // bg={{
-                //     linearGradient: {
-                //         colors: ['workoutDisplayGray', workoutGradient[0]],
-                //         start: [0.5, 0.5],
-                //         end: [1.3, 1.3],
+            // bg={{
+            //     linearGradient: {
+            //         colors: getWorkoutDifficultyGradient(workout.numberOfTabatas),
+            //         start: [0, 1],
+            //         end: [1, 0],
+            //     },
+            // }}
+            // bg={{
+            //     linearGradient: {
+            //         colors: ['workoutDisplayGray', workoutGradient[0]],
+            //         start: [0.5, 0.5],
+            //         end: [1.3, 1.3],
 
-                //     },
-                // }}
+            //     },
+            // }}
             >
                 <HStack
                     justifyContent="space-between"

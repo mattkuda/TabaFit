@@ -371,7 +371,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                         borderColor="gray.600"
                         borderWidth={2}
                         style={{ margin: 'auto' }}
-                        width="85%"
+                        width="90%"
                     >
                         <Modal.Body
                             backgroundColor="gray.900"

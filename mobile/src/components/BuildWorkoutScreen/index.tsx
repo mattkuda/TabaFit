@@ -407,7 +407,7 @@ export const BuildWorkoutScreen: React.FC<BuildWorkoutScreenNavigationProp> = ()
                         borderColor="gray.600"
                         borderWidth={2}
                         style={{ margin: 'auto' }}
-                        width="85%"
+                        width="90%"
                     >
                         <Modal.CloseButton />
                         <Modal.Body

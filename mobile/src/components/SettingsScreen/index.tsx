@@ -29,7 +29,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
     const [showModal, setShowModal] = useState(false);
     const { onLogout, authState: { userId } } = useAuth();
     const [showLogoutModal, setShowLogoutModal] = useState(false);
-
+    const [advancedOpen, setAdvancedOpen] = useState(false);
     const handleLogout = async (): Promise<void> => {
         try {
             await onLogout();
@@ -111,6 +111,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
                 </HStack>
                 <Icon as={Ionicons} color="primary" name="chevron-forward" />
             </TouchableOpacity>
+
             <TouchableOpacity
                 style={{
                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
@@ -124,24 +125,45 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
                 </HStack>
                 <Icon as={Ionicons} color="red.500" name="chevron-forward" />
             </TouchableOpacity>
+            <TouchableOpacity
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginTop: 16,
+                }}
+                onPress={(): void => setAdvancedOpen(!advancedOpen)}
+            >
+                <HStack alignItems="center" space="2">
+                    <Icon as={Ionicons} color="gray.500" name="settings-outline" />
+                    <Text color="gray.500" textAlign="left">Advanced</Text>
+                </HStack>
+                <Icon
+                    as={Ionicons}
+                    color="gray.500"
+                    name={advancedOpen ? 'chevron-up' : 'chevron-down'}
+                />
+            </TouchableOpacity>
+            {advancedOpen && (
+                <TouchableOpacity
+                    style={{
+                        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                    }}
+                    onPress={(): void => setShowModal(true)}
+                >
+                    <HStack alignItems="center" space="2">
+                        <Icon as={Ionicons} color="red.500" name="trash" />
+                        <Text color="red.500" textAlign="left">Delete Account</Text>
+                    </HStack>
+                    <Icon as={Ionicons} color="red.500" name="chevron-forward" />
+                </TouchableOpacity>
+            )}
             <Text color="white" textAlign="center">
                 {`TabaFit Version: ${version}`}
             </Text>
             <Text color="white" textAlign="center">
                 {`Environment: ${process.env.EXPO_PUBLIC_ENVIRONMENT}`}
             </Text>
-            <TouchableOpacity
-                style={{
-                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-                }}
-                onPress={(): void => setShowModal(true)}
-            >
-                <HStack alignItems="center" space="2">
-                    <Icon as={Ionicons} color="red.500" name="trash" />
-                    <Text color="red.500" textAlign="left">Delete Account</Text>
-                </HStack>
-                <Icon as={Ionicons} color="red.500" name="chevron-forward" />
-            </TouchableOpacity>
             <Modal isOpen={showLogoutModal} size="xl" onClose={(): void => setShowLogoutModal(false)}>
                 <Modal.Content backgroundColor="gray9">
                     {/* @ts-expect-error */}
@@ -159,6 +181,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
                     </Modal.Footer>
                 </Modal.Content>
             </Modal>
+            {/* Advanced settings button */}
             <Modal isOpen={showModal} size="xl" onClose={(): void => setShowModal(false)}>
                 <Modal.Content backgroundColor="gray9">
                     {/* @ts-expect-error */}
