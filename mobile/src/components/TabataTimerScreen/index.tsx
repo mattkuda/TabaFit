@@ -437,7 +437,7 @@ export const TabataTimerScreen = (): JSX.Element => {
             }}
         >
             {/* Progression Row */}
-            <Flex align="center" direction="row" justify="space-between" px={4} w="100%">
+            <Flex align="center" direction="row" justify="space-between" px={4} style={{ flex: 0 }} w="100%">
                 <VStack alignItems="center" space={2}>
                     <Text color="gray.200" fontSize="lg">Exercises</Text>
                     <Text fontSize="xl">
@@ -459,29 +459,53 @@ export const TabataTimerScreen = (): JSX.Element => {
                     <Text fontSize="xl">{formatTime(remainingTime)}</Text>
                 </VStack>
             </Flex>
-            {/* Video/Icon Section */}
-            <Box height="40%" mb={4} width="100%">
-                {currentExercise || shouldShowNextExerciseVideo(currentInterval, seconds, exercisesDone, exercisesPerTabata, circuitsDone, numberOfTabatas) ? (
-                    videoSource ? (
-                        <Animated.View style={{
-                            opacity: fadeAnim,
-                            width: '100%',
-                            height: '100%',
-                        }}
-                        >
-                            <Video
-                                isLooping
-                                isMuted
-                                ref={ref}
-                                resizeMode={ResizeMode.COVER}
-                                shouldPlay={isActive}
-                                source={videoSource}
+
+            {/* New Parent Box for Video and Timer Section */}
+            <Box flex={1} width="100%">
+                {/* Video/Icon Section */}
+                <Box height="50%" width="100%">
+                    {currentExercise || shouldShowNextExerciseVideo(currentInterval, seconds, exercisesDone, exercisesPerTabata, circuitsDone, numberOfTabatas) ? (
+                        videoSource ? (
+                            <Animated.View style={{
+                                opacity: fadeAnim,
+                                width: '100%',
+                                height: '100%',
+                            }}
+                            >
+                                <Video
+                                    isLooping
+                                    isMuted
+                                    ref={ref}
+                                    resizeMode={ResizeMode.COVER}
+                                    shouldPlay={isActive}
+                                    source={videoSource}
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                />
+                            </Animated.View>
+                        ) : (
+                            <Flex
+                                alignItems="center"
+                                justifyContent="center"
                                 style={{
                                     width: '100%',
                                     height: '100%',
                                 }}
-                            />
-                        </Animated.View>
+                            >
+                                <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>
+                                    <Image
+                                        alt="Exercise Icon"
+                                        size="xl"
+                                        source={exerciseIconDictionary[currentExercise?.types[0]]}
+                                        style={{
+                                            tintColor: iconColor,
+                                        }}
+                                    />
+                                </Animated.View>
+                            </Flex>
+                        )
                     ) : (
                         <Flex
                             alignItems="center"
@@ -492,94 +516,79 @@ export const TabataTimerScreen = (): JSX.Element => {
                             }}
                         >
                             <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>
-                                <Image
-                                    alt="Exercise Icon"
-                                    size="2xl"
-                                    source={exerciseIconDictionary[currentExercise?.types[0]]}
-                                    style={{
-                                        tintColor: iconColor,
-                                    }}
-                                />
+                                {currentInterval !== Intervals.Warmup
+                                    ? (
+                                        <Image
+                                            alt="Get ready icon"
+                                            size="xl"
+                                            source={exerciseIconDictionary.Recovery}
+                                            style={{
+                                                tintColor: iconColor,
+                                            }}
+                                        />
+                                    )
+                                    : (
+                                        <Image
+                                            alt="Get ready icon"
+                                            size="xl"
+                                            source={exerciseIconDictionary.GetReady}
+                                            style={{
+                                                tintColor: iconColor,
+                                            }}
+                                        />
+                                    )}
                             </Animated.View>
                         </Flex>
-                    )
-                ) : (
-                    <Flex
-                        alignItems="center"
-                        justifyContent="center"
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                        }}
-                    >
-                        <Animated.View style={{ transform: [{ scale: scaleAnimation }] }}>
-                            {currentInterval !== Intervals.Warmup
-                                ? (
-                                    <Image
-                                        alt="Get ready icon"
-                                        size="2xl"
-                                        source={exerciseIconDictionary.Recovery}
-                                        style={{
-                                            tintColor: iconColor,
-                                        }}
-                                    />
-                                )
-                                : (
-                                    <Image
-                                        alt="Get ready icon"
-                                        size="2xl"
-                                        source={exerciseIconDictionary.GetReady}
-                                        style={{
-                                            tintColor: iconColor,
-                                        }}
-                                    />
-                                )}
-                        </Animated.View>
-                    </Flex>
-                )}
-            </Box>
-            {/* Interval Name and Timer Display */}
-            <VStack alignItems="center" mb={4}>
-                <Text
-                    bold
-                    color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Intermission ? 'flame.500' : 'yellow.500'}
-                    fontSize="4xl"
-                    textAlign="center"
-                >
-                    {currentExercise ? currentExercise.name : (currentInterval === Intervals.Warmup ? 'Get Ready!' : currentInterval)}
-                </Text>
-                <HStack alignItems="center" justifyContent="center">
+                    )}
+                </Box>
+
+                {/* Interval Name and Timer Display */}
+                <VStack alignItems="center" height="50%" width="100%">
                     <Text
+                        bold
                         color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Intermission ? 'flame.500' : 'yellow.500'}
-                        flex={1}
-                        fontSize="9xl"
-                        textAlign="right"
-                    >
-                        {formatSplitTime(seconds).minutes}
-                    </Text>
-                    <Text
-                        color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Intermission ? 'flame.500' : 'yellow.500'}
-                        fontSize="9xl"
-                        pb={4}
+                        fontSize="4xl"
                         textAlign="center"
                     >
-                        :
+                        {currentExercise ? currentExercise.name : (currentInterval === Intervals.Warmup ? 'Get Ready!' : currentInterval)}
                     </Text>
-                    <Text
-                        color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Intermission ? 'flame.500' : 'yellow.500'}
-                        flex={1}
-                        fontSize="9xl"
-                        textAlign="left"
-                    >
-                        {formatSplitTime(seconds).secs}
+                    <HStack alignItems="center" justifyContent="center">
+                        <Text
+                            color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Intermission ? 'flame.500' : 'yellow.500'}
+                            flex={1}
+                            fontSize="9xl"
+                            lineHeight={130}
+                            textAlign="right"
+                        >
+                            {formatSplitTime(seconds).minutes}
+                        </Text>
+                        <Text
+                            color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Intermission ? 'flame.500' : 'yellow.500'}
+                            fontSize="9xl"
+                            lineHeight={130}
+                            pb={4}
+                            textAlign="center"
+                        >
+                            :
+                        </Text>
+                        <Text
+                            color={currentInterval === Intervals.Exercise ? 'easyGreen' : currentInterval === Intervals.Intermission ? 'flame.500' : 'yellow.500'}
+                            flex={1}
+                            fontSize="9xl"
+                            lineHeight={130}
+                            textAlign="left"
+                        >
+                            {formatSplitTime(seconds).secs}
+                        </Text>
+                    </HStack>
+                    <Text bold color="gray.300" fontSize="2xl" textAlign="center">
+                        {nextExerciseText ? `Next Up: ${nextExerciseText}` : ' '}
                     </Text>
-                </HStack>
-                <Text bold color="gray.300" fontSize="2xl" mb={4} textAlign="center">
-                    {nextExerciseText ? `Next Up: ${nextExerciseText}` : ' '}
-                </Text>
-            </VStack>
+                </VStack>
+            </Box>
+
             {/* Controls Row */}
-            <Box p="4" width="100%">
+            <Box p="4" style={{ flex: 0 }} width="100%">
                 <Flex
                     alignItems="center"
                     direction="row"
