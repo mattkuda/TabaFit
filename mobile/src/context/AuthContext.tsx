@@ -40,7 +40,7 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
         authenticated: null,
         userId: null,
     });
-    const [hasSeenTutorial, setHasSeenTutorial] = useState<boolean | null>(null);
+    const [hasSeenTutorial, setHasSeenTutorial] = useState<boolean | null>(true);
     const [loading, setLoading] = useState<boolean>(true); // Add loading state
 
     useEffect(() => {
