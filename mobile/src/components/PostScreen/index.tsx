@@ -30,6 +30,7 @@ import { ProfilePicture } from '../ProfilePicture';
 import { GradientVStack } from '../common/GradientVStack';
 import { WorkoutPostManualDisplay } from '../common/WorkoutPostManualDisplay';
 import { useDeletePost } from '../../mutations/useMutateSharePost';
+import { ReportModal } from '../common/ReportModal';
 
 export const PostScreen = (): JSX.Element => {
     const route = useRoute<PostScreenRouteProp>();
@@ -46,6 +47,7 @@ export const PostScreen = (): JSX.Element => {
     const navigation = useNavigation<PostScreenNavigationProp>();
     const commentInputRef = useRef<HTMLInputElement>(null);
     const queryClient = useQueryClient();
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
     const handleDeletePost = (): void => {
         deletePostMutation.mutate({ postId }, {
@@ -98,9 +100,14 @@ export const PostScreen = (): JSX.Element => {
                             />
                         )}
                     >
-                        <Menu.Item onPress={handleDeletePost}>
-                            <Text color="red.500">Delete Post</Text>
+                        <Menu.Item onPress={(): void => setIsReportModalOpen(true)}>
+                            <Text color="red.500">Report Post</Text>
                         </Menu.Item>
+                        {post?.userId === userId && (
+                            <Menu.Item onPress={handleDeletePost}>
+                                <Text color="red.500">Delete Post</Text>
+                            </Menu.Item>
+                        )}
                     </Menu>
                 ),
             });
@@ -200,6 +207,19 @@ export const PostScreen = (): JSX.Element => {
                         />
                     ))}
                 </VStack>
+                {/* <HStack alignItems="center" justifyContent="space-between" p={4}>
+                    <IconButton
+                        icon={<Icon as={Ionicons} name="flag-outline" />}
+                        onPress={() => setIsReportModalOpen(true)}
+                    />
+                </HStack> */}
+                <ReportModal
+                    isOpen={isReportModalOpen}
+                    itemId={post._id.toString()}
+                    itemType="post"
+                    reporterId={userId}
+                    onClose={(): void => setIsReportModalOpen(false)}
+                />
             </ScrollView>
         </GradientVStack>
     );

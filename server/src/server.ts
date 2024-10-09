@@ -13,6 +13,7 @@ import userAuthRoutes from './routes/userAuth';
 import usersRoutes from './routes/users';
 import followsRoutes from './routes/follows';
 import notificationsRoutes from './routes/notifications';
+import reportsRoutes from './routes/reports';
 import waitlistRoutes from './routes/waitlist';
 
 const app = express();
@@ -54,6 +55,7 @@ app.use('/posts', postRoutes);
 app.use('/users', usersRoutes);
 app.use('/follows', followsRoutes);
 app.use('/notifications', notificationsRoutes);
+app.use('/reports', reportsRoutes);
 app.use('/waitlist', waitlistRoutes);
 
 app.get('/', (req: Request, res: Response) => {
