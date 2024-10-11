@@ -55,7 +55,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
         // TODO: Change the URL to your Google Form URL
         Linking.openURL('https://forms.gle/q6caxGtoJNtAYX5JA');
     };
-
     const handlePreferences = (): void => {
         navigation.navigate('PreferencesScreen');
     };
@@ -116,6 +115,37 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
                 style={{
                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
                 }}
+                onPress={(): Promise<void> => Linking.openURL(
+                    'https://www.freeprivacypolicy.com/live/619bc4e9-efb1-45b2-91d2-f5c7bc802221',
+                )}
+            >
+                <HStack alignItems="center" space="2">
+                    {/* eslint-disable-next-line dot-notation */}
+                    <Icon as={Ionicons} color="primary" name="information-circle" />
+                    <Text color="primary" textAlign="left">Privacy Policy</Text>
+                </HStack>
+                <Icon as={Ionicons} color="primary" name="chevron-forward" />
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={{
+                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                }}
+                onPress={(): Promise<void> => Linking.openURL(
+                    'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/',
+                )}
+            >
+                <HStack alignItems="center" space="2">
+                    {/* eslint-disable-next-line dot-notation */}
+                    <Icon as={Ionicons} color="primary" name="information-circle" />
+                    <Text color="primary" textAlign="left">Apple Standard EULA</Text>
+                </HStack>
+                <Icon as={Ionicons} color="primary" name="chevron-forward" />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                style={{
+                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                }}
                 onPress={(): void => setShowLogoutModal(true)}
             >
                 <HStack alignItems="center" space="2">
@@ -144,20 +174,22 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
                     name={advancedOpen ? 'chevron-up' : 'chevron-down'}
                 />
             </TouchableOpacity>
-            {advancedOpen && (
-                <TouchableOpacity
-                    style={{
-                        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-                    }}
-                    onPress={(): void => setShowModal(true)}
-                >
-                    <HStack alignItems="center" space="2">
-                        <Icon as={Ionicons} color="red.500" name="trash" />
-                        <Text color="red.500" textAlign="left">Delete Account</Text>
-                    </HStack>
-                    <Icon as={Ionicons} color="red.500" name="chevron-forward" />
-                </TouchableOpacity>
-            )}
+            {
+                advancedOpen && (
+                    <TouchableOpacity
+                        style={{
+                            flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                        }}
+                        onPress={(): void => setShowModal(true)}
+                    >
+                        <HStack alignItems="center" space="2">
+                            <Icon as={Ionicons} color="red.500" name="trash" />
+                            <Text color="red.500" textAlign="left">Delete Account</Text>
+                        </HStack>
+                        <Icon as={Ionicons} color="red.500" name="chevron-forward" />
+                    </TouchableOpacity>
+                )
+            }
             <Text color="white" textAlign="center">
                 {`TabaFit Version: ${version}`}
             </Text>
