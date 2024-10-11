@@ -9,7 +9,6 @@ import {
     Input,
     useToast,
 } from 'native-base';
-import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import { Report, ReportItemType, ReportReason } from '../../types/reports';
@@ -65,137 +64,132 @@ export const ReportModal: React.FC<ReportModalProps> = ({
 
     return (
         <Modal
+            closeOnOverlayClick
             borderColor="gray.600"
             isOpen={isOpen}
             size="full"
             onClose={onClose}
         >
-            <BlurView
-                intensity={20}
-                style={{
-                    width: '100%', flex: 1, justifyContent: 'center', alignItems: 'center',
-                }}
-                tint="dark"
+
+            <Modal.Content
+                backgroundColor="gray.900"
+                borderColor="gray.600"
+                borderWidth={2}
+                style={{ margin: 'auto' }}
+                width="90%"
             >
-                <Modal.Content
+                <Modal.CloseButton />
+                <Modal.Body
                     backgroundColor="gray.900"
-                    borderColor="gray.600"
-                    borderWidth={2}
-                    style={{ margin: 'auto' }}
-                    width="90%"
+                    // @ts-expect-error
+                    gap={4}
+                    px={8}
                 >
-                    <Modal.Body
-                        backgroundColor="gray.900"
-                        // @ts-expect-error
-                        gap={4}
-                        px={8}
+                    <Box
+                        alignItems="center"
+                        flexDirection="row"
+                        justifyContent="center"
+                        width="100%"
                     >
-                        <Box
-                            alignItems="center"
-                            flexDirection="row"
-                            justifyContent="center"
-                            width="100%"
-                        >
-                            <Icon as={Ionicons} mr={2} name="flag" size="md" />
-                            <Text bold fontSize="xl">
-                                Report
-                                {' '}
-                                {itemType.charAt(0).toUpperCase() + itemType.slice(1)}
-                            </Text>
-                        </Box>
-                        <Box
-                            flexDirection="column"
-                            justifyContent="center"
-                            width="100%"
-                        >
-                            <HStack alignItems="center" justifyContent="flex-start">
-                                <Text
-                                    fontSize="lg"
-                                    numberOfLines={2}
-                                    style={{
-                                        fontWeight: 'bold',
-                                    }}
-                                >
-                                    Reason (required):
-                                </Text>
-                            </HStack>
-                            <Select
-                                _actionSheetContent={{
-                                    bg: 'gray.900',
+                        <Icon as={Ionicons} mr={2} name="flag" size="md" />
+                        <Text bold fontSize="xl">
+                            Report
+                            {' '}
+                            {itemType.charAt(0).toUpperCase() + itemType.slice(1)}
+                        </Text>
+                    </Box>
+                    <Box
+                        flexDirection="column"
+                        justifyContent="center"
+                        width="100%"
+                    >
+                        <HStack alignItems="center" justifyContent="flex-start">
+                            <Text
+                                fontSize="lg"
+                                numberOfLines={2}
+                                style={{
+                                    fontWeight: 'bold',
                                 }}
-                                _item={{
-                                    bg: 'gray.900',
-                                    color: 'white',
-                                    _text: {
-                                        color: 'white',
-                                    },
-                                    _pressed: {
-                                        bg: 'gray.800',
-                                    },
-                                }}
-                                _selectedItem={{
-                                    bg: 'gray.700',
-                                    color: 'white',
-                                }}
-                                backgroundColor="transparent"
-                                borderColor="transparent"
-                                placeholder="Select a reason"
-                                selectedValue={reportReason}
-                                size="xl"
-                                onValueChange={(itemValue): void => setReportReason(itemValue as ReportReason)}
                             >
-                                {Object.values(ReportReason).map((reason) => (
-                                    <Select.Item key={reason} label={reason} value={reason} />
-                                ))}
-                            </Select>
-                        </Box>
-                        <Input
-                            fontSize="md"
-                            placeholder="Additional details"
-                            returnKeyType="done"
-                            value={description}
-                            onChangeText={setDescription}
-                        />
-                        <Box
-                            flexDirection="row"
-                            justifyContent="center"
-                            width="100%"
+                                Reason (required):
+                            </Text>
+                        </HStack>
+                        <Select
+                            _actionSheetContent={{
+                                bg: 'gray.900',
+                            }}
+                            _item={{
+                                bg: 'gray.900',
+                                color: 'white',
+                                _text: {
+                                    color: 'white',
+                                },
+                                _pressed: {
+                                    bg: 'gray.800',
+                                },
+                            }}
+                            _selectedItem={{
+                                bg: 'gray.700',
+                                color: 'white',
+                            }}
+                            backgroundColor="transparent"
+                            borderColor="transparent"
+                            placeholder="Select a reason"
+                            selectedValue={reportReason}
+                            size="xl"
+                            onValueChange={(itemValue): void => setReportReason(itemValue as ReportReason)}
                         >
-                            <TouchableOpacity onPress={handleSubmit}>
-                                <Box
-                                    alignItems="center"
-                                    bg={{
-                                        linearGradient: reportReason ? {
-                                            colors: ['flame.500', 'cherry.500'],
-                                            start: [0, 1],
-                                            end: [1, 0],
-                                        } : {
-                                            colors: ['gray.500', 'gray.500'],
-                                            start: [0, 1],
-                                            end: [1, 0],
-                                        },
-                                    }}
-                                    borderRadius="full"
-                                    flexDirection="row"
-                                    // @ts-ignore
-                                    gap={2}
-                                    justifyContent="center"
-                                    mx="4"
-                                    p="2"
-                                    px={4}
-                                    // @ts-ignore
-                                    width="120"
-                                >
-                                    <Icon as={Ionicons} name="checkmark" size="lg" />
-                                    <Text fontSize="md" fontWeight="semibold">
-                                        Submit
-                                    </Text>
-                                </Box>
-                            </TouchableOpacity>
-                        </Box>
-                    </Modal.Body>
-                </Modal.Content>
-            </BlurView>
+                            {Object.values(ReportReason).map((reason) => (
+                                <Select.Item key={reason} label={reason} value={reason} />
+                            ))}
+                        </Select>
+                    </Box>
+                    <Input
+                        fontSize="md"
+                        placeholder="Additional details"
+                        returnKeyType="done"
+                        value={description}
+                        onChangeText={setDescription}
+                    />
+                    <Box
+                        flexDirection="row"
+                        justifyContent="center"
+                        width="100%"
+                    >
+                        <TouchableOpacity onPress={handleSubmit}>
+                            <Box
+                                alignItems="center"
+                                bg={{
+                                    linearGradient: reportReason ? {
+                                        colors: ['flame.500', 'cherry.500'],
+                                        start: [0, 1],
+                                        end: [1, 0],
+                                    } : {
+                                        colors: ['gray.500', 'gray.500'],
+                                        start: [0, 1],
+                                        end: [1, 0],
+                                    },
+                                }}
+                                borderRadius="full"
+                                flexDirection="row"
+                                // @ts-ignore
+                                gap={2}
+                                justifyContent="center"
+                                mx="4"
+                                p="2"
+                                px={4}
+                                // @ts-ignore
+                                width="120"
+                            >
+                                <Icon as={Ionicons} name="checkmark" size="lg" />
+                                <Text fontSize="md" fontWeight="semibold">
+                                    Submit
+                                </Text>
+                            </Box>
+                        </TouchableOpacity>
+                    </Box>
+                </Modal.Body>
+            </Modal.Content>
         </Modal>
     );
 };

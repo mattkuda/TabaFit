@@ -1,4 +1,35 @@
 /* eslint-disable import/prefer-default-export */
+import {
+  RegExpMatcher,
+  englishDataset,
+  englishRecommendedTransformers,
+} from 'obscenity';
+
+// Create a matcher using the English preset
+const matcher = new RegExpMatcher({
+  ...englishDataset.build(),
+  ...englishRecommendedTransformers,
+});
+
+// Utility function to filter objectionable content
+export const filterObjectionableContent = (text: string): boolean => matcher
+  .hasMatch(text); // Check if the text contains any profanities
+
+// Utility function to sanitize text
+export const sanitizeText = (text: string): string => {
+  const matches = matcher.getAllMatches(text);
+  let sanitizedText = text;
+
+  // Replace each match with asterisks
+  matches.forEach((match) => {
+    const replacement = '*'.repeat(match.endIndex - match.startIndex);
+    sanitizedText = sanitizedText.substring(0, match.startIndex)
+      + replacement + sanitizedText.substring(match.endIndex);
+  });
+
+  return sanitizedText;
+};
+
 export const validateUsername = (username: string): { isValid: boolean, errorMessage?: string } => {
   const usernameRegex = /^[a-zA-Z0-9_.]+$/;
   const reservedUsernames = ['admin', 'root', 'system', 'tabafit', 'moderator', 'null', 'undefined', 'anonymous',

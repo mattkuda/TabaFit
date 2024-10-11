@@ -23,6 +23,7 @@ export interface User {
     savedWorkouts?: mongoose.Types.ObjectId[]; // Add saved workouts
     createdWorkouts?: mongoose.Types.ObjectId[]; // Add created workouts
     preferences?: UserPreferences; // Add a Preferences section for sensitive user settings
+    blockedUsers?: mongoose.Types.ObjectId[];
 }
 
 export interface UserFullInfoModel extends User {

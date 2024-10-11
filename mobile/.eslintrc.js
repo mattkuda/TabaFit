@@ -63,6 +63,7 @@ module.exports = {
         // Prefer named exports always
         'import/prefer-default-export': 'off',
         // Turn off since we're using typescript's indent
+        'react/no-unstable-nested-components': 'off',
         indent: 'off',
         // Override airbnb's max line length rule to:
         // - increase the line length limit to 120

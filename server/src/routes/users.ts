@@ -9,6 +9,7 @@ import multer from 'multer';
 import { User, UserFullInfoModel } from '../../../mobile/src/types/users';
 import authenticate, { AuthRequest } from '../middleware/authenticate';
 import { bucket } from '../config/firebaseConfig';
+import { sanitizeText } from '../util/util';
 
 const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
@@ -37,13 +38,32 @@ let followsCollection: Collection;
 
 const SUGGESTED_USER_IDS = ['64f4ccf351498c529ff6d7b0'];
 
-router.get('/suggested', async (req: AuthRequest, res: Response) => {
+async function isUserBlocked(blockerId: string, blockedId: string): Promise<boolean> {
+  const blocker = await usersCollection.findOne(
+    { _id: new ObjectId(blockerId) },
+    { projection: { blockedUsers: 1 } },
+  );
+  return blocker?.blockedUsers?.some((id) => id.toString() === blockedId) || false;
+}
+
+router.get('/suggested', authenticate, async (req: AuthRequest, res: Response) => {
   try {
     const { userId } = req;
-    const idsToFetch = SUGGESTED_USER_IDS.map((id) => new mongoose.Types.ObjectId(id));
-    const suggestedUsers = await usersCollection.find({ _id: { $in: idsToFetch } }).toArray();
+    const idsToFetch = SUGGESTED_USER_IDS.map((id) => new ObjectId(id));
 
-    const newestUsers = await usersCollection.find({ _id: { $ne: userId } })
+    // Get the user's blocked list
+    const currentUser = await usersCollection.findOne({ _id: new ObjectId(userId) });
+    const blockedUserIds = currentUser?.blockedUsers?.map((id) => id.toString()) || [];
+
+    const suggestedUsers = await usersCollection.find({
+      _id: { $in: idsToFetch, $nin: blockedUserIds.map((id) => new ObjectId(id)) },
+      blockedUsers: { $nin: [new ObjectId(userId)] },
+    }).toArray();
+
+    const newestUsers = await usersCollection.find({
+      _id: { $ne: new ObjectId(userId), $nin: blockedUserIds.map((id) => new ObjectId(id)) },
+      blockedUsers: { $nin: [new ObjectId(userId)] },
+    })
       .sort({ createdAt: -1 }).limit(2).toArray();
     suggestedUsers.push(...newestUsers);
 
@@ -54,8 +74,9 @@ router.get('/suggested', async (req: AuthRequest, res: Response) => {
   }
 });
 
-router.get('/:userId', async (req: AuthRequest, res: Response) => {
+router.get('/:userId', authenticate, async (req: AuthRequest, res: Response) => {
   const requestedUserId = req.params.userId;
+  const { userId: currentUserId } = req;
 
   if (!ObjectId.isValid(requestedUserId)) {
     res.status(400).send({ message: 'Invalid user ID' });
@@ -63,7 +84,13 @@ router.get('/:userId', async (req: AuthRequest, res: Response) => {
   }
 
   try {
-    const userIdObj = new mongoose.Types.ObjectId(req.params.userId);
+    const userIdObj = new ObjectId(requestedUserId);
+    const isBlocked = await isUserBlocked(requestedUserId, currentUserId!);
+    if (isBlocked) {
+      res.status(403).send({ message: 'You do not have permission to view this user' });
+      return;
+    }
+
     // Find the user
     const user = await usersCollection.findOne({ _id: userIdObj });
 
@@ -73,8 +100,14 @@ router.get('/:userId', async (req: AuthRequest, res: Response) => {
     }
 
     // Aggregate followers and following counts
-    const followersCount = await followsCollection.countDocuments({ followeeId: userIdObj });
-    const followingCount = await followsCollection.countDocuments({ followerId: userIdObj });
+    const followersCount = await followsCollection.countDocuments({
+      followeeId: userIdObj,
+      followerId: { $nin: user.blockedUsers || [] },
+    });
+    const followingCount = await followsCollection.countDocuments({
+      followerId: userIdObj,
+      followeeId: { $nin: user.blockedUsers || [] },
+    });
 
     // Construct the UserFullInfoModel
     const userFullInfo: UserFullInfoModel = {
@@ -85,7 +118,7 @@ router.get('/:userId', async (req: AuthRequest, res: Response) => {
 
     // Exclude sensitive fields
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...safeUserFullInfo } = userFullInfo;
+    const { password, blockedUsers, ...safeUserFullInfo } = userFullInfo;
 
     res.status(200).send(safeUserFullInfo);
   } catch (err) {
@@ -94,8 +127,9 @@ router.get('/:userId', async (req: AuthRequest, res: Response) => {
   }
 });
 
-router.get('/username/:username', async (req: AuthRequest, res: Response) => {
+router.get('/username/:username', authenticate, async (req: AuthRequest, res: Response) => {
   try {
+    const { userId: currentUserId } = req;
     // Find the user by username
     const user = await usersCollection.findOne({ username: req.params.username.toLowerCase() });
 
@@ -104,8 +138,15 @@ router.get('/username/:username', async (req: AuthRequest, res: Response) => {
       return;
     }
 
+    // Check if the current user is blocked by the requested user
+    const isBlocked = user.blockedUsers?.some((id) => id.toString() === currentUserId);
+    if (isBlocked) {
+      res.status(403).send({ message: 'You do not have permission to view this user' });
+      return;
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...safeUser } = user;
+    const { password, blockedUsers, ...safeUser } = user;
     res.status(200).send(safeUser);
   } catch (err) {
     console.error('Failed to get user by username', err);
@@ -234,12 +275,16 @@ router.post('/upload/:userId', authenticate, upload.single('file'), async (req: 
   }
 });
 
-router.get('/search/:query', async (req: AuthRequest, res: Response) => {
+router.get('/search/:query', authenticate, async (req: AuthRequest, res: Response) => {
   try {
     const { query } = req.params;
+    const { userId: currentUserId } = req;
 
     // Create a case-insensitive regex pattern for the search query
     const regex = new RegExp(query, 'i');
+
+    const currentUser = await usersCollection.findOne({ _id: new ObjectId(currentUserId) });
+    const blockedUserIds = currentUser?.blockedUsers?.map((id) => id.toString()) || [];
 
     // Search for users by username, first name, or last name
     const users = await usersCollection.find({
@@ -248,13 +293,14 @@ router.get('/search/:query', async (req: AuthRequest, res: Response) => {
         { firstName: regex },
         { lastName: regex },
       ],
+      _id: { $nin: blockedUserIds.map((id) => new ObjectId(id)) },
+      blockedUsers: { $nin: [new ObjectId(currentUserId)] },
     }).toArray();
 
     // Exclude sensitive fields from the results
     const safeUsers = users.map((user) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...safeUser } = user;
-
+      const { password, blockedUsers, ...safeUser } = user;
       return safeUser;
     });
 
@@ -269,7 +315,7 @@ router.put('/:userId', authenticate, async (req: AuthRequest, res: Response) => 
   try {
     const { userId } = req;
     const { userId: userIdToUpdate } = req.params;
-    const updateData: Partial<User> = req.body; // Get the data to update from the request body
+    const updateData: Partial<User> = req.body;
 
     // Check if the authenticated user is the same as the user being updated
     if (userIdToUpdate !== userId) {
@@ -280,6 +326,12 @@ router.put('/:userId', authenticate, async (req: AuthRequest, res: Response) => 
     // Prevent updating sensitive fields
     delete updateData._id;
     delete updateData.password;
+
+    // Filter objectionable content from updateable fields
+    if (updateData.firstName) updateData.firstName = sanitizeText(updateData.firstName);
+    if (updateData.lastName) updateData.lastName = sanitizeText(updateData.lastName);
+    if (updateData.bio) updateData.bio = sanitizeText(updateData.bio);
+    if (updateData.city) updateData.city = sanitizeText(updateData.city);
 
     await usersCollection.updateOne(
       { _id: new mongoose.Types.ObjectId(userId) },
@@ -293,13 +345,83 @@ router.put('/:userId', authenticate, async (req: AuthRequest, res: Response) => 
   }
 });
 
+// Endpoint to add a user to the user's block list
+router.post('/:userId/block', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    console.log('Block request received');
+    const { userId: userIdToBlock } = req;
+    const { userId } = req.params;
+
+    if (!userIdToBlock) {
+      res.status(400).send({ message: 'User ID to block is required' });
+      return;
+    }
+
+    if (userId === userIdToBlock) {
+      res.status(400).send({ message: 'You cannot block yourself' });
+      return;
+    }
+
+    const userIdObj = new mongoose.Types.ObjectId(userId);
+    const userIdToBlockObj = new mongoose.Types.ObjectId(userIdToBlock);
+
+    // Check if the user to block exists
+    const userToBlock = await usersCollection.findOne({ _id: userIdToBlockObj });
+    if (!userToBlock) {
+      res.status(404).send({ message: 'User to block not found' });
+      return;
+    }
+
+    // Add the user to the block list
+    const result = await usersCollection.updateOne(
+      { _id: userIdObj },
+      { $addToSet: { blockedUsers: userIdToBlockObj } },
+    );
+
+    if (result.modifiedCount === 0) {
+      res.status(200).send({ message: 'User is already blocked' });
+    } else {
+      res.status(200).send({ message: 'User blocked successfully' });
+    }
+  } catch (err) {
+    console.error('Failed to block user', err);
+    res.status(500).send({ message: 'Failed to block user' });
+  }
+});
+
+// Endpoint to remove a user from the user's block list
+router.delete('/:userId/block/:blockedUserId', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { userId } = req;
+    const { blockedUserId } = req.params;
+
+    const userIdObj = new mongoose.Types.ObjectId(userId);
+    const blockedUserIdObj = new mongoose.Types.ObjectId(blockedUserId);
+
+    // Remove the user from the block list
+    const result = await usersCollection.updateOne(
+      { _id: userIdObj },
+      { $pull: { blockedUsers: blockedUserIdObj } },
+    );
+
+    if (result.modifiedCount === 0) {
+      res.status(200).send({ message: 'User was not in the block list' });
+    } else {
+      res.status(200).send({ message: 'User unblocked successfully' });
+    }
+  } catch (err) {
+    console.error('Failed to unblock user', err);
+    res.status(500).send({ message: 'Failed to unblock user' });
+  }
+});
+
 // Endpoint to delete a user account
 router.delete('/:userId', authenticate, async (req: AuthRequest, res: Response) => {
   try {
     const { userId } = req;
 
     // Check if the authenticated user is the same as the user being deleted
-    if (req.userId !== userId) {
+    if (req.params.userId !== userId) {
       res.status(403).send({ message: 'Forbidden: You cannot delete other users\' accounts.' });
       return;
     }

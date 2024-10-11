@@ -144,9 +144,6 @@ export const WorkoutsScreen = (): JSX.Element => {
                                     <Text color="gray.50" mt={2} textAlign="left">
                                         Auto-generate your workout!
                                     </Text>
-                                    <Text color="gray.50" textAlign="left">
-                                        Choose your length, body focus, and more.
-                                    </Text>
                                 </VStack>
                             </HStack>
                             <Icon as={Ionicons} color="white" mx="2" name="chevron-forward" size="xl" />
@@ -187,7 +184,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                                         </Heading>
                                     </HStack>
                                     <Text color="gray.50" mt={2} textAlign="left">
-                                        Create a custom workout with your own settings. Complete now or save for later.
+                                        Customize your workout and settings
                                     </Text>
                                 </VStack>
                             </HStack>
@@ -224,7 +221,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                         workouts={premadeWorkouts ?? []}
                         onPressWorkout={handlePressViewWorkout}
                     />
-                    {/* /* My Workouts */ }
+                    {/* /* My Workouts */}
                     <HStack alignItems="center" justifyContent="space-between">
                         <HStack alignItems="center" space={2}>
                             <Heading size="md">My Workouts</Heading>
@@ -252,7 +249,7 @@ export const WorkoutsScreen = (): JSX.Element => {
                         workouts={myCreatedWorkouts ?? []}
                         onPressWorkout={handlePressViewMyWorkout}
                     />
-                    {/* /* Saved Workouts */ }
+                    {/* /* Saved Workouts */}
                     <HStack alignItems="center" justifyContent="space-between">
                         <HStack alignItems="center" space={2}>
                             <Heading size="md">Saved Workouts</Heading>

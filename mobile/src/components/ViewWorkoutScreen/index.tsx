@@ -1,7 +1,8 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     ScrollView, Text, VStack, Button, Icon, Center, Spinner, HStack, Box, Image,
+    IconButton, Menu,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -9,6 +10,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Animated, TouchableOpacity } from 'react-native';
 import { format } from 'date-fns';
 import { useQueryClient } from 'react-query';
+import { ReportModal } from '../common/ReportModal';
 import { TabataCircuit, TabataWorkoutWithUserInfo } from '../../types/workouts';
 import { ViewWorkoutScreenRouteProp, BuildWorkoutScreenProps } from '../../navigation/navigationTypes';
 import { TabNavigatorParamList } from '../../types/navigationTypes';
@@ -37,6 +39,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
     const saveWorkoutMutation = useSaveWorkout();
     const unsaveWorkoutMutation = useUnsaveWorkout();
     const formattedDate = workout?.createdAt ? format(new Date(workout.createdAt), 'MMM do, yyyy') : 'emtpy date';
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
     const handleEditWorkout = useCallback((): void => {
         navigation.navigate(
@@ -191,9 +194,39 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                         <PictureWithName isTabaFitAdmin={workout.isPremade} user={workout.user} />
                         {!workout.isPremade && <Text>{formattedDate}</Text>}
                     </Box>
-                    <Text italic fontSize="sm">
-                        {formatBodyParts(workout.includeSettings)}
-                    </Text>
+                    <Box alignItems="center" flexDirection="row" justifyContent="space-between">
+                        <Text italic fontSize="sm">
+                            {formatBodyParts(workout.includeSettings)}
+                        </Text>
+                        <Menu
+                            backgroundColor="gray.900"
+                            shadow={2}
+                            trigger={(triggerProps: any): JSX.Element => (
+                                <IconButton
+                                    {...triggerProps}
+                                    _icon={{
+                                        color: 'white',
+                                        size: 'md',
+                                    }}
+                                    borderRadius="full"
+                                    color="primary"
+                                    icon={<Icon as={Ionicons} name="chevron-down-outline" size="sm" />}
+                                />
+                            )}
+                        >
+                            <Menu.Item
+                                color="red.500"
+                                onPress={(): void => {
+                                    setIsReportModalOpen(true);
+                                }}
+                            >
+                                <>
+                                    <Icon as={Ionicons} color="red.500" name="flag" size="sm" />
+                                    <Text color="red.500">Report user</Text>
+                                </>
+                            </Menu.Item>
+                        </Menu>
+                    </Box>
                     <HStack justifyContent="space-between" mt={2}>
                         <VStack alignItems="center" flex={1} space={0}>
                             <Icon as={Ionicons} name="body-outline" size="md" />
@@ -265,6 +298,13 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                     </Animated.View>
                 </Box>
             </TouchableOpacity>
+            {/* Report Modal */}
+            <ReportModal
+                isOpen={isReportModalOpen}
+                itemId={workout._id.toString()}
+                itemType="workout"
+                onClose={(): void => setIsReportModalOpen(false)}
+            />
         </GradientVStack>
     );
 };

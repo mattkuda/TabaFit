@@ -9,6 +9,7 @@ import { User } from '../../../mobile/src/types/users';
 import authenticate, { AuthRequest } from '../middleware/authenticate';
 // eslint-disable-next-line import/no-relative-packages
 import { NotificationSchema } from '../../../mobile/src/types/notifications';
+import { sanitizeText } from '../util/util';
 
 const router = express.Router();
 const connectionString = process.env.MONGODB_URI;
@@ -276,8 +277,8 @@ router.post('/share', authenticate, async (req: AuthRequest, res: Response) => {
       workoutId,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      title,
-      description,
+      title: sanitizeText(title),
+      description: sanitizeText(description),
       manualTabatas,
       likes: [],
       comments: [],
@@ -306,7 +307,7 @@ router.post('/:postId/comments', authenticate, async (req: AuthRequest, res) => 
     const comment = {
       _id: new ObjectId(),
       userId,
-      body,
+      body: sanitizeText(body),
       createdAt: new Date().toISOString(),
     };
 

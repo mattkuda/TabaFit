@@ -4,6 +4,7 @@ import {
     Modal, Button, Checkbox, Box,
     Select, Image,
     Switch,
+    Spinner,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
@@ -29,6 +30,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
     const [showSettingsModal, setShowSettingsModal] = useState<boolean>(true);
     const [showHelpDialog, setShowHelpDialog] = useState<boolean>(false);
     const [equipmentEnabled, setEquipmentEnabled] = useState<boolean>(false);
+    const [isShuffling, setIsShuffling] = useState<boolean>(false);
 
     const handleAddTabata = (): void => {
         const {
@@ -127,6 +129,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
     };
 
     const triggerShuffle = (workoutParam?: TabataWorkout): void => {
+        setIsShuffling(true);
         // console.log('workoutParam.difficulty.', workoutParam.difficulty);
         const shuffledWorkout = workoutParam || workout;
 
@@ -151,6 +154,7 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                 tabatas: shuffledTabatas,
             }));
         }
+        setIsShuffling(false);
     };
 
     // useEffect(() => {
@@ -273,7 +277,11 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
                             px={4}
                             width="150"
                         >
-                            <Icon as={Ionicons} name="shuffle" size="lg" />
+                            {isShuffling ? (
+                                <Spinner color="white" size="sm" />
+                            ) : (
+                                <Icon as={Ionicons} name="shuffle" size="lg" />
+                            )}
                             <Text fontSize="md" fontWeight="semibold">
                                 Shuffle
                             </Text>

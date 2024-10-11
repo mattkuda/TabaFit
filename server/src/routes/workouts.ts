@@ -5,6 +5,7 @@ import { MongoClient, Collection, ObjectId } from 'mongodb';
 import authenticate, { AuthRequest } from '../middleware/authenticate';
 import { TabataWorkout, TabataWorkoutWithUserInfo } from '../../../mobile/src/types/workouts';
 import { User } from '../../../mobile/src/types/users';
+import { sanitizeText } from '../util/util';
 
 const router = express.Router();
 const connectionString = process.env.MONGODB_URI;
@@ -31,44 +32,44 @@ let usersCollection: Collection<User>;
 })();
 
 const addUserInfoToWorkouts = async (workouts: TabataWorkout[]):
- Promise<TabataWorkoutWithUserInfo[]> => Promise.all(workouts.map(async (workout) => {
-  try {
-    const user = await usersCollection.findOne({ _id: new ObjectId(workout.userId) });
+  Promise<TabataWorkoutWithUserInfo[]> => Promise.all(workouts.map(async (workout) => {
+    try {
+      const user = await usersCollection.findOne({ _id: new ObjectId(workout.userId) });
 
-    if (!user) {
+      if (!user) {
+        return {
+          ...workout,
+          user: {
+            username: 'Unknown',
+            firstName: 'N/A',
+            lastName: 'N/A',
+            profilePictureUrl: 'default_image_url', // Replace with actual default image URL if applicable
+          },
+        };
+      }
+
       return {
         ...workout,
         user: {
-          username: 'Unknown',
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          profilePictureUrl: user.profilePictureUrl,
+        },
+      };
+    } catch (error) {
+      console.error('Error fetching user info for workout', error);
+      return {
+        ...workout,
+        user: {
+          username: 'Error',
           firstName: 'N/A',
           lastName: 'N/A',
-          profilePictureUrl: 'default_image_url', // Replace with actual default image URL if applicable
+          profilePictureUrl: 'error_image_url', // Replace with actual error image URL if applicable
         },
       };
     }
-
-    return {
-      ...workout,
-      user: {
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        profilePictureUrl: user.profilePictureUrl,
-      },
-    };
-  } catch (error) {
-    console.error('Error fetching user info for workout', error);
-    return {
-      ...workout,
-      user: {
-        username: 'Error',
-        firstName: 'N/A',
-        lastName: 'N/A',
-        profilePictureUrl: 'error_image_url', // Replace with actual error image URL if applicable
-      },
-    };
-  }
-}));
+  }));
 
 router.get('/', async (req: Request, res: Response) => {
   try {
@@ -205,6 +206,11 @@ router.post('/create', authenticate, async (req: AuthRequest, res: Response) => 
   delete workout._id;
   workout.userId = userId;
 
+  // Sanitize the workout name
+  if (workout.name) {
+    workout.name = sanitizeText(workout.name);
+  }
+
   try {
     // Insert the new workout
     const result = await workoutsCollection.insertOne(workout);
@@ -326,6 +332,11 @@ router.put('/update/:workoutId', authenticate, async (req: AuthRequest, res: Res
   const newWorkoutData = req.body;
   const { userId } = req;
   delete newWorkoutData._id;
+
+  // Sanitize the workout name
+  if (newWorkoutData.name) {
+    newWorkoutData.name = sanitizeText(newWorkoutData.name);
+  }
 
   try {
     // First, find the existing workout to check ownership

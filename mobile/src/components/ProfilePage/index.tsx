@@ -1,8 +1,11 @@
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from 'react';
 import {
     VStack, Text, Button, HStack, Icon, IconButton, Spinner,
     Flex,
-    Box,
+    Box, Menu,
+    Skeleton,
 } from 'native-base';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { format } from 'date-fns';
@@ -19,6 +22,8 @@ import { formatName } from '../../util/util';
 import { ProfilePicture } from '../ProfilePicture';
 import { GradientVStack } from '../common/GradientVStack';
 import { EmptyState } from '../EmptyState';
+import { ReportModal } from '../common/ReportModal';
+import { BlockModal } from '../common/BlockModal';
 
 export const ProfilePage = (): JSX.Element => {
     const { onLogout } = useAuth();
@@ -31,6 +36,8 @@ export const ProfilePage = (): JSX.Element => {
         refetch: refetchUserInfo,
     } = useUserInfo(userId);
     const isCurrentUserProfile = userId === authUserId;
+    const [reportModalOpen, setReportModalOpen] = useState(false);
+    const [blockModalOpen, setBlockModalOpen] = useState(false);
 
     const {
         data,
@@ -49,21 +56,11 @@ export const ProfilePage = (): JSX.Element => {
         setRefreshing(false);
     };
 
-    // useFocusEffect(
-    //     useCallback(() => {
-    //         userInfo.refetch();
-
-    //         return () => {
-    //             // Do any cleanup if needed when the screen goes out of focus
-    //         };
-    //     }, [userInfo]),
-    // );
-
     // Refetch user info only on component mount
     useEffect(() => {
         refetchUserInfo();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const navigateToEditProfile = useCallback((): void => {
@@ -99,43 +96,85 @@ export const ProfilePage = (): JSX.Element => {
             });
         } else {
             navigation.setOptions({
+                headerRight: (): JSX.Element => (
+                    <Menu
+                        backgroundColor="gray.900"
+                        shadow={2}
+                        trigger={(triggerProps): JSX.Element => (
+                            <IconButton
+                                {...triggerProps}
+                                _icon={{
+                                    color: 'white',
+                                    size: 'lg',
+                                }}
+                                borderRadius="full"
+                                icon={<Icon as={Ionicons} name="ellipsis-horizontal" />}
+                            />
+                        )}
+                        w="190"
+                    >
+                        <Menu.Item onPress={(): void => setReportModalOpen(true)}>
+                            <>
+                                <Icon as={Ionicons} color="red.500" name="flag" size="sm" />
+                                <Text color="red.500">Report user</Text>
+                            </>
+                        </Menu.Item>
+                        <Menu.Item onPress={(): void => setBlockModalOpen(true)}>
+                            <>
+                                <Icon as={Ionicons} color="red.500" name="close-circle-outline" size="sm" />
+                                <Text color="red.500">Block user</Text>
+                            </>
+                        </Menu.Item>
+                    </Menu>
+                ),
                 headerTitle: 'Profile',
             });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigation, isCurrentUserProfile]);
 
     const renderProfileHeader = React.useMemo(() => (
         <VStack>
-            {userInfo && (
-                <HStack alignItems="center" p={4} pb={0} px={4} space={4} width="100%">
-                    <ProfilePicture
-                        borderColor="primary"
-                        borderWidth={2}
-                        size="xl"
-                        user={userInfo}
-                    />
-                    <VStack flex={1}>
-                        <Text>
-                            <Text bold fontSize="lg">{formatName(userInfo.firstName, userInfo.lastName)}</Text>
-                            {'  '}
-                            <Text color="gray.400" fontSize="lg">
-                                {`@${userInfo.username}`}
+            {
+                userInfo ? (
+                    <HStack alignItems="center" p={4} pb={0} px={4} space={4} width="100%">
+                        <ProfilePicture
+                            borderColor="primary"
+                            borderWidth={2}
+                            size="xl"
+                            user={userInfo}
+                        />
+                        <VStack flex={1}>
+                            <Text>
+                                <Text bold fontSize="lg">{formatName(userInfo.firstName, userInfo.lastName)}</Text>
+                                {'  '}
+                                <Text color="gray.400" fontSize="lg">
+                                    {`@${userInfo.username}`}
+                                </Text>
                             </Text>
-                        </Text>
-                        <Box flex={1}>
-                            <Text flex={1} fontSize="sm">
-                                {userInfo.bio}
+                            <Box flex={1}>
+                                <Text flex={1} fontSize="sm">
+                                    {userInfo.bio}
+                                </Text>
+                            </Box>
+                            <Text italic fontSize="sm">
+                                Joined
+                                {' '}
+                                {format(new Date(userInfo.createdAt), 'PPP')}
                             </Text>
-                        </Box>
-                        <Text italic fontSize="sm">
-                            Joined
-                            {' '}
-                            {format(new Date(userInfo.createdAt), 'PPP')}
-                        </Text>
-                    </VStack>
-                </HStack>
-            )}
+                        </VStack>
+                    </HStack>
+                ) : (
+                    <HStack alignItems="center" p={4} pb={0} px={4} space={4} width="100%">
+                        <Skeleton borderRadius="full" h="96px" w="96px" />
+                        <VStack flex={1} space={2}>
+                            <Skeleton.Text lines={1} />
+                            <Skeleton.Text flex={1} lines={3} />
+                            <Skeleton.Text lines={1} />
+                        </VStack>
+                    </HStack>
+                )
+            }
             <HStack alignItems="center" justifyContent="space-between" p={2} px={4} space={4} width="100%">
                 <TouchableOpacity onPress={handlePressFollowers}>
                     <Flex
@@ -208,7 +247,7 @@ export const ProfilePage = (): JSX.Element => {
                                 tintColor="#FFFFFF"
                                 onRefresh={handleRefresh}
                             />
-                  )}
+                        )}
                         renderItem={({ item }): JSX.Element => <PostCard post={item} />}
                         onEndReached={(): void => {
                             if (hasNextPage) {
@@ -219,7 +258,17 @@ export const ProfilePage = (): JSX.Element => {
                     />
                 </VStack>
             )}
-
+            <ReportModal
+                isOpen={reportModalOpen}
+                itemId={userId}
+                itemType="user"
+                onClose={(): void => setReportModalOpen(false)}
+            />
+            <BlockModal
+                isOpen={blockModalOpen}
+                userIdToBlock={userId}
+                onClose={(): void => setBlockModalOpen(false)}
+            />
         </GradientVStack>
     );
 };
