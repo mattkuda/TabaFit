@@ -207,17 +207,10 @@ export const PostScreen = (): JSX.Element => {
                         />
                     ))}
                 </VStack>
-                {/* <HStack alignItems="center" justifyContent="space-between" p={4}>
-                    <IconButton
-                        icon={<Icon as={Ionicons} name="flag-outline" />}
-                        onPress={() => setIsReportModalOpen(true)}
-                    />
-                </HStack> */}
                 <ReportModal
                     isOpen={isReportModalOpen}
                     itemId={post._id.toString()}
                     itemType="post"
-                    reporterId={userId}
                     onClose={(): void => setIsReportModalOpen(false)}
                 />
             </ScrollView>

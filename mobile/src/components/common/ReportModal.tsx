@@ -14,13 +14,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import { Report, ReportItemType, ReportReason } from '../../types/reports';
 import { useMutateReport } from '../../mutations/useMutateReport';
+import { useAuth } from '../../context/AuthContext';
 
 interface ReportModalProps {
     isOpen: boolean;
     onClose: () => void;
     itemType: ReportItemType;
     itemId: string;
-    reporterId: string;
 }
 
 export const ReportModal: React.FC<ReportModalProps> = ({
@@ -28,12 +28,12 @@ export const ReportModal: React.FC<ReportModalProps> = ({
     onClose,
     itemType,
     itemId,
-    reporterId,
 }) => {
     const [reportReason, setReportReason] = useState<ReportReason | null>(null);
     const [description, setDescription] = useState('');
     const toast = useToast();
     const reportMutation = useMutateReport();
+    const { authState: { userId: reporterId } } = useAuth();
 
     const handleSubmit = (): void => {
         if (reportReason) {
