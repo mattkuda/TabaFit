@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
     StyleSheet, Image, KeyboardAvoidingView, Platform,
     TouchableOpacity,
+    Linking,
 } from 'react-native';
 import { useSetRecoilState } from 'recoil';
 import {
@@ -9,6 +10,8 @@ import {
     Box,
     Icon,
     Spinner,
+    Checkbox,
+    HStack,
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
@@ -38,7 +41,7 @@ export const SignupScreen = (): JSX.Element => {
     const setUser = useSetRecoilState(userState);
     const { onRegister } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
-
+    const [isPrivacyPolicyChecked, setIsPrivacyPolicyChecked] = useState(false);
     const handleSignUp = async (): Promise<void> => {
         setIsLoading(true);
         try {
@@ -76,7 +79,7 @@ export const SignupScreen = (): JSX.Element => {
         setPassword('test');
     };
 
-    const isFormIncomplete = !email || !password || !firstName || !lastName || !username;
+    const isFormIncomplete = !email || !password || !firstName || !lastName || !username || !isPrivacyPolicyChecked;
 
     return (
         <GradientVStack
@@ -141,6 +144,30 @@ export const SignupScreen = (): JSX.Element => {
                             onChangeText={setUsername}
                             onSubmitEditing={handleSignUp}
                         />
+                        <HStack alignContent="top" width="80%">
+                            <Checkbox
+                                bgColor={isPrivacyPolicyChecked ? 'primary' : 'gray.900'}
+                                isChecked={isPrivacyPolicyChecked}
+                                size="md"
+                                value="privacyPolicy"
+                                onChange={setIsPrivacyPolicyChecked}
+                            >
+                                <Text fontSize="xs">
+                                    I agree to the
+                                    <Text onPress={(): Promise<void> => Linking.openURL('https://www.freeprivacypolicy.com/live/619bc4e9-efb1-45b2-91d2-f5c7bc802221')}>
+                                        {' '}
+                                        Privacy Policy
+                                    </Text>
+                                    {' '}
+                                    and the
+                                    {' '}
+                                    <Text onPress={(): Promise<void> => Linking.openURL('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/')}>
+                                        Apple Standard EULA
+                                    </Text>
+                                    .
+                                </Text>
+                            </Checkbox>
+                        </HStack>
                         <TouchableOpacity
                             disabled={isFormIncomplete}
                             style={{ width: '80%' }}

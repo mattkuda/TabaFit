@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Response } from 'express';
 import { MongoClient, Collection, ObjectId } from 'mongodb';
 // eslint-disable-next-line import/no-relative-packages
 import { TabataWorkout, TabataWorkoutSchema } from '../../../mobile/src/types/workouts';
@@ -24,6 +24,7 @@ let postsCollection: Collection<PostSchema>;
 let workoutsCollection: Collection<TabataWorkoutSchema>;
 let notificationsCollection: Collection<NotificationSchema>;
 let followsCollection: Collection;
+let usersCollection: Collection<User>;
 
 (async () => {
   try {
@@ -32,6 +33,7 @@ let followsCollection: Collection;
     workoutsCollection = client.db('AbcountableDB').collection<TabataWorkoutSchema>('workouts');
     followsCollection = client.db('AbcountableDB').collection('follows');
     notificationsCollection = client.db('AbcountableDB').collection('notifications');
+    usersCollection = client.db('AbcountableDB').collection<User>('users');
   } catch (err) {
     console.error('Failed to connect to MongoDB', err);
     process.exit(1);
@@ -40,7 +42,7 @@ let followsCollection: Collection;
 
 // Generic function to add user info to posts
 const addUserInfoToPosts = async (posts: PostSchema[]) => Promise.all(posts.map(async (post) => {
-  const user = await client.db('AbcountableDB').collection<User>('users').findOne({ _id: new ObjectId(post.userId) });
+  const user = await usersCollection.findOne({ _id: new ObjectId(post.userId) });
   return {
     ...post,
     user: {
@@ -56,8 +58,6 @@ const addUserInfoToPosts = async (posts: PostSchema[]) => Promise.all(posts.map(
 const addWorkoutInfoToPosts = async (posts: PostSchema[]) => Promise.all(posts.map(async (post) => {
   const workout = await workoutsCollection.findOne({ _id: new ObjectId(post.workoutId) });
 
-  // console.log("omg here's the post.workoutId", post.workoutId);
-  // console.log("omg here's the workout", workout);
   return {
     ...post,
     workout, // Add the full workout data here
@@ -66,7 +66,7 @@ const addWorkoutInfoToPosts = async (posts: PostSchema[]) => Promise.all(posts.m
 
 const addUserInfoToComments = async (comments: PostComment[]) => Promise.all(
   comments.map(async (comment) => {
-    const user = await client.db('AbcountableDB').collection<User>('users').findOne({ _id: new ObjectId(comment.userId) });
+    const user = await usersCollection.findOne({ _id: new ObjectId(comment.userId) });
     return {
       ...comment,
       user: {
@@ -92,15 +92,26 @@ async function createNewWorkout(workout: TabataWorkout, userId: string): Promise
   return result.insertedId;
 }
 
-router.get('/global', async (req: Request, res: Response) => {
-  try {
-    const offset = parseInt(req.query.offset as string, 10) || 0; // Set a default value for offset
-    const limit = parseInt(req.query.limit as string, 10) || 10; // Set a default value for limit
+// Helper function to get blocked users
+async function getBlockedUsers(userId: string): Promise<ObjectId[]> {
+  const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
+  return user?.blockedUsers?.map((id) => new ObjectId(id)) || [];
+}
 
-    const posts = await postsCollection.find({})
+router.get('/global', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const offset = parseInt(req.query.offset as string, 10) || 0;
+    const limit = parseInt(req.query.limit as string, 10) || 10;
+    const { userId } = req;
+
+    const blockedUsers = userId ? await getBlockedUsers(userId) : [];
+
+    const posts = await postsCollection.find({
+      userId: { $nin: blockedUsers },
+    })
       .sort({ createdAt: -1 })
-      .skip(offset) // Skip the number of posts defined by offset
-      .limit(limit) // Limit the number of posts to the limit
+      .skip(offset)
+      .limit(limit)
       .toArray();
 
     const transformedPosts = await addUserInfoToPosts(posts as PostSchema[]);
@@ -114,8 +125,9 @@ router.get('/global', async (req: Request, res: Response) => {
 
 router.get('/user-posts/:userId', authenticate, async (req: AuthRequest, res: Response) => {
   const requestedUserId = req.params.userId;
-  const offset = parseInt(req.query.offset as string, 10) || 0; // Set a default value for offset
-  const limit = parseInt(req.query.limit as string, 10) || 10; // Set a default value for limit
+  const offset = parseInt(req.query.offset as string, 10) || 0;
+  const limit = parseInt(req.query.limit as string, 10) || 10;
+  const { userId } = req;
 
   if (!ObjectId.isValid(requestedUserId)) {
     res.status(400).send({ message: 'Invalid user ID' });
@@ -123,12 +135,19 @@ router.get('/user-posts/:userId', authenticate, async (req: AuthRequest, res: Re
   }
 
   try {
+    const blockedUsers = userId ? await getBlockedUsers(userId) : [];
+
+    if (blockedUsers.some((id) => id.toString() === requestedUserId)) {
+      res.status(403).send({ message: 'You have blocked this user' });
+      return;
+    }
+
     const userPosts = await postsCollection.find({
       userId: new ObjectId(requestedUserId),
     })
       .sort({ createdAt: -1 })
-      .skip(offset) // Skip the number of posts defined by offset
-      .limit(limit) // Limit the number of posts to the limit
+      .skip(offset)
+      .limit(limit)
       .toArray();
 
     const transformedPosts = await addUserInfoToPosts(userPosts as PostSchema[]);
@@ -156,11 +175,12 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
     const followees = following.map((follow) => new ObjectId(follow.followeeId));
     followees.push(objectIdUserId);
 
+    const blockedUsers = await getBlockedUsers(userId);
+
     const posts = await postsCollection.aggregate([
       {
-        // Match posts where the creator is in the list of followees or is the current user
         $match: {
-          userId: { $in: followees },
+          userId: { $in: followees, $nin: blockedUsers },
         },
       },
       { $sort: { createdAt: -1 } },
@@ -177,8 +197,9 @@ router.get('/following-posts', authenticate, async (req: AuthRequest, res: Respo
   }
 });
 
-router.get('/post/:postId', async (req: Request, res: Response) => {
+router.get('/post/:postId', authenticate, async (req: AuthRequest, res: Response) => {
   const { postId } = req.params;
+  const { userId } = req;
 
   if (!ObjectId.isValid(postId)) {
     res.status(400).send({ message: 'Invalid post ID' });
@@ -186,7 +207,12 @@ router.get('/post/:postId', async (req: Request, res: Response) => {
   }
 
   try {
-    const post = await postsCollection.findOne({ _id: new ObjectId(postId) });
+    const blockedUsers = userId ? await getBlockedUsers(userId) : [];
+
+    const post = await postsCollection.findOne({
+      _id: new ObjectId(postId),
+      userId: { $nin: blockedUsers },
+    });
 
     if (!post) {
       res.status(404).send({ message: 'Post not found' });
