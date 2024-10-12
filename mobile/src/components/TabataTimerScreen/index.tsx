@@ -437,7 +437,7 @@ export const TabataTimerScreen = (): JSX.Element => {
             }}
         >
             {/* Progression Row */}
-            <Flex align="center" direction="row" justify="space-between" px={4} style={{ flex: 0 }} w="100%">
+            <Flex align="center" direction="row" justify="space-between" pb={2} px={4} style={{ flex: 0 }} w="100%">
                 <VStack alignItems="center" space={2}>
                     <Text color="gray.200" fontSize="lg">Exercises</Text>
                     <Text fontSize="xl">

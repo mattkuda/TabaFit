@@ -147,9 +147,10 @@ export const ReportModal: React.FC<ReportModalProps> = ({
                     <Input
                         fontSize="md"
                         placeholder="Additional details"
-                        returnKeyType="done"
+                        returnKeyType={reportReason ? 'go' : 'done'}
                         value={description}
                         onChangeText={setDescription}
+                        onSubmitEditing={handleSubmit}
                     />
                     <Box
                         flexDirection="row"

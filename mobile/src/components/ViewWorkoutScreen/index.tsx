@@ -222,7 +222,7 @@ export const ViewWorkoutScreen = (): JSX.Element => {
                             >
                                 <>
                                     <Icon as={Ionicons} color="red.500" name="flag" size="sm" />
-                                    <Text color="red.500">Report user</Text>
+                                    <Text color="red.500">Report workout</Text>
                                 </>
                             </Menu.Item>
                         </Menu>
