@@ -52,7 +52,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
             return false;
         }
 
-        if (weight && (weight < 0 || weight > 1000)) {
+        if (weight && (weight < 50 || weight > 1000)) {
             Toast.show({
                 title: 'Weight must be a valid number',
                 bgColor: 'red.500',
