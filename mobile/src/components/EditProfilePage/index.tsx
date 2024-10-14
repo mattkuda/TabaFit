@@ -110,7 +110,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                 uri: localUri,
                 name: filename,
                 type,
-            } as any); // 'any' casting is necessary to satisfy TypeScript
+            } as any);
 
             updateProfilePictureMutation.mutate({
                 formData,
@@ -128,7 +128,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
     };
 
     const handleBirthdayChange = (text: string): void => {
-        const newText = text.replace(/[^0-9]/g, ''); // Removes any character that is not a number
+        const newText = text.replace(/[^0-9]/g, '');
 
         // Format as MM/DD/YYYY
         let formattedText = '';
@@ -194,15 +194,6 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                         onChangeText={setFirstName}
 
                     />
-                    {/* <Input
-                            returnKeyType="done"
-                        fontSize="md"
-                        InputLeftElement={<Icon as={Ionicons} ml={4} name="search-outline" size="sm" />}
-                        m="4"
-                        placeholder="Search for users"
-                        value={searchQuery}
-                        onChangeText={setSearchQuery}
-                    /> */}
                     <Input
                         placeholder="Last Name"
                         returnKeyType="done"
@@ -259,11 +250,6 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                 w="100%"
                 onChangeText={(text): void => setWeight(parseInt(text, 10))} // conver to number
             />
-            {/* <Button onPress={handleUpdate}>Update Profile</Button>
-            <Button onPress={handleLogout}>Logout</Button>
-            <Button onPress={(): void => navigation.goBack()}>Go Back</Button>
-            <Button onPress={(): void => setShowDeleteAccoutModal(true)}>Delete Account</Button> */}
-            {/* Help Dialog */}
             <Modal isOpen={showDeleteAccoutModal}>
                 <Modal.Content>
                     <Modal.CloseButton />
