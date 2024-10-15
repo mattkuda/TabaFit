@@ -248,7 +248,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({ route, navigation 
                 returnKeyType="done"
                 value={weight ? weight.toString() : ''}
                 w="100%"
-                onChangeText={(text): void => setWeight(parseInt(text, 10))} // conver to number
+                onChangeText={(text): void => setWeight(parseInt(text, 10))}
             />
             <Modal isOpen={showDeleteAccoutModal}>
                 <Modal.Content>
