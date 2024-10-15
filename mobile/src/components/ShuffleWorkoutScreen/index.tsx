@@ -130,7 +130,6 @@ export const ShuffleWorkoutScreen: React.FC<ShuffleWorkoutScreenNavigationProp> 
 
     const triggerShuffle = (workoutParam?: TabataWorkout): void => {
         setIsShuffling(true);
-        // console.log('workoutParam.difficulty.', workoutParam.difficulty);
         const shuffledWorkout = workoutParam || workout;
 
         if (shuffledWorkout.includeSettings) {

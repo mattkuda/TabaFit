@@ -65,7 +65,7 @@ export const AboutScreen: React.FC = () => (
                     Alpha was launched in Summer 2024.
                 </Text>
                 <Text color="white" textAlign="center">
-                    Public release coming soon!
+                    Public release was in October 2024.
                 </Text>
 
                 <Text color="white" fontSize="xl" fontWeight="bold" mt={4} textAlign="center">

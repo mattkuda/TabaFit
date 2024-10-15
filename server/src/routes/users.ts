@@ -348,7 +348,6 @@ router.put('/:userId', authenticate, async (req: AuthRequest, res: Response) => 
 // Endpoint to add a user to the user's block list
 router.post('/:userId/block', authenticate, async (req: AuthRequest, res: Response) => {
   try {
-    console.log('Block request received');
     const { userId: userIdToBlock } = req;
     const { userId } = req.params;
 

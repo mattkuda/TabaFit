@@ -10,9 +10,9 @@ if (!connectionString) {
 }
 
 interface WaitlistEntry {
-    email: string;
-    createdAt: Date;
-  }
+  email: string;
+  createdAt: Date;
+}
 
 // Connect to MongoDB
 const client = new MongoClient(connectionString);
@@ -33,8 +33,6 @@ let waitlistCollection: Collection<WaitlistEntry>;
 
 router.post('/', async (req: AuthRequest, res: Response) => {
   const { email } = req.body;
-  console.log('req.body', req.body);
-  console.log('email', email);
 
   if (!email) {
     res.status(400).send({ message: 'Email is required' });
