@@ -61,17 +61,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) =>
 
     return (
         <GradientVStack height="100%" justifyContent="flex-start" style={{ padding: 20, gap: 8 }}>
-            {/* Disbale for now. Consider keeping here vs on main profile page.  */}
-            {/* <TouchableOpacity
-                style={{
-                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-                }}
-                onPress={handleEditProfile}
-            >
-                <Ionicons color="primary" name="person" size={24} />
-                <Text color="primary" textAlign="left">Edit Profile</Text>
-                <Icon as={Ionicons} color="primary" name="chevron-forward" />
-            </TouchableOpacity> */}
             <TouchableOpacity
                 style={{
                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
