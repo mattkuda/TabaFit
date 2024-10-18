@@ -1,13 +1,15 @@
+/* eslint-disable no-underscore-dangle */
 import React, {
-    createContext, useContext, useState, useEffect,
+    createContext, useContext, useState, useEffect, useCallback,
 } from 'react';
-import axios from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import * as SplashScreen from 'expo-splash-screen';
 
 const apiUrl = process.env.EXPO_PUBLIC_EAS_API_BASE_URL || 'http://localhost:3000';
 const tokenKey = process.env.EXPO_PUBLIC_TOKEN_KEY;
-const TUTORIAL_STATUS_KEY = 'hasSeenTutorial';
+const refreshTokenKey = 'refreshToken';
+// const TUTORIAL_STATUS_KEY = 'hasSeenTutorial';
 
 interface AuthProps {
     children?: React.ReactNode;
@@ -43,6 +45,50 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
     const [hasSeenTutorial, setHasSeenTutorial] = useState<boolean | null>(true);
     const [loading, setLoading] = useState<boolean>(true); // Add loading state
 
+    const onLogout = useCallback(async (): Promise<void> => {
+        try {
+            await SecureStore.deleteItemAsync(tokenKey);
+            await SecureStore.deleteItemAsync(refreshTokenKey);
+            await SecureStore.deleteItemAsync('userId');
+            axios.defaults.headers.common.Authorization = '';
+            setAuthState({
+                token: null, authenticated: false, userId: null,
+            });
+        } catch (error) {
+            console.error('Logout error:', error);
+            throw error;
+        }
+    }, []);
+
+    const refreshToken = useCallback(async () => {
+        try {
+            const currentRefreshToken = await SecureStore.getItemAsync(refreshTokenKey);
+
+            if (!currentRefreshToken) {
+                throw new Error('No refresh token available');
+            }
+
+            const response = await axios.post(`${apiUrl}/refresh-token`, { refreshToken: currentRefreshToken });
+            const { token: newToken, refreshToken: newRefreshToken } = response.data;
+
+            await SecureStore.setItemAsync(tokenKey, newToken);
+            await SecureStore.setItemAsync(refreshTokenKey, newRefreshToken);
+
+            axios.defaults.headers.common.Authorization = `Bearer ${newToken}`;
+            setAuthState((prev) => ({ ...prev, token: newToken }));
+
+            return newToken;
+        } catch (error) {
+            console.error('Token refresh failed:', error);
+            // If refresh fails, log out the user
+            await onLogout();
+            // You might want to notify the user here
+            // For example, you could use a state variable to show a "Session expired" message
+            setAuthState((prev) => ({ ...prev, authenticated: false }));
+            throw error;
+        }
+    }, [onLogout]);
+
     useEffect(() => {
         const loadToken = async (): Promise<void> => {
             try {
@@ -51,7 +97,6 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
 
                 const token = await SecureStore.getItemAsync(tokenKey);
                 const userId = await SecureStore.getItemAsync('userId');
-                const tutorialStatus = await SecureStore.getItemAsync(TUTORIAL_STATUS_KEY);
 
                 if (token) {
                     axios.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -60,9 +105,33 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
                         authenticated: true,
                         userId,
                     });
+
+                    // Set up interceptor for automatic token refresh
+                    axios.interceptors.response.use(
+                        (response: AxiosResponse) => response,
+                        async (error: AxiosError) => {
+                            const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
+
+                            if (error.response?.status === 401 && !originalRequest._retry) {
+                                originalRequest._retry = true;
+                                try {
+                                    const newToken = await refreshToken();
+
+                                    if (originalRequest.headers) {
+                                        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                                    }
+                                    return axios(originalRequest);
+                                } catch (refreshError) {
+                                    // If refresh fails, proceed with the error
+                                    return Promise.reject(refreshError);
+                                }
+                            }
+                            return Promise.reject(error);
+                        },
+                    );
                 }
 
-                setHasSeenTutorial(tutorialStatus === 'true');
+                // setHasSeenTutorial(tutorialStatus === 'true');
             } finally {
                 setLoading(false); // Add loading state
 
@@ -71,7 +140,7 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
         };
 
         loadToken();
-    }, []);
+    }, [refreshToken]);
 
     const onRegister = async (
         email: string,
@@ -84,14 +153,15 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
             const response = await axios.post(`${apiUrl}/signup`, {
                 email, password, firstName, lastName, username,
             });
-            const { token, user } = response.data;
+            const { token, refreshToken: newRefreshToken, user } = response.data;
 
             setHasSeenTutorial(false);
             setAuthState({ token, authenticated: true, userId: user._id });
 
-            axios.defaults.headers.common.Authorization = `Bearer ${response.data.token}`;
+            axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 
-            await SecureStore.setItemAsync(tokenKey, response.data.token);
+            await SecureStore.setItemAsync(tokenKey, token);
+            await SecureStore.setItemAsync(refreshTokenKey, newRefreshToken);
             await SecureStore.setItemAsync('userId', user._id);
         } catch (error) {
             console.error('Registration error:', error);
@@ -103,42 +173,33 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
     const onLogin = async (emailOrUsername: string, password: string): Promise<void> => {
         try {
             const response = await axios.post(`${apiUrl}/login`, { emailOrUsername, password });
-            const { token, user } = response.data;
-            // Fetch user preferences
-            // const queryClient = new QueryClient();
+            const { token, refreshToken: newRefreshToken, user } = response.data;
 
-            // queryClient.prefetchQuery(['preferences', user._id], () => fetchUserPreferences(user._id));
+            // Store tokens and user ID
+            await Promise.all([
+                SecureStore.setItemAsync(tokenKey, token),
+                SecureStore.setItemAsync(refreshTokenKey, newRefreshToken),
+                SecureStore.setItemAsync('userId', user._id),
+            ]);
 
+            // Update auth state immediately
             setAuthState({
                 token,
                 authenticated: true,
                 userId: user._id,
             });
 
+            // Set axios default header
             axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-            await SecureStore.setItemAsync(tokenKey, token);
-            await SecureStore.setItemAsync('userId', user._id);
         } catch (error) {
             console.error('Login error:', error);
             throw error;
         }
     };
 
-    const onLogout = async (): Promise<void> => {
-        try {
-            await SecureStore.deleteItemAsync(tokenKey);
-            await SecureStore.deleteItemAsync('userId');
-            axios.defaults.headers.common.Authorization = '';
-            setAuthState({ token: null, authenticated: false, userId: null });
-        } catch (error) {
-            console.error('Logout error:', error);
-            throw error;
-        }
-    };
-
     const completeTutorial = async (): Promise<void> => {
         try {
-            await SecureStore.setItemAsync(TUTORIAL_STATUS_KEY, 'true');
+            // await SecureStore.setItemAsync(TUTORIAL_STATUS_KEY, 'true');
             setHasSeenTutorial(true);
         } catch (error) {
             console.error('Failed to save tutorial status', error);
@@ -147,7 +208,7 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
 
     const resetTutorial = async (): Promise<void> => {
         try {
-            await SecureStore.deleteItemAsync(TUTORIAL_STATUS_KEY);
+            // await SecureStore.deleteItemAsync(TUTORIAL_STATUS_KEY);
             setHasSeenTutorial(false);
         } catch (error) {
             console.error('Failed to reset tutorial status', error);
@@ -164,6 +225,7 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }: any) => {
         onLogin,
         onLogout,
         loading,
+        refreshToken, // Add refreshToken to the context value
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

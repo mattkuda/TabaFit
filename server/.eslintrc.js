@@ -18,6 +18,8 @@ module.exports = {
   rules: {
     'no-console': 'off',
     indent: 'off',
+    // Prefer named exports always
+    'import/prefer-default-export': 'off',
     'import/extensions': ['error', 'ignorePackages', {
       js: 'never',
       mjs: 'never',

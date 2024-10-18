@@ -3,10 +3,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export default (id: string): string => jwt.sign(
+export const createSecretToken = (id: string): string => jwt.sign(
   { id },
-    process.env.TOKEN_KEY as string,
-    {
-      expiresIn: 7 * 24 * 60 * 60,
-    },
+  process.env.TOKEN_KEY as string,
+  {
+    expiresIn: '30m',
+  },
 );

@@ -258,17 +258,21 @@ export const ProfilePage = (): JSX.Element => {
                     />
                 </VStack>
             )}
-            <ReportModal
-                isOpen={reportModalOpen}
-                itemId={userId}
-                itemType="user"
-                onClose={(): void => setReportModalOpen(false)}
-            />
-            <BlockModal
-                isOpen={blockModalOpen}
-                userIdToBlock={userId}
-                onClose={(): void => setBlockModalOpen(false)}
-            />
+            {reportModalOpen && (
+                <ReportModal
+                    isOpen={reportModalOpen}
+                    itemId={userId}
+                    itemType="user"
+                    onClose={(): void => setReportModalOpen(false)}
+                />
+            )}
+            {blockModalOpen && (
+                <BlockModal
+                    isOpen={blockModalOpen}
+                    userIdToBlock={userId}
+                    onClose={(): void => setBlockModalOpen(false)}
+                />
+            )}
         </GradientVStack>
     );
 };
