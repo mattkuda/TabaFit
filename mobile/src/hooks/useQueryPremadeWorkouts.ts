@@ -22,7 +22,6 @@ const fetchPremadeWorkouts = async ({ offset = 0, limit }: PagingParams): Promis
         throw new Error('An error occurred while fetching premade workouts');
     }
 };
-// TODO: Transform into querying featured workouts perhaps
 
 export const useQueryPremadeWorkouts = (pagingParams?: PagingParams): UseQueryResult<TabataWorkoutWithUserInfo[], Error> => useQuery([
     'premade-workouts', pagingParams], () => fetchPremadeWorkouts(pagingParams));

@@ -22,7 +22,6 @@ const fetchWorkouts = async ({ offset = 0, limit }: PagingParams): Promise<Tabat
         throw new Error('An error occurred while fetching workouts');
     }
 };
-// TODO: Transform into querying featured workouts perhaps
 
 export const useQueryWorkouts = (pagingParams?: PagingParams): UseQueryResult<TabataWorkoutWithUserInfo[], Error> => useQuery([
     'workouts', pagingParams], () => fetchWorkouts(pagingParams));
@@ -54,7 +53,6 @@ const fetchSuggestedWorkouts = async (): Promise<TabataWorkoutWithUserInfo[]> =>
         throw new Error('An error occurred while fetching suggested workouts');
     }
 };
-// TODO: Transform into querying featured workouts perhaps
 
 export const useQuerySuggestedWorkouts = (pagingParams?: PagingParams): UseQueryResult<TabataWorkoutWithUserInfo[], Error> => useQuery([
     'suggested-workouts', pagingParams], () => fetchSuggestedWorkouts());
