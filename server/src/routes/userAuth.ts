@@ -137,7 +137,7 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
     // Create refresh token
     const refreshToken = jwt.sign(
       { userId: user._id.toString() },
-      process.env.REFRESH_TOKEN_SECRET as string,
+      process.env.REFRESH_TOKEN_KEY as string,
       { expiresIn: `${REFRESH_TOKEN_EXPIRATION_DAYS}d` },
     );
 
@@ -235,7 +235,7 @@ router.post('/refresh-token', async (req: Request, res: Response) => {
     // Create new refresh token
     const newRefreshToken = jwt.sign(
       { userId: user._id.toString() },
-      process.env.REFRESH_TOKEN_SECRET as string,
+      process.env.REFRESH_TOKEN_KEY as string,
       { expiresIn: `${REFRESH_TOKEN_EXPIRATION_DAYS}d` },
     );
 
